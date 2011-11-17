@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  
+  <xs:element name="simulation" type="simulationType"/>
+
+  <xs:complexType name="simulationType">
+    <xs:sequence>
+      <xs:element type="agentfileType" name="agentfile" minOccurs="1" maxOccurs="1"/>
+      <xs:element type="sensorfileType" name="sensorfile" minOccurs="1" maxOccurs="1"/>
+      <xs:element type="roomfileType" name="roomfile" minOccurs="1" maxOccurs="1"/>
+      <xs:element type="ttdtfileType" name="ttdtfile" minOccurs="1" maxOccurs="1"/>
+      <xs:element type="confType" name="conf" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+    <xs:attribute type="xs:string" name="name" use="optional"/>
+  </xs:complexType>
+
+  <xs:complexType name="agentfileType">
+    <xs:sequence>
+      <xs:element type="agentType" name="agent" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="agentType">
+    <xs:all>
+      <xs:element type="actionsType" name="actions" minOccurs="0"/>
+      <xs:element type="default_positionType" name="default_position" minOccurs="0"/>
+    </xs:all>
+    <xs:attribute type="xs:string" name="name"/>
+    <xs:attribute type="xs:string" name="typ" use="optional"/>
+    <xs:attribute type="xs:string" name="id"/>
+    <xs:attribute type="xs:integer" name="starttime" use="optional"/>
+    <xs:attribute type="xs:float" name="speed" use="optional"/>
+    <xs:attribute type="xs:string" name="image" use="optional"/>
+  </xs:complexType>
+
+  <xs:complexType name="actionsType">
+    <xs:sequence>
+      <xs:element type="actionType" name="action" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+    <xs:attribute type="xs:integer" name="offset" use="optional"/>
+  </xs:complexType>
+
+  <xs:complexType name="actionType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:string" name="ref"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  
+  <xs:complexType name="default_positionType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:string" name="ref"/>
+        <xs:attribute type="xs:boolean" name="overwrite_default_start_position"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  
+  <xs:complexType name="roomType" mixed="true">
+    <xs:sequence>
+      <xs:element type="wallType" name="wall" maxOccurs="unbounded" minOccurs="0"/>
+      <xs:element type="doorType" name="door" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+    <xs:attribute type="xs:string" name="reference" use="optional"/>
+    <xs:attribute type="xs:string" name="id" use="optional"/>
+    <xs:attribute type="xs:string" name="name" use="optional"/>
+  </xs:complexType>
+  
+  <xs:complexType name="coordinateType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:integer" name="x" use="optional"/>
+        <xs:attribute type="xs:integer" name="y" use="optional"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  
+  <xs:complexType name="positionType">
+    <xs:choice>
+      <xs:element type="roomType" name="room"/>
+      <xs:element type="coordinateType" name="coordinate"/>
+    </xs:choice>
+  </xs:complexType>
+
+  <xs:complexType name="areaType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:integer" name="dir" use="optional"/>
+        <xs:attribute type="xs:integer" name="openess" use="optional"/>
+        <xs:attribute type="xs:integer" name="radius" use="optional"/>
+        <xs:attribute type="xs:short" name="direction" use="optional"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
+  <xs:complexType name="triggerType" mixed="true">
+    <xs:sequence>
+      <xs:element type="xs:string" name="value" minOccurs="0"/>
+      <xs:element type="value_rangeType" name="value_range" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute type="xs:string" name="action" use="optional"/>
+    <xs:attribute type="xs:string" name="value" use="optional"/>
+  </xs:complexType>
+
+  <xs:complexType name="triggersType">
+    <xs:sequence>
+      <xs:element type="triggerType" name="trigger" maxOccurs="unbounded" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="sensorType">
+    <xs:sequence>
+      <xs:element type="positionType" name="position"/>
+      <xs:element type="areaType" name="area"/>
+      <xs:element type="triggersType" name="triggers"/>
+    </xs:sequence>
+    <xs:attribute type="xs:string" name="id"/>
+    <xs:attribute type="xs:string" name="image"/>
+  </xs:complexType>
+
+  <xs:complexType name="sensorfileType">
+    <xs:sequence>
+      <xs:element type="sensorType" name="sensor" maxOccurs="unbounded" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="edgeType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:string" name="id" use="optional"/>
+        <xs:attribute type="xs:short" name="x" use="optional"/>
+        <xs:attribute type="xs:short" name="y" use="optional"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
+  <xs:complexType name="edgesType">
+    <xs:sequence>
+      <xs:element type="edgeType" name="edge" maxOccurs="unbounded" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="wallType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:string" name="id" use="optional"/>
+        <xs:attribute type="xs:string" name="from" use="optional"/>
+        <xs:attribute type="xs:string" name="to" use="optional"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
+  <xs:complexType name="doorType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:string" name="at"/>
+        <xs:attribute type="xs:integer" name="offset"/>
+        <xs:attribute type="xs:integer" name="size"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
+  <xs:complexType name="roomsType">
+    <xs:sequence>
+      <xs:element type="roomType" name="room" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="roomfileType">
+    <xs:sequence>
+      <xs:element type="edgesType" name="edges"/>
+      <xs:element type="roomsType" name="rooms"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="value_rangeType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:byte" name="from" use="optional"/>
+        <xs:attribute type="xs:byte" name="to" use="optional"/>
+        <xs:attribute type="xs:string" name="type" use="optional"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
+  <xs:complexType name="triggered_actionType">
+    <xs:sequence>
+      <xs:element type="triggerType" name="trigger"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="deny_valuesType">
+    <xs:sequence>
+      <xs:element type="xs:byte" name="value"/>
+      <xs:element type="value_rangeType" name="value_range"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="vetoable_actionType">
+    <xs:sequence>
+      <xs:element type="deny_valuesType" name="deny_values"/>
+    </xs:sequence>
+    <xs:attribute type="xs:string" name="action"/>
+  </xs:complexType>
+
+  <xs:complexType name="ttdtType">
+    <xs:sequence>
+      <xs:element type="positionType" name="position"/>
+      <xs:element type="areaType" name="area"/>
+      <xs:element type="triggered_actionType" name="triggered_action"/>
+      <xs:element type="vetoable_actionType" name="vetoable_action"/>
+    </xs:sequence>
+    <xs:attribute type="xs:string" name="dddtID"/>
+    <xs:attribute type="xs:string" name="image"/>
+  </xs:complexType>
+
+  <xs:complexType name="ttdtfileType">
+    <xs:sequence>
+      <xs:element type="ttdtType" name="ttdt"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="confType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:string" name="name" use="optional"/>
+        <xs:attribute type="xs:string" name="value" use="optional"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
+</xs:schema>

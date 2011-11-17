@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<simulation name="Example Simulation number 1337">
+ <agentfile>
+  include(agentfile.xml)
+ </agentfile>
+ <sensorfile>   
+  include(sensorfile.xml)
+ </sensorfile>
+ <roomfile>
+ 	include(roomefile.xml)
+ </roomfile>
+ <ttdtfile>
+  include(Dinge_die_Dinge_tun_file.xml)
+ </ttdtfile>
+
+ <!-- für die confs eine schlaue Methode die aus jedem Kindknoten den Wert ausließt und in die enstsprechende in die Configvariable schreibt)-->
+
+ <conf name="mapfile" value="some_other_map_file.png" />
+ <!-- (optional, overwrites the default $simulationname_map.png)-->
+
+ <conf name="starttime" value="some string that is understandable by Java" />
+ <!-- (optional, overwrites default value of 1970-01-01 00:00)-->
+
+</simulation>

@@ -1,0 +1,11 @@
+<sensor id="sens_foo" image="dropzone.png">
+ <position> <!-- (entweder ein room oder kooridnate) -->
+  <room reference="room_id">
+  <coordinate x=42 y=23> <!-- (absolut gesehen auf der Karte) -->
+ </position>
+ <area dir=23 openess=42 radius=23>
+  <triggers>
+   <trigger action="action_42" value="value_that_will_be_returned" />
+   <trigger action="other_action_23" value="other_value" />
+  </triggers>
+</sensor>

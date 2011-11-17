@@ -1,0 +1,25 @@
+<ttdt dddtID="dingID3" image="doorplate.png">
+ <position> <!-- (entweder ein room oder kooridnate)-->
+  <room reference="roomID" /> <!-- (dann in der Mitte vom Raum oder so)-->
+  <coordinate x=42 y=23> <!-- (absolut gesehen auf der Karte)-->
+ </position> 
+
+ <!-- 	direction: the direction in degrees in which das Ding is directed. 0 is north, 180 is south...
+		openess: in degrees. From the direction, half to the left, half to the right -->
+ <area direction=230 openess=42 radius=23>
+   <triggered_action> <!-- (enthält ein oder mehrere triggers) -->
+     <trigger action="action_23">
+       <value>true</value>
+       <!-- oder: -->
+       <value_range from=1 to=3 type="int" />
+     </trigger>
+   </triggered_action>
+
+   <vetoable_action action="action_42">
+     <deny_values>
+       <value>10</value>
+       <!-- multiple options / Random -->
+       <value_range from=1 to=3 type="int" />
+     <deny_values>
+   </vetoable_action>
+  </ttdt>

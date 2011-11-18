@@ -50,9 +50,5 @@ public class Agent extends AbstractComponent {
 		agentListeners.remove(listener);
 	}
 
-	@Override
-	public String getIdentifier() {
-		return super.identifier;
-	}
 
 }

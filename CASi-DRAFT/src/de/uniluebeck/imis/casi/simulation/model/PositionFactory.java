@@ -12,21 +12,11 @@ import java.util.Collection;
  */
 public class PositionFactory {
 
-	private static Collection<Agent> agents = null;
 	private static Collection<Room> rooms = null;
 	private static Collection<Point> points = null;
 
-	public static Agent getAgentWithName(String agentName) {
 
-		// or maybe better with an agent.ID or something...
-		
-		// check if the Agent is in the Collection,
-		// then return that Agent
-		// else create a new agent and return this
-		return null;
-	}
-
-	public static Point getPostionWithKoordinates(int x, int y) {
+	public static IPosition getPostionWithKoordinates(int x, int y) {
 
 		// to streamline the process of getting the actual coordinates form the
 		// returned Object we should create a new class that is in fact the

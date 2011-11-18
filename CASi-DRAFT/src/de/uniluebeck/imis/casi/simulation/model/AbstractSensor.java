@@ -1,15 +1,18 @@
 package de.uniluebeck.imis.casi.simulation.model;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import de.uniluebeck.imis.casi.network.INetworkComponent;
+import de.uniluebeck.imis.casi.utils.Listenable;
 
 /**
  * Template for a sensor, that can be integrated in the simulation world
  * @author Tobias Mende
  *
  */
-public abstract class AbstractSensor extends AbstractComponent implements INetworkComponent{
+public abstract class AbstractSensor extends AbstractComponent implements INetworkComponent, Listenable<ISensorListener>{
 
 	public AbstractSensor(String identifier) {
 		super(identifier);
@@ -18,6 +21,7 @@ public abstract class AbstractSensor extends AbstractComponent implements INetwo
 	protected Collection<AbstractAction> sensableActions;
 	/** actual value this sensor has recognized*/
 	protected Object lastValue;
+	protected List<ISensorListener> listeners = new ArrayList<ISensorListener>();
 	
 	/**
 	 * Getter for the type of this sensor
@@ -35,10 +39,24 @@ public abstract class AbstractSensor extends AbstractComponent implements INetwo
 		//Do fancy things
 		return handleInternal(action);
 	}
+	
+	@Override
+	public void addListener(ISensorListener listener) {
+		if(!listeners.contains(listener)) {
+			listeners.add(listener);
+		}
+	}
+	
+	@Override
+	public void removeListener(ISensorListener listener) {
+		listeners.remove(listener);
+	}
+	
 	/**
 	 * Method for handling an action internal. Overwrite for customized behavior
 	 * @param action the action to handle
 	 * @return <code>true</code> if the action is allowed, <code>false</code> otherwise
 	 */
 	protected abstract boolean handleInternal(AbstractAction action);
+	public abstract String getHumanReadableValue();
 }

@@ -11,8 +11,8 @@ public abstract class AbstractAction {
 		SCHEDULED, INTERRUPTED, COMPLETED, ABSTRACT, UNKNOWN;
 	}
 
-	protected Time earliestStartTime;
-	protected Time latestEndTime; 
+	protected SimulationTime earliestStartTime;
+	protected SimulationTime latestEndTime; 
 	
 	/** priority of this action (integer between 0 and 10) */
 	protected int priority = 5;

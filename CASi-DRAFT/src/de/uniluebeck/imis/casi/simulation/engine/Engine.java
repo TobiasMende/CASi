@@ -1,7 +1,10 @@
 package de.uniluebeck.imis.casi.simulation.engine;
 
+import java.util.Collection;
+
 public class Engine {
 	private static Engine instance;
+	
 	private Engine() {
 		
 	}

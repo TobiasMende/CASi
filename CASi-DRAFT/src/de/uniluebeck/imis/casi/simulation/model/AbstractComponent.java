@@ -1,16 +1,13 @@
 package de.uniluebeck.imis.casi.simulation.model;
 
 import java.awt.Image;
-import java.util.ArrayList;
-import java.util.List;
+import java.awt.Point;
 
-import de.uniluebeck.imis.casi.utils.Listenable;
-
-public abstract class AbstractComponent implements Listenable<IComponentListener> {
+public abstract class AbstractComponent implements IPosition {
 	private Image representation;
 	private IPosition position;
 	protected final String identifier;
-	protected List<IComponentListener> listeners = new ArrayList<IComponentListener>();
+	
 	
 	public AbstractComponent(String identifier) {
 		this.identifier = identifier;
@@ -25,16 +22,40 @@ public abstract class AbstractComponent implements Listenable<IComponentListener
 	}
 	
 	@Override
-	public void addListener(IComponentListener listener) {
-		if(!listeners.contains(listener)) {
-			listeners.add(listener);
-		}
+	public Point getCoordinates() {
+		// TODO implement
+		return null;
 	}
+	
+	public final String getIdentifier() {
+		return identifier;
+	}
+	
 	
 	@Override
-	public void removeListener(IComponentListener listener) {
-		listeners.remove(listener);
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((identifier == null) ? 0 : identifier.hashCode());
+		return result;
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		AbstractComponent other = (AbstractComponent) obj;
+		if (identifier == null) {
+			if (other.identifier != null)
+				return false;
+		} else if (!identifier.equals(other.identifier))
+			return false;
+		return true;
 	}
 	
-	public abstract String getIdentifier();
+	
 }

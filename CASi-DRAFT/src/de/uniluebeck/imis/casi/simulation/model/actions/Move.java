@@ -16,6 +16,7 @@ public class Move extends AbstractAction {
 	public STATE internalPerform(){
 		
 		//TODO: tell the Agent to do something smart!
+		whoMoves.setCurrentPosition(whereTo);
 		
 		return STATE.COMPLETED;
 

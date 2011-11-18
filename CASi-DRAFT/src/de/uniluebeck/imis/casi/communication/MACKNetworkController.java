@@ -1,7 +1,7 @@
 package de.uniluebeck.imis.casi.network;
 
 
-public final class MACKNetworkController implements INetworkHandler {
+public final class MACKNetworkController implements INetworkController {
 
 	private static final Exception NotYetConnectedException = null;
 	private static MACKNetworkController instance;

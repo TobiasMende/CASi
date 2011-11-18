@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import de.uniluebeck.imis.casi.network.INetworkComponent;
+import de.uniluebeck.imis.casi.communication.ICommunicationComponent;
 import de.uniluebeck.imis.casi.utils.Listenable;
 //TODO add fancy solution for triggering actions
 /**
@@ -12,7 +12,7 @@ import de.uniluebeck.imis.casi.utils.Listenable;
  * @author Tobias Mende
  *
  */
-public abstract class AbstractActuator extends AbstractComponent implements INetworkComponent, Listenable<IActuatorListener>{
+public abstract class AbstractActuator extends AbstractComponent implements ICommunicationComponent, Listenable<IActuatorListener>{
 	public AbstractActuator(String identifier) {
 		super(identifier);
 	}

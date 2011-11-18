@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import de.uniluebeck.imis.casi.network.INetworkComponent;
+import de.uniluebeck.imis.casi.communication.ICommunicationComponent;
 import de.uniluebeck.imis.casi.utils.Listenable;
 
 /**
@@ -12,7 +12,7 @@ import de.uniluebeck.imis.casi.utils.Listenable;
  * @author Tobias Mende
  *
  */
-public abstract class AbstractSensor extends AbstractComponent implements INetworkComponent, Listenable<ISensorListener>{
+public abstract class AbstractSensor extends AbstractComponent implements ICommunicationComponent, Listenable<ISensorListener>{
 
 	public AbstractSensor(String identifier) {
 		super(identifier);

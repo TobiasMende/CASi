@@ -1,7 +1,9 @@
 package de.uniluebeck.imis.casi.simulation.engine;
 
 import java.util.ArrayList;
+import java.util.Timer;
 
+import de.uniluebeck.imis.casi.simulation.model.SimulationTime;
 import de.uniluebeck.imis.casi.utils.Listenable;
 
 /**
@@ -11,9 +13,11 @@ import de.uniluebeck.imis.casi.utils.Listenable;
  */
 public class SimulationClock implements Listenable<ISimulationClockListener> {
 	private static SimulationClock instance;
-	private Integer simulationStartTime; //TODO use real time and date
+	private SimulationTime simulationStartTime;
 	private double scaleFactor = 1.0;
 	private boolean started;
+	private boolean paused;
+	private Timer timer;
 	/** Listeners are informed about every tick of the clock */
 	private ArrayList<ISimulationClockListener> listeners = new ArrayList<ISimulationClockListener>();
 	private SimulationClock() {
@@ -27,7 +31,7 @@ public class SimulationClock implements Listenable<ISimulationClockListener> {
 		return instance;
 	}
 	
-	public void init(int startTime) throws IllegalStateException {
+	public void init(SimulationTime startTime) throws IllegalStateException {
 		if(started) {
 			throw new IllegalStateException("Can't init clock after starting");
 		}
@@ -41,19 +45,37 @@ public class SimulationClock implements Listenable<ISimulationClockListener> {
 			throw new IllegalStateException("Can't start before initialization");
 		}
 		// TODO start Timer task
+		//timer = new Timer("CASi-System-Clock", true);
 		started = true;
+	}
+	
+	public void stop() throws IllegalStateException {
+		if(!started) {
+			throw new IllegalStateException("Simulation isn't started yet.");
+		}
+		timer.cancel();
+		// TODO implement
+		started = false;
+	}
+	
+	public synchronized void setPaused(boolean pause) {
+		paused = pause;
+	}
+	
+	public synchronized boolean isPaused() {
+		return paused;
 	}
 
 
 	@Override
-	public void addListener(ISimulationClockListener listener) {
+	public synchronized void addListener(ISimulationClockListener listener) {
 		if(!listeners.contains(listener)) {
 			listeners.add(listener);
 		}
 	}
 
 	@Override
-	public void removeListener(ISimulationClockListener listener) {
+	public synchronized void removeListener(ISimulationClockListener listener) {
 		listeners.remove(listener);
 	}
 

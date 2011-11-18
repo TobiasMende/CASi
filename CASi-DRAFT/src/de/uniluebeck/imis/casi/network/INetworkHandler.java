@@ -4,7 +4,7 @@ package de.uniluebeck.imis.casi.network;
  * @author Tobias Mende
  *
  */
-public interface INetworkController {
+public interface INetworkHandler {
 	/**
 	 * Method for sending a message
 	 * @param sender the component that sends the message

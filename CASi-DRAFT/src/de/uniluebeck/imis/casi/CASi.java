@@ -12,7 +12,7 @@ import de.uniluebeck.imis.casi.logging.SimLogFormatter;
 
 public class CASi {
 
-		private static Logger log = Logger.getLogger("de.uniluebeck.imis.casi.");
+		private static Logger log = Logger.getLogger("de.uniluebeck.imis.casi");
 	/**
 	* Default logger for logging simulation information. Should be used from
 	* the whole project
@@ -32,11 +32,9 @@ public class CASi {
 		/*
 		 * TODO:
 		 * 	- Create a generator
-		 * 	- Tell generator to create world
-		 *  - create the gui
-		 *  - create the simulation engine with the world
-		 *  - register gui on engine
-		 *  - tell simulation to start the engine
+		 *  - create the GUI
+		 *  - create the network controller
+		 *  - create main controller with generator, gui and network
 		 */
 		
 	}

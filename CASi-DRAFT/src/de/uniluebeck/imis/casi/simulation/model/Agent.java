@@ -2,14 +2,14 @@ package de.uniluebeck.imis.casi.simulation.model;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
-import java.util.Set;
-
-import de.uniluebeck.imis.casi.utils.GenericListener;
-import de.uniluebeck.imis.casi.utils.Listenable;
 
 
-public class Agent extends AbstractComponent implements Listenable<GenericListener<Agent>> {
+public class Agent extends AbstractComponent {
+	public Agent(String identifier) {
+		super(identifier);
+		// TODO Auto-generated constructor stub
+	}
+
 	public enum STATE {
 		ABSTRACT, IDLE, BUSY, UNKNOWN;
 	}
@@ -19,12 +19,12 @@ public class Agent extends AbstractComponent implements Listenable<GenericListen
 	private IPosition defaultPosition;
 	
 	
-	/** Orderd list of actions the agent should perform in this order during this simulation */
+	/** Ordered list of actions the agent should perform in this order during this simulation */
 	private Collection<AbstractAction> todoList;
 	/** A pool of actions that can be performed by this agent type */
 	private Collection<AbstractAction> actionPool;
 	/** Listeners, perhaps already needed in AbstractComponent */
-	private ArrayList<GenericListener<Agent>> listeners = new ArrayList<GenericListener<Agent>>();
+	private ArrayList<IAgentListener> agentListeners = new ArrayList<IAgentListener>();
 	private Agent.STATE state = STATE.UNKNOWN;
 	
 	public boolean isTemplate() {
@@ -39,15 +39,20 @@ public class Agent extends AbstractComponent implements Listenable<GenericListen
 		state = this.state;
 	}
 
-	@Override
-	public void addListener(GenericListener<Agent> listener) {
-		if(!listeners.contains(listener)) {
-			listeners.add(listener);
+
+	public void addListener(IAgentListener listener) {
+		if(!agentListeners.contains(listener)) {
+			agentListeners.add(listener);
 		}
+	}
+	
+	public void removeListener(IAgentListener listener) {
+		agentListeners.remove(listener);
 	}
 
 	@Override
-	public void removeListener(GenericListener<Agent> listener) {
-		listeners.remove(listener);
+	public String getIdentifier() {
+		return super.identifier;
 	}
+
 }

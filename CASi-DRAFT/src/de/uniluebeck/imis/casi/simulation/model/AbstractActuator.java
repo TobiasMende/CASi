@@ -10,6 +10,9 @@ import de.uniluebeck.imis.casi.network.INetworkComponent;
  *
  */
 public abstract class AbstractActuator extends AbstractComponent implements INetworkComponent{
+	public AbstractActuator(String identifier) {
+		super(identifier);
+	}
 	/** Time for pulling values from the server in seconds */
 	protected int pullIntervall = 10;
 	

@@ -1,6 +1,5 @@
 package de.uniluebeck.imis.casi.simulation.model;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 import de.uniluebeck.imis.casi.network.INetworkComponent;
@@ -12,6 +11,9 @@ import de.uniluebeck.imis.casi.network.INetworkComponent;
  */
 public abstract class AbstractSensor extends AbstractComponent implements INetworkComponent{
 
+	public AbstractSensor(String identifier) {
+		super(identifier);
+	}
 	/** List of actions, that can be recognized by this sensor */
 	protected Collection<AbstractAction> sensableActions;
 	/** actual value this sensor has recognized*/

@@ -2,7 +2,6 @@ package de.uniluebeck.imis.casi.simulation.engine;
 
 import java.util.ArrayList;
 
-import de.uniluebeck.imis.casi.utils.GenericListener;
 import de.uniluebeck.imis.casi.utils.Listenable;
 
 /**
@@ -10,13 +9,13 @@ import de.uniluebeck.imis.casi.utils.Listenable;
  * @author Tobias Mende
  *
  */
-public class SimulationClock implements Listenable<GenericListener<SimulationClock>>{
+public class SimulationClock implements Listenable<ISimulationClockListener> {
 	private static SimulationClock instance;
 	private Integer simulationStartTime; //TODO use real time and date
 	private double scaleFactor = 1.0;
 	private boolean started;
 	/** Listeners are informed about every tick of the clock */
-	private ArrayList<GenericListener<SimulationClock>> listeners = new ArrayList<GenericListener<SimulationClock>>();
+	private ArrayList<ISimulationClockListener> listeners = new ArrayList<ISimulationClockListener>();
 	private SimulationClock() {
 		
 	}
@@ -45,15 +44,16 @@ public class SimulationClock implements Listenable<GenericListener<SimulationClo
 		started = true;
 	}
 
+
 	@Override
-	public void addListener(GenericListener<SimulationClock> listener) {
+	public void addListener(ISimulationClockListener listener) {
 		if(!listeners.contains(listener)) {
 			listeners.add(listener);
 		}
 	}
 
 	@Override
-	public void removeListener(GenericListener<SimulationClock> listener) {
+	public void removeListener(ISimulationClockListener listener) {
 		listeners.remove(listener);
 	}
 

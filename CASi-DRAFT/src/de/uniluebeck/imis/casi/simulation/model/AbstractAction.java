@@ -17,7 +17,8 @@ public abstract class AbstractAction {
 	/** priority of this action (integer between 0 and 10) */
 	protected int priority = 5;
 	/** duration of this action in minutes */
-	protected int duration;
+	protected int duration = -1;
+	protected double process = 0.0;
 	private AbstractAction.STATE state = STATE.UNKNOWN;
 	/**
 	 * Method for performing this action
@@ -33,7 +34,7 @@ public abstract class AbstractAction {
 	 * Method for really perform the action
 	 * @return the state that this action should get.
 	 */
-	public abstract STATE internalPerform();
+	protected abstract STATE internalPerform();
 	/**
 	 * Getter for the type of this action
 	 * @return the action type

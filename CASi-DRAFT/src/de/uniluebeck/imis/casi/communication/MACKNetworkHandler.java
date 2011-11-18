@@ -1,9 +1,7 @@
 package de.uniluebeck.imis.casi.communication;
 
-
 public final class MACKNetworkHandler implements ICommunicationHandler {
 
-	private static final Exception NotYetConnectedException = null;
 	private static MACKNetworkHandler instance;
 	private String xmppID;
 
@@ -26,7 +24,7 @@ public final class MACKNetworkHandler implements ICommunicationHandler {
 	}
 
 	@Override
-	public synchronized boolean send(ICommunicationComponent sender, Object message) throws Exception {
+	public synchronized boolean send(ICommunicationComponent sender, Object message) {
 		checkIfConnected();
 		// TODO Auto-generated method stub
 		return false;
@@ -38,9 +36,9 @@ public final class MACKNetworkHandler implements ICommunicationHandler {
 
 	}
 
-	private static void checkIfConnected() throws Exception {
+	private static void checkIfConnected() throws java.nio.channels.NotYetConnectedException {
 		if (instance.getXmppID() == null) {
-			throw NotYetConnectedException;
+			throw new java.nio.channels.NotYetConnectedException();
 		}	
 	}
 }

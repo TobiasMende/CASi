@@ -3,7 +3,11 @@ package de.uniluebeck.imis.casi.simulation.model;
 import java.util.ArrayList;
 import java.util.Collection;
 
-
+/**
+ * 
+ * @author Tobias Mende, Marvin Frick, Moritz BŸrger 
+ *
+ */
 public class Agent extends AbstractComponent {
 	public Agent(String identifier) {
 		super(identifier);

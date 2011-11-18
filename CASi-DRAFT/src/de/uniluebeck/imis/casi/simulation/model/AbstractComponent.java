@@ -3,6 +3,11 @@ package de.uniluebeck.imis.casi.simulation.model;
 import java.awt.Image;
 import java.awt.Point;
 
+/**
+ * 
+ * @author Marvin Frick
+ *
+ */
 public abstract class AbstractComponent implements IPosition {
 	private Image representation;
 	private IPosition position;

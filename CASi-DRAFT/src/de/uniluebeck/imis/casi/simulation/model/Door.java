@@ -1,5 +1,11 @@
 package de.uniluebeck.imis.casi.simulation.model;
 
+/**
+ * 
+ * 
+ * @author Tobias Mende
+ *
+ */
 public class Door extends AbstractComponent{
 	private static int id;
 	private int offset;

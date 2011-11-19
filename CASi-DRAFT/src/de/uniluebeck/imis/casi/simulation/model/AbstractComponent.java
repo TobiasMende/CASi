@@ -5,7 +5,7 @@ import java.awt.Point;
 
 /**
  * 
- * @author Marvin Frick
+ * @author Marvin Frick, Moritz Bürger, Tobias Mende
  *
  */
 public abstract class AbstractComponent implements IPosition {

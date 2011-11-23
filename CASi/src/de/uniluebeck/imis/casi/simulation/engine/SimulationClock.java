@@ -158,6 +158,13 @@ public class SimulationClock implements Listenable<ISimulationClockListener> {
 	public synchronized boolean isPaused() {
 		return paused;
 	}
+	/**
+	 * Getter for the simulation state
+	 * @return <code>true</code> if the simulation is started yet, <code>false</code> otherwise.
+	 */
+	public boolean isStarted() {
+		return started;
+	}
 
 
 	@Override

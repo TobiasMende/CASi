@@ -4,73 +4,139 @@ import de.uniluebeck.imis.casi.communication.ICommunicationHandler;
 import de.uniluebeck.imis.casi.simulation.model.SimulationTime;
 import de.uniluebeck.imis.casi.simulation.model.World;
 
-public class Engine implements ISimulationClockListener{
+/**
+ * The engine is the central unit in the simulator that holds and provides the
+ * world and other relevant data and information.
+ * 
+ * The engine is a singleton, so it can be called from everywhere and there
+ * exists only one engine in each simulator.
+ * 
+ * @author Tobias Mende
+ * 
+ */
+public class Engine implements ISimulationClockListener {
+	/** The instance of this singleton */
 	private static Engine instance;
+	/**
+	 * The handler which handles external communication (e.g. a network
+	 * connection)
+	 */
 	private ICommunicationHandler communicationHandler;
+
+	/**
+	 * The world which holds all components and settings of the current
+	 * simulation
+	 */
 	private World world;
-	private boolean started;
-	
+
+	/**
+	 * The private constructor of this singleton
+	 */
 	private Engine() {
 		SimulationClock.getInstance().addListener(this);
-		//just here
+		// just here for prohibiting external access
 	}
-	
+
+	/**
+	 * Getter for the instance of this singleton
+	 * 
+	 * @return the instance
+	 */
 	public static Engine getInstance() {
-		if(instance == null) {
+		if (instance == null) {
 			instance = new Engine();
 		}
 		return instance;
 	}
-	
+
+	/**
+	 * Getter for the handler which handles the external communication
+	 * 
+	 * @return the communication handler
+	 */
 	public ICommunicationHandler getCommunicationHandler() {
 		return communicationHandler;
 	}
-	
+
+	/**
+	 * Setter for the communication handler
+	 * 
+	 * @param communicationHandler
+	 *            the handler
+	 * @throws IllegalAccessException
+	 *             if the simulation was started yet.
+	 */
 	public void setCommunicationHandler(
-			ICommunicationHandler communicationHandler) {
+			ICommunicationHandler communicationHandler)
+			throws IllegalAccessException {
+		if (SimulationClock.getInstance().isStarted()) {
+			throw new IllegalAccessException(
+					"Can't change the communication handler after starting the simulation");
+		}
 		this.communicationHandler = communicationHandler;
 	}
-	
+
+	/**
+	 * Getter for the world
+	 * 
+	 * @return the world
+	 */
 	public World getWorld() {
 		return world;
 	}
-	
-	public void setWorld(World world) {
+
+	/**
+	 * Setter for the world that is simulated by this engine
+	 * 
+	 * @param world
+	 *            the wolrd
+	 * @throws IllegalAccessException
+	 *             if the simulation is started yet
+	 */
+	public void setWorld(World world) throws IllegalAccessException {
+		if (SimulationClock.getInstance().isStarted()) {
+			throw new IllegalAccessException(
+					"Can't change the world after starting the simulation");
+		}
 		this.world = world;
 	}
-	
-	public void start() throws IllegalStateException{
-		if(started)
+
+	/**
+	 * Starts the engine and the simulation clock.
+	 * 
+	 * @throws IllegalStateException
+	 *             if no connection handler or no world was set.
+	 */
+	public void start() throws IllegalStateException {
+		if (SimulationClock.getInstance().isStarted())
 			return;
-		if(communicationHandler == null)
+		if (communicationHandler == null)
 			throw new IllegalStateException("CommunicationHandler must be set");
-		if(world == null)
+		if (world == null)
 			throw new IllegalStateException("World must be set");
 		SimulationClock.getInstance().init(world.getStartTime());
 		SimulationClock.getInstance().start();
-		started = true;
 	}
+
+	// THINK needs the engine to be a clock listener?
 
 	@Override
 	public void timeChanged(SimulationTime newTime) {
-		// TODO implement
+		// nothing to do here at the moment
 	}
 
 	@Override
 	public void simulationPaused(boolean pause) {
-		// TODO Auto-generated method stub
-		
+		// nothing to do here at the moment
 	}
 
 	@Override
 	public void simulationStopped() {
-		// TODO Auto-generated method stub
-		
+		// nothing to do here at the moment
 	}
 
 	@Override
 	public void simulationStarted() {
-		// TODO Auto-generated method stub
-		
+		// nothing to do here at the moment
 	}
 }

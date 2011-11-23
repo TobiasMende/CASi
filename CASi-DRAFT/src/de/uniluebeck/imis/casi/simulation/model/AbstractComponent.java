@@ -2,13 +2,14 @@ package de.uniluebeck.imis.casi.simulation.model;
 
 import java.awt.Image;
 import java.awt.Point;
+import java.io.Serializable;
 
 /**
  * 
  * @author Marvin Frick, Moritz Bürger, Tobias Mende
  *
  */
-public abstract class AbstractComponent implements IPosition {
+public abstract class AbstractComponent implements IPosition, Serializable {
 	private Image representation;
 	private IPosition position;
 	protected final String identifier;
@@ -61,6 +62,7 @@ public abstract class AbstractComponent implements IPosition {
 			return false;
 		return true;
 	}
+	
 	
 	
 }

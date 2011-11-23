@@ -6,6 +6,7 @@ import java.util.Vector;
 
 public class Room implements IPosition{
 	
+	private static final long serialVersionUID = 112593179870431369L;
 	private Collection<Wall> walls = new Vector<Wall>();
 	
 	@Override

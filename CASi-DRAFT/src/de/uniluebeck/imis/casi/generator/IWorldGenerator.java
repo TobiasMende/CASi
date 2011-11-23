@@ -1,9 +1,6 @@
-/**
- * 
- */
 package de.uniluebeck.imis.casi.generator;
 
-import de.uniluebeck.imis.casi.simulation.model.*;
+import de.uniluebeck.imis.casi.simulation.model.World;
 
 /**
  * @author marv

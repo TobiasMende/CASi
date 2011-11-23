@@ -162,4 +162,22 @@ public class Agent extends AbstractComponent implements
 		return null;
 	}
 
+	@Override
+	public void simulationPaused(boolean pause) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void simulationStopped() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void simulationStarted() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

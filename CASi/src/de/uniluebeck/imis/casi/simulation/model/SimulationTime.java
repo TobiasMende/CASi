@@ -19,8 +19,4 @@ public class SimulationTime extends Timestamp {
 		setTime(getTime()+1);
 	}
 
-
-
-	
-
 }

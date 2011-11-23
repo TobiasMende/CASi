@@ -17,7 +17,6 @@ public class World {
 	/** Collection of components that are neither agents, actuators nor sensors */
 	private Collection<AbstractComponent> components;
 	private SimulationTime startTime;
-	private SimulationTime currentTime;
 
 	private boolean sealed;
 
@@ -116,15 +115,6 @@ public class World {
 			throw new IllegalAccessException("World is sealed!");
 		}
 		this.startTime = startTime;
-		this.currentTime = startTime;
-	}
-
-	public void setCurrentTime(SimulationTime currentTime) {
-		this.currentTime = currentTime;
-	}
-
-	public SimulationTime getCurrentTime() {
-		return currentTime;
 	}
 
 }

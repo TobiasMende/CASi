@@ -53,6 +53,24 @@ public class Engine implements ISimulationClockListener{
 
 	@Override
 	public void timeChanged(SimulationTime newTime) {
-		world.setCurrentTime(newTime);
+		// TODO implement
+	}
+
+	@Override
+	public void simulationPaused(boolean pause) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void simulationStopped() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void simulationStarted() {
+		// TODO Auto-generated method stub
+		
 	}
 }

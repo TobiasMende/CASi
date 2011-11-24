@@ -34,49 +34,6 @@ public class CASi {
 	public static void main(String[] args) {
 		setupLogging();
 		log.info("Test!");
-		final SimulationClock sc = SimulationClock.getInstance();
-		sc.init(new SimulationTime(System.currentTimeMillis()), 500);
-		sc.addListener(new ISimulationClockListener() {
-			
-			@Override
-			public void timeChanged(SimulationTime newTime) {
-				SIM_LOG.info("Tick!");
-			}
-			
-			@Override
-			public void simulationStopped() {
-				SIM_LOG.severe("Simulation stopped");
-			}
-			
-			@Override
-			public void simulationStarted() {
-				SIM_LOG.info("Simulation started");
-			}
-			
-			@Override
-			public void simulationPaused(boolean pause) {
-				SIM_LOG.info("paused = "+pause);
-			}
-		});
-		sc.start();
-		new Thread(new Runnable() {
-			
-			@Override
-			public void run() {
-				try {
-					Thread.sleep(5000);
-					sc.setPaused(true);
-					Thread.sleep(5000);
-					sc.setPaused(false);
-					Thread.sleep(5000);
-					sc.stop();
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				
-			}
-		}).start();
 		/*
 		 * TODO: - Create a generator - create the GUI - create the network
 		 * controller - create main controller with generator, gui and network

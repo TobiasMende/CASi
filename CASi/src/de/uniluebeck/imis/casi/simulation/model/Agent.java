@@ -22,7 +22,7 @@ import de.uniluebeck.imis.casi.utils.Tools;
 public class Agent extends AbstractComponent implements
 		ISimulationClockListener, Serializable {
 	private static final long serialVersionUID = -1166856593367347255L;
-	private Logger log = Logger.getLogger(Agent.class.getName());
+	private static final Logger log = Logger.getLogger(Agent.class.getName());
 
 	public enum STATE {
 		ABSTRACT, IDLE, BUSY, UNKNOWN;
@@ -88,7 +88,7 @@ public class Agent extends AbstractComponent implements
 	}
 
 	public void setState(STATE state) throws IllegalStateException {
-		if (isTemplate() && this.state != STATE.UNKNOWN) {
+		if (state.equals(STATE.ABSTRACT) && this.state != STATE.UNKNOWN) {
 			// Deny changes to unknown or abstract
 			throw new IllegalStateException("Can't change the state to "
 					+ state);

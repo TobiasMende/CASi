@@ -14,10 +14,17 @@ import java.util.logging.Logger;
  * 
  */
 public class Wall implements IPosition {
+	/** just the logger */
 	private static final Logger log = Logger.getLogger(Wall.class.getName());
+	/**
+	 * id needed for serialization
+	 */
+	private static final long serialVersionUID = 717672722422035342L;
+	/** the point where this wall starts */
 	private Point start;
+	/** the point where this wall ends */
 	private Point end;
-
+	/** A collection of doors that are in this wall */
 	private final Collection<Door> doors = new Vector<Door>();
 
 	/**
@@ -43,6 +50,22 @@ public class Wall implements IPosition {
 		doors.add(door);
 	}
 
+	/**
+	 * Getter for the doors contained in this walls
+	 * @return a collection of doors
+	 */
+	public Collection<Door> getDoors() {
+		return doors;
+	}
+	
+	/**
+	 * Method for checking whether this wall contains doors or not.
+	 * @return <code>true</code> if the wall contains at least one door, <code>false</code> otherwise.
+	 */
+	public boolean hasDoors() {
+		return doors.size()>0;
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -55,29 +78,20 @@ public class Wall implements IPosition {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
+		if(!(obj instanceof Wall)) {
 			return false;
-		if (getClass() != obj.getClass())
-			return false;
+		}
 		Wall other = (Wall) obj;
-		if (doors == null) {
-			if (other.doors != null)
-				return false;
-		} else if (!doors.equals(other.doors))
-			return false;
-		if (end == null) {
-			if (other.end != null)
-				return false;
-		} else if (!end.equals(other.end))
-			return false;
-		if (start == null) {
-			if (other.start != null)
-				return false;
-		} else if (!start.equals(other.start))
-			return false;
-		return true;
+		boolean areIdentical = this.getStartPoint().equals(other.getStartPoint()) && this.getEndPoint().equals(other.getEndPoint());
+		boolean areInversed = this.getStartPoint().equals(other.getEndPoint()) && this.getEndPoint().equals(other.getStartPoint());
+		if(areIdentical || areInversed) {
+			return true;
+		}
+		/* TODO add further cases where walls are really equal
+		 * 
+		 * ATTENTION: They are not equal, if they have different lengths!
+		 */
+		return false;
 	}
 
 	/**
@@ -136,5 +150,6 @@ public class Wall implements IPosition {
 				+ ", Distance = " + getShapeRepresentation().ptLineDist(middle));
 		return start;
 	}
+
 
 }

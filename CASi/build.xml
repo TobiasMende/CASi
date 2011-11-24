@@ -1,29 +1,80 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <project name="CASi" default="doc">
+	<property name="TALK" value="true" />
 	<property name="src.dir" location="src" />
 	<property name="build.dir" location="bin" />
 	<property name="dist.dir" location="dist" />
 	<property name="docs.dir" location="doc" />
 	<property name="log.dir" location="log" />
+	<property name="test.dir" location="test" />
+	<property name="test.reports" location="reports" />
+
+	<path id="classpath.base">
+	</path>
+	<path id="classpath.test">
+		<pathelement location="lib/junit-4.10.jar" />
+		<pathelement location="${test.dir}" />
+		<path refid="classpath.base" />
+	</path>
+
 	<target name="clean">
 		<delete dir="${build.dir}" />
 		<delete dir="${docs.dir}" />
 		<delete dir="${dist.dir}" />
 		<delete dir="${log.dir}" />
+		<delete dir="${test.reports}" />
 	</target>
 	<target name="makedir">
 		<mkdir dir="${build.dir}" />
 		<mkdir dir="${docs.dir}" />
 		<mkdir dir="${dist.dir}" />
 		<mkdir dir="${log.dir}" />
+		<mkdir dir="${test.reports}" />
 	</target>
 	<target name="compile" depends="clean, makedir">
 		<javac srcdir="${src.dir}" destdir="${build.dir}" includeantruntime="false">
 		</javac>
 
 	</target>
+	<target name="compile-test">
+		<javac srcdir="${test.dir}" verbose="${TALK}" includeantruntime="false">
+			<classpath refid="classpath.test" />
+		</javac>
+	</target>
+	<target name="clean-compile-test">
+		<delete verbose="${TALK}">
+			<fileset dir="${test.dir}" includes="**/*.class" />
+		</delete>
+	</target>
+	<target name="test" depends="compile-test">
+		<junit>
+			<classpath refid="classpath.test" />
+			<formatter type="brief" usefile="false" />
+			<batchtest>
+				<fileset dir="${test.dir}" includes="**/*.class" />
+			</batchtest>
+		</junit>
+	</target>
+	<target name="test-html" depends="compile-test"> 
+		<junit fork="yes" printsummary="no" haltonfailure="no">
+			<batchtest fork="yes" todir="${test.reports}">
+				<fileset dir="${test.dir}">
+					<include name="**/*.class" />
+				</fileset>
+			</batchtest>
+			<formatter type="xml" />
+			<classpath refid="classpath.test" />
+		</junit>
+
+		<junitreport todir="${test.reports}">
+			<fileset dir="${test.reports}">
+				<include name="TEST-*.xml" />
+			</fileset>
+			<report todir="${test.reports}" />
+		</junitreport>
+	</target>
 	<target name="doc" depends="compile">
-		<javadoc packagenames="src" sourcepath="${src.dir}" destdir="${docs.dir}">
+		<javadoc packagenames="src" sourcepath="${src.dir}" destdir="${docs.dir}" access="private">
 			<!-- Define which files / directory should get included, we include all -->
 			<fileset dir="${src.dir}">
 				<include name="**" />

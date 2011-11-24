@@ -59,7 +59,7 @@ public class SimulationClock implements Listenable<ISimulationClockListener> {
 	 * @param startTime the exact time, when the simulation starts (just eye candy)
 	 * @throws IllegalStateException if the clock was started before
 	 */
-	public void init(SimulationTime startTime) throws IllegalStateException {
+	public synchronized void init(SimulationTime startTime) throws IllegalStateException {
 		init(startTime, DEFAULT_SCALE_FACTOR);
 	}
 	
@@ -70,7 +70,7 @@ public class SimulationClock implements Listenable<ISimulationClockListener> {
 	 * @param factor the factor (1 simulated second = factor real milliseconds)
 	 * @throws IllegalStateException if the clock was started before
 	 */
-	public void init(SimulationTime startTime, int factor) throws IllegalStateException {
+	public synchronized void init(SimulationTime startTime, int factor) throws IllegalStateException {
 		init(startTime, (SimulationTime) startTime.clone(), factor);
 	}
 	
@@ -81,7 +81,7 @@ public class SimulationClock implements Listenable<ISimulationClockListener> {
 	 * @param factor the factor (1 simulated second = factor real milliseconds)
 	 * @throws IllegalStateException if the clock was started before
 	 */
-	public void init(SimulationTime startTime, SimulationTime currentTime, int factor) throws IllegalStateException {
+	public synchronized void init(SimulationTime startTime, SimulationTime currentTime, int factor) throws IllegalStateException {
 		if(started) {
 			throw new IllegalStateException("Can't init clock after starting");
 		}
@@ -94,7 +94,7 @@ public class SimulationClock implements Listenable<ISimulationClockListener> {
 	 * Starts the simulation clock (the simulation)
 	 * @throws IllegalStateException if the clock wasn't initialized before or if it was started yet.
 	 */
-	public void start() throws IllegalStateException {
+	public synchronized void start() throws IllegalStateException {
 		if(started) {
 			throw new IllegalStateException("Simulation was already started");
 		} else if(simulationStartTime == null) {
@@ -108,7 +108,7 @@ public class SimulationClock implements Listenable<ISimulationClockListener> {
 	/**
 	 * Method for renewing the timer with a new timer task. Should be called e.g. after scale factor changes.
 	 */
-	private void renewTimer() {
+	private synchronized void renewTimer() {
 		if(timer != null) {
 			timer.cancel();
 			timer = null;
@@ -133,7 +133,7 @@ public class SimulationClock implements Listenable<ISimulationClockListener> {
 	 * Stops the simulation
 	 * @throws IllegalStateException if the simulation wasn't started before.
 	 */
-	public void stop() throws IllegalStateException {
+	public synchronized void stop() throws IllegalStateException {
 		if(!started) {
 			throw new IllegalStateException("Simulation isn't started yet.");
 		}
@@ -162,7 +162,7 @@ public class SimulationClock implements Listenable<ISimulationClockListener> {
 	 * Getter for the simulation state
 	 * @return <code>true</code> if the simulation is started yet, <code>false</code> otherwise.
 	 */
-	public boolean isStarted() {
+	public synchronized boolean isStarted() {
 		return started;
 	}
 
@@ -191,7 +191,7 @@ public class SimulationClock implements Listenable<ISimulationClockListener> {
 	 * Setter for the scale factor (meaning the simulation speed a high scale factor results in a slow speed)
 	 * @param scaleFactor the factor to set
 	 */
-	public void setScaleFactor(int scaleFactor) {
+	public synchronized void setScaleFactor(int scaleFactor) {
 		this.scaleFactor = scaleFactor;
 		if(started) {
 			renewTimer();
@@ -202,7 +202,7 @@ public class SimulationClock implements Listenable<ISimulationClockListener> {
 	 * Getter for the current factor
 	 * @return the current factor (the amount of real milliseconds which must elapse before one simulated second is finished)
 	 */
-	public int getScaleFactor() {
+	public synchronized int getScaleFactor() {
 		return scaleFactor;
 	}
 

@@ -82,7 +82,16 @@ public class Room implements IPosition {
 	 * @return <code>true</code> if the position is in this room, <code>false</code> otherwise.
 	 */
 	public boolean contains(IPosition position) {
-		return getPolygonRepresentation().contains(position.getCoordinates());
+		return contains(position.getCoordinates());
+	}
+	
+	/**
+	 * Method for determining whether this rooms contains a given point
+	 * @param point the point
+	 * @return <code>true</code> if the point is in this room, <code>false</code> otherwise.
+	 */
+	public boolean contains(Point point) {
+		return getPolygonRepresentation().contains(point);
 	}
 
 }

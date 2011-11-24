@@ -1,4 +1,4 @@
-package de.uniluebeck.imis.casi.simulation.model;
+package de.uniluebeck.imis.casi.simulation.model.actionHandling;
 
 import java.io.Serializable;
 import java.net.Proxy.Type;
@@ -7,6 +7,8 @@ import java.util.Collection;
 import java.util.logging.Logger;
 
 import de.uniluebeck.imis.casi.CASi;
+import de.uniluebeck.imis.casi.simulation.model.AbstractComponent;
+import de.uniluebeck.imis.casi.simulation.model.SimulationTime;
 import de.uniluebeck.imis.casi.simulation.model.Agent.STATE;
 import de.uniluebeck.imis.casi.utils.Listenable;
 import de.uniluebeck.imis.casi.utils.Tools;
@@ -227,7 +229,7 @@ public abstract class AbstractAction implements Listenable<IActionListener>,
 	}
 
 	/**
-	 * @return <code>true</code> if the type is {@link TYPE.ABSTRACT},
+	 * @return <code>true</code> if the type is TYPE.ABSTRACT,
 	 *         <code>false</code> otherwise.
 	 */
 	public final boolean isAbstract() {
@@ -301,7 +303,6 @@ public abstract class AbstractAction implements Listenable<IActionListener>,
 
 	/**
 	 * Method for cloning an agent and its components to a relay new agent with state IDLE.
-	 * @param agent the agent to clone
 	 * @return the clone
 	 */
 	public AbstractAction clone() {

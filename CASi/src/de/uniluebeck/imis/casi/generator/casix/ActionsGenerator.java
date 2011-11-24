@@ -4,7 +4,7 @@ import java.util.Collection;
 
 import org.w3c.dom.NodeList;
 
-import de.uniluebeck.imis.casi.simulation.model.AbstractAction;
+import de.uniluebeck.imis.casi.simulation.model.actionHandling.AbstractAction;
 
 public class ActionsGenerator {//implements IGenerator {
 

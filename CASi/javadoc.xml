@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="javadoc">
+    <target name="javadoc">
+        <javadoc access="private" author="true" classpath="." destdir="doc" doctitle="CASi JavaDoc" nodeprecated="true" nodeprecatedlist="true" noindex="false" nonavbar="false" notree="false" packagenames="de.uniluebeck.imis.casi.generator.java,de.uniluebeck.imis.casi.utils,de.uniluebeck.imis.casi.simulation.model.actionHandling,de.uniluebeck.imis.casi.simulation.model,de.uniluebeck.imis.casi.communication,de.uniluebeck.imis.casi.generator.casix,de.uniluebeck.imis.casi.logging,de.uniluebeck.imis.casi.controller,de.uniluebeck.imis.casi.ui,de.uniluebeck.imis.casi.generator,de.uniluebeck.imis.casi.simulation.engine,de.uniluebeck.imis.casi" source="1.6" sourcepath="src" splitindex="true" use="true" version="false"/>
+    </target>
+</project>

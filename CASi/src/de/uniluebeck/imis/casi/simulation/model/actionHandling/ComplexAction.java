@@ -1,9 +1,10 @@
-package de.uniluebeck.imis.casi.simulation.model;
+package de.uniluebeck.imis.casi.simulation.model.actionHandling;
 
 import java.util.Collection;
 import java.util.Vector;
 
 import de.uniluebeck.imis.casi.CASi;
+import de.uniluebeck.imis.casi.simulation.model.AbstractComponent;
 
 /**
  * An abstract class that represents a complex action. Inherit from it to

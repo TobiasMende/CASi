@@ -1,4 +1,6 @@
-package de.uniluebeck.imis.casi.simulation.model;
+package de.uniluebeck.imis.casi.simulation.model.actionHandling;
+
+import de.uniluebeck.imis.casi.simulation.model.AbstractComponent;
 
 
 /**

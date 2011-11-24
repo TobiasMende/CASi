@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 
 import de.uniluebeck.imis.casi.simulation.engine.ISimulationClockListener;
 import de.uniluebeck.imis.casi.simulation.engine.SimulationClock;
+import de.uniluebeck.imis.casi.simulation.model.actionHandling.AbstractAction;
 import de.uniluebeck.imis.casi.utils.Tools;
 
 /**
@@ -146,7 +147,6 @@ public class Agent extends AbstractComponent implements
 
 	/**
 	 * Method for cloning an agent and its components to a relay new agent with state IDLE.
-	 * @param agent the agent to clone
 	 * @return the clone
 	 */
 	public Agent clone() {

@@ -1,4 +1,4 @@
-package de.uniluebeck.imis.casi.simulation.model;
+package de.uniluebeck.imis.casi.simulation.model.actionHandling;
 /**
  * Interfaces for objects that listen to events on actions
  * @author Tobias Mende

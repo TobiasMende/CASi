@@ -11,11 +11,11 @@ import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 import de.uniluebeck.imis.casi.generator.IWorldGenerator;
-import de.uniluebeck.imis.casi.simulation.model.AbstractAction;
 import de.uniluebeck.imis.casi.simulation.model.AbstractSensor;
 import de.uniluebeck.imis.casi.simulation.model.Agent;
 import de.uniluebeck.imis.casi.simulation.model.Room;
 import de.uniluebeck.imis.casi.simulation.model.World;
+import de.uniluebeck.imis.casi.simulation.model.actionHandling.AbstractAction;
 
 public class WorldGenerator implements IWorldGenerator {
 

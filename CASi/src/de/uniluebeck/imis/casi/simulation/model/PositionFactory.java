@@ -16,7 +16,7 @@ public class PositionFactory {
 	private static Collection<Point> points = null;
 
 
-	public static IPosition getPostionWithKoordinates(int x, int y) {
+	public static IPosition getPostionWithPoint(Point p) {
 
 		// to streamline the process of getting the actual coordinates form the
 		// returned Object we should create a new class that is in fact the
@@ -27,6 +27,15 @@ public class PositionFactory {
 		// else:
 		// create a new Point() and put in in the Collection
 		// and return it
+		return null;
+	}
+	
+	public static Room getRoomWithPoint(final Point p) {
+		for(Room r : rooms) {
+			if(r.contains(p)) {
+				return r;
+			}
+		}
 		return null;
 	}
 

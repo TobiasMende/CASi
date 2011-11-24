@@ -1,4 +1,7 @@
-package de.uniluebeck.imis.casi.communication;
+package de.uniluebeck.imis.casi.communication.mack;
+
+import de.uniluebeck.imis.casi.communication.ICommunicationComponent;
+import de.uniluebeck.imis.casi.communication.ICommunicationHandler;
 
 public final class MACKNetworkHandler implements ICommunicationHandler {
 

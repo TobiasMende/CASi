@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 
 import de.uniluebeck.imis.casi.communication.ICommunicationComponent;
+import de.uniluebeck.imis.casi.simulation.model.actionHandling.AbstractAction;
 import de.uniluebeck.imis.casi.utils.Listenable;
 //TODO add fancy solution for triggering actions
 /**

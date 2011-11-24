@@ -2,6 +2,7 @@ package de.uniluebeck.imis.casi.simulation.model;
 
 import java.awt.Point;
 import java.awt.Shape;
+import java.awt.geom.Point2D;
 import java.io.Serializable;
 
 public interface IPosition extends Serializable{
@@ -21,7 +22,7 @@ public interface IPosition extends Serializable{
 	 * @param point the point
 	 * @return <code>true</code> if the point is in the shape, <code>false</code> otherwise.
 	 */
-	public boolean contains(Point point);
+	public boolean contains(Point2D point);
 	
 	/**
 	 * Getter for the polygon representation of this object.
@@ -37,5 +38,5 @@ public interface IPosition extends Serializable{
 	 * 
 	 * @return the central point
 	 */
-	public Point getCentralPoint();
+	public Point2D getCentralPoint();
 }

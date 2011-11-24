@@ -2,6 +2,7 @@ package de.uniluebeck.imis.casi.simulation.model;
 
 import java.awt.Point;
 import java.awt.Shape;
+import java.awt.geom.Point2D;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -189,7 +190,7 @@ public class Agent extends AbstractComponent implements
 	}
 
 	@Override
-	public boolean contains(Point point) {
+	public boolean contains(Point2D point) {
 		// TODO Auto-generated method stub
 		return false;
 	}

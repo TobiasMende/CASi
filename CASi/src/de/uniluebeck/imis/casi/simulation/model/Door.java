@@ -1,7 +1,7 @@
 package de.uniluebeck.imis.casi.simulation.model;
 
-import java.awt.Point;
 import java.awt.Shape;
+import java.awt.geom.Point2D;
 
 /**
  * 
@@ -51,7 +51,7 @@ public class Door extends AbstractComponent{
 	}
 
 	@Override
-	public boolean contains(Point point) {
+	public boolean contains(Point2D point) {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -63,7 +63,7 @@ public class Door extends AbstractComponent{
 	}
 
 	@Override
-	public Point getCentralPoint() {
+	public Point2D getCentralPoint() {
 		// TODO Auto-generated method stub
 		return null;
 	}

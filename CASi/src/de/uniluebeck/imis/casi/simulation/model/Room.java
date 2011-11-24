@@ -3,7 +3,12 @@ package de.uniluebeck.imis.casi.simulation.model;
 import java.awt.Point;
 import java.awt.Polygon;
 import java.awt.Shape;
+import java.awt.geom.Point2D;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Vector;
 
 /**
@@ -17,7 +22,7 @@ public class Room implements IPosition {
 
 	private static final long serialVersionUID = 112593179870431369L;
 	/** the collection of walls this room consists of */
-	private Collection<Wall> walls = new Vector<Wall>();// THINK use map
+	private Vector<Wall> walls = new Vector<Wall>();// THINK use map
 														// instead?
 	/** A polygon that representates the shape of this room */
 	private Polygon polygonRepresentation;
@@ -29,14 +34,16 @@ public class Room implements IPosition {
 	}
 
 	@Override
-	public Point getCentralPoint() {
+	public Point2D getCentralPoint() {
 		// TODO implement
 		return null;
 	}
 
 	@Override
 	public Shape getShapeRepresentation() {
-		// TODO implement
+		if(polygonRepresentation == null) {
+			//TODO implement
+		}
 		return null;
 	}
 
@@ -49,6 +56,11 @@ public class Room implements IPosition {
 			walls.add(w);
 			invalidatePolygonRepresentation();
 		}
+	}
+	
+	private List<Point> getWallPoints() {
+		//TODO implement
+		return null;
 	}
 
 	/**
@@ -73,7 +85,7 @@ public class Room implements IPosition {
 	}
 	
 	@Override
-	public boolean contains(Point point) {
+	public boolean contains(Point2D point) {
 		return getShapeRepresentation().contains(point);
 	}
 

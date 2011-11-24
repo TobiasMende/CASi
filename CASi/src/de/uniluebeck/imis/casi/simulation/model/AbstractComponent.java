@@ -2,6 +2,7 @@ package de.uniluebeck.imis.casi.simulation.model;
 
 import java.awt.Image;
 import java.awt.Point;
+import java.awt.Shape;
 import java.io.Serializable;
 
 /**
@@ -61,6 +62,30 @@ public abstract class AbstractComponent implements IPosition, Serializable {
 		} else if (!identifier.equals(other.identifier))
 			return false;
 		return true;
+	}
+	
+	@Override
+	public boolean contains(IPosition position) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean contains(Point point) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public Shape getShapeRepresentation() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Point getCentralPoint() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 	

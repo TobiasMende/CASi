@@ -1,5 +1,7 @@
 package de.uniluebeck.imis.casi.simulation.model;
 
+import java.awt.Point;
+import java.awt.Shape;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -178,6 +180,30 @@ public class Agent extends AbstractComponent implements
 	public void simulationStarted() {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public boolean contains(IPosition position) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean contains(Point point) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public Shape getShapeRepresentation() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Point getCentralPoint() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

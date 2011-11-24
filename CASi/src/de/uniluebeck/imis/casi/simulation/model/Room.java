@@ -2,6 +2,7 @@ package de.uniluebeck.imis.casi.simulation.model;
 
 import java.awt.Point;
 import java.awt.Polygon;
+import java.awt.Shape;
 import java.util.Collection;
 import java.util.Vector;
 
@@ -27,24 +28,14 @@ public class Room implements IPosition {
 		return null;
 	}
 
-	/**
-	 * A point which is in the room, in best point a point near to the middle
-	 * point
-	 * 
-	 * @return the central point
-	 */
+	@Override
 	public Point getCentralPoint() {
 		// TODO implement
 		return null;
 	}
 
-	/**
-	 * Getter for the polygon representation of this room.
-	 * 
-	 * @return the existing polygon representation or a new created one if no
-	 *         representation exists yet.
-	 */
-	public Polygon getPolygonRepresentation() {
+	@Override
+	public Shape getShapeRepresentation() {
 		// TODO implement
 		return null;
 	}
@@ -76,22 +67,14 @@ public class Room implements IPosition {
 		polygonRepresentation = null;
 	}
 	
-	/**
-	 * Method for determining whether this rooms contains a given position
-	 * @param position the position
-	 * @return <code>true</code> if the position is in this room, <code>false</code> otherwise.
-	 */
+	@Override
 	public boolean contains(IPosition position) {
 		return contains(position.getCoordinates());
 	}
 	
-	/**
-	 * Method for determining whether this rooms contains a given point
-	 * @param point the point
-	 * @return <code>true</code> if the point is in this room, <code>false</code> otherwise.
-	 */
+	@Override
 	public boolean contains(Point point) {
-		return getPolygonRepresentation().contains(point);
+		return getShapeRepresentation().contains(point);
 	}
 
 }

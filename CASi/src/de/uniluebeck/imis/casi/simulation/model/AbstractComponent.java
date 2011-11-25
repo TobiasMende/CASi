@@ -1,7 +1,6 @@
 package de.uniluebeck.imis.casi.simulation.model;
 
 import java.awt.Image;
-import java.awt.Point;
 import java.awt.Shape;
 import java.awt.geom.Point2D;
 import java.io.Serializable;
@@ -28,13 +27,10 @@ public abstract class AbstractComponent implements IPosition, Serializable {
 		this.position = position;
 		return true;
 	}
-	
-	@Override
-	public Point getCoordinates() {
-		// TODO implement
+	public Point2D getCoordinates() {
+		//TODO implement
 		return null;
-	}
-	
+	};	
 	public final String getIdentifier() {
 		return identifier;
 	}

@@ -7,9 +7,7 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.TreeSet;
-
-import de.uniluebeck.imis.casi.utils.WallComperator;
+import java.util.logging.Logger;
 
 /**
  * This class is a presentation of rooms in the simulation. Furthermore it
@@ -19,11 +17,10 @@ import de.uniluebeck.imis.casi.utils.WallComperator;
  * 
  */
 public class Room implements IPosition {
-
+	private static final Logger log = Logger.getLogger(Room.class.getName());
 	private static final long serialVersionUID = 112593179870431369L;
 	/** the collection of walls this room consists of */
-	private TreeSet<Wall> walls = new TreeSet<Wall>(new WallComperator());// THINK use map
-														// instead?
+	private List<Wall> walls = new LinkedList<Wall>();
 	/** A polygon that representates the shape of this room */
 	private Polygon polygonRepresentation;
 
@@ -32,7 +29,7 @@ public class Room implements IPosition {
 		/**
 		 * returns the coordinates of the first wall
 		 */
-		return walls.first().getCoordinates();
+		return walls.get(0).getCoordinates();
 	}
 
 	@Override
@@ -42,7 +39,26 @@ public class Room implements IPosition {
 		if(getShapeRepresentation().contains(middleCandidate)) {
 			return middleCandidate;
 		}
-		// TODO add another central point calculation for ugly cases
+		//If middle candidate is wrong, give central point of first door
+		// THINK how can we add a better calculation in this case (e.g. another point in the room)
+		Door firstDoor = getFirstDoor();
+		if(firstDoor != null) {
+			return firstDoor.getCentralPoint();
+		}
+		return null;
+	}
+	
+	/**
+	 * Method for getting the first door in this room
+	 * @return the first door or <code>null</code> if the room has no doors.
+	 */
+	private Door getFirstDoor() {
+		for(Wall w : walls) {
+			if(w.hasDoors()) {
+				return w.getDoors().get(0);
+			}
+		}
+		log.warning("This room has no doors");
 		return null;
 	}
 
@@ -51,7 +67,7 @@ public class Room implements IPosition {
 		if(polygonRepresentation == null) {
 			List<Point> points = getWallPoints();
 			//Adding startpoint again for providing a closed path
-			points.add(walls.first().getStartPoint());
+			points.add(walls.get(0).getStartPoint());
 			int[] x = new int[points.size()];
 			int[] y = new int[points.size()];
 			for(int i = 0; i < x.length; i++) {
@@ -75,11 +91,11 @@ public class Room implements IPosition {
 	}
 	
 	/**
-	 * Calculates an ordered list of points which can be used for generating a polygon representation
+	 * Calculates list of points which can be used for generating a polygon representation
+	 * This method expects that the walls are added as they are connected.
 	 * @return an ordered list of node points
 	 */
 	private List<Point> getWallPoints() {
-		// TODO naiv: Hope that the set is well sorted, Test how this works in normal environment
 		List<Point> points = new LinkedList<Point>();
 		for(Wall w: walls) {
 			if(!points.contains(w.getStartPoint())) {
@@ -90,15 +106,6 @@ public class Room implements IPosition {
 			}
 		}
 		return points;
-	}
-
-	/**
-	 * Removes a wall from the room
-	 * @param w the wall to remove
-	 */
-	public void removeWall(Wall w) {
-		walls.remove(w);
-		invalidatePolygonRepresentation();
 	}
 
 	/**
@@ -116,6 +123,16 @@ public class Room implements IPosition {
 	@Override
 	public boolean contains(Point2D point) {
 		return getShapeRepresentation().contains(point);
+	}
+
+	/**
+	 * Removes a wall from the room. This method is deprecated because there is no sense in removing walls
+	 * @param w the wall to remove
+	 */
+	@Deprecated
+	public void removeWall(Wall w) {
+		walls.remove(w);
+		invalidatePolygonRepresentation();
 	}
 
 }

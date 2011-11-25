@@ -1,71 +1,125 @@
 package de.uniluebeck.imis.casi.simulation.model;
 
-import java.awt.Shape;
+import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
+import java.security.InvalidParameterException;
 
 /**
- * 
- * 
+ * The representation for a door that can be added to a wall
  * @author Tobias Mende
  *
  */
 public class Door extends AbstractComponent{
+	/**the id for serialization */
+	private static final long serialVersionUID = 8551792658587147027L;
+	/** The default size for doors */
 	public static final int DEFAULT_DOOR_SIZE = 1;
-	// the default offset is -1, so the Wall takes care of placing the door centered!
+	/** The default door offset, if <code>-1</code> the door will be centered */
 	public static final int DEFAULT_DOOR_OFFSET = -1;
+	/** The id counter */
 	private static int id;
+	/** The offset from the startpoint of the containing wall */
 	private int offset;
+	/** The size of the door */
 	private int size;
+	/** The wall that contains this door */
+	private Wall wall;
 	
-	private Door(String identifier) {
+	/**
+	 * Creates a door with a given identifier
+	 * @param identifier the identifier
+	 */
+	private Door(String identifier) throws InvalidParameterException{
 		super(identifier);
+		if(WorldFactory.findDoorForIdentifier(identifier) != null) {
+			throw new InvalidParameterException("There is a door with this identifier yet.");
+		}
+		WorldFactory.addDoor(this);
 	}
-
-	public int getOffset() {
-		return offset;
-	}
-
-	public int getSize() {
-		return size;
-	}
-
-	
+	/**
+	 * Constructor for a door with a given offset of the walls start point
+	 * @param offset the offset from the start point of the containing wall
+	 * @param size the size of the wall (must be positive)
+	 */
 	public Door(int offset, int size) {
 		this("door-"+id);
 		id++;
 		this.offset = offset;
-		this.size = size;
+		this.size = Math.abs(size);
 	}
-	
+	/**
+	 * Constructor for a default door that is automatically centered on the wall and has a default size of DEFAULT_DOOR_SIZE
+	 */
 	public Door() {
-		this("door-"+id);
-		id++;
-		this.offset = DEFAULT_DOOR_OFFSET;
-		this.size = DEFAULT_DOOR_SIZE;
+		this(DEFAULT_DOOR_OFFSET, DEFAULT_DOOR_SIZE);
 	}
 
+	/**
+	 * Getter for the offset of the wall
+	 * @return the offset or <code>-1</code> if the door should be automatically positioned
+	 */
+	public int getOffset() {
+		return offset;
+	}
+
+	/**
+	 * Getter for the size of the door
+	 * @return the size
+	 */
+	public int getSize() {
+		return size;
+	}
+	
+	/**
+	 * Setter for the wall that contains this door
+	 * @param wall
+	 */
+	public void setWall(Wall wall) {
+		this.wall = wall;
+	}
+
+	
 	@Override
 	public boolean contains(IPosition position) {
-		// TODO Auto-generated method stub
-		return false;
+		return contains(position.getCoordinates());
 	}
 
 	@Override
 	public boolean contains(Point2D point) {
-		// TODO Auto-generated method stub
-		return false;
+		return getShapeRepresentation().ptLineDist(point) == 0;
 	}
 
 	@Override
-	public Shape getShapeRepresentation() {
-		// TODO Auto-generated method stub
-		return null;
+	public Line2D getShapeRepresentation() {
+		Point2D wallVector = wall.getNormalizedWallVector();
+		Point2D centralPoint = getCentralPoint();
+		double startEndOffset = ((double)size)/2;
+		// Calculating offset vectors
+		Point2D startOffsetVector = new Point2D.Double(wallVector.getX()*(-startEndOffset), wallVector.getY()*(-startEndOffset));
+		Point2D endOffsetVector = new Point2D.Double(wallVector.getX()*startEndOffset, wallVector.getY()*startEndOffset);
+		// Calculating start end end points
+		Point2D startPoint = new Point2D.Double(centralPoint.getX()+startOffsetVector.getX(), centralPoint.getY()+startOffsetVector.getY());
+		Point2D endPoint = new Point2D.Double(centralPoint.getX()+endOffsetVector.getX(), centralPoint.getY()+endOffsetVector.getY());
+		return new Line2D.Double(startPoint, endPoint);
 	}
 
 	@Override
 	public Point2D getCentralPoint() {
-		// TODO Auto-generated method stub
-		return null;
+		if(offset < 0) {
+			return wall.getCentralPoint();
+		}
+		Point2D wallVector = wall.getNormalizedWallVector();
+		// The offset of the central point:
+		double centralOffset = ((double)offset) + ((double)size)/2;
+		// A vector with the wall direction and the length of the offset
+		Point2D doorStartOffset = new Point2D.Double(wallVector.getX()*centralOffset, wallVector.getY()*centralOffset);
+		// Add start point as begin for the vector
+		return new Point2D.Double(wall.getStartPoint().getX()+doorStartOffset.getX(), wall.getStartPoint().getY()+doorStartOffset.getY());
+	}
+	
+	@Override
+	public Point2D getCoordinates() {
+		return getCentralPoint();
 	}
 	
 	

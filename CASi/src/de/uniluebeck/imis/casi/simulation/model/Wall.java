@@ -3,8 +3,8 @@ package de.uniluebeck.imis.casi.simulation.model;
 import java.awt.Point;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
-import java.util.Collection;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 /**
@@ -25,7 +25,7 @@ public class Wall implements IPosition {
 	/** the point where this wall ends */
 	private Point end;
 	/** A collection of doors that are in this wall */
-	private final Collection<Door> doors = new Vector<Door>();
+	private final List<Door> doors = new ArrayList<Door>();
 
 	/**
 	 * Constructor creating a wall with provided start and end point
@@ -47,14 +47,16 @@ public class Wall implements IPosition {
 	 *            the door to add
 	 */
 	public void addDoor(Door door) {
+		door.setWall(this);
 		doors.add(door);
+		
 	}
 
 	/**
 	 * Getter for the doors contained in this walls
 	 * @return a collection of doors
 	 */
-	public Collection<Door> getDoors() {
+	public List<Door> getDoors() {
 		return doors;
 	}
 	
@@ -149,6 +151,26 @@ public class Wall implements IPosition {
 				+ middle
 				+ ", Distance = " + getShapeRepresentation().ptLineDist(middle));
 		return start;
+	}
+	
+	/**
+	 * Getter for a normalized vector that describes the direction of the wall
+	 * @return the vector
+	 */
+	public Point2D getNormalizedWallVector() {
+		double xDistance = end.x - start.x;
+		double yDistance = end.y - start.y;
+		double wallLength = Math.hypot(xDistance, yDistance);
+		return new Point2D.Double(xDistance/wallLength, yDistance/wallLength);
+	}
+	
+	/**
+	 * Getter for the length of the wall
+	 * @return the length
+	 */
+	public double getLength() {
+		Point2D distanceVector = new Point2D.Double(end.getX()-start.getX(), end.getY()-start.getY());
+		return Math.hypot(distanceVector.getX(), distanceVector.getY());
 	}
 
 

@@ -8,7 +8,7 @@ import java.io.Serializable;
 public interface IPosition extends Serializable{
 	
 	
-	public Point getCoordinates();
+	public Point2D getCoordinates();
 	
 	/**
 	 * Method for determining whether the shape of this object contains a given position

@@ -90,6 +90,10 @@ public class Room implements IPosition {
 		}
 	}
 	
+	public List<Wall> getWalls() {
+		return walls;
+	}
+	
 	/**
 	 * Calculates list of points which can be used for generating a polygon representation
 	 * This method expects that the walls are added as they are connected.

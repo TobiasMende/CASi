@@ -8,8 +8,8 @@ public final class MACKNetworkHandler implements ICommunicationHandler {
 	private static MACKNetworkHandler instance;
 	private String xmppID;
 
-	private MACKNetworkHandler() {
-
+	public MACKNetworkHandler() {
+		// TODO implement
 	}
 
 

@@ -6,12 +6,15 @@ import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import de.uniluebeck.imis.casi.communication.ICommunicationHandler;
+import de.uniluebeck.imis.casi.communication.comLogger.CommunicationLogger;
+import de.uniluebeck.imis.casi.controller.MainController;
+import de.uniluebeck.imis.casi.generator.IWorldGenerator;
+import de.uniluebeck.imis.casi.generator.java.WorldGenerator;
 import de.uniluebeck.imis.casi.logging.DevLogFormatter;
 import de.uniluebeck.imis.casi.logging.ExtendedConsoleHandler;
 import de.uniluebeck.imis.casi.logging.SimLogFormatter;
-import de.uniluebeck.imis.casi.simulation.engine.ISimulationClockListener;
-import de.uniluebeck.imis.casi.simulation.engine.SimulationClock;
-import de.uniluebeck.imis.casi.simulation.model.SimulationTime;
+import de.uniluebeck.imis.casi.ui.IMainView;
 
 public class CASi {
 
@@ -34,11 +37,13 @@ public class CASi {
 	public static void main(String[] args) {
 		setupLogging();
 		log.info("Test!");
-		/*
-		 * TODO: - Create a generator - create the GUI - create the network
-		 * controller - create main controller with generator, gui and network
-		 */
-
+		IWorldGenerator generator = new WorldGenerator();
+		ICommunicationHandler networkLogger = new CommunicationLogger();
+		IMainView mainView = null; // TODO create new MainView
+		
+		//Call the main controller and let it work:
+		MainController mc = new MainController(generator, networkLogger, mainView);
+		
 	}
 
 	private static void setupLogging() {

@@ -1,7 +1,10 @@
 package de.uniluebeck.imis.casi.simulation.factory;
 
+import java.awt.Point;
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -34,17 +37,18 @@ public class PathFactory {
 		for (Wall wall : room.getWalls()) {
 			doors.addAll(wall.getDoors());
 		}
-		if(doors.size() == 0) {
+		if (doors.size() == 0) {
 			return null;
 		}
 		Set<Path> paths = new HashSet<Path>();
 		// Calculate paths from each door to each other
-		for(Door start : doors) {
-			for(Door end : doors) {
-				if(start.equals(end)) {
+		for (Door start : doors) {
+			for (Door end : doors) {
+				if (start.equals(end)) {
 					continue;
 				}
-				// TODO implement, THINK better way? if "a->b" is known, we don't need to calculate "b->a"
+				// TODO implement, THINK better way? if "a->b" is known, we
+				// don't need to calculate "b->a"
 			}
 		}
 		return paths;
@@ -61,9 +65,55 @@ public class PathFactory {
 	 *            the maximum path length
 	 * @return a fine grained path
 	 */
-	public static Path getFineGrainedPath(Path path, int maximumPathLength) {
-		// TODO implement
-		return null;
+	public static Path getFineGrainedPath(Path path, double maximumPathLength) {
+		Path grainedPath = new Path(path.getStartPoint(), path.getEndPoint());
+		for (Iterator<Point2D> iter = path.iterator(); iter.hasNext();) {
+			Point2D first = iter.next();
+			if (iter.hasNext()) {
+				Point2D second = iter.next();
+				grainedPath.addAll(getFineGrainedPath(first, second,
+						maximumPathLength));
+			} else {
+				// Reached the last point
+				break;
+			}
+		}
+		return grainedPath;
+	}
+
+	/**
+	 * Calculates a fine grained path between two points. This means, that the linear path is cut into further steps. This is useful if you need subpaths for each second.
+	 * @param start the start point
+	 * @param end the end point
+	 * @param maximumPathLength the maximum distance between interpoints
+	 * @return a new fine grained path
+	 */
+	public static Path getFineGrainedPath(Point2D start,
+			Point2D end, double maximumPathLength) {
+		Point2D directionVector = GraphicFactory.getDirectionVector(start, end);
+		double length = GraphicFactory.calculateVectorLength(directionVector);
+		Point2D normalizedDirectionVector = GraphicFactory
+				.getNormalizedVector(directionVector);
+		Path path = new Path(start, end);
+		path.add(start);
+		Point2D lastPoint = start;
+		// Calculating interpoints while the reamining length is bigger than the maximum path length
+		while (length > maximumPathLength) {
+			// Calculating interpoint
+			double x = lastPoint.getX() + maximumPathLength
+					* normalizedDirectionVector.getX();
+			double y = lastPoint.getY() + maximumPathLength
+					* normalizedDirectionVector.getY();
+			lastPoint = new Point2D.Double(x, y);
+			// adding interpoint
+			path.add(lastPoint);
+			// calculating reaming length
+			length -= maximumPathLength;
+		}
+		path.add(end);
+		
+		return path;
+
 	}
 
 	/**
@@ -99,6 +149,46 @@ public class PathFactory {
 	 */
 	private static Path findPathInRoom(IPosition start, IPosition end) {
 		// TODO implement
+		return null;
+	}
+
+	/**
+	 * Method for finding a path in a given set. A path is found, if there
+	 * exists a path so that one of the following conditions is true:
+	 * <ul>
+	 * <li> <code>a.startPoint.equals(start) && a.endPoint.equals(end)</code>
+	 * <li> <code>a.startPoint.equals(end) && a.endPoint.equals(start)</code>, in
+	 * this case, the path is returned in reversed order.
+	 * </ul>
+	 * 
+	 * @param paths
+	 *            the set to search in
+	 * @param start
+	 *            the start point
+	 * @param end
+	 *            the end point
+	 * @return the path or <code>null</code> if no matching path was found
+	 */
+	public static Path findPathInSet(Set<Path> paths, Point start, Point end) {
+		Path p = new Path(start, end);
+		boolean reversed = false;
+		if (!paths.contains(p)) {
+			p = new Path(end, start);
+			if (!paths.contains(p)) {
+				return null;
+			}
+			reversed = true;
+		}
+		for (Path path : paths) {
+			if (!path.equals(p)) {
+				continue;
+			}
+			if (reversed) {
+				return path.reversed();
+			} else {
+				return path;
+			}
+		}
 		return null;
 	}
 }

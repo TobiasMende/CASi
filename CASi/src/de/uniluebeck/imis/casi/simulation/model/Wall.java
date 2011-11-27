@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+import de.uniluebeck.imis.casi.simulation.factory.GraphicFactory;
+
 /**
  * Representation of a wall which is used by {@link Room}s and {@link Door}s
  * 
@@ -136,10 +138,9 @@ public class Wall implements IPosition {
 
 	@Override
 	public Point2D getCentralPoint() {
-		Point2D middle = new Point2D.Double();
 		double x = ((double) (start.x + end.x)) / 2;
 		double y = ((double) (start.y + end.y)) / 2;
-		middle.setLocation(x, y);
+		Point2D middle = new Point2D.Double(x,y);
 		if (contains(middle)) {
 			return middle;
 		}
@@ -158,10 +159,8 @@ public class Wall implements IPosition {
 	 * @return the vector
 	 */
 	public Point2D getNormalizedWallVector() {
-		double xDistance = end.x - start.x;
-		double yDistance = end.y - start.y;
-		double wallLength = Math.hypot(xDistance, yDistance);
-		return new Point2D.Double(xDistance/wallLength, yDistance/wallLength);
+		Point2D wallVector = GraphicFactory.getDirectionVector(start, end);
+		return GraphicFactory.getNormalizedVector(wallVector);
 	}
 	
 	/**
@@ -169,8 +168,8 @@ public class Wall implements IPosition {
 	 * @return the length
 	 */
 	public double getLength() {
-		Point2D distanceVector = new Point2D.Double(end.getX()-start.getX(), end.getY()-start.getY());
-		return Math.hypot(distanceVector.getX(), distanceVector.getY());
+		Point2D distanceVector = GraphicFactory.getDirectionVector(start, end);
+		return GraphicFactory.calculateVectorLength(distanceVector);
 	}
 
 

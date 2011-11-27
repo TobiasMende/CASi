@@ -2,6 +2,7 @@ package de.uniluebeck.imis.casi.simulation.model;
 
 import java.awt.Point;
 import java.awt.geom.Point2D;
+import java.util.Iterator;
 import java.util.LinkedList;
 
 /**
@@ -14,10 +15,11 @@ public class Path extends LinkedList<Point2D> {
 	private static final long serialVersionUID = 5513927165139455322L;
 	
 	/** the start point */
-	private final Point startPoint;
+	private final Point2D startPoint;
 	
 	/** the end point */
-	private final Point endPoint;
+	private final Point2D endPoint;
+	
 	
 	/**
 	 * Constructor for a new path that saves the way between the given start and end point
@@ -25,6 +27,15 @@ public class Path extends LinkedList<Point2D> {
 	 * @param end the end point
 	 */
 	public Path(Point start, Point end) {
+		this((Point2D)start, (Point2D)end);
+	}
+
+	/**
+	 * Constructor for a new path that saves the way between the given start and end point
+	 * @param start the start point
+	 * @param end the end point
+	 */
+	public Path(Point2D start, Point2D end) {
 		super();
 		startPoint = start;
 		endPoint = end;
@@ -34,7 +45,7 @@ public class Path extends LinkedList<Point2D> {
 	 * Getter for the start point of this path
 	 * @return the start point
 	 */
-	public Point getStartPoint() {
+	public Point2D getStartPoint() {
 		return startPoint;
 	}
 	
@@ -43,7 +54,7 @@ public class Path extends LinkedList<Point2D> {
 	 * @return the end point
 	 */
 
-	public Point getEndPoint() {
+	public Point2D getEndPoint() {
 		return endPoint;
 	}
 
@@ -80,5 +91,15 @@ public class Path extends LinkedList<Point2D> {
 		return true;
 	}
 
-	
+	/**
+	 * Creates a reversed version of the path, meaning a path from end to start point
+	 * @return the reversed path
+	 */
+	public Path reversed() {
+		Path reversedPath = new Path(endPoint, startPoint);
+		for(Iterator<Point2D> iter = descendingIterator(); iter.hasNext(); ) {
+			reversedPath.add(iter.next());
+		}
+		return reversedPath;
+	}
 }

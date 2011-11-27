@@ -4,6 +4,8 @@ import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.security.InvalidParameterException;
 
+import de.uniluebeck.imis.casi.simulation.factory.WorldFactory;
+
 /**
  * The representation for a door that can be added to a wall
  * @author Tobias Mende

@@ -3,6 +3,10 @@ package de.uniluebeck.imis.casi.simulation.model;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Set;
+import java.util.logging.Logger;
+
+import de.uniluebeck.imis.casi.simulation.factory.PathFactory;
+import de.uniluebeck.imis.casi.simulation.factory.WorldFactory;
 
 /**
  * World Class that is kind of a root object for a Model tree
@@ -11,6 +15,8 @@ import java.util.Set;
  * 
  */
 public class World {
+	/** The development logger */
+	private static final Logger log = Logger.getLogger(World.class.getName());
 	/** A set containing the rooms */
 	private Set<Room> rooms;
 	/** A set containing the agents */
@@ -30,6 +36,7 @@ public class World {
 	 * same room or <code>-1</code> otherwise.
 	 */
 	private double[][] doorGraph;
+	private Path[][] doorPaths;
 
 	/**
 	 * Flag for saving whether this world is sealed or not. If sealed, no
@@ -44,6 +51,7 @@ public class World {
 	public void seal() {
 		sealed = true;
 		calculateDoorGraph();
+		calculateDoorPaths();
 	}
 
 	/**
@@ -297,5 +305,49 @@ public class World {
 		for (int i = 0; i < size; i++) {
 			doorGraph[i] = init;
 		}
+	}
+	
+	/**
+	 * Calculates the paths from each door to all adjacent other doors. And saves them in the doorPaths matrix
+	 */
+	private void calculateDoorPaths() {
+		doorPaths = new Path[doorGraph.length][doorGraph.length];
+		for(int i = 0; i< doorPaths.length; i++) {
+			for(int j = 0; j < i; j++) {
+				if(i == j || doorGraph[i][j] <= 0) {
+					// Doors are equal or not adjacent
+					doorPaths[i][j] = null;
+					continue;
+				}
+				Door from = WorldFactory.findDoorForIdentifier(i);
+				Door to = WorldFactory.findDoorForIdentifier(j);
+				if(from != null && to != null) {
+					doorPaths[i][j] = PathFactory.findPath(from, to);
+				} else {
+					doorPaths[i][j] = null;
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Getter for a path between two adjacent doors
+	 * @param start the start door
+	 * @param end the end door
+	 * @return a path or <code>null</code> if no path was found.
+	 */
+	public Path getDoorPath(Door start, Door end) {
+		if(start.equals(end)) {
+			log.severe("Shouldn't call this method if doors are equal!");
+			return null;
+		}
+		Path path = doorPaths[start.getIntIdentifier()][end.getIntIdentifier()];
+		if(path == null) {
+			// Path didn't exist this way. try another way round
+			path = doorPaths[end.getIntIdentifier()][start.getIntIdentifier()];
+			// Reverse path  if one is found
+			path = (path != null) ? doorPaths[end.getIntIdentifier()][start.getIntIdentifier()].reversed() : null;
+		}
+		return path;
 	}
 }

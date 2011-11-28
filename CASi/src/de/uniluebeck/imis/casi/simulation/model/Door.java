@@ -4,6 +4,7 @@ import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.security.InvalidParameterException;
 
+import de.uniluebeck.imis.casi.CASi;
 import de.uniluebeck.imis.casi.simulation.factory.WorldFactory;
 
 /**
@@ -26,8 +27,10 @@ public class Door extends AbstractComponent{
 	private int offset;
 	/** The size of the door */
 	private int size;
-	/** The wall that contains this door */
-	private Wall wall;
+	/** The wall that contains this door and is used for calculating the position */
+	private Wall firstWall;
+	/** The wall, that also contains this door but is not used for calculations */
+	private Wall secondWall;
 	/** The identifier */
 	private int identifier;
 	
@@ -81,7 +84,13 @@ public class Door extends AbstractComponent{
 	 * @param wall
 	 */
 	public void setWall(Wall wall) {
-		this.wall = wall;
+		if(firstWall == null) {
+			this.firstWall = wall;
+		} else if(secondWall == null) {
+			this.secondWall = wall;
+		} else {
+			CASi.SIM_LOG.warning("Adding door to more than two walls isn't allowed. Ignored this command! First wall = "+firstWall+", second wall = "+secondWall);
+		}
 	}
 	
 	/** 
@@ -105,7 +114,7 @@ public class Door extends AbstractComponent{
 
 	@Override
 	public Line2D getShapeRepresentation() {
-		Point2D wallVector = wall.getNormalizedWallVector();
+		Point2D wallVector = firstWall.getNormalizedWallVector();
 		Point2D centralPoint = getCentralPoint();
 		double startEndOffset = ((double)size)/2;
 		// Calculating offset vectors
@@ -120,15 +129,15 @@ public class Door extends AbstractComponent{
 	@Override
 	public Point2D getCentralPoint() {
 		if(offset < 0) {
-			return wall.getCentralPoint();
+			return firstWall.getCentralPoint();
 		}
-		Point2D wallVector = wall.getNormalizedWallVector();
+		Point2D wallVector = firstWall.getNormalizedWallVector();
 		// The offset of the central point:
 		double centralOffset = ((double)offset) + ((double)size)/2;
 		// A vector with the wall direction and the length of the offset
 		Point2D doorStartOffset = new Point2D.Double(wallVector.getX()*centralOffset, wallVector.getY()*centralOffset);
 		// Add start point as begin for the vector
-		return new Point2D.Double(wall.getStartPoint().getX()+doorStartOffset.getX(), wall.getStartPoint().getY()+doorStartOffset.getY());
+		return new Point2D.Double(firstWall.getStartPoint().getX()+doorStartOffset.getX(), firstWall.getStartPoint().getY()+doorStartOffset.getY());
 	}
 	
 	@Override

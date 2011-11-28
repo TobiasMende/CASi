@@ -59,7 +59,7 @@ public class CASi {
 	/**
 	 * Sets up the logging
 	 */
-	private static void setupLogging() {
+	public static void setupLogging() {
 		// setup logging
 		log.setUseParentHandlers(false);
 		SIM_LOG.setUseParentHandlers(false);

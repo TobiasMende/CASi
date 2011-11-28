@@ -1,6 +1,8 @@
 package de.uniluebeck.imis.casi.simulation.factory;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import de.uniluebeck.imis.casi.simulation.model.Door;
@@ -13,9 +15,9 @@ import de.uniluebeck.imis.casi.simulation.model.Wall;
  */
 public class WorldFactory {
 	/** A set of doors, that are used in the simulation */
-	private static Set<Door> doors = new HashSet<Door>();
+	private static Map<Integer,Door> doors = new HashMap<Integer, Door>();
 	
-	/** A set of walls, that are used in the simulation */
+	/** A map of walls, that are used in the simulation */
 	private static Set<Wall> walls = new HashSet<Wall>();
 	
 	/**
@@ -24,7 +26,7 @@ public class WorldFactory {
 	 * @return the door, if it was found, <code>null</code> otherwise.
 	 */
 	public static Door findDoorForIdentifier(String identifier) {
-		for(Door door : doors) {
+		for(Door door : doors.values()) {
 			if(door.getIdentifier().equals(identifier)) {
 				return door;
 			}
@@ -33,11 +35,20 @@ public class WorldFactory {
 	}
 	
 	/**
+	 * Method for searching a door with a given int identifier
+	 * @param identifier the identifier
+	 * @return the door or <code>null</code> if no door was found
+	 */
+	public static Door findDoorForIdentifier(int identifier) {
+		return doors.get(identifier);
+	}
+	
+	/**
 	 * Method for adding a door
 	 * @param door the door
 	 */
 	public static void addDoor(Door door) {
-		doors.add(door);
+		doors.put(door.getIntIdentifier(), door);
 	}
 
 }

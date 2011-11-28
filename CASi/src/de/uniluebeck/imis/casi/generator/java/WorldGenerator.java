@@ -6,7 +6,7 @@ import de.uniluebeck.imis.casi.simulation.model.World;
 public class WorldGenerator implements IWorldGenerator {
 
 	@Override
-	public World generateWorld() throws Exception {
+	public World generateWorld() {
 		// TODO Auto-generated method stub
 
 		// Ein Geistlicher und ein australischer Schafhirte treten bei einem

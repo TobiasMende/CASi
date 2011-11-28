@@ -36,7 +36,10 @@ public class CASi {
 	 * @param args
 	 */
 	public static void main(String[] args) {
+		// DON'T REMOVE THESE LINES:
 		setupLogging();
+		
+		// DO WHAT YOU WANT:
 		log.info("Test!");
 		IWorldGenerator generator = new WorldGenerator();
 		ICommunicationHandler networkLogger = new CommunicationLogger();
@@ -44,9 +47,12 @@ public class CASi {
 		
 		//Call the main controller and let it work:
 		MainController mc = new MainController(generator, networkLogger, mainView);
-		mainView.showGui();
+		mc.start();
 	}
 
+	/**
+	 * Sets up the logging
+	 */
 	private static void setupLogging() {
 		// setup logging
 		log.setUseParentHandlers(false);

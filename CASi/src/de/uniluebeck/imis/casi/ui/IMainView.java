@@ -19,5 +19,5 @@ public interface IMainView {
 	/**
 	 * Shows the IMainView.
 	 */
-	public void showGui();
+	public void showUi();
 }

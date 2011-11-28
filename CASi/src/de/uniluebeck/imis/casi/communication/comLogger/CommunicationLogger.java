@@ -22,8 +22,7 @@ public class CommunicationLogger implements ICommunicationHandler {
 	}
 
 	@Override
-	public boolean send(ICommunicationComponent sender, Object message)
-			throws Exception {
+	public boolean send(ICommunicationComponent sender, Object message) {
 		log.info(sender + " has send a message: " + message);
 		return true;
 	}

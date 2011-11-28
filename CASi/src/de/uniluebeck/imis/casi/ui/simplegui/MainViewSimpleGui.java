@@ -63,7 +63,7 @@ public class MainViewSimpleGui extends JFrame implements IMainView {
 	 * Sets the simple GUI visible.
 	 */
 	@Override
-	public void showGui() {
+	public void showUi() {
 		
 		this.setVisible(true);
 		CASi.SIM_LOG.info("Show simple GUI");

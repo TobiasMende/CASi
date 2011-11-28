@@ -12,6 +12,8 @@ import de.uniluebeck.imis.casi.simulation.factory.WorldFactory;
  *
  */
 public class Door extends AbstractComponent{
+	/** A prefix for the identifier of this door	 */
+	public static final String ID_PREFIX = "door-";
 	/**the id for serialization */
 	private static final long serialVersionUID = 8551792658587147027L;
 	/** The default size for doors */
@@ -26,14 +28,16 @@ public class Door extends AbstractComponent{
 	private int size;
 	/** The wall that contains this door */
 	private Wall wall;
+	/** The identifier */
+	private int identifier;
 	
 	/**
 	 * Creates a door with a given identifier
 	 * @param identifier the identifier
 	 */
-	private Door(String identifier) throws InvalidParameterException{
-		super(identifier);
-		if(WorldFactory.findDoorForIdentifier(identifier) != null) {
+	private Door(int identifier) throws InvalidParameterException{
+		super(ID_PREFIX+identifier);
+		if(WorldFactory.findDoorForIdentifier(ID_PREFIX+identifier) != null) {
 			throw new InvalidParameterException("There is a door with this identifier yet.");
 		}
 		WorldFactory.addDoor(this);
@@ -44,7 +48,7 @@ public class Door extends AbstractComponent{
 	 * @param size the size of the wall (must be positive)
 	 */
 	public Door(int offset, int size) {
-		this("door-"+id);
+		this(id);
 		id++;
 		this.offset = offset;
 		this.size = Math.abs(size);
@@ -78,6 +82,14 @@ public class Door extends AbstractComponent{
 	 */
 	public void setWall(Wall wall) {
 		this.wall = wall;
+	}
+	
+	/** 
+	 * Getter for the integer value of the identifier for this door
+	 * @return the identifier as integer
+	 */
+	public int getIntIdentifier() {
+		return identifier;
 	}
 
 	
@@ -124,6 +136,13 @@ public class Door extends AbstractComponent{
 		return getCentralPoint();
 	}
 	
+	/**
+	 * Method for getting the number of doors in the simulation
+	 * @return The static identifier counter
+	 */
+	public static int getNumberOfDoors() {
+		return id;
+	}
 	
 
 }

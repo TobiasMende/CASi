@@ -14,9 +14,9 @@ import de.uniluebeck.imis.casi.simulation.model.World;
  * @author Tobias Mende
  * 
  */
-public class Engine implements ISimulationClockListener {
+public class SimulationEngine implements ISimulationClockListener {
 	/** The instance of this singleton */
-	private static Engine instance;
+	private static SimulationEngine instance;
 	/**
 	 * The handler which handles external communication (e.g. a network
 	 * connection)
@@ -32,7 +32,7 @@ public class Engine implements ISimulationClockListener {
 	/**
 	 * The private constructor of this singleton
 	 */
-	private Engine() {
+	private SimulationEngine() {
 		SimulationClock.getInstance().addListener(this);
 		// just here for prohibiting external access
 	}
@@ -42,9 +42,9 @@ public class Engine implements ISimulationClockListener {
 	 * 
 	 * @return the instance
 	 */
-	public static Engine getInstance() {
+	public static SimulationEngine getInstance() {
 		if (instance == null) {
-			instance = new Engine();
+			instance = new SimulationEngine();
 		}
 		return instance;
 	}

@@ -3,11 +3,11 @@ package de.uniluebeck.imis.casi.generator;
 import de.uniluebeck.imis.casi.simulation.model.World;
 
 /**
- * @author marv
+ * @author Marvin Frick
  *
  */
 public interface IWorldGenerator {
 
-	public World generateWorld() throws Exception;
+	public World generateWorld();
 	
 }

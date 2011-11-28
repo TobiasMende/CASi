@@ -10,9 +10,8 @@ public interface ICommunicationHandler {
 	 * @param sender the component that sends the message
 	 * @param message the message
 	 * @return <code>true</code> if the message was sended successful, <code>false</code> otherwise.
-	 * @throws Exception if something went wrong 
 	 */
-	public boolean send(ICommunicationComponent sender, Object message) throws Exception;
+	public boolean send(ICommunicationComponent sender, Object message);
 	/**
 	 * Method for registering a network component in the network controller
 	 * @param comp the component to register

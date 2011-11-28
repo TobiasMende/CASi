@@ -5,14 +5,21 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import com.sun.tools.doclets.internal.toolkit.taglets.InheritDocTaglet;
+
+import de.uniluebeck.imis.casi.simulation.engine.SimulationEngine;
 import de.uniluebeck.imis.casi.simulation.model.Door;
 import de.uniluebeck.imis.casi.simulation.model.IPosition;
 import de.uniluebeck.imis.casi.simulation.model.Path;
 import de.uniluebeck.imis.casi.simulation.model.Room;
 import de.uniluebeck.imis.casi.simulation.model.Wall;
+import de.uniluebeck.imis.casi.simulation.model.World;
+import de.uniluebeck.imis.casi.utils.pathfinding.GraphPathSolver;
+import de.uniluebeck.imis.casi.utils.pathfinding.InRoomPathSolver;
 
 /**
  * The Path Factory is able to calculate paths by using some path tracking
@@ -82,14 +89,20 @@ public class PathFactory {
 	}
 
 	/**
-	 * Calculates a fine grained path between two points. This means, that the linear path is cut into further steps. This is useful if you need subpaths for each second.
-	 * @param start the start point
-	 * @param end the end point
-	 * @param maximumPathLength the maximum distance between interpoints
+	 * Calculates a fine grained path between two points. This means, that the
+	 * linear path is cut into further steps. This is useful if you need
+	 * subpaths for each second.
+	 * 
+	 * @param start
+	 *            the start point
+	 * @param end
+	 *            the end point
+	 * @param maximumPathLength
+	 *            the maximum distance between interpoints
 	 * @return a new fine grained path
 	 */
-	public static Path getFineGrainedPath(Point2D start,
-			Point2D end, double maximumPathLength) {
+	public static Path getFineGrainedPath(Point2D start, Point2D end,
+			double maximumPathLength) {
 		Point2D directionVector = GraphicFactory.getDirectionVector(start, end);
 		double length = GraphicFactory.calculateVectorLength(directionVector);
 		Point2D normalizedDirectionVector = GraphicFactory
@@ -97,7 +110,8 @@ public class PathFactory {
 		Path path = new Path(start, end);
 		path.add(start);
 		Point2D lastPoint = start;
-		// Calculating interpoints while the reamining length is bigger than the maximum path length
+		// Calculating interpoints while the reamining length is bigger than the
+		// maximum path length
 		while (length > maximumPathLength) {
 			// Calculating interpoint
 			double x = lastPoint.getX() + maximumPathLength
@@ -111,7 +125,7 @@ public class PathFactory {
 			length -= maximumPathLength;
 		}
 		path.add(end);
-		
+
 		return path;
 
 	}
@@ -128,6 +142,9 @@ public class PathFactory {
 	 *         found.
 	 */
 	public static Path findPath(IPosition start, IPosition end) {
+		if ((start instanceof Door) && (end instanceof Door)) {
+			return findDoorToDoorPath((Door) start, (Door) end);
+		}
 		Room startRoom = PositionFactory.getRoomWithPoint(start
 				.getCentralPoint());
 		Room endRoom = PositionFactory.getRoomWithPoint(end.getCentralPoint());
@@ -136,6 +153,65 @@ public class PathFactory {
 		}
 		// TODO implement
 		return null;
+	}
+
+	/**
+	 * Method finds a path between adjacent doors
+	 * 
+	 * @return the path
+	 */
+	public static Path findDoorToDoorPath(Door start, Door end) {
+		double[][] adjacency = SimulationEngine.getInstance().getWorld()
+				.getDoorGraph();
+		if (adjacency[start.getIntIdentifier()][end.getIntIdentifier()] > 0) {
+			Path test = SimulationEngine.getInstance().getWorld()
+					.getDoorPath(start, end);
+			if (test != null) {
+				// Path was calculated yet
+				return test;
+			}
+			// doors are adjacent
+			// TODO get room for the doors
+			Room room = null;
+			InRoomPathSolver solver = new InRoomPathSolver(room,
+					(Point) end.getCentralPoint());
+			List<Point> tempPath = solver.compute((Point) start
+					.getCentralPoint());
+			Path finalPath = new Path(start.getCentralPoint(),
+					end.getCentralPoint());
+			finalPath.addAll(tempPath);
+			return finalPath;
+		}
+
+		// Doors arn't adjacent, so search in door graph.
+		Set<Integer> temp = new HashSet<Integer>();
+		temp.add(end.getIntIdentifier());
+		GraphPathSolver solver = new GraphPathSolver(temp, SimulationEngine
+				.getInstance().getWorld().getDoorGraph());
+		// Computes a list of identifiers for door noodes.
+		List<Integer> nodes = solver.compute(start.getIntIdentifier());
+		Path path = new Path(start.getCentralPoint(), end.getCentralPoint());
+		Iterator<Integer> iter = nodes.iterator();
+		Door first;
+		if (iter.hasNext()) {
+			first = WorldFactory.findDoorForIdentifier(iter.next());
+		} else {
+			return null;
+		}
+		while (true) {
+			Door second;
+			if (iter.hasNext()) {
+				second = WorldFactory.findDoorForIdentifier(iter.next());
+			} else {
+				break;
+			}
+			// This path should be in the door path matrix or at least it should
+			// be a path between adjacent doors:
+			path.addAll(findDoorToDoorPath(first, second));
+			// Save the second door as first door to start here:
+			first = second;
+		}
+		return path;
 	}
 
 	/**

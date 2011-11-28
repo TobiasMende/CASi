@@ -1,22 +1,29 @@
 package de.uniluebeck.imis.casi.utils.pathfinding;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.fail;
+
 import java.awt.Point;
 import java.util.List;
 import java.util.logging.Logger;
 
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 import de.uniluebeck.imis.casi.CASi;
 import de.uniluebeck.imis.casi.simulation.model.Room;
 import de.uniluebeck.imis.casi.simulation.model.Wall;
-
+/**
+ * This test tries to verify the correctness of the A<sup>*</sup> implementation for in-room-purposes
+ * @author Tobias Mende
+ *
+ */
 public class InRoomPathSolverTest {
 	private static final Logger log = Logger.getLogger(InRoomPathSolverTest.class.getName());
-	private Room room;
-	@Before
-	public void setup() {
+	private static Room room;
+	@BeforeClass
+	public static void setup() {
 		CASi.setupLogging();
 		
 		Wall w1 = new Wall(new Point(0, 0), new Point(200, 0));
@@ -39,6 +46,17 @@ public class InRoomPathSolverTest {
 		room.addWall(w8);
 	}
 
+/**
+ 	 * The room:
+	 * 
+	 * -*--			-----*---
+	 * |	|		  |		|
+	 * |	|		  |		|
+	 * |	|_________|		|
+	 * |					|
+	 * |					|
+	 * ----------------------
+ */
 	@Test
 	public void testComputeWithValidDestination() {
 		
@@ -50,7 +68,7 @@ public class InRoomPathSolverTest {
 		
 		assertNotNull("No path found", path);
 		log.info(path.toString());
-		log.info("Path length ="+path.size());
+		log.info("Path length = "+path.size());
 		log.info("Next test! Start not in room");
 		path = solver.compute(new Point(0, 10000));
 		assertNull("A path was found, but there is none", path);
@@ -68,6 +86,29 @@ public class InRoomPathSolverTest {
 		} catch (IllegalArgumentException e) {
 			// Nothing to do here.
 		}
+	}
+	
+	/**
+	 * This method test finding a way from a point on the wall to another point on the wall
+	 * The room:
+	 * 
+	 * ------		--------
+	 * | *	|		  |		|
+	 * |	|		  |	*	|
+	 * |	|_________|		|
+	 * |					|
+	 * |					|
+	 * ----------------------
+	 * 
+	 */
+	@Test
+	public void testComputeDoorToDoorWay() {
+		log.info("Testing door to door way (point on wall to point on wall)");
+		InRoomPathSolver solver = new InRoomPathSolver(room, new Point(50,0));
+		List<Point> path = solver.compute(new Point(700,0));
+		assertNotNull("No path found", path);
+		log.info(path.toString());
+		log.info("Path length = "+path.size());
 	}
 
 }

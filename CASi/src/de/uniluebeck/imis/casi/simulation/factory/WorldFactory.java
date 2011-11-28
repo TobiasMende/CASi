@@ -50,5 +50,6 @@ public class WorldFactory {
 	public static void addDoor(Door door) {
 		doors.put(door.getIntIdentifier(), door);
 	}
+	
 
 }

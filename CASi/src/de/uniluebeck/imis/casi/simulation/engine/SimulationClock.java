@@ -18,7 +18,7 @@ public class SimulationClock implements Listenable<ISimulationClockListener> {
 	private static SimulationClock instance;
 	/** The starttime of this simulation */
 	private SimulationTime simulationStartTime;
-	
+	/** The current time in the simulation */
 	private SimulationTime currentTime;
 	/** Factor: tick every scaleFactor milliseconds (1 simulated second = scale factor real milliseconds) */
 	private int scaleFactor;

@@ -22,7 +22,9 @@ import de.uniluebeck.imis.casi.utils.Tools;
  */
 public abstract class AbstractAction implements Listenable<IActionListener>,
 		Serializable {
+	/** the id for serialization */
 	private static final long serialVersionUID = -4600404747026813557L;
+	/** the development logger */
 	private Logger log = Logger.getLogger(AbstractAction.class.getName());
 
 	/**
@@ -66,7 +68,9 @@ public abstract class AbstractAction implements Listenable<IActionListener>,
 	/** the duration of this action in seconds */
 	private int duration = -1;
 
+	/** The earliest time for starting with this action */
 	private SimulationTime earliestStartTime;
+	/** The latest time when this simulation should be finished */
 	private SimulationTime latestEndTime;
 
 	/** A collection of listeners that listen for events */
@@ -256,18 +260,13 @@ public abstract class AbstractAction implements Listenable<IActionListener>,
 				&& !type.equals(TYPE.ABSTRACT);
 	}
 
+	/**
+	 * Method for checking whether this action is completed.
+	 * @return <code>true</code> if the action is completed or <code>false</code> otherwise.
+	 */
 	public boolean isCompleted() {
 		return state.equals(STATE.COMPLETED);
 	}
-
-	// /**
-	// * Sets the type of this action to {@link TYPE.SUBACTION}
-	// */
-	// public void makeSubaction() {
-	// if(!isAbstract() && !isComplex()) {
-	// setType(TYPE.SUBACTION);
-	// }
-	// }
 
 	/* === Listener Handling === */
 	@Override

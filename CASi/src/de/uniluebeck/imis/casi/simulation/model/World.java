@@ -2,6 +2,7 @@ package de.uniluebeck.imis.casi.simulation.model;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Set;
 
 /**
  * World Class that is kind of a root object for a Model tree
@@ -10,14 +11,18 @@ import java.util.Collection;
  * 
  */
 public class World {
-
-	private Collection<Room> rooms;
-	private Collection<Agent> agents;
-	private Collection<AbstractActuator> actuators;
-	private Collection<AbstractSensor> sensors;
+	/** A set containing the rooms */
+	private Set<Room> rooms;
+	/** A set containing the agents */
+	private Set<Agent> agents;
+	/** A set containing the actuators */
+	private Set<AbstractActuator> actuators;
+	/** A set containing the sensors */
+	private Set<AbstractSensor> sensors;
 
 	/** Collection of components that are neither agents, actuators nor sensors */
-	private Collection<AbstractComponent> components;
+	private Set<AbstractComponent> components;
+	/** The start time in this world */
 	private SimulationTime startTime;
 	/**
 	 * The door graph is a graph with doors as nodes. In this case its an
@@ -48,7 +53,7 @@ public class World {
 	 * @throws IllegalAccessException
 	 *             if the world isn't sealed
 	 */
-	public Collection<Room> getRooms() throws IllegalAccessException {
+	public Set<Room> getRooms() throws IllegalAccessException {
 		if (!sealed) {
 			throw new IllegalAccessException("World isn't sealed!");
 		}
@@ -62,7 +67,7 @@ public class World {
 	 * @throws IllegalAccessException
 	 *             if the world isn't sealed
 	 */
-	public Collection<Agent> getAgents() throws IllegalAccessException {
+	public Set<Agent> getAgents() throws IllegalAccessException {
 		if (!sealed) {
 			throw new IllegalAccessException("World isn't sealed!");
 		}
@@ -76,7 +81,7 @@ public class World {
 	 * @throws IllegalAccessException
 	 *             if the world isn't sealed
 	 */
-	public Collection<AbstractActuator> getActuators()
+	public Set<AbstractActuator> getActuators()
 			throws IllegalAccessException {
 		if (!sealed) {
 			throw new IllegalAccessException("World isn't sealed!");
@@ -91,7 +96,7 @@ public class World {
 	 * @throws IllegalAccessException
 	 *             if the world isn't sealed
 	 */
-	public Collection<AbstractSensor> getSensors()
+	public Set<AbstractSensor> getSensors()
 			throws IllegalAccessException {
 		if (!sealed) {
 			throw new IllegalAccessException("World isn't sealed!");
@@ -106,7 +111,7 @@ public class World {
 	 * @throws IllegalAccessException
 	 *             if the world isn't sealed
 	 */
-	public Collection<AbstractComponent> getComponents()
+	public Set<AbstractComponent> getComponents()
 			throws IllegalAccessException {
 		if (!sealed) {
 			throw new IllegalAccessException("World isn't sealed!");
@@ -141,7 +146,7 @@ public class World {
 	 * @throws IllegalAccessException
 	 *             if the world is sealed.
 	 */
-	public void setRooms(Collection<Room> rooms) throws IllegalAccessException {
+	public void setRooms(Set<Room> rooms) throws IllegalAccessException {
 		if (sealed) {
 			throw new IllegalAccessException("World is sealed!");
 		}
@@ -156,7 +161,7 @@ public class World {
 	 * @throws IllegalAccessException
 	 *             if the world is sealed.
 	 */
-	public void setAgents(Collection<Agent> agents)
+	public void setAgents(Set<Agent> agents)
 			throws IllegalAccessException {
 		if (sealed) {
 			throw new IllegalAccessException("World is sealed!");
@@ -172,7 +177,7 @@ public class World {
 	 * @throws IllegalAccessException
 	 *             if the world is sealed.
 	 */
-	public void setActuators(Collection<AbstractActuator> actuators)
+	public void setActuators(Set<AbstractActuator> actuators)
 			throws IllegalAccessException {
 		if (sealed) {
 			throw new IllegalAccessException("World is sealed!");
@@ -188,7 +193,7 @@ public class World {
 	 * @throws IllegalAccessException
 	 *             if the world is sealed.
 	 */
-	public void setSensors(Collection<AbstractSensor> sensors)
+	public void setSensors(Set<AbstractSensor> sensors)
 			throws IllegalAccessException {
 		if (sealed) {
 			throw new IllegalAccessException("World is sealed!");
@@ -205,7 +210,7 @@ public class World {
 	 * @throws IllegalAccessException
 	 *             if the world is sealed.
 	 */
-	public void setComponents(Collection<AbstractComponent> components)
+	public void setComponents(Set<AbstractComponent> components)
 			throws IllegalAccessException {
 		if (sealed) {
 			throw new IllegalAccessException("World is sealed!");
@@ -281,7 +286,7 @@ public class World {
 	}
 
 	/**
-	 * Sets all distances to -1, meaning that the doors arn't adjacent.
+	 * Sets all distances to <code>-1</code>, meaning that the doors arn't adjacent.
 	 */
 	private void initializeDoorGraph() {
 		int size = doorGraph.length;

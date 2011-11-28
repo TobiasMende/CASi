@@ -16,10 +16,15 @@ import de.uniluebeck.imis.casi.logging.ExtendedConsoleHandler;
 import de.uniluebeck.imis.casi.logging.SimLogFormatter;
 import de.uniluebeck.imis.casi.ui.IMainView;
 import de.uniluebeck.imis.casi.ui.simplegui.MainViewSimpleGui;
-
+/**
+ * CASi is the main class of the entire simulator.
+ * Modules like the {@link ICommunicationHandler}, {@link IWorldGenerator} or the {@link IMainView} can be exchanged here.
+ * @author Tobias Mende
+ *
+ */
 public class CASi {
-
-	private static Logger log = Logger.getLogger("de.uniluebeck.imis.casi");
+	/** The development logger */
+	private static final Logger log = Logger.getLogger("de.uniluebeck.imis.casi");
 	/**
 	 * Default logger for logging simulation information. Should be used from
 	 * the whole project
@@ -33,6 +38,7 @@ public class CASi {
 	private static ExtendedConsoleHandler devConsoleHandler, simConsoleHandler;
 
 	/**
+	 * The starting point for the entire program, changes can be made here to customize the simulator
 	 * @param args
 	 */
 	public static void main(String[] args) {

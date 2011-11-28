@@ -14,9 +14,13 @@ import de.uniluebeck.imis.casi.communication.ICommunicationHandler;
  * 
  */
 public class CommunicationLogger implements ICommunicationHandler {
+	/** The development logger */
 	private static final Logger log = Logger
 			.getLogger(CommunicationLogger.class.getName());
-	
+
+	/**
+	 * Default constructor
+	 */
 	public CommunicationLogger() {
 		log.fine("Hello World! I'm here for logging some network stuff");
 	}

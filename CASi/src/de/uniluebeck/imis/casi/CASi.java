@@ -15,6 +15,7 @@ import de.uniluebeck.imis.casi.logging.DevLogFormatter;
 import de.uniluebeck.imis.casi.logging.ExtendedConsoleHandler;
 import de.uniluebeck.imis.casi.logging.SimLogFormatter;
 import de.uniluebeck.imis.casi.ui.IMainView;
+import de.uniluebeck.imis.casi.ui.simplegui.MainViewSimpleGui;
 
 public class CASi {
 
@@ -39,11 +40,11 @@ public class CASi {
 		log.info("Test!");
 		IWorldGenerator generator = new WorldGenerator();
 		ICommunicationHandler networkLogger = new CommunicationLogger();
-		IMainView mainView = null; // TODO create new MainView
+		IMainView mainView = new MainViewSimpleGui();
 		
 		//Call the main controller and let it work:
 		MainController mc = new MainController(generator, networkLogger, mainView);
-		
+		mainView.showGui();
 	}
 
 	private static void setupLogging() {

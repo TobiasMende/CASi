@@ -8,6 +8,16 @@ import de.uniluebeck.imis.casi.controller.IUIController;
  *
  */
 public interface IMainView {
+	
+	/**
+	 * Sets the UIController of the IMainView.
+	 * 
+	 * @param controller the UI controller
+	 */
 	public void setUIController(IUIController controller);
-	public void show();
+	
+	/**
+	 * Shows the IMainView.
+	 */
+	public void showGui();
 }

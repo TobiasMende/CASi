@@ -34,7 +34,6 @@ public class MainController {
 			CASi.SIM_LOG.severe("Can't set components after starting the simulation: "+e.fillInStackTrace());
 		}
 		CASi.SIM_LOG.fine("Setup finished. Everything is fine");
-		// TODO Auto-generated constructor stub
 	}
 	
 	/**

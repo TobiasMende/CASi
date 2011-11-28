@@ -3,6 +3,7 @@ package de.uniluebeck.imis.casi.ui.simplegui;
 import java.awt.Color;
 import java.awt.Graphics;
 
+import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
 /**
@@ -13,6 +14,11 @@ import javax.swing.JPanel;
 
 @SuppressWarnings("serial")
 public class SimulationPanel extends JPanel {
+	
+	public SimulationPanel() {
+		
+		this.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+	}
 	
 	public void paintComponent(Graphics g) {
 		

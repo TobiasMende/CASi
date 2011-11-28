@@ -66,5 +66,15 @@ public class InRoomPathSolver extends AStar<Point> {
 		}
 		return successors;
 	}
+	
+	@Override
+	public List<Point> compute(Point start) {
+		if(start.equals(destination)) {
+			List<Point> path = new LinkedList<Point>();
+			path.add(start);
+			return path;
+		}
+		return super.compute(start);
+	}
 
 }

@@ -1,8 +1,6 @@
 package de.uniluebeck.imis.casi.utils.pathfinding;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 import java.awt.Point;
 import java.util.List;
@@ -72,7 +70,6 @@ public class InRoomPathSolverTest {
 		log.info("Next test! Start not in room");
 		path = solver.compute(new Point(0, 10000));
 		assertNull("A path was found, but there is none", path);
-		
 	}
 	
 	@Test

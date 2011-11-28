@@ -2,6 +2,7 @@ package de.uniluebeck.imis.casi.utils.pathfinding;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -60,11 +61,21 @@ public class GraphPathSolver extends AStar<Integer> {
 	@Override
 	protected List<Integer> calculateSuccessors(Integer node) {
 		List<Integer> successors = new ArrayList<Integer>();
-		for (int i = 0; i < adjacency.length; i++) {
-			if (adjacency[node.intValue()][i] > 0) {
+		for (int i = 0; i < adjacency[node.intValue()].length; i++) {
+			if (adjacency[node.intValue()][i] >= 0) {
 				successors.add(i);
 			}
 		}
 		return successors;
+	}
+	
+	@Override
+	public List<Integer> compute(Integer start) {
+		if(destinationIdentifiers.contains(start)) {
+			List<Integer> path= new LinkedList<Integer>();
+			path.add(start);
+			return path;
+		}
+		return super.compute(start);
 	}
 }

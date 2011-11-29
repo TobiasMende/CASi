@@ -1,3 +1,11 @@
+/*  CASi is a Context Awareness Simulation software
+    Copyright (C) 2012  Moritz Bürger, Marvin Frick, Tobias Mende
+
+    This program is free software. It is licensed under the
+    GNU Lesser General Public License with one clarification.
+    See the LICENSE.txt file in this projects root folder or
+    <http://www.gnu.org/licenses/lgpl.html> for more details.   
+ */
 package de.uniluebeck.imis.casi.simulation.model;
 
 import java.awt.Point;
@@ -37,40 +45,44 @@ public class Room implements IPosition {
 	@Override
 	public Point2D getCentralPoint() {
 		Rectangle2D bounds = getShapeRepresentation().getBounds2D();
-		Point2D middleCandidate = new Point2D.Double(bounds.getCenterX(), bounds.getCenterY());
-		if(getShapeRepresentation().contains(middleCandidate)) {
+		Point2D middleCandidate = new Point2D.Double(bounds.getCenterX(),
+				bounds.getCenterY());
+		if (getShapeRepresentation().contains(middleCandidate)) {
 			return middleCandidate;
 		}
-		//If middle candidate is wrong, give central point of first door
-		// THINK how can we add a better calculation in this case (e.g. another point in the room)
+		// If middle candidate is wrong, give central point of first door
+		// THINK how can we add a better calculation in this case (e.g. another
+		// point in the room)
 		Door firstDoor = getFirstDoor();
-		if(firstDoor != null) {
+		if (firstDoor != null) {
 			return firstDoor.getCentralPoint();
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Method for getting the first door in this room
+	 * 
 	 * @return the first door or <code>null</code> if the room has no doors.
 	 */
 	private Door getFirstDoor() {
-		for(Wall w : walls) {
-			if(w.hasDoors()) {
+		for (Wall w : walls) {
+			if (w.hasDoors()) {
 				return w.getDoors().get(0);
 			}
 		}
 		log.warning("This room has no doors");
 		return null;
 	}
-	
+
 	/**
 	 * Getter for all doors in this room
+	 * 
 	 * @return a set of doors
 	 */
 	public Set<Door> getDoors() {
 		Set<Door> doors = new HashSet<Door>();
-		for(Wall w : walls) {
+		for (Wall w : walls) {
 			doors.addAll(w.getDoors());
 		}
 		return doors;
@@ -78,13 +90,13 @@ public class Room implements IPosition {
 
 	@Override
 	public Shape getShapeRepresentation() {
-		if(polygonRepresentation == null) {
+		if (polygonRepresentation == null) {
 			List<Point> points = getWallPoints();
-			//Adding startpoint again for providing a closed path
+			// Adding startpoint again for providing a closed path
 			points.add(walls.get(0).getStartPoint());
 			int[] x = new int[points.size()];
 			int[] y = new int[points.size()];
-			for(int i = 0; i < x.length; i++) {
+			for (int i = 0; i < x.length; i++) {
 				x[i] = points.get(i).x;
 				y[i] = points.get(i).y;
 			}
@@ -95,7 +107,9 @@ public class Room implements IPosition {
 
 	/**
 	 * Adds a wall to the room
-	 * @param w the wall to add
+	 * 
+	 * @param w
+	 *            the wall to add
 	 */
 	public void addWall(Wall w) {
 		if (!walls.contains(w)) {
@@ -103,23 +117,25 @@ public class Room implements IPosition {
 			invalidatePolygonRepresentation();
 		}
 	}
-	
+
 	public List<Wall> getWalls() {
 		return walls;
 	}
-	
+
 	/**
-	 * Calculates list of points which can be used for generating a polygon representation
-	 * This method expects that the walls are added as they are connected.
+	 * Calculates list of points which can be used for generating a polygon
+	 * representation This method expects that the walls are added as they are
+	 * connected.
+	 * 
 	 * @return an ordered list of node points
 	 */
 	private List<Point> getWallPoints() {
 		List<Point> points = new LinkedList<Point>();
-		for(Wall w: walls) {
-			if(!points.contains(w.getStartPoint())) {
+		for (Wall w : walls) {
+			if (!points.contains(w.getStartPoint())) {
 				points.add(w.getStartPoint());
 			}
-			if(!points.contains(w.getEndPoint())) {
+			if (!points.contains(w.getEndPoint())) {
 				points.add(w.getEndPoint());
 			}
 		}
@@ -132,20 +148,23 @@ public class Room implements IPosition {
 	private void invalidatePolygonRepresentation() {
 		polygonRepresentation = null;
 	}
-	
+
 	@Override
 	public boolean contains(IPosition position) {
 		return contains(position.getCoordinates());
 	}
-	
+
 	@Override
 	public boolean contains(Point2D point) {
 		return getShapeRepresentation().contains(point);
 	}
 
 	/**
-	 * Removes a wall from the room. This method is deprecated because there is no sense in removing walls
-	 * @param w the wall to remove
+	 * Removes a wall from the room. This method is deprecated because there is
+	 * no sense in removing walls
+	 * 
+	 * @param w
+	 *            the wall to remove
 	 */
 	@Deprecated
 	public void removeWall(Wall w) {

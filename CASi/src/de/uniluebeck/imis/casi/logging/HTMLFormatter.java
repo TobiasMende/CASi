@@ -1,3 +1,11 @@
+/*  CASi is a Context Awareness Simulation software
+    Copyright (C) 2012  Moritz Bürger, Marvin Frick, Tobias Mende
+
+    This program is free software. It is licensed under the
+    GNU Lesser General Public License with one clarification.
+    See the LICENSE.txt file in this projects root folder or
+    <http://www.gnu.org/licenses/lgpl.html> for more details.   
+ */
 package de.uniluebeck.imis.casi.logging;
 
 import java.text.DateFormat;
@@ -27,11 +35,11 @@ public class HTMLFormatter extends java.util.logging.Formatter {
 		r.append("<span class='log_method'>(" + methodName + ")</span>:<br />");
 		r.append("<span class='log_date'>" + dateStr + "</span><br />");
 		r.append("<span class='log_entry");
-		if(rec.getLevel().intValue() <= Level.FINE.intValue())
+		if (rec.getLevel().intValue() <= Level.FINE.intValue())
 			r.append(" log_fine");
-		else if(rec.getLevel().intValue() <= Level.INFO.intValue())
+		else if (rec.getLevel().intValue() <= Level.INFO.intValue())
 			r.append(" log_default");
-		else 
+		else
 			r.append(" log_error");
 		r.append("'>" + rec.getMessage() + "</span>");
 		r.append("</div>");

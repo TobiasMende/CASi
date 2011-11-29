@@ -1,5 +1,10 @@
-/**
- * 
+/*  CASi is a Context Awareness Simulation software
+    Copyright (C) 2012  Moritz Bürger, Marvin Frick, Tobias Mende
+
+    This program is free software. It is licensed under the
+    GNU Lesser General Public License with one clarification.
+    See the LICENSE.txt file in this projects root folder or
+    <http://www.gnu.org/licenses/lgpl.html> for more details.   
  */
 package de.uniluebeck.imis.casi.simulation.factory;
 
@@ -14,17 +19,20 @@ import de.uniluebeck.imis.casi.simulation.model.Wall;
 
 /**
  * The position factory helps when dealing with different positions.
+ * 
  * @author Marvin Frick, Tobias Mende
  * 
  */
 public class PositionFactory {
 	/** The development logger */
-	private static final Logger log = Logger.getLogger(PositionFactory.class.getName());
-	
+	private static final Logger log = Logger.getLogger(PositionFactory.class
+			.getName());
+
 	/**
 	 * Method for getting a position object for a given point.
 	 * 
-	 * @param point the point to get the position for
+	 * @param point
+	 *            the point to get the position for
 	 * @return the position, if one is found or <code>null</code> otherwise.
 	 */
 	public static IPosition getPostionWithPoint(Point2D point) {
@@ -40,30 +48,36 @@ public class PositionFactory {
 		// and return it
 		return null;
 	}
-	
+
 	/**
 	 * Method for getting a room that contains a specific point
-	 * @param point the point to get a room for
-	 * @return a room containing the provided point or <code>null</code> if no room was found.
+	 * 
+	 * @param point
+	 *            the point to get a room for
+	 * @return a room containing the provided point or <code>null</code> if no
+	 *         room was found.
 	 */
 	public static Room getRoomWithPoint(final Point2D point) {
 		Collection<Room> rooms;
 		try {
 			rooms = SimulationEngine.getInstance().getWorld().getRooms();
-			for(Room r : rooms) {
-				if(r.contains(point)) {
+			for (Room r : rooms) {
+				if (r.contains(point)) {
 					return r;
 				}
 			}
 		} catch (IllegalAccessException e) {
-			log.severe("Method should not be called before sealing the world. "+e.fillInStackTrace());
+			log.severe("Method should not be called before sealing the world. "
+					+ e.fillInStackTrace());
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Method for getting a room with a provided collection of walls
-	 * @param walls the walls to search the room for
+	 * 
+	 * @param walls
+	 *            the walls to search the room for
 	 * @return the room, if one was found or <code>null</code> otherwise.
 	 */
 	public static Room getRoomWithWalls(Collection<Wall> walls) {

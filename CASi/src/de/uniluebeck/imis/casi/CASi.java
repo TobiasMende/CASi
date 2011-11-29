@@ -1,3 +1,11 @@
+/*  CASi is a Context Awareness Simulation software
+    Copyright (C) 2012  Moritz Bürger, Marvin Frick, Tobias Mende
+
+    This program is free software. It is licensed under the
+    GNU Lesser General Public License with one clarification.
+    See the LICENSE.txt file in this projects root folder or
+    <http://www.gnu.org/licenses/lgpl.html> for more details.   
+ */
 package de.uniluebeck.imis.casi;
 
 import java.io.IOException;
@@ -17,15 +25,19 @@ import de.uniluebeck.imis.casi.logging.ExtendedConsoleHandler;
 import de.uniluebeck.imis.casi.logging.SimLogFormatter;
 import de.uniluebeck.imis.casi.ui.IMainView;
 import de.uniluebeck.imis.casi.ui.simplegui.MainViewSimpleGui;
+
 /**
- * CASi is the main class of the entire simulator.
- * Modules like the {@link ICommunicationHandler}, {@link IWorldGenerator} or the {@link IMainView} can be exchanged here.
+ * CASi is the main class of the entire simulator. Modules like the
+ * {@link ICommunicationHandler}, {@link IWorldGenerator} or the
+ * {@link IMainView} can be exchanged here.
+ * 
  * @author Tobias Mende
- *
+ * 
  */
 public class CASi {
 	/** The development logger */
-	private static final Logger log = Logger.getLogger("de.uniluebeck.imis.casi");
+	private static final Logger log = Logger
+			.getLogger("de.uniluebeck.imis.casi");
 	/**
 	 * Default logger for logging simulation information. Should be used from
 	 * the whole project
@@ -39,21 +51,24 @@ public class CASi {
 	private static ExtendedConsoleHandler devConsoleHandler, simConsoleHandler;
 
 	/**
-	 * The starting point for the entire program, changes can be made here to customize the simulator
+	 * The starting point for the entire program, changes can be made here to
+	 * customize the simulator
+	 * 
 	 * @param args
 	 */
 	public static void main(String[] args) {
 		// DON'T REMOVE THESE LINES:
 		setupLogging();
-		
+
 		// DO WHAT YOU WANT:
 		log.info("Test!");
 		IWorldGenerator generator = new GeneratorStub();
 		ICommunicationHandler networkLogger = new CommunicationLogger();
 		IMainView mainView = new MainViewSimpleGui();
-		
-		//Call the main controller and let it work:
-		MainController mc = new MainController(generator, networkLogger, mainView);
+
+		// Call the main controller and let it work:
+		MainController mc = new MainController(generator, networkLogger,
+				mainView);
 		mc.start();
 	}
 
@@ -74,7 +89,7 @@ public class CASi {
 			// Create the sim log only in productive mode
 			configureSimulationLogging();
 			SIM_LOG.addHandler(simConsoleHandler);
-			if(simFileHandler != null) {
+			if (simFileHandler != null) {
 				SIM_LOG.addHandler(simFileHandler);
 			}
 		} else {
@@ -82,7 +97,7 @@ public class CASi {
 			SIM_LOG.addHandler(devConsoleHandler);
 		}
 		// write simulation information to the dev log in every case
-		if(devFileHandler != null) {
+		if (devFileHandler != null) {
 			log.addHandler(devFileHandler);
 			SIM_LOG.addHandler(devFileHandler);
 		}
@@ -109,9 +124,10 @@ public class CASi {
 			devFileHandler.setFormatter(new DevLogFormatter()); // Use
 																// HTMLFormatter
 			// for fancy output
-			
+
 			if (PRODUCTIVE_MODE) {
-				// define the behavior of the development handler in productive mode
+				// define the behavior of the development handler in productive
+				// mode
 				// log everything important into the dev log file
 				devFileHandler.setLevel(Level.CONFIG);
 			} else {
@@ -120,7 +136,7 @@ public class CASi {
 			}
 		} catch (Exception e) {
 			log.info("Es wird keine Protokolldatei erzeugt: " + e.getMessage());
-		} 
+		}
 
 		if (PRODUCTIVE_MODE) {
 			// define the behavior of the development handler in productive mode
@@ -149,13 +165,15 @@ public class CASi {
 		long time = Calendar.getInstance().getTimeInMillis();
 
 		try {
-			simFileHandler = new FileHandler(String.format("log/sim-%d.log", time));
-			simFileHandler.setFormatter(new SimLogFormatter()); // Use HTMLFormatter
+			simFileHandler = new FileHandler(String.format("log/sim-%d.log",
+					time));
+			simFileHandler.setFormatter(new SimLogFormatter()); // Use
+																// HTMLFormatter
 			simFileHandler.setLevel(Level.ALL);
 		} catch (Exception e) {
 			log.info("Es wird keine Protokolldatei erzeugt: " + e.getMessage());
-		} 
-															// for fancy output
+		}
+		// for fancy output
 		simConsoleHandler.setLevel(Level.INFO);
 
 	}

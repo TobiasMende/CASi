@@ -1,3 +1,11 @@
+/*  CASi is a Context Awareness Simulation software
+    Copyright (C) 2012  Moritz Bürger, Marvin Frick, Tobias Mende
+
+    This program is free software. It is licensed under the
+    GNU Lesser General Public License with one clarification.
+    See the LICENSE.txt file in this projects root folder or
+    <http://www.gnu.org/licenses/lgpl.html> for more details.   
+ */
 package de.uniluebeck.imis.casi.simulation.model;
 
 import java.awt.Point;
@@ -51,25 +59,28 @@ public class Wall implements IPosition {
 	public void addDoor(Door door) {
 		door.setWall(this);
 		doors.add(door);
-		
+
 	}
 
 	/**
 	 * Getter for the doors contained in this walls
+	 * 
 	 * @return a collection of doors
 	 */
 	public List<Door> getDoors() {
 		return doors;
 	}
-	
+
 	/**
 	 * Method for checking whether this wall contains doors or not.
-	 * @return <code>true</code> if the wall contains at least one door, <code>false</code> otherwise.
+	 * 
+	 * @return <code>true</code> if the wall contains at least one door,
+	 *         <code>false</code> otherwise.
 	 */
 	public boolean hasDoors() {
-		return doors.size()>0;
+		return doors.size() > 0;
 	}
-	
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -82,16 +93,20 @@ public class Wall implements IPosition {
 
 	@Override
 	public boolean equals(Object obj) {
-		if(!(obj instanceof Wall)) {
+		if (!(obj instanceof Wall)) {
 			return false;
 		}
 		Wall other = (Wall) obj;
-		boolean areIdentical = this.getStartPoint().equals(other.getStartPoint()) && this.getEndPoint().equals(other.getEndPoint());
-		boolean areInversed = this.getStartPoint().equals(other.getEndPoint()) && this.getEndPoint().equals(other.getStartPoint());
-		if(areIdentical || areInversed) {
+		boolean areIdentical = this.getStartPoint().equals(
+				other.getStartPoint())
+				&& this.getEndPoint().equals(other.getEndPoint());
+		boolean areInversed = this.getStartPoint().equals(other.getEndPoint())
+				&& this.getEndPoint().equals(other.getStartPoint());
+		if (areIdentical || areInversed) {
 			return true;
 		}
-		/* TODO add further cases where walls are really equal
+		/*
+		 * TODO add further cases where walls are really equal
 		 * 
 		 * ATTENTION: They are not equal, if they have different lengths!
 		 */
@@ -140,7 +155,7 @@ public class Wall implements IPosition {
 	public Point2D getCentralPoint() {
 		double x = ((double) (start.x + end.x)) / 2;
 		double y = ((double) (start.y + end.y)) / 2;
-		Point2D middle = new Point2D.Double(x,y);
+		Point2D middle = new Point2D.Double(x, y);
 		if (contains(middle)) {
 			return middle;
 		}
@@ -153,24 +168,25 @@ public class Wall implements IPosition {
 				+ ", Distance = " + getShapeRepresentation().ptLineDist(middle));
 		return start;
 	}
-	
+
 	/**
 	 * Getter for a normalized vector that describes the direction of the wall
+	 * 
 	 * @return the vector
 	 */
 	public Point2D getNormalizedWallVector() {
 		Point2D wallVector = GraphicFactory.getDirectionVector(start, end);
 		return GraphicFactory.getNormalizedVector(wallVector);
 	}
-	
+
 	/**
 	 * Getter for the length of the wall
+	 * 
 	 * @return the length
 	 */
 	public double getLength() {
 		Point2D distanceVector = GraphicFactory.getDirectionVector(start, end);
 		return GraphicFactory.calculateVectorLength(distanceVector);
 	}
-
 
 }

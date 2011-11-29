@@ -1,3 +1,11 @@
+/*  CASi is a Context Awareness Simulation software
+    Copyright (C) 2012  Moritz Bürger, Marvin Frick, Tobias Mende
+
+    This program is free software. It is licensed under the
+    GNU Lesser General Public License with one clarification.
+    See the LICENSE.txt file in this projects root folder or
+    <http://www.gnu.org/licenses/lgpl.html> for more details.   
+ */
 package de.uniluebeck.imis.casi.simulation.model.actionHandling;
 
 import java.io.Serializable;
@@ -79,19 +87,24 @@ public abstract class AbstractAction implements Listenable<IActionListener>,
 	/**
 	 * Method for performing and continuing this action. Should be called in
 	 * every tick in which the action must be performed.
-	 * @param performer the component which performs this action
+	 * 
+	 * @param performer
+	 *            the component which performs this action
 	 * 
 	 * @return <code>true</code> if the action and all its subactions are
 	 *         completed, <code>false</code> otherwise.
 	 * @throws IllegalAccessException
 	 *             if the action is abstract or not performable
 	 */
-	public abstract boolean perform(AbstractComponent performer) throws IllegalAccessException;
+	public abstract boolean perform(AbstractComponent performer)
+			throws IllegalAccessException;
 
 	/**
 	 * Method for internal performing the action. Must be implemented in actions
 	 * to customize the behavior. Is ignored by complex actions.
-	 * @param performer the component which performs this action
+	 * 
+	 * @param performer
+	 *            the component which performs this action
 	 * 
 	 * @return <code>true</code> if the action is completed, <code>false</code>
 	 *         otherwise. Should return <code>false</code> if the action should
@@ -148,10 +161,14 @@ public abstract class AbstractAction implements Listenable<IActionListener>,
 	public void setPriority(int priority) {
 		if (priority > 10) {
 			this.priority = 10;
-			CASi.SIM_LOG.warning(priority+" is an invalid value. Priority was set to "+this.priority);
+			CASi.SIM_LOG.warning(priority
+					+ " is an invalid value. Priority was set to "
+					+ this.priority);
 		} else if (priority < 0) {
 			this.priority = 0;
-			CASi.SIM_LOG.warning(priority+" is an invalid value. Priority was set to "+this.priority);
+			CASi.SIM_LOG.warning(priority
+					+ " is an invalid value. Priority was set to "
+					+ this.priority);
 		} else {
 			this.priority = priority;
 		}
@@ -262,7 +279,9 @@ public abstract class AbstractAction implements Listenable<IActionListener>,
 
 	/**
 	 * Method for checking whether this action is completed.
-	 * @return <code>true</code> if the action is completed or <code>false</code> otherwise.
+	 * 
+	 * @return <code>true</code> if the action is completed or
+	 *         <code>false</code> otherwise.
 	 */
 	public boolean isCompleted() {
 		return state.equals(STATE.COMPLETED);
@@ -299,22 +318,24 @@ public abstract class AbstractAction implements Listenable<IActionListener>,
 	protected void decrementDurationTime() throws IllegalAccessException {
 		duration--;
 	}
-	
 
 	/**
-	 * Method for cloning an agent and its components to a relay new agent with state IDLE.
+	 * Method for cloning an agent and its components to a relay new agent with
+	 * state IDLE.
+	 * 
 	 * @return the clone
 	 */
 	public AbstractAction clone() {
 		AbstractAction newAction;
 		try {
-			newAction= (AbstractAction) Tools.deepCopy(this);
+			newAction = (AbstractAction) Tools.deepCopy(this);
 			newAction.setType(TYPE.NORMAL);
 			return newAction;
 		} catch (Exception e) {
-			log.severe("An error occured while cloning the action: "+e.getLocalizedMessage());
+			log.severe("An error occured while cloning the action: "
+					+ e.getLocalizedMessage());
 			log.severe(e.fillInStackTrace().toString());
-		} 
+		}
 		return null;
 	}
 

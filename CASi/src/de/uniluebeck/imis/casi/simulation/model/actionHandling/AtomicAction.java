@@ -1,11 +1,18 @@
+/*  CASi is a Context Awareness Simulation software
+    Copyright (C) 2012  Moritz Bürger, Marvin Frick, Tobias Mende
+
+    This program is free software. It is licensed under the
+    GNU Lesser General Public License with one clarification.
+    See the LICENSE.txt file in this projects root folder or
+    <http://www.gnu.org/licenses/lgpl.html> for more details.   
+ */
 package de.uniluebeck.imis.casi.simulation.model.actionHandling;
 
 import de.uniluebeck.imis.casi.simulation.model.AbstractComponent;
 
-
 /**
- * An abstract class that represents atomic actions. Inherit from it to
- * provide an atomic action (an action without subactions)
+ * An abstract class that represents atomic actions. Inherit from it to provide
+ * an atomic action (an action without subactions)
  * 
  * @author Tobias Mende
  * 
@@ -15,7 +22,8 @@ public abstract class AtomicAction extends AbstractAction {
 	private static final long serialVersionUID = -2572027179785943085L;
 
 	@Override
-	public final boolean perform(AbstractComponent performer) throws IllegalAccessException {
+	public final boolean perform(AbstractComponent performer)
+			throws IllegalAccessException {
 		if (!isPerformable()) {
 			throw new IllegalAccessException("Can't perform an abstract action");
 		}
@@ -55,16 +63,16 @@ public abstract class AtomicAction extends AbstractAction {
 	public final int getDuration() {
 		return (int) Math.round(getDurationSeconds() / 60);
 	}
-	
+
 	@Override
 	public final int getDurationSeconds() {
 		return super.getDurationSeconds();
 	}
-	
+
 	@Override
-	protected final void decrementDurationTime() throws IllegalAccessException{
-		throw new IllegalAccessException("Don't decrement the duration! It's decremented automatically");
+	protected final void decrementDurationTime() throws IllegalAccessException {
+		throw new IllegalAccessException(
+				"Don't decrement the duration! It's decremented automatically");
 	}
-	
 
 }

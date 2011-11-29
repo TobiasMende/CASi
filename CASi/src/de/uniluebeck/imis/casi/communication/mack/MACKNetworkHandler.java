@@ -1,3 +1,11 @@
+/*  CASi is a Context Awareness Simulation software
+    Copyright (C) 2012  Moritz Bürger, Marvin Frick, Tobias Mende
+
+    This program is free software. It is licensed under the
+    GNU Lesser General Public License with one clarification.
+    See the LICENSE.txt file in this projects root folder or
+    <http://www.gnu.org/licenses/lgpl.html> for more details.   
+ */
 package de.uniluebeck.imis.casi.communication.mack;
 
 import de.uniluebeck.imis.casi.communication.ICommunicationComponent;
@@ -12,14 +20,15 @@ public final class MACKNetworkHandler implements ICommunicationHandler {
 		// TODO implement
 	}
 
-
 	private String getXmppID() {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
+
 	/**
-	 * Setter method for xmmpdID. This need to be set before the first usage of this Object!
+	 * Setter method for xmmpdID. This need to be set before the first usage of
+	 * this Object!
+	 * 
 	 * @param xmmpID
 	 */
 	public void setXmppID(String xmmpID) {
@@ -27,7 +36,8 @@ public final class MACKNetworkHandler implements ICommunicationHandler {
 	}
 
 	@Override
-	public synchronized boolean send(ICommunicationComponent sender, Object message) {
+	public synchronized boolean send(ICommunicationComponent sender,
+			Object message) {
 		checkIfConnected();
 		// TODO Auto-generated method stub
 		return false;
@@ -39,9 +49,10 @@ public final class MACKNetworkHandler implements ICommunicationHandler {
 
 	}
 
-	private static void checkIfConnected() throws java.nio.channels.NotYetConnectedException {
+	private static void checkIfConnected()
+			throws java.nio.channels.NotYetConnectedException {
 		if (instance.getXmppID() == null) {
 			throw new java.nio.channels.NotYetConnectedException();
-		}	
+		}
 	}
 }

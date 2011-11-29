@@ -1,3 +1,11 @@
+/*  CASi is a Context Awareness Simulation software
+    Copyright (C) 2012  Moritz Bürger, Marvin Frick, Tobias Mende
+
+    This program is free software. It is licensed under the
+    GNU Lesser General Public License with one clarification.
+    See the LICENSE.txt file in this projects root folder or
+    <http://www.gnu.org/licenses/lgpl.html> for more details.   
+ */
 package de.uniluebeck.imis.casi.simulation.model;
 
 import java.awt.Point;
@@ -119,12 +127,11 @@ public class Agent extends AbstractComponent implements
 	public void setTodoList(Collection<AbstractAction> todoList) {
 		this.todoList = todoList;
 	}
-	
-	
+
 	public void addActionToPool(AbstractAction action) {
 		actionPool.add(action);
 	}
-	
+
 	public void addActionToList(AbstractAction action) {
 		todoList.add(action);
 	}
@@ -149,7 +156,9 @@ public class Agent extends AbstractComponent implements
 	}
 
 	/**
-	 * Method for cloning an agent and its components to a relay new agent with state IDLE.
+	 * Method for cloning an agent and its components to a relay new agent with
+	 * state IDLE.
+	 * 
 	 * @return the clone
 	 */
 	public Agent clone() {
@@ -159,28 +168,29 @@ public class Agent extends AbstractComponent implements
 			newAgent.setState(STATE.IDLE);
 			return newAgent;
 		} catch (Exception e) {
-			log.severe("An error occured while cloning the agent: "+e.getLocalizedMessage());
+			log.severe("An error occured while cloning the agent: "
+					+ e.getLocalizedMessage());
 			log.severe(e.fillInStackTrace().toString());
-		} 
+		}
 		return null;
 	}
 
 	@Override
 	public void simulationPaused(boolean pause) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void simulationStopped() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void simulationStarted() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override

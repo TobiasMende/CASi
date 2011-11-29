@@ -1,3 +1,11 @@
+/*  CASi is a Context Awareness Simulation software
+    Copyright (C) 2012  Moritz Bürger, Marvin Frick, Tobias Mende
+
+    This program is free software. It is licensed under the
+    GNU Lesser General Public License with one clarification.
+    See the LICENSE.txt file in this projects root folder or
+    <http://www.gnu.org/licenses/lgpl.html> for more details.   
+ */
 package de.uniluebeck.imis.casi.generator.casix;
 
 import java.io.IOException;
@@ -19,7 +27,8 @@ import de.uniluebeck.imis.casi.simulation.model.actionHandling.AbstractAction;
 
 public class WorldGenerator implements IWorldGenerator {
 
-	public World WorldGenWithCASiXFilepath(String filepath) throws ParserConfigurationException, SAXException, IOException {
+	public World WorldGenWithCASiXFilepath(String filepath)
+			throws ParserConfigurationException, SAXException, IOException {
 		// TODO: open File at filePath
 		DocumentBuilder docBuilder = DocumentBuilderFactory.newInstance()
 				.newDocumentBuilder();
@@ -31,8 +40,8 @@ public class WorldGenerator implements IWorldGenerator {
 				doc.getElementsByTagName("action")).genObjectFromXML();
 		Collection<AbstractSensor> sensors = new SensorsGenerator(
 				doc.getElementsByTagName("sensors")).genObjectFromXML();
-		Collection<Room> rooms = new RoomsGenerator(doc.getElementsByTagName("room"))
-				.genObjectFromXML();
+		Collection<Room> rooms = new RoomsGenerator(
+				doc.getElementsByTagName("room")).genObjectFromXML();
 
 		buildUpReferences(agents, actions, sensors, rooms);
 		return worldFromCollectionsAndConfs(agents, actions, sensors, rooms);

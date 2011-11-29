@@ -1,3 +1,11 @@
+/*  CASi is a Context Awareness Simulation software
+    Copyright (C) 2012  Moritz Bürger, Marvin Frick, Tobias Mende
+
+    This program is free software. It is licensed under the
+    GNU Lesser General Public License with one clarification.
+    See the LICENSE.txt file in this projects root folder or
+    <http://www.gnu.org/licenses/lgpl.html> for more details.   
+ */
 package de.uniluebeck.imis.casi.simulation.model;
 
 import static org.junit.Assert.*;
@@ -61,23 +69,24 @@ public class WallTest {
 
 	@Test
 	public void testGetCentralPoint() {
-		int counter=0;
+		int counter = 0;
 		// Testing 1000 random walls
-		for(int i = 0; i < 1000; i++) {
+		for (int i = 0; i < 1000; i++) {
 			// Declaring a Random wall
-			int x = (int) Math.round(Math.random()*1000);
-			int y = (int) Math.round(Math.random()*1000);
+			int x = (int) Math.round(Math.random() * 1000);
+			int y = (int) Math.round(Math.random() * 1000);
 			Point start = new Point(x, y);
-			x = (int) Math.round(Math.random()*1000);
-			y = (int) Math.round(Math.random()*1000);
+			x = (int) Math.round(Math.random() * 1000);
+			y = (int) Math.round(Math.random() * 1000);
 			Point end = new Point(x, y);
 			Wall w = new Wall(start, end);
 			Point2D p = w.getCentralPoint();
-			if(p != null) {
+			if (p != null) {
 				counter++;
 			}
 		}
-		assertEquals("Not all calculated central points lay on the wall",1000, counter);
+		assertEquals("Not all calculated central points lay on the wall", 1000,
+				counter);
 	}
 
 }

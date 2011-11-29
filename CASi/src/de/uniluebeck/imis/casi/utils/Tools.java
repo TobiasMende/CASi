@@ -1,3 +1,11 @@
+/*  CASi is a Context Awareness Simulation software
+    Copyright (C) 2012  Moritz Bürger, Marvin Frick, Tobias Mende
+
+    This program is free software. It is licensed under the
+    GNU Lesser General Public License with one clarification.
+    See the LICENSE.txt file in this projects root folder or
+    <http://www.gnu.org/licenses/lgpl.html> for more details.   
+ */
 package de.uniluebeck.imis.casi.utils;
 
 import java.io.ByteArrayInputStream;
@@ -22,10 +30,13 @@ public final class Tools {
 	 * @param o
 	 *            the object to clone
 	 * @return the clone
-	 * @throws IOException if an error occurs during serialization
-	 * @throws ClassNotFoundException if the class of a serializable object cannot be found.
+	 * @throws IOException
+	 *             if an error occurs during serialization
+	 * @throws ClassNotFoundException
+	 *             if the class of a serializable object cannot be found.
 	 */
-	public static Object deepCopy(Object o) throws IOException, ClassNotFoundException {
+	public static Object deepCopy(Object o) throws IOException,
+			ClassNotFoundException {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream(4096);
 		ObjectOutputStream oos = new ObjectOutputStream(baos);
 		oos.writeObject(o);

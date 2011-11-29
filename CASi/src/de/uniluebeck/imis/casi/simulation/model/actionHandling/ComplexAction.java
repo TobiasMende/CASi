@@ -1,3 +1,11 @@
+/*  CASi is a Context Awareness Simulation software
+    Copyright (C) 2012  Moritz Bürger, Marvin Frick, Tobias Mende
+
+    This program is free software. It is licensed under the
+    GNU Lesser General Public License with one clarification.
+    See the LICENSE.txt file in this projects root folder or
+    <http://www.gnu.org/licenses/lgpl.html> for more details.   
+ */
 package de.uniluebeck.imis.casi.simulation.model.actionHandling;
 
 import java.util.Collection;
@@ -19,7 +27,8 @@ public abstract class ComplexAction extends AbstractAction {
 	private Collection<AtomicAction> subActions = new Vector<AtomicAction>();
 
 	@Override
-	public final boolean perform(AbstractComponent performer) throws IllegalAccessException {
+	public final boolean perform(AbstractComponent performer)
+			throws IllegalAccessException {
 		if (!isPerformable()) {
 			throw new IllegalAccessException("Can't perform an abstract action");
 		}
@@ -56,7 +65,7 @@ public abstract class ComplexAction extends AbstractAction {
 
 	@Override
 	public final int getDuration() {
-		return (int) Math.round(getDurationSeconds()/60);
+		return (int) Math.round(getDurationSeconds() / 60);
 	}
 
 	/**
@@ -94,27 +103,28 @@ public abstract class ComplexAction extends AbstractAction {
 		}
 		subActions.clear();
 	}
-	
+
 	@Override
 	public final int getDurationSeconds() {
 		int duration = 0;
-		for(AtomicAction a : subActions) {
-			if(a.getDurationSeconds()>0) {
+		for (AtomicAction a : subActions) {
+			if (a.getDurationSeconds() > 0) {
 				duration += a.getDurationSeconds();
 			}
 		}
-		if(duration == 0) {
-			//no duration information provided for all subactions
+		if (duration == 0) {
+			// no duration information provided for all subactions
 			duration = -1;
 		}
 		return duration;
 	}
-	
+
 	@Override
 	protected final void decrementDurationTime() throws IllegalAccessException {
-		CASi.SIM_LOG.warning("Decrementing the duration on a complex action has no effect!");
+		CASi.SIM_LOG
+				.warning("Decrementing the duration on a complex action has no effect!");
 	}
-	
+
 	@Override
 	protected final boolean internalPerform(AbstractComponent performer) {
 		return false;

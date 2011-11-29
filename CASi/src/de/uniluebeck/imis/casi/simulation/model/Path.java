@@ -1,3 +1,11 @@
+/*  CASi is a Context Awareness Simulation software
+    Copyright (C) 2012  Moritz Bürger, Marvin Frick, Tobias Mende
+
+    This program is free software. It is licensed under the
+    GNU Lesser General Public License with one clarification.
+    See the LICENSE.txt file in this projects root folder or
+    <http://www.gnu.org/licenses/lgpl.html> for more details.   
+ */
 package de.uniluebeck.imis.casi.simulation.model;
 
 import java.awt.Point;
@@ -7,33 +15,41 @@ import java.util.LinkedList;
 
 /**
  * The path object can be used for describing a way from a point to another.
+ * 
  * @author Tobias Mende
- *
+ * 
  */
 public class Path extends LinkedList<Point2D> {
 	/** id for serialization */
 	private static final long serialVersionUID = 5513927165139455322L;
-	
+
 	/** the start point */
 	private final Point2D startPoint;
-	
+
 	/** the end point */
 	private final Point2D endPoint;
-	
-	
+
 	/**
-	 * Constructor for a new path that saves the way between the given start and end point
-	 * @param start the start point
-	 * @param end the end point
+	 * Constructor for a new path that saves the way between the given start and
+	 * end point
+	 * 
+	 * @param start
+	 *            the start point
+	 * @param end
+	 *            the end point
 	 */
 	public Path(Point start, Point end) {
-		this((Point2D)start, (Point2D)end);
+		this((Point2D) start, (Point2D) end);
 	}
 
 	/**
-	 * Constructor for a new path that saves the way between the given start and end point
-	 * @param start the start point
-	 * @param end the end point
+	 * Constructor for a new path that saves the way between the given start and
+	 * end point
+	 * 
+	 * @param start
+	 *            the start point
+	 * @param end
+	 *            the end point
 	 */
 	public Path(Point2D start, Point2D end) {
 		super();
@@ -43,14 +59,16 @@ public class Path extends LinkedList<Point2D> {
 
 	/**
 	 * Getter for the start point of this path
+	 * 
 	 * @return the start point
 	 */
 	public Point2D getStartPoint() {
 		return startPoint;
 	}
-	
+
 	/**
 	 * Getter for the end point of this path
+	 * 
 	 * @return the end point
 	 */
 
@@ -92,12 +110,14 @@ public class Path extends LinkedList<Point2D> {
 	}
 
 	/**
-	 * Creates a reversed version of the path, meaning a path from end to start point
+	 * Creates a reversed version of the path, meaning a path from end to start
+	 * point
+	 * 
 	 * @return the reversed path
 	 */
 	public Path reversed() {
 		Path reversedPath = new Path(endPoint, startPoint);
-		for(Iterator<Point2D> iter = descendingIterator(); iter.hasNext(); ) {
+		for (Iterator<Point2D> iter = descendingIterator(); iter.hasNext();) {
 			reversedPath.add(iter.next());
 		}
 		return reversedPath;

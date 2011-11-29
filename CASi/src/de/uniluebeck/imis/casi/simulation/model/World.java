@@ -1,3 +1,11 @@
+/*  CASi is a Context Awareness Simulation software
+    Copyright (C) 2012  Moritz Bürger, Marvin Frick, Tobias Mende
+
+    This program is free software. It is licensed under the
+    GNU Lesser General Public License with one clarification.
+    See the LICENSE.txt file in this projects root folder or
+    <http://www.gnu.org/licenses/lgpl.html> for more details.   
+ */
 package de.uniluebeck.imis.casi.simulation.model;
 
 import java.util.ArrayList;
@@ -89,8 +97,7 @@ public class World {
 	 * @throws IllegalAccessException
 	 *             if the world isn't sealed
 	 */
-	public Set<AbstractActuator> getActuators()
-			throws IllegalAccessException {
+	public Set<AbstractActuator> getActuators() throws IllegalAccessException {
 		if (!sealed) {
 			throw new IllegalAccessException("World isn't sealed!");
 		}
@@ -104,8 +111,7 @@ public class World {
 	 * @throws IllegalAccessException
 	 *             if the world isn't sealed
 	 */
-	public Set<AbstractSensor> getSensors()
-			throws IllegalAccessException {
+	public Set<AbstractSensor> getSensors() throws IllegalAccessException {
 		if (!sealed) {
 			throw new IllegalAccessException("World isn't sealed!");
 		}
@@ -119,8 +125,7 @@ public class World {
 	 * @throws IllegalAccessException
 	 *             if the world isn't sealed
 	 */
-	public Set<AbstractComponent> getComponents()
-			throws IllegalAccessException {
+	public Set<AbstractComponent> getComponents() throws IllegalAccessException {
 		if (!sealed) {
 			throw new IllegalAccessException("World isn't sealed!");
 		}
@@ -169,8 +174,7 @@ public class World {
 	 * @throws IllegalAccessException
 	 *             if the world is sealed.
 	 */
-	public void setAgents(Set<Agent> agents)
-			throws IllegalAccessException {
+	public void setAgents(Set<Agent> agents) throws IllegalAccessException {
 		if (sealed) {
 			throw new IllegalAccessException("World is sealed!");
 		}
@@ -294,7 +298,8 @@ public class World {
 	}
 
 	/**
-	 * Sets all distances to <code>-1</code>, meaning that the doors arn't adjacent.
+	 * Sets all distances to <code>-1</code>, meaning that the doors arn't
+	 * adjacent.
 	 */
 	private void initializeDoorGraph() {
 		int size = doorGraph.length;
@@ -306,22 +311,23 @@ public class World {
 			doorGraph[i] = init;
 		}
 	}
-	
+
 	/**
-	 * Calculates the paths from each door to all adjacent other doors. And saves them in the doorPaths matrix
+	 * Calculates the paths from each door to all adjacent other doors. And
+	 * saves them in the doorPaths matrix
 	 */
 	private void calculateDoorPaths() {
 		doorPaths = new Path[doorGraph.length][doorGraph.length];
-		for(int i = 0; i< doorPaths.length; i++) {
-			for(int j = 0; j < i; j++) {
-				if(i == j || doorGraph[i][j] <= 0) {
+		for (int i = 0; i < doorPaths.length; i++) {
+			for (int j = 0; j < i; j++) {
+				if (i == j || doorGraph[i][j] <= 0) {
 					// Doors are equal or not adjacent
 					doorPaths[i][j] = null;
 					continue;
 				}
 				Door from = WorldFactory.findDoorForIdentifier(i);
 				Door to = WorldFactory.findDoorForIdentifier(j);
-				if(from != null && to != null) {
+				if (from != null && to != null) {
 					doorPaths[i][j] = PathFactory.findPath(from, to);
 				} else {
 					doorPaths[i][j] = null;
@@ -329,24 +335,28 @@ public class World {
 			}
 		}
 	}
-	
+
 	/**
 	 * Getter for a path between two adjacent doors
-	 * @param start the start door
-	 * @param end the end door
+	 * 
+	 * @param start
+	 *            the start door
+	 * @param end
+	 *            the end door
 	 * @return a path or <code>null</code> if no path was found.
 	 */
 	public Path getDoorPath(Door start, Door end) {
-		if(start.equals(end)) {
+		if (start.equals(end)) {
 			log.severe("Shouldn't call this method if doors are equal!");
 			return null;
 		}
 		Path path = doorPaths[start.getIntIdentifier()][end.getIntIdentifier()];
-		if(path == null) {
+		if (path == null) {
 			// Path didn't exist this way. try another way round
 			path = doorPaths[end.getIntIdentifier()][start.getIntIdentifier()];
-			// Reverse path  if one is found
-			path = (path != null) ? doorPaths[end.getIntIdentifier()][start.getIntIdentifier()].reversed() : null;
+			// Reverse path if one is found
+			path = (path != null) ? doorPaths[end.getIntIdentifier()][start
+					.getIntIdentifier()].reversed() : null;
 		}
 		return path;
 	}

@@ -2,9 +2,9 @@
 		
 We hope that this software will be useful. Therefore we encourage  
 you to use it to write your own simulations and do whatever you feel
-to do with them. However, if you decide to do changes to the CASi
-core system (as it is included in this project), this has to be open!
-			(be aware that this is not a layer approved text,
+to do with them. However, if you decide to modify the CASi
+core system (as it is included in this project), these changes have to be open!
+			(be aware that this is not a lawyer approved text,
  				the license below applies in any case!)
 
                    GNU LESSER GENERAL PUBLIC LICENSE

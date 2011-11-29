@@ -76,7 +76,7 @@ public class PathFactory {
 		Path path = new Path(start, end);
 		path.add(start);
 		Point2D lastPoint = start;
-		// Calculating interpoints while the reamining length is bigger than the
+		// Calculating interpoints while the remaining length is bigger than the
 		// maximum path length
 		while (length > maximumPathLength) {
 			// Calculating interpoint
@@ -108,12 +108,14 @@ public class PathFactory {
 	 *         found.
 	 */
 	public static Path findPath(IPosition start, IPosition end) {
+		// If both positions are doors, find path between doors
 		if ((start instanceof Door) && (end instanceof Door)) {
 			return findDoorToDoorPath((Door) start, (Door) end);
 		}
 		Room startRoom = PositionFactory.getRoomWithPoint(start
 				.getCentralPoint());
 		Room endRoom = PositionFactory.getRoomWithPoint(end.getCentralPoint());
+		// If start and end room are equal, find path in room:
 		if (startRoom != null && endRoom != null && startRoom.equals(endRoom)) {
 			return findPathInRoom(start, end);
 		}
@@ -122,9 +124,13 @@ public class PathFactory {
 		Set<Door> endRoomDoors = endRoom.getDoors();
 		Path totalPath = new Path(start.getCentralPoint(),
 				end.getCentralPoint());
+		// Get the path between one door of the start room and one door of the end room
 		Path doorToDoorPath = findRoomToRoomPath(startRoomDoors, endRoomDoors);
+		// Get the path from start point to the start door
 		Path startPath = findPathInRoom(start.getCentralPoint(), doorToDoorPath.getStartPoint(), startRoom);
+		// Get the path from the end door to the end point
 		Path endPath = findPathInRoom(doorToDoorPath.getEndPoint(), end.getCentralPoint(), endRoom);
+		// Merging the sub paths together:
 		totalPath.addAll(startPath);
 		totalPath.addAll(doorToDoorPath);
 		totalPath.addAll(endPath);

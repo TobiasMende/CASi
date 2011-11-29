@@ -16,6 +16,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.Logger;
 
+import de.uniluebeck.imis.casi.CASi;
 import de.uniluebeck.imis.casi.simulation.model.SimulationTime;
 import de.uniluebeck.imis.casi.utils.Listenable;
 
@@ -26,6 +27,11 @@ import de.uniluebeck.imis.casi.utils.Listenable;
  * 
  */
 public class SimulationClock implements Listenable<ISimulationClockListener> {
+	/** The maximum scale factor (the slowest speed) for the clock */
+	public static final int MAXIMUM_SCALE_FACTOR = 2000;
+	/** The minimum scale factor (the highest speed) for the clock */
+	public static final int MINIMUM_SCALE_FACTOR = 10;
+	
 	/** The instance of this singleton class */
 	private static SimulationClock instance;
 	/** The starttime of this simulation */
@@ -239,7 +245,15 @@ public class SimulationClock implements Listenable<ISimulationClockListener> {
 	 *            the factor to set
 	 */
 	public synchronized void setScaleFactor(int scaleFactor) {
-		this.scaleFactor = scaleFactor;
+		if(scaleFactor > MAXIMUM_SCALE_FACTOR) {
+			CASi.SIM_LOG.warning("scale factor was too high. Set scale factor to "+MAXIMUM_SCALE_FACTOR);
+			this.scaleFactor = MAXIMUM_SCALE_FACTOR;
+		} else if(scaleFactor < MINIMUM_SCALE_FACTOR) {
+			CASi.SIM_LOG.warning("scale factor was too low. Set scale factor to "+MINIMUM_SCALE_FACTOR);
+			this.scaleFactor = MINIMUM_SCALE_FACTOR;
+		} else {
+			this.scaleFactor = scaleFactor;
+		}
 		if (started) {
 			renewTimer();
 		}

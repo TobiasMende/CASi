@@ -54,9 +54,9 @@ public class PathFactory {
 		if ((start instanceof Door) && (end instanceof Door)) {
 			return findDoorToDoorPath((Door) start, (Door) end);
 		}
-		Room startRoom = PositionFactory.getRoomWithPoint(start
+		Room startRoom = WorldFactory.getRoomWithPoint(start
 				.getCentralPoint());
-		Room endRoom = PositionFactory.getRoomWithPoint(end.getCentralPoint());
+		Room endRoom = WorldFactory.getRoomWithPoint(end.getCentralPoint());
 		// If start and end room are equal, find path in room:
 		if (startRoom != null && endRoom != null && startRoom.equals(endRoom)) {
 			return findPathInRoom(start, end);
@@ -202,7 +202,7 @@ public class PathFactory {
 	 * @return a path that describes the way
 	 */
 	private static Path findPathInRoom(IPosition start, IPosition end) {
-		Room room = PositionFactory.getRoomWithPoint(start.getCentralPoint());
+		Room room = WorldFactory.getRoomWithPoint(start.getCentralPoint());
 		InRoomPathSolver solver = new InRoomPathSolver(room, (Point)end.getCentralPoint());
 		List<Point> points = solver.compute((Point)start.getCentralPoint());
 		Path path = new Path(start.getCentralPoint(), end.getCentralPoint());

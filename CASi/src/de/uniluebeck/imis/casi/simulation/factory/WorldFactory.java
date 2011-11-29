@@ -11,6 +11,8 @@
  */
 package de.uniluebeck.imis.casi.simulation.factory;
 
+import java.awt.geom.Point2D;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -20,6 +22,7 @@ import java.util.logging.Logger;
 import de.uniluebeck.imis.casi.simulation.engine.SimulationEngine;
 import de.uniluebeck.imis.casi.simulation.model.Door;
 import de.uniluebeck.imis.casi.simulation.model.Room;
+import de.uniluebeck.imis.casi.simulation.model.Wall;
 
 /**
  * The WorldFactory holds world objects and is able generate new objects
@@ -117,6 +120,53 @@ public class WorldFactory {
 					+ e.fillInStackTrace());
 		}
 		return results;
+	}
+
+	/**
+	 * Method for getting a room that contains a specific point
+	 * 
+	 * @param point
+	 *            the point to get a room for
+	 * @return a room containing the provided point or <code>null</code> if no
+	 *         room was found.
+	 */
+	public static Room getRoomWithPoint(final Point2D point) {
+		Collection<Room> rooms;
+		try {
+			rooms = SimulationEngine.getInstance().getWorld().getRooms();
+			for (Room r : rooms) {
+				if (r.contains(point)) {
+					return r;
+				}
+			}
+		} catch (IllegalAccessException e) {
+			log.severe("Method should not be called before sealing the world. "
+					+ e.fillInStackTrace());
+		}
+		return null;
+	}
+
+	/**
+	 * Method for getting a room with a provided collection of walls. Searches for a room that contains these walls.
+	 * 
+	 * @param walls
+	 *            the walls to search the room for
+	 * @return the room, if one was found or <code>null</code> otherwise.
+	 */
+	public static Room getRoomWithWalls(Collection<Wall> walls) {
+		Set<Room> allRooms;
+		try {
+			allRooms = SimulationEngine.getInstance().getWorld().getRooms();
+			for(Room room : allRooms) {
+				if(room.getWalls().containsAll(walls)) {
+					return room;
+				}
+			}
+		} catch (IllegalAccessException e) {
+			log.severe("Method should not be called before sealing the world. "
+					+ e.fillInStackTrace());
+		}
+		return null;
 	}
 
 }

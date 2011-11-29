@@ -4,9 +4,11 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Logger;
 
+import de.uniluebeck.imis.casi.simulation.engine.SimulationEngine;
 import de.uniluebeck.imis.casi.simulation.model.Door;
-import de.uniluebeck.imis.casi.simulation.model.Wall;
+import de.uniluebeck.imis.casi.simulation.model.Room;
 
 /**
  * The WorldFactory holds world objects and is able generate new objects
@@ -14,11 +16,10 @@ import de.uniluebeck.imis.casi.simulation.model.Wall;
  *
  */
 public class WorldFactory {
+	/** The development logger */
+	private static final Logger log = Logger.getLogger(WorldFactory.class.getName());
 	/** A set of doors, that are used in the simulation */
 	private static Map<Integer,Door> doors = new HashMap<Integer, Door>();
-	
-	/** A map of walls, that are used in the simulation */
-	private static Set<Wall> walls = new HashSet<Wall>();
 	
 	/**
 	 * Method for searching a door with a given identifier
@@ -51,5 +52,43 @@ public class WorldFactory {
 		doors.put(door.getIntIdentifier(), door);
 	}
 	
+	/**
+	 * Method for getting a room which have exactly the provided doors
+	 * @param doors a set of doors
+	 * @return the room or <code>null</code> if no room was found
+	 */
+	public static Room getRoomWithDoors(Set<Door> doors) {
+		try {
+			Set<Room> rooms = SimulationEngine.getInstance().getWorld().getRooms();
+			for(Room room : rooms) {
+				if(room.getWalls().equals(doors)) {
+					return room;
+				}
+			}
+		} catch (IllegalAccessException e) {
+			log.severe("World isn't sealed. This should not happen! "+e.fillInStackTrace());
+		}
+		return null;
+	}
+	
+	/**
+	 * Method for getting a set of rooms which contain the provided doors.
+	 * @param doors the doors to search rooms for
+	 * @return a set of rooms containing the doors or an empty set, if no room was found.
+	 */
+	public static Set<Room> getRoomsWithDoors(Set<Door> doors) {
+		Set<Room> results = new HashSet<Room>();
+		try {
+			Set<Room> rooms = SimulationEngine.getInstance().getWorld().getRooms();
+			for(Room room : rooms) {
+				if(room.getDoors().containsAll(doors)) {
+					results.add(room);
+				}
+			}
+		} catch (IllegalAccessException e) {
+			log.severe("World isn't sealed. This should not happen! "+e.fillInStackTrace());
+		}
+		return results;
+	}
 
 }

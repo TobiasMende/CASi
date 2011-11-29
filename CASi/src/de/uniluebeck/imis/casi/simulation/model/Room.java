@@ -5,8 +5,10 @@ import java.awt.Polygon;
 import java.awt.Shape;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Logger;
 
 /**
@@ -60,6 +62,18 @@ public class Room implements IPosition {
 		}
 		log.warning("This room has no doors");
 		return null;
+	}
+	
+	/**
+	 * Getter for all doors in this room
+	 * @return a set of doors
+	 */
+	public Set<Door> getDoors() {
+		Set<Door> doors = new HashSet<Door>();
+		for(Wall w : walls) {
+			doors.addAll(w.getDoors());
+		}
+		return doors;
 	}
 
 	@Override

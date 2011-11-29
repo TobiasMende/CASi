@@ -33,11 +33,11 @@ public class InRoomPathSolver extends AStar<Point> {
 		return node.equals(destination);
 	}
 	@Override
-	protected double g(Point from, Point to) {
+	protected double costs(Point from, Point to) {
 		return from.distance(to);
 	}
 	@Override
-	protected double h(Point from, Point to) {
+	protected double heuristic(Point from, Point to) {
 		return from.distance(destination);
 	}
 	@Override

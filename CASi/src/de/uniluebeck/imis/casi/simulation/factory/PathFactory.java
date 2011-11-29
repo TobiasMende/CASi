@@ -2,18 +2,18 @@ package de.uniluebeck.imis.casi.simulation.factory;
 
 import java.awt.Point;
 import java.awt.geom.Point2D;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Logger;
 
 import de.uniluebeck.imis.casi.simulation.engine.SimulationEngine;
 import de.uniluebeck.imis.casi.simulation.model.Door;
 import de.uniluebeck.imis.casi.simulation.model.IPosition;
 import de.uniluebeck.imis.casi.simulation.model.Path;
 import de.uniluebeck.imis.casi.simulation.model.Room;
-import de.uniluebeck.imis.casi.simulation.model.Wall;
 import de.uniluebeck.imis.casi.utils.pathfinding.GraphPathSolver;
 import de.uniluebeck.imis.casi.utils.pathfinding.InRoomPathSolver;
 
@@ -25,38 +25,8 @@ import de.uniluebeck.imis.casi.utils.pathfinding.InRoomPathSolver;
  * 
  */
 public class PathFactory {
-
-	/**
-	 * Calculates a matrix of path iterators which show the way from each door
-	 * in this room to each other.
-	 * 
-	 * @param room
-	 *            the room to calculate the paths for
-	 * @return a set of paths or <code>null</code> if no paths were found
-	 */
-	public static Set<Path> getPathsForRoom(Room room) {
-		List<Door> doors = new ArrayList<Door>();
-		// Get a list of all doors
-		for (Wall wall : room.getWalls()) {
-			doors.addAll(wall.getDoors());
-		}
-		if (doors.size() == 0) {
-			return null;
-		}
-		Set<Path> paths = new HashSet<Path>();
-		// Calculate paths from each door to each other
-		for (Door start : doors) {
-			for (Door end : doors) {
-				if (start.equals(end)) {
-					continue;
-				}
-				// TODO implement, THINK better way? if "a->b" is known, we
-				// don't need to calculate "b->a"
-			}
-		}
-		return paths;
-	}
-
+	/** The development logger */
+	private static final Logger log = Logger.getLogger(PathFactory.class.getName());
 	/**
 	 * Calculates a path which's subpaths arn't longer than the give maximum
 	 * length. This can be useful, if one need steps that can be performed in
@@ -147,14 +117,55 @@ public class PathFactory {
 		if (startRoom != null && endRoom != null && startRoom.equals(endRoom)) {
 			return findPathInRoom(start, end);
 		}
-		// TODO implement
-		return null;
+		// Case: Different Rooms:
+		Set<Door> startRoomDoors = startRoom.getDoors();
+		Set<Door> endRoomDoors = endRoom.getDoors();
+		Path totalPath = new Path(start.getCentralPoint(),
+				end.getCentralPoint());
+		Path doorToDoorPath = findRoomToRoomPath(startRoomDoors, endRoomDoors);
+		Path startPath = findPathInRoom(start.getCentralPoint(), doorToDoorPath.getStartPoint(), startRoom);
+		Path endPath = findPathInRoom(doorToDoorPath.getEndPoint(), end.getCentralPoint(), endRoom);
+		totalPath.addAll(startPath);
+		totalPath.addAll(doorToDoorPath);
+		totalPath.addAll(endPath);
+		return totalPath;
 	}
 
 	/**
-	 * Method finds a path between adjacent doors
+	 * Method for finding the path from one room to another by using a set of doors of the start room and a set of doors of the end room
+	 * @param startDoors the doors of the start room
+	 * @param endDoors the doors of the end room
+	 * @return a path from one start door to one door of the end room.
+	 */
+	public static Path findRoomToRoomPath(Set<Door> startDoors,
+			Set<Door> endDoors) {
+		// Get identifiers for end doors:
+		Set<Integer> identifiers = new HashSet<Integer>();
+		for (Door d : endDoors) {
+			identifiers.add(d.getIntIdentifier());
+		}
+		GraphPathSolver solver = new GraphPathSolver(identifiers,
+				SimulationEngine.getInstance().getWorld().getDoorGraph());
+		// Find path for each start 
+		List<Integer> minimumPath = new LinkedList<Integer>();
+		for (Door d : startDoors) {
+			List<Integer> path = solver.compute(d.getIntIdentifier());
+			if (path.size() < minimumPath.size() || minimumPath == null || minimumPath.isEmpty()) {
+				minimumPath = path;
+			}
+		}
+		Path doorToDoorPath = findDoorToDoorPath(
+				WorldFactory.findDoorForIdentifier(minimumPath.get(0)),
+				WorldFactory.findDoorForIdentifier(minimumPath.get(minimumPath
+						.size() - 1)));
+		return doorToDoorPath;
+	}
+
+	/**
+	 * Method finds a path between doors
 	 * 
-	 * @return the path
+	 * @return the path between two doors or <code>null</code> if no path was
+	 *         found.
 	 */
 	public static Path findDoorToDoorPath(Door start, Door end) {
 		double[][] adjacency = SimulationEngine.getInstance().getWorld()
@@ -167,8 +178,15 @@ public class PathFactory {
 				return test;
 			}
 			// doors are adjacent
-			// TODO get room for the doors
-			Room room = null;
+			Set<Door> doorSet = new HashSet<Door>();
+			doorSet.add(start);
+			doorSet.add(end);
+			Set<Room> fittingRooms = WorldFactory.getRoomsWithDoors(doorSet);
+			if(fittingRooms.isEmpty()) {
+				log.severe("No room was found. This shouldn't happen!");
+				return null;
+			}
+			Room room = fittingRooms.iterator().next();
 			InRoomPathSolver solver = new InRoomPathSolver(room,
 					(Point) end.getCentralPoint());
 			List<Point> tempPath = solver.compute((Point) start
@@ -179,12 +197,24 @@ public class PathFactory {
 			return finalPath;
 		}
 
+		return findDoorToDoorPathOfNonAdjacentDoors(start, end);
+	}
+	
+
+	/**
+	 * Method for finding a path between two non adjacent doors
+	 * @param start the start door
+	 * @param end the end door
+	 * @return the path between the doors
+	 */
+	private static Path findDoorToDoorPathOfNonAdjacentDoors(Door start,
+			Door end) {
 		// Doors arn't adjacent, so search in door graph.
 		Set<Integer> temp = new HashSet<Integer>();
 		temp.add(end.getIntIdentifier());
 		GraphPathSolver solver = new GraphPathSolver(temp, SimulationEngine
 				.getInstance().getWorld().getDoorGraph());
-		// Computes a list of identifiers for door noodes.
+		// Computes a list of identifiers for door nodes.
 		List<Integer> nodes = solver.compute(start.getIntIdentifier());
 		Path path = new Path(start.getCentralPoint(), end.getCentralPoint());
 		Iterator<Integer> iter = nodes.iterator();
@@ -220,8 +250,27 @@ public class PathFactory {
 	 * @return a path that describes the way
 	 */
 	private static Path findPathInRoom(IPosition start, IPosition end) {
-		// TODO implement
-		return null;
+		Room room = PositionFactory.getRoomWithPoint(start.getCentralPoint());
+		InRoomPathSolver solver = new InRoomPathSolver(room, (Point)end.getCentralPoint());
+		List<Point> points = solver.compute((Point)start.getCentralPoint());
+		Path path = new Path(start.getCentralPoint(), end.getCentralPoint());
+		path.addAll(points);
+		return path;
+	}
+	
+	/**
+	 * Method for calculating a path in a given room
+	 * @param start the start point
+	 * @param end the end point
+	 * @param room the room to search in
+	 * @return a path if one was found or <code>null</code> otherwise.
+	 */
+	private static Path findPathInRoom(Point2D start, Point2D end, Room room) {
+		InRoomPathSolver solver = new InRoomPathSolver(room, (Point)end);
+		List<Point> path = solver.compute((Point)start);
+		Path finalPath =  new Path(start, end);
+		finalPath.addAll(path);
+		return finalPath;
 	}
 
 	/**

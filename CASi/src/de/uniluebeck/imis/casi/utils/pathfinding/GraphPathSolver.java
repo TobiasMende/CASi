@@ -17,6 +17,8 @@ public class GraphPathSolver extends AStar<Integer> {
 	private Set<Integer> destinationIdentifiers;
 	/** The adjacency matrix for the graph */
 	private double[][] adjacency;
+	private double[] heuristics;
+	
 
 	/**
 	 * Constructor for a new Graph path finder
@@ -27,6 +29,7 @@ public class GraphPathSolver extends AStar<Integer> {
 		super();
 		this.destinationIdentifiers = destinations;
 		this.adjacency = adjacency;
+		preCalculateHeuristics();
 	}
 	
 	/**
@@ -39,23 +42,38 @@ public class GraphPathSolver extends AStar<Integer> {
 		destinationIdentifiers = new HashSet<Integer>();
 		destinationIdentifiers.add(destination);
 		this.adjacency = adjacency;
+		preCalculateHeuristics();
+	}
+
+	private void preCalculateHeuristics() {
+		heuristics = new double[adjacency.length];
+		for(int i = 0; i < heuristics.length; i++) {
+			double minimum = Double.MAX_VALUE;
+			for(int j = 0; j < adjacency[i].length ; j++) {
+				if(i != j && adjacency[i][j] >= 0 && adjacency[i][j] < minimum) {
+					minimum = adjacency[i][j];
+				}
+			}
+			heuristics[i] = minimum;
+		}
 	}
 	
-
+	
 	@Override
 	protected boolean isDestination(Integer node) {
 		return destinationIdentifiers.contains(node);
 	}
 
 	@Override
-	protected double g(Integer from, Integer to) {
+	protected double costs(Integer from, Integer to) {
 		return adjacency[from.intValue()][to.intValue()];
 	}
 
 	@Override
-	protected double h(Integer from, Integer to) {
-		// TODO add better heuristic if possible
-		return 1;
+	protected double heuristic(Integer from, Integer to) {
+		// TODO: add better heuristic if possible
+		// IDEA: take the minimum costs over all possible next steps as heuristic
+		return heuristics[from.intValue()];
 	}
 
 	@Override

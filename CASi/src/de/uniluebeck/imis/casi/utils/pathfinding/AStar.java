@@ -37,7 +37,7 @@ public abstract class AStar<T> {
 	 * @param to the next node
 	 * @return the costs
 	 */
-	protected abstract double g(T from, T to);
+	protected abstract double costs(T from, T to);
 	
 	/**
 	 * Calculates an optimistic heuristic which should never be bigger than the real costs. In graphic cases linear distance is an acceptable heuristic.
@@ -45,7 +45,7 @@ public abstract class AStar<T> {
 	 * @param to the next node
 	 * @return the estimated costs as heuristic
 	 */
-	protected abstract double h(T from, T to);
+	protected abstract double heuristic(T from, T to);
 	
 	/**
 	 * Calculates a list of successors for a given node
@@ -67,15 +67,15 @@ public abstract class AStar<T> {
 	 * @param path the path we use
 	 * @param from the start node
 	 * @param to the end node
-	 * @return
+	 * @return the total costs
 	 */
-	protected double f(SolvePath path, T from, T to) {
+	protected double totalCosts(SolvePath path, T from, T to) {
 		double gOfParent = 0.0;
 		if(path.parent != null) {
 			gOfParent = path.parent.g;
 		} 
-		double g = g(from, to) + gOfParent;
-		double h = h(from, to);
+		double g = costs(from, to) + gOfParent;
+		double h = heuristic(from, to);
 		
 		path.g = g;
 		path.f = g+h;
@@ -101,7 +101,7 @@ public abstract class AStar<T> {
 		for(T node : successors) {
 			SolvePath newPath = new SolvePath(path);
 			newPath.setPoint(node);
-			f(newPath, path.getPoint(), node);
+			totalCosts(newPath, path.getPoint(), node);
 			paths.offer(newPath);
 		}
 		expandationCounter++;
@@ -124,7 +124,7 @@ public abstract class AStar<T> {
 		cleanUp();
 		SolvePath root = new SolvePath();
 		root.setPoint(start);
-		f(root, start, start);
+		totalCosts(root, start, start);
 		expand(root);
 		while(true) {
 			SolvePath path = paths.poll();

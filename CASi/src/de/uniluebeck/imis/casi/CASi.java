@@ -71,6 +71,7 @@ public class CASi {
 		// Call the main controller and let it work:
 		MainController mc = new MainController(generator, networkLogger,
 				mainView);
+		mainView.showUi();
 		mc.start();
 	}
 

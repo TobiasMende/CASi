@@ -65,6 +65,5 @@ public class MainController {
 	public void start() {
 		CASi.SIM_LOG.info("Starting the Simulation ...");
 		SimulationEngine.getInstance().start();
-		mainView.showUi();
 	}
 }

@@ -121,7 +121,6 @@ public class SimulationClock implements Listenable<ISimulationClockListener> {
 				if(!paused) {
 					//incrementing time
 					currentTime.increment();
-					
 					//informing listeners about time change
 					informListenerAboutTimeChange();
 				}

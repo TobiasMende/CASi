@@ -5,11 +5,8 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-
-import com.sun.tools.doclets.internal.toolkit.taglets.InheritDocTaglet;
 
 import de.uniluebeck.imis.casi.simulation.engine.SimulationEngine;
 import de.uniluebeck.imis.casi.simulation.model.Door;
@@ -17,7 +14,6 @@ import de.uniluebeck.imis.casi.simulation.model.IPosition;
 import de.uniluebeck.imis.casi.simulation.model.Path;
 import de.uniluebeck.imis.casi.simulation.model.Room;
 import de.uniluebeck.imis.casi.simulation.model.Wall;
-import de.uniluebeck.imis.casi.simulation.model.World;
 import de.uniluebeck.imis.casi.utils.pathfinding.GraphPathSolver;
 import de.uniluebeck.imis.casi.utils.pathfinding.InRoomPathSolver;
 

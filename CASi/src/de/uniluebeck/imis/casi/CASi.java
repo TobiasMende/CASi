@@ -11,6 +11,7 @@ import de.uniluebeck.imis.casi.communication.comLogger.CommunicationLogger;
 import de.uniluebeck.imis.casi.controller.MainController;
 import de.uniluebeck.imis.casi.generator.IWorldGenerator;
 import de.uniluebeck.imis.casi.generator.java.WorldGenerator;
+import de.uniluebeck.imis.casi.generator.stub.GeneratorStub;
 import de.uniluebeck.imis.casi.logging.DevLogFormatter;
 import de.uniluebeck.imis.casi.logging.ExtendedConsoleHandler;
 import de.uniluebeck.imis.casi.logging.SimLogFormatter;
@@ -47,7 +48,7 @@ public class CASi {
 		
 		// DO WHAT YOU WANT:
 		log.info("Test!");
-		IWorldGenerator generator = new WorldGenerator();
+		IWorldGenerator generator = new GeneratorStub();
 		ICommunicationHandler networkLogger = new CommunicationLogger();
 		IMainView mainView = new MainViewSimpleGui();
 		

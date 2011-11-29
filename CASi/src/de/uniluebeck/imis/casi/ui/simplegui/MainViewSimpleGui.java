@@ -98,9 +98,13 @@ public class MainViewSimpleGui extends JFrame implements IMainView,
 
 		/** New SimulationPanel */
 		simPanel = new SimulationPanel();
-
+		
+		/** New ClockViewPanel */
+		ClockViewPanel clockViewPanel = new ClockViewPanel();
+		
 		this.add(simPanel, BorderLayout.CENTER);
 		this.add(menuBar, BorderLayout.NORTH);
+		this.add(clockViewPanel, BorderLayout.SOUTH);
 	}
 
 	@Override

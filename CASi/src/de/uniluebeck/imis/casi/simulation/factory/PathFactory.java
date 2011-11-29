@@ -37,7 +37,9 @@ import de.uniluebeck.imis.casi.utils.pathfinding.InRoomPathSolver;
  */
 public class PathFactory {
 	/** The development logger */
-	private static final Logger log = Logger.getLogger(PathFactory.class.getName());
+	private static final Logger log = Logger.getLogger(PathFactory.class
+			.getName());
+
 	/**
 	 * Calculates a path from one position to another. This method uses the
 	 * central point of each position as concrete position.
@@ -54,8 +56,7 @@ public class PathFactory {
 		if ((start instanceof Door) && (end instanceof Door)) {
 			return findDoorToDoorPath((Door) start, (Door) end);
 		}
-		Room startRoom = WorldFactory.getRoomWithPoint(start
-				.getCentralPoint());
+		Room startRoom = WorldFactory.getRoomWithPoint(start.getCentralPoint());
 		Room endRoom = WorldFactory.getRoomWithPoint(end.getCentralPoint());
 		// If start and end room are equal, find path in room:
 		if (startRoom != null && endRoom != null && startRoom.equals(endRoom)) {
@@ -66,12 +67,15 @@ public class PathFactory {
 		Set<Door> endRoomDoors = endRoom.getDoors();
 		Path totalPath = new Path(start.getCentralPoint(),
 				end.getCentralPoint());
-		// Get the path between one door of the start room and one door of the end room
+		// Get the path between one door of the start room and one door of the
+		// end room
 		Path doorToDoorPath = findRoomToRoomPath(startRoomDoors, endRoomDoors);
 		// Get the path from start point to the start door
-		Path startPath = findPathInRoom(start.getCentralPoint(), doorToDoorPath.getStartPoint(), startRoom);
+		Path startPath = findPathInRoom(start.getCentralPoint(),
+				doorToDoorPath.getStartPoint(), startRoom);
 		// Get the path from the end door to the end point
-		Path endPath = findPathInRoom(doorToDoorPath.getEndPoint(), end.getCentralPoint(), endRoom);
+		Path endPath = findPathInRoom(doorToDoorPath.getEndPoint(),
+				end.getCentralPoint(), endRoom);
 		// Merging the sub paths together:
 		totalPath.addAll(startPath);
 		totalPath.addAll(doorToDoorPath);
@@ -80,9 +84,13 @@ public class PathFactory {
 	}
 
 	/**
-	 * Method for finding the path from one room to another by using a set of doors of the start room and a set of doors of the end room
-	 * @param startDoors the doors of the start room
-	 * @param endDoors the doors of the end room
+	 * Method for finding the path from one room to another by using a set of
+	 * doors of the start room and a set of doors of the end room
+	 * 
+	 * @param startDoors
+	 *            the doors of the start room
+	 * @param endDoors
+	 *            the doors of the end room
 	 * @return a path from one start door to one door of the end room.
 	 */
 	public static Path findRoomToRoomPath(Set<Door> startDoors,
@@ -92,13 +100,21 @@ public class PathFactory {
 		for (Door d : endDoors) {
 			identifiers.add(d.getIntIdentifier());
 		}
-		GraphPathSolver solver = new GraphPathSolver(identifiers,
-				SimulationEngine.getInstance().getWorld().getDoorGraph());
-		// Find path for each start but take only the one with a minimum amount of doors:
+		GraphPathSolver solver = null;
+		try {
+			solver = new GraphPathSolver(identifiers, SimulationEngine
+					.getInstance().getWorld().getDoorGraph());
+		} catch (IllegalAccessException e) {
+			log.severe("This shouldn't happen. Don't call this method at this time! "
+					+ e.fillInStackTrace());
+		}
+		// Find path for each start but take only the one with a minimum amount
+		// of doors:
 		List<Integer> minimumPath = new LinkedList<Integer>();
 		for (Door d : startDoors) {
 			List<Integer> path = solver.compute(d.getIntIdentifier());
-			if (path.size() < minimumPath.size() || minimumPath == null || minimumPath.isEmpty()) {
+			if (path.size() < minimumPath.size() || minimumPath == null
+					|| minimumPath.isEmpty()) {
 				minimumPath = path;
 			}
 		}
@@ -117,46 +133,55 @@ public class PathFactory {
 	 *         found.
 	 */
 	public static Path findDoorToDoorPath(Door start, Door end) {
-		double[][] adjacency = SimulationEngine.getInstance().getWorld()
-				.getDoorGraph();
-		// start and end are adjacent:
-		if (adjacency[start.getIntIdentifier()][end.getIntIdentifier()] > 0) {
-			Path test = SimulationEngine.getInstance().getWorld()
-					.getDoorPath(start, end);
-			if (test != null) {
-				// Path was calculated yet
-				return test;
+		double[][] adjacency;
+		try {
+			adjacency = SimulationEngine.getInstance().getWorld()
+					.getDoorGraph();
+			if (adjacency[start.getIntIdentifier()][end.getIntIdentifier()] > 0) {
+				Path test = SimulationEngine.getInstance().getWorld()
+						.getDoorPath(start, end);
+				if (test != null) {
+					// Path was calculated yet
+					return test;
+				}
+				// doors are adjacent but there is no calculated path:
+				Set<Door> doorSet = new HashSet<Door>();
+				doorSet.add(start);
+				doorSet.add(end);
+				// two doors can belong to multiple rooms (in most cases they do
+				// not):
+				Set<Room> fittingRooms = WorldFactory.getRoomsWithDoors(doorSet);
+				if (fittingRooms.isEmpty()) {
+					log.severe("No room was found. This shouldn't happen!");
+					return null;
+				}
+				// Take the first room and calculate a path:
+				Room room = fittingRooms.iterator().next();
+				InRoomPathSolver solver = new InRoomPathSolver(room,
+						(Point) end.getCentralPoint());
+				List<Point> tempPath = solver.compute((Point) start
+						.getCentralPoint());
+				Path finalPath = new Path(start.getCentralPoint(),
+						end.getCentralPoint());
+				finalPath.addAll(tempPath);
+				return finalPath;
 			}
-			// doors are adjacent but there is no calculated path:
-			Set<Door> doorSet = new HashSet<Door>();
-			doorSet.add(start);
-			doorSet.add(end);
-			// two doors can belong to multiple rooms (in most cases they do not):
-			Set<Room> fittingRooms = WorldFactory.getRoomsWithDoors(doorSet);
-			if(fittingRooms.isEmpty()) {
-				log.severe("No room was found. This shouldn't happen!");
-				return null;
-			}
-			//Take the first room and calculate a path:
-			Room room = fittingRooms.iterator().next();
-			InRoomPathSolver solver = new InRoomPathSolver(room,
-					(Point) end.getCentralPoint());
-			List<Point> tempPath = solver.compute((Point) start
-					.getCentralPoint());
-			Path finalPath = new Path(start.getCentralPoint(),
-					end.getCentralPoint());
-			finalPath.addAll(tempPath);
-			return finalPath;
+		} catch (IllegalAccessException e) {
+			log.severe("This shouldn't happen. Don't call this method at this time! "
+					+ e.fillInStackTrace());
 		}
-		//Last case: doors arn't adjacent:
+		// start and end are adjacent:
+		// Last case: doors arn't adjacent:
 		return findDoorToDoorPathOfNonAdjacentDoors(start, end);
 	}
-	
 
 	/**
 	 * Method for finding a path between two non adjacent doors
-	 * @param start the start door
-	 * @param end the end door
+	 * 
+	 * @param start
+	 *            the start door
+	 * @param end
+	 *            the end door
 	 * @return the path between the doors
 	 */
 	private static Path findDoorToDoorPathOfNonAdjacentDoors(Door start,
@@ -164,8 +189,14 @@ public class PathFactory {
 		// Doors arn't adjacent, so search in door graph.
 		Set<Integer> temp = new HashSet<Integer>();
 		temp.add(end.getIntIdentifier());
-		GraphPathSolver solver = new GraphPathSolver(temp, SimulationEngine
-				.getInstance().getWorld().getDoorGraph());
+		GraphPathSolver solver = null;
+		try {
+			solver = new GraphPathSolver(temp, SimulationEngine
+					.getInstance().getWorld().getDoorGraph());
+		} catch (IllegalAccessException e) {
+			log.severe("This shouldn't happen. Don't call this method at this time! "
+					+ e.fillInStackTrace());
+		}
 		// Computes a list of identifiers for door nodes.
 		List<Integer> nodes = solver.compute(start.getIntIdentifier());
 		Path path = new Path(start.getCentralPoint(), end.getCentralPoint());
@@ -203,24 +234,29 @@ public class PathFactory {
 	 */
 	private static Path findPathInRoom(IPosition start, IPosition end) {
 		Room room = WorldFactory.getRoomWithPoint(start.getCentralPoint());
-		InRoomPathSolver solver = new InRoomPathSolver(room, (Point)end.getCentralPoint());
-		List<Point> points = solver.compute((Point)start.getCentralPoint());
+		InRoomPathSolver solver = new InRoomPathSolver(room,
+				(Point) end.getCentralPoint());
+		List<Point> points = solver.compute((Point) start.getCentralPoint());
 		Path path = new Path(start.getCentralPoint(), end.getCentralPoint());
 		path.addAll(points);
 		return path;
 	}
-	
+
 	/**
 	 * Method for calculating a path in a given room
-	 * @param start the start point
-	 * @param end the end point
-	 * @param room the room to search in
+	 * 
+	 * @param start
+	 *            the start point
+	 * @param end
+	 *            the end point
+	 * @param room
+	 *            the room to search in
 	 * @return a path if one was found or <code>null</code> otherwise.
 	 */
 	private static Path findPathInRoom(Point2D start, Point2D end, Room room) {
-		InRoomPathSolver solver = new InRoomPathSolver(room, (Point)end);
-		List<Point> path = solver.compute((Point)start);
-		Path finalPath =  new Path(start, end);
+		InRoomPathSolver solver = new InRoomPathSolver(room, (Point) end);
+		List<Point> path = solver.compute((Point) start);
+		Path finalPath = new Path(start, end);
 		finalPath.addAll(path);
 		return finalPath;
 	}
@@ -275,7 +311,8 @@ public class PathFactory {
 	 * @param maximumPathLength
 	 *            the maximum path length
 	 * @return a fine grained path
-	 * @deprecated because the algorithm provides path with sub paths of the size <code>1</code> and this method isn't needed.
+	 * @deprecated because the algorithm provides path with sub paths of the
+	 *             size <code>1</code> and this method isn't needed.
 	 */
 	@Deprecated
 	public static Path getFineGrainedPath(Path path, double maximumPathLength) {
@@ -306,7 +343,8 @@ public class PathFactory {
 	 * @param maximumPathLength
 	 *            the maximum distance between interpoints
 	 * @return a new fine grained path
-	 * @deprecated because the algorithm provides path with sub paths of the size <code>1</code> and this method isn't needed.
+	 * @deprecated because the algorithm provides path with sub paths of the
+	 *             size <code>1</code> and this method isn't needed.
 	 */
 	@Deprecated
 	public static Path getFineGrainedPath(Point2D start, Point2D end,
@@ -333,8 +371,8 @@ public class PathFactory {
 			length -= maximumPathLength;
 		}
 		path.add(end);
-	
+
 		return path;
-	
+
 	}
 }

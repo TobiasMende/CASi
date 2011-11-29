@@ -116,7 +116,7 @@ public class SimulationEngine implements ISimulationClockListener {
 	 * Starts the engine and the simulation clock.
 	 * 
 	 * @throws IllegalStateException
-	 *             if no connection handler or no world was set.
+	 *             if no connection handler or no world was set or the world wasn't sealed yet.
 	 */
 	public void start() throws IllegalStateException {
 		if (SimulationClock.getInstance().isStarted())
@@ -125,8 +125,12 @@ public class SimulationEngine implements ISimulationClockListener {
 			throw new IllegalStateException("CommunicationHandler must be set");
 		if (world == null)
 			throw new IllegalStateException("World must be set");
-		SimulationClock.getInstance().init(world.getStartTime());
-		SimulationClock.getInstance().start();
+		try {
+			SimulationClock.getInstance().init(world.getStartTime());
+			SimulationClock.getInstance().start();
+		} catch (IllegalAccessException e) {
+			throw new IllegalStateException("Can't start if world isn't sealed");
+		}
 	}
 
 	// THINK needs the engine to be a clock listener?

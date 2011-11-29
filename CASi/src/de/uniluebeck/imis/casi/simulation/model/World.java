@@ -11,8 +11,8 @@
  */
 package de.uniluebeck.imis.casi.simulation.model;
 
+import java.awt.Image;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Set;
 import java.util.logging.Logger;
 
@@ -41,6 +41,9 @@ public class World {
 	private Set<AbstractComponent> components;
 	/** The start time in this world */
 	private SimulationTime startTime;
+
+	/** Background image for the simulation */
+	private Image backgroundImage;
 	/**
 	 * The door graph is a graph with doors as nodes. In this case its an
 	 * adjacency matrix that saves the distance between doors if they are in the
@@ -140,8 +143,71 @@ public class World {
 	 * 
 	 * @return the start time
 	 */
-	public SimulationTime getStartTime() {
+	public SimulationTime getStartTime() throws IllegalAccessException {
+		if (!sealed) {
+			throw new IllegalAccessException("World isn't sealed!");
+		}
 		return startTime;
+	}
+
+	/**
+	 * Getter for the door graph
+	 * 
+	 * @return an adjacency matrix that holds the adjacencies of doors with the
+	 *         specific best case costs (the distance between two doors)
+	 * @throws IllegalAccessException
+	 *             if the world isn't sealed
+	 * 
+	 */
+	public double[][] getDoorGraph() throws IllegalAccessException {
+		if (!sealed) {
+			throw new IllegalAccessException("World isn't sealed!");
+		}
+		return doorGraph;
+	}
+
+	/**
+	 * Getter for a path between two adjacent doors
+	 * 
+	 * @param start
+	 *            the start door
+	 * @param end
+	 *            the end door
+	 * @return a path or <code>null</code> if no path was found.
+	 * @throws IllegalAccessException
+	 *             if the world isn't sealed
+	 */
+	public Path getDoorPath(Door start, Door end) throws IllegalAccessException {
+		if (!sealed) {
+			throw new IllegalAccessException("World isn't sealed!");
+		}
+		if (start.equals(end)) {
+			log.severe("Shouldn't call this method if doors are equal!");
+			return null;
+		}
+		Path path = doorPaths[start.getIntIdentifier()][end.getIntIdentifier()];
+		if (path == null) {
+			// Path didn't exist this way. try another way round
+			path = doorPaths[end.getIntIdentifier()][start.getIntIdentifier()];
+			// Reverse path if one is found
+			path = (path != null) ? doorPaths[end.getIntIdentifier()][start
+					.getIntIdentifier()].reversed() : null;
+		}
+		return path;
+	}
+
+	/**
+	 * Getter for the background image
+	 * 
+	 * @return the background image
+	 * @throws IllegalAccessException
+	 *             if the world isn't sealed
+	 */
+	public Image getBackgroundImage() throws IllegalAccessException {
+		if (!sealed) {
+			throw new IllegalAccessException("World isn't sealed!");
+		}
+		return backgroundImage;
 	}
 
 	/**
@@ -250,13 +316,19 @@ public class World {
 	}
 
 	/**
-	 * Getter for the door graph
+	 * Setter for the background image behind the simulation
 	 * 
-	 * @return an adjacency matrix that holds the adjacencies of doors with the
-	 *         specific best case costs (the distance between two doors)
+	 * @param backgroundImage
+	 *            the background image to set
+	 * @throws IllegalAccessException
+	 *             if the world is sealed.
 	 */
-	public double[][] getDoorGraph() {
-		return doorGraph;
+	public void setBackgroundImage(Image backgroundImage)
+			throws IllegalAccessException {
+		if (sealed) {
+			throw new IllegalAccessException("World is sealed!");
+		}
+		this.backgroundImage = backgroundImage;
 	}
 
 	/**
@@ -337,30 +409,5 @@ public class World {
 				}
 			}
 		}
-	}
-
-	/**
-	 * Getter for a path between two adjacent doors
-	 * 
-	 * @param start
-	 *            the start door
-	 * @param end
-	 *            the end door
-	 * @return a path or <code>null</code> if no path was found.
-	 */
-	public Path getDoorPath(Door start, Door end) {
-		if (start.equals(end)) {
-			log.severe("Shouldn't call this method if doors are equal!");
-			return null;
-		}
-		Path path = doorPaths[start.getIntIdentifier()][end.getIntIdentifier()];
-		if (path == null) {
-			// Path didn't exist this way. try another way round
-			path = doorPaths[end.getIntIdentifier()][start.getIntIdentifier()];
-			// Reverse path if one is found
-			path = (path != null) ? doorPaths[end.getIntIdentifier()][start
-					.getIntIdentifier()].reversed() : null;
-		}
-		return path;
 	}
 }

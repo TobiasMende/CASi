@@ -51,6 +51,8 @@ public class SimulationClock implements Listenable<ISimulationClockListener> {
 	private boolean paused;
 	/** The timer which handles the system time */
 	private Timer timer;
+	/** Sets whether the timer is invalid or not */
+	private boolean invalidateTimer;
 	/** Listeners are informed about every tick of the clock */
 	private ArrayList<ISimulationClockListener> listeners = new ArrayList<ISimulationClockListener>();
 
@@ -155,11 +157,17 @@ public class SimulationClock implements Listenable<ISimulationClockListener> {
 			timer.cancel();
 			timer = null;
 		}
+		invalidateTimer = false;
 		timer = new Timer("CASi-System-Clock", true);
 		timer.schedule(new TimerTask() {
 
 			@Override
 			public void run() {
+				if(invalidateTimer) {
+					timer.cancel();
+					renewTimer();
+					return;
+				}
 				if (!paused) {
 					// incrementing time
 					currentTime.increment();
@@ -255,7 +263,7 @@ public class SimulationClock implements Listenable<ISimulationClockListener> {
 			this.scaleFactor = scaleFactor;
 		}
 		if (started) {
-			renewTimer();
+			invalidateTimer = true;
 		}
 	}
 

@@ -11,11 +11,37 @@
  */
 package de.uniluebeck.imis.casi.generator.java;
 
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.Point;
+import java.awt.image.BufferedImage;
+import java.awt.image.ImageObserver;
+import java.awt.image.ImageProducer;
+import java.io.File;
+import java.io.IOException;
+import java.util.HashSet;
+
+import javax.imageio.ImageIO;
+
 import de.uniluebeck.imis.casi.generator.IWorldGenerator;
+import de.uniluebeck.imis.casi.simulation.model.Agent;
+import de.uniluebeck.imis.casi.simulation.model.Door;
+import de.uniluebeck.imis.casi.simulation.model.Room;
+import de.uniluebeck.imis.casi.simulation.model.Wall;
 import de.uniluebeck.imis.casi.simulation.model.World;
+import de.uniluebeck.imis.casi.simulation.model.actionHandling.AbstractAction;
 
 public class WorldGenerator implements IWorldGenerator {
 
+	/**
+	 * This generator creates an basic, pre coded World object
+	 * 
+	 * @throws Exception
+	 *             In this particular generator the Exception is less useful,
+	 *             this comes from {@link IWorldGenerator} which is used by the
+	 *             more specialized generators.
+	 * @return {@link World}
+	 */
 	@Override
 	public World generateWorld() {
 		// TODO Auto-generated method stub
@@ -44,6 +70,126 @@ public class WorldGenerator implements IWorldGenerator {
 		// They were three and we were two,
 		// so I booked one an Tim booked two..."
 
+		World tempWord = new World();
+
+		BufferedImage image = null;
+		try {
+			image = ImageIO
+					.read(new File("sims/dev_office_java/backround.png"));
+		} catch (IOException e) {
+			// there could be something wrong
+			// TODO: logg this!
+		}
+
+		// giant try block around everything that actually sets things to the
+		// world 
+		try {
+
+			tempWord.setBackgroundImage(image);
+
+		} catch (IllegalAccessException e) {
+			// catches every Exception that may arise from sealed World or
+			// whatever
+			// TODO: logg that!
+			e.printStackTrace();
+		}
 		return new World();
 	}
+
+	/**
+	 * Only creates some agents. Testing stuff
+	 * 
+	 * @return {@link HashSet} of {@link Agent}
+	 */
+	private HashSet<Agent> generateAgents() {
+
+		HashSet<Agent> agents = new HashSet<Agent>();
+		Agent tempAgent = null;
+
+		// if we need a lot of agents...
+		for (int i = 0; i < 42; i++) {
+			tempAgent = new Agent("agent_" + i + "_smith", "A. Smith the " + i,
+					"crowd");
+			agents.add(tempAgent);
+		}
+
+		tempAgent = new Agent("agent_00", "Father Moneymaker", "candidates");
+		agents.add(tempAgent);
+		tempAgent = new Agent("agent_01", "Tim", "candidates");
+		agents.add(tempAgent);
+		tempAgent = new Agent("agent_02", "And I", "candidates");
+		agents.add(tempAgent);
+
+		for (int i = 0; i < 3; i++) {
+			tempAgent = new Agent("agent_" + i + "_lady", "Tentlady" + i,
+					"tendladies");
+			agents.add(tempAgent);
+		}
+
+		return agents;
+
+	}
+
+	/**
+	 * Creates some rooms. Testing stuff.
+	 * 
+	 * @return {@link HashSet} of {@link Room}
+	 */
+	private HashSet<Room> generateRooms() {
+		HashSet<Room> rooms = new HashSet<Room>();
+		Wall theNewWall;
+		Door theNewDoor;
+		Room theNewRoom = new Room();
+
+		// Room #1 (top left)
+		theNewRoom.addWall(new Wall(new Point(20, 20), new Point(20, 100)));
+		theNewRoom.addWall(new Wall(new Point(20, 100), new Point(100, 100)));
+		theNewDoor = new Door(20, 20);
+		theNewWall = new Wall(new Point(100, 100), new Point(100, 20));
+		theNewWall.addDoor(theNewDoor);
+		theNewRoom.addWall(theNewWall);
+		theNewRoom.addWall(new Wall(new Point(100, 20), new Point(20, 20)));
+		rooms.add(theNewRoom);
+
+		// Room #2 (second top left)
+		theNewRoom.addWall(new Wall(new Point(20, 100), new Point(20, 160)));
+		theNewRoom.addWall(new Wall(new Point(20, 160), new Point(100, 160)));
+		theNewDoor = new Door(20, 20);
+		theNewWall = new Wall(new Point(100, 160), new Point(100, 100));
+		theNewWall.addDoor(theNewDoor);
+		theNewRoom.addWall(theNewWall);
+		theNewRoom.addWall(new Wall(new Point(100, 100), new Point(20, 100)));
+		rooms.add(theNewRoom);
+
+		// Room #3 (third top left)
+		theNewRoom.addWall(new Wall(new Point(20, 160), new Point(20, 220)));
+		theNewRoom.addWall(new Wall(new Point(20, 220), new Point(100, 220)));
+		theNewDoor = new Door(20, 20);
+		theNewWall = new Wall(new Point(100, 220), new Point(100, 160));
+		theNewWall.addDoor(theNewDoor);
+		theNewRoom.addWall(theNewWall);
+		theNewRoom.addWall(new Wall(new Point(100, 160), new Point(20, 160)));
+		rooms.add(theNewRoom);
+
+		// Room #4 small kitchen
+		theNewRoom.addWall(new Wall(new Point(20, 220), new Point(20, 260)));
+		theNewRoom.addWall(new Wall(new Point(20, 260), new Point(100, 260)));
+		theNewDoor = new Door();
+		theNewWall = new Wall(new Point(100, 260), new Point(100, 220));
+		theNewWall.addDoor(theNewDoor);
+		theNewRoom.addWall(theNewWall);
+		theNewRoom.addWall(new Wall(new Point(100, 220), new Point(20, 220)));
+		rooms.add(theNewRoom);
+
+		// this are just a few rooms. Not a whole building for now.
+		// lets check first in the gui if the points are chosen correctly
+		return rooms;
+
+	}
+
+	private HashSet<AbstractAction> generateActionPools() {
+
+		return null;
+	}
+
 }

@@ -13,9 +13,13 @@ package de.uniluebeck.imis.casi.simulation.model;
 
 import java.sql.Timestamp;
 import java.text.DateFormat;
+import java.text.FieldPosition;
 import java.text.ParseException;
+import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * The SimulationTime provides simple time objects which are used in the
@@ -85,5 +89,30 @@ public class SimulationTime extends Timestamp {
 	 */
 	public void increment() {
 		setTime(getTime() + 1000);
+	}
+	
+	/**
+	 * Getter for the time as localized string
+	 * @return the time as string
+	 */
+	public String getLocalizedTime() {
+		DateFormat formatter = new SimpleDateFormat("HH:mm:ss");
+		return formatter.format(new Date(getTime()));
+	}
+	
+	/**
+	 * Getter for the localized date of this time object
+	 * @return the date as string
+	 */
+	public String getLocalizedDate() {
+		Locale loc = Locale.getDefault();
+		DateFormat formatter = null;
+		if(loc.equals(Locale.GERMAN)) {
+			formatter = new SimpleDateFormat("dd.MM.yyyy");
+		} else {
+			formatter = new SimpleDateFormat("MM/dd/yyyy");
+		}
+		
+		return formatter.format(new Date(getTime()));
 	}
 }

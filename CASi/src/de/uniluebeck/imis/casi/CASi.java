@@ -13,6 +13,7 @@ package de.uniluebeck.imis.casi;
 
 import java.io.IOException;
 import java.util.Calendar;
+import java.util.Locale;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -64,6 +65,7 @@ public class CASi {
 
 		// DO WHAT YOU WANT:
 		log.info("Test!");
+		Locale.setDefault(Locale.GERMAN);
 		IWorldGenerator generator = new GeneratorStub();
 		ICommunicationHandler networkLogger = new CommunicationLogger();
 		IMainView mainView = new MainViewSimpleGui();

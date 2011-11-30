@@ -34,19 +34,9 @@ public abstract class AtomicAction extends AbstractAction {
 			// stop performing if completed
 			return true;
 		}
-		/*
-		 * XXX we need some good ideas how to handle the perform and continue
-		 * actions.
-		 * 
-		 * Current Problem:
-		 * 
-		 * - Should we call the internalPerform()-Method in every tick?
-		 * 
-		 * What must this method do then?
-		 */
 		setState(STATE.ONGOING);
 
-		if (internalPerform(null)) {
+		if (internalPerform(performer)) {
 			setState(STATE.COMPLETED);
 			return true;
 		}

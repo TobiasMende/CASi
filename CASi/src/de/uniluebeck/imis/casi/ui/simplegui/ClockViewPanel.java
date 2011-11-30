@@ -12,8 +12,10 @@
 package de.uniluebeck.imis.casi.ui.simplegui;
 
 import java.awt.Dimension;
-import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.GridLayout;
 
+import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
@@ -43,10 +45,25 @@ public class ClockViewPanel extends JPanel implements ISimulationClockListener, 
 		SimulationClock.getInstance().addListener(this);
 		
 		/** Set layout to FlowLayout */
-		this.setLayout(new FlowLayout());
+		this.setLayout(new GridLayout(1,0));
+		
+		/** Set the components */
+		this.setComponents();
+		
+		/** Set preferred size */
+		this.setPreferredSize(new Dimension(0, 65));
+	}
+	
+	/**
+	 * This method sets the components of the ClockViewPanel (JLabel showing the
+	 * date and time, JSlider scaling the simulation time).
+	 */
+	private void setComponents() {
 		
 		/** JLabel showing the simulation time */
 		this.timeLabel = new JLabel();
+		this.timeLabel.setFont(new Font("sans",Font.BOLD,16));
+		this.timeLabel.setBorder(BorderFactory.createTitledBorder("Date/Time:"));
 		this.add(this.timeLabel);
 		
 		/** JSlider to set the speed*/
@@ -59,9 +76,12 @@ public class ClockViewPanel extends JPanel implements ISimulationClockListener, 
 		this.slider.setSnapToTicks(true);
 		this.slider.setPaintTicks(true);
 		this.slider.addChangeListener(this);
+		this.slider.setBorder(BorderFactory.createTitledBorder("Time scaler:"));
 		this.add(this.slider);
 		
-		this.setPreferredSize(new Dimension(0, 35));
+		/** Add control panel */
+		ControlPanel controlPanel = new ControlPanel();
+		this.add(controlPanel);
 	}
 
 	@Override

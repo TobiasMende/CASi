@@ -14,6 +14,7 @@ package de.uniluebeck.imis.casi.simulation.model;
 import java.awt.Image;
 import java.awt.Shape;
 import java.awt.geom.Point2D;
+import java.awt.geom.Point2D.Double;
 import java.io.Serializable;
 
 /**
@@ -24,6 +25,7 @@ import java.io.Serializable;
 public abstract class AbstractComponent implements IPosition, Serializable {
 	private Image representation;
 	private IPosition position;
+	private Point2D coordinates = new Point2D.Double();
 	protected final String identifier;
 
 	public AbstractComponent(String identifier) {
@@ -36,14 +38,26 @@ public abstract class AbstractComponent implements IPosition, Serializable {
 
 	public boolean setCurrentPosition(IPosition currentPosition) {
 		this.position = position;
+		setCoordinates(position.getCentralPoint());
 		return true;
 	}
 
 	public Point2D getCoordinates() {
-		// TODO implement
-		return null;
-	};
-
+		return coordinates;
+	}
+	
+	/**
+	 * Setter for the coordinates of this component
+	 * @param coordinates the coordinates to set
+	 */
+	public void setCoordinates(Point2D coordinates) {
+		this.coordinates = coordinates;
+	}
+	
+	/**
+	 * Getter for the identifier
+	 * @return the identifier
+	 */
 	public final String getIdentifier() {
 		return identifier;
 	}
@@ -76,26 +90,12 @@ public abstract class AbstractComponent implements IPosition, Serializable {
 
 	@Override
 	public boolean contains(IPosition position) {
-		// TODO Auto-generated method stub
-		return false;
+		return contains(position.getCentralPoint());
 	}
 
 	@Override
 	public boolean contains(Point2D point) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public Shape getShapeRepresentation() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Point2D getCentralPoint() {
-		// TODO Auto-generated method stub
-		return null;
+		return getShapeRepresentation().contains(point);
 	}
 
 }

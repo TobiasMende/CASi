@@ -11,8 +11,11 @@
  */
 package de.uniluebeck.imis.casi.simulation.model;
 
+import java.awt.geom.Point2D;
+
 public interface IAgentListener {
 	public void stateChanged(Agent.STATE newState);
 
-	public void positionChanged(IPosition oldPosition, IPosition newPosition);
+	public void positionChanged(Point2D oldPosition, Point2D newPosition);
+	
 }

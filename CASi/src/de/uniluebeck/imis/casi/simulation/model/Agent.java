@@ -219,5 +219,18 @@ public class Agent extends AbstractComponent implements
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	@Override
+	public void setCoordinates(Point2D coordinates) {
+		Point2D oldPoint = super.getCoordinates();
+		super.setCoordinates(coordinates);
+		informListenersAboutPositionChange(oldPoint, coordinates);
+	}
+	
+	private void informListenersAboutPositionChange(Point2D oldPoint, Point2D newPoint) {
+		for(IAgentListener listener : agentListeners) {
+			listener.positionChanged(oldPoint, newPoint);
+		}
+	}
 
 }

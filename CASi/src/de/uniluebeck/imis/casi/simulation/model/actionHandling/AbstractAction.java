@@ -82,7 +82,7 @@ public abstract class AbstractAction implements Listenable<IActionListener>,
 	/** The earliest time for starting with this action */
 	private SimulationTime earliestStartTime;
 	/** The latest time when this simulation should be finished */
-	private SimulationTime latestEndTime;
+	private SimulationTime deadline;
 
 	/** A collection of listeners that listen for events */
 	private transient Collection<IActionListener> listeners = new ArrayList<IActionListener>();
@@ -153,6 +153,39 @@ public abstract class AbstractAction implements Listenable<IActionListener>,
 				listener.stateChanged(state);
 			}
 		}
+	}
+	
+	
+	/**
+	 * Setter for the deadline for this action.
+	 * @param deadline the deadline to set
+	 */
+	public void setDeadline(SimulationTime deadline) {
+		this.deadline = deadline;
+	}
+	
+	/**
+	 * Sets the earliest time when this action should be performed
+	 * @param earliestStartTime the earliest start time to set
+	 */
+	public void setEarliestStartTime(SimulationTime earliestStartTime) {
+		this.earliestStartTime = earliestStartTime;
+	}
+	
+	/**
+	 * Getter for the deadline of this action
+	 * @return the deadline
+	 */
+	public SimulationTime getDeadline() {
+		return deadline;
+	}
+	
+	/**
+	 * Getter for the earliest start time of this action
+	 * @return the earliest start time
+	 */
+	public SimulationTime getEarliestStartTime() {
+		return earliestStartTime;
 	}
 
 	/**
@@ -340,6 +373,37 @@ public abstract class AbstractAction implements Listenable<IActionListener>,
 			log.severe(e.fillInStackTrace().toString());
 		}
 		return null;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(super.equals(obj)) {
+			return true;
+		}
+		if(!(obj instanceof AbstractAction)) {
+			return false;
+		}
+		AbstractAction other = (AbstractAction)obj;
+		if(!type.equals(other.getType())) {
+			return false;
+		}
+		if(deadline != null && other.getDeadline() != null && !deadline.equals(other.getDeadline())) {
+			return false;
+		}
+		if(earliestStartTime != null && other.getEarliestStartTime() != null && !earliestStartTime.equals(other.getDeadline())) {
+			return false;
+		}
+		if(priority != other.getPriority() || duration != other.getDuration()) {
+			return false;
+		}
+		if((deadline != null && other.getDeadline() == null) || (deadline == null && other.getDeadline() != null)) {
+			return false;
+		}
+		if((earliestStartTime != null && other.getEarliestStartTime() == null) || (earliestStartTime == null && other.getEarliestStartTime() != null)) {
+			return false;
+		}
+		// TODO this isn't a complete equals method... further additions should be made in the concrete actions.
+		return true;
 	}
 
 }

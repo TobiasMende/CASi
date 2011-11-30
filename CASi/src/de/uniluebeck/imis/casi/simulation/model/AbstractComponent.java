@@ -12,9 +12,7 @@
 package de.uniluebeck.imis.casi.simulation.model;
 
 import java.awt.Image;
-import java.awt.Shape;
 import java.awt.geom.Point2D;
-import java.awt.geom.Point2D.Double;
 import java.io.Serializable;
 
 /**
@@ -23,6 +21,7 @@ import java.io.Serializable;
  * 
  */
 public abstract class AbstractComponent implements IPosition, Serializable {
+	private static final long serialVersionUID = 7951474356106618134L;
 	private Image representation;
 	private IPosition position;
 	private Point2D coordinates = new Point2D.Double();

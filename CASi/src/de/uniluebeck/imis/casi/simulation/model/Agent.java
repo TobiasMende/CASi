@@ -19,9 +19,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.logging.Logger;
 
+import de.uniluebeck.imis.casi.CASi;
 import de.uniluebeck.imis.casi.simulation.engine.ISimulationClockListener;
 import de.uniluebeck.imis.casi.simulation.engine.SimulationClock;
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.AbstractAction;
+import de.uniluebeck.imis.casi.simulation.model.actionHandling.IActionScheduler;
+import de.uniluebeck.imis.casi.simulation.model.actionHandling.schedulers.DefaultActionScheduler;
 import de.uniluebeck.imis.casi.utils.Tools;
 
 /**
@@ -43,17 +46,17 @@ public class Agent extends AbstractComponent implements
 	private String name;
 	private String type;
 	private IPosition defaultPosition;
+	private AbstractAction currentAction;
+	private IActionScheduler actionScheduler;
 
-	/**
-	 * Ordered list of actions the agent should perform in this order during
-	 * this simulation
-	 */
-	private Collection<AbstractAction> todoList;
-	/** A pool of actions that can be performed by this agent type */
-	private Collection<AbstractAction> actionPool;
 	/** Listeners, perhaps already needed in AbstractComponent */
 	private transient ArrayList<IAgentListener> agentListeners = new ArrayList<IAgentListener>();
 	private Agent.STATE state = STATE.UNKNOWN;
+
+	private Agent(String identifier) {
+		super(identifier);
+		actionScheduler = new DefaultActionScheduler();
+	}
 
 	/**
 	 * Constructor for an abstract agent.
@@ -62,7 +65,7 @@ public class Agent extends AbstractComponent implements
 	 *            the id of this agent type
 	 */
 	public Agent(String identifier, String type) {
-		super(identifier);
+		this(identifier);
 		this.type = type;
 		state = STATE.ABSTRACT;
 		// TODO Auto-generated constructor stub
@@ -80,7 +83,7 @@ public class Agent extends AbstractComponent implements
 	 */
 	public Agent(String identifier, String name, String type,
 			IPosition defaultPosition) {
-		super(identifier);
+		this(identifier);
 		this.name = name;
 		this.type = type;
 		this.defaultPosition = defaultPosition;
@@ -119,28 +122,20 @@ public class Agent extends AbstractComponent implements
 		return state.equals(STATE.ABSTRACT);
 	}
 
-	public Collection<AbstractAction> getTodoList() {
-		return todoList;
-	}
-
-	public Collection<AbstractAction> getActionPool() {
-		return actionPool;
-	}
-
 	public void setTodoList(Collection<AbstractAction> todoList) {
-		this.todoList = todoList;
+		actionScheduler.setTodoList(todoList);
 	}
 
 	public void addActionToPool(AbstractAction action) {
-		actionPool.add(action);
+		actionScheduler.addPoolAction(action);
 	}
 
 	public void addActionToList(AbstractAction action) {
-		todoList.add(action);
+		actionScheduler.schedule(action);
 	}
 
 	public void setActionPool(Collection<AbstractAction> actionPool) {
-		this.actionPool = actionPool;
+		actionScheduler.setActionPool(actionPool);
 	}
 
 	public void addListener(IAgentListener listener) {
@@ -155,7 +150,24 @@ public class Agent extends AbstractComponent implements
 
 	@Override
 	public void timeChanged(SimulationTime newTime) {
-		// TODO handle the actions here
+		// TODO handle agent states and interdependent actions between agents
+		if (currentAction == null || currentAction.isCompleted()) {
+			// need a new action to perform:
+			currentAction = actionScheduler.getNextAction();
+			if(currentAction == null) {
+				CASi.SIM_LOG.info(this.name+": Nothing to do at the moment.");
+				return;
+			}
+		}
+		try {
+			currentAction.perform(this);
+		} catch (IllegalAccessException e) {
+			CASi.SIM_LOG
+					.severe("The last action wasn't performable. "
+							+ this.name
+							+ " has better things to do than solving impossible problems. E.g Searching for a Club Mate!");
+			currentAction = null;
+		}
 	}
 
 	/**
@@ -219,16 +231,17 @@ public class Agent extends AbstractComponent implements
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
+
 	@Override
 	public void setCoordinates(Point2D coordinates) {
 		Point2D oldPoint = super.getCoordinates();
 		super.setCoordinates(coordinates);
 		informListenersAboutPositionChange(oldPoint, coordinates);
 	}
-	
-	private void informListenersAboutPositionChange(Point2D oldPoint, Point2D newPoint) {
-		for(IAgentListener listener : agentListeners) {
+
+	private void informListenersAboutPositionChange(Point2D oldPoint,
+			Point2D newPoint) {
+		for (IAgentListener listener : agentListeners) {
 			listener.positionChanged(oldPoint, newPoint);
 		}
 	}

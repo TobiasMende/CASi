@@ -67,5 +67,7 @@ public abstract class AtomicAction extends AbstractAction {
 		throw new IllegalAccessException(
 				"Don't decrement the duration! It's decremented automatically");
 	}
+	
+	
 
 }

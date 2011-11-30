@@ -106,4 +106,46 @@ public class Move extends AtomicAction {
 		startPosition = start;
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((endPosition == null) ? 0 : endPosition.hashCode());
+		result = prime * result
+				+ ((performer == null) ? 0 : performer.hashCode());
+		result = prime * result
+				+ ((startPosition == null) ? 0 : startPosition.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Move other = (Move) obj;
+		if (endPosition == null) {
+			if (other.endPosition != null)
+				return false;
+		} else if (!endPosition.equals(other.endPosition))
+			return false;
+		if (performer == null) {
+			if (other.performer != null)
+				return false;
+		} else if (!performer.equals(other.performer))
+			return false;
+		if (startPosition == null) {
+			if (other.startPosition != null)
+				return false;
+		} else if (!startPosition.equals(other.startPosition))
+			return false;
+		return true;
+	}
+	
+	
+
 }

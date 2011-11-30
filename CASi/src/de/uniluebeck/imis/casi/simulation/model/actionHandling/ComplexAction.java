@@ -123,4 +123,32 @@ public abstract class ComplexAction extends AbstractAction {
 		return false;
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((subActions == null) ? 0 : subActions.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ComplexAction other = (ComplexAction) obj;
+		if (subActions == null) {
+			if (other.subActions != null)
+				return false;
+		} else if (!subActions.equals(other.subActions))
+			return false;
+		return true;
+	}
+	
+	
+
 }

@@ -64,9 +64,9 @@ public class CASi {
 		setupLogging();
 
 		// DO WHAT YOU WANT:
-		log.info("Test!");
+		log.info("TESTSIMULATION");
+		IWorldGenerator generator = new de.uniluebeck.imis.casi.generator.java.WorldGenerator();
 		Locale.setDefault(Locale.GERMAN);
-		IWorldGenerator generator = new GeneratorStub();
 		ICommunicationHandler networkLogger = new CommunicationLogger();
 		IMainView mainView = new MainViewSimpleGui();
 

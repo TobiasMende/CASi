@@ -20,19 +20,28 @@ import java.awt.image.ImageProducer;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.Set;
+import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
 
 import de.uniluebeck.imis.casi.generator.IWorldGenerator;
+import de.uniluebeck.imis.casi.simulation.model.AbstractActuator;
+import de.uniluebeck.imis.casi.simulation.model.AbstractComponent;
+import de.uniluebeck.imis.casi.simulation.model.AbstractSensor;
 import de.uniluebeck.imis.casi.simulation.model.Agent;
 import de.uniluebeck.imis.casi.simulation.model.Door;
 import de.uniluebeck.imis.casi.simulation.model.Room;
+import de.uniluebeck.imis.casi.simulation.model.SimulationTime;
 import de.uniluebeck.imis.casi.simulation.model.Wall;
 import de.uniluebeck.imis.casi.simulation.model.World;
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.AbstractAction;
 
+
 public class WorldGenerator implements IWorldGenerator {
 
+	private static final Logger log = Logger.getLogger(WorldGenerator.class.getName());  
+	
 	/**
 	 * This generator creates an basic, pre coded World object
 	 * 
@@ -70,8 +79,9 @@ public class WorldGenerator implements IWorldGenerator {
 		// They were three and we were two,
 		// so I booked one an Tim booked two..."
 
-		World tempWord = new World();
+		World tempWorld = new World();
 
+		// backroundimage
 		BufferedImage image = null;
 		try {
 			image = ImageIO
@@ -80,20 +90,53 @@ public class WorldGenerator implements IWorldGenerator {
 			// there could be something wrong
 			// TODO: logg this!
 		}
+		
+		// rooms
+		HashSet<Room> rooms = generateRooms();
+		
+		// generate the agents
+		HashSet<Agent> agents = generateAgents();
 
+		// sensors
+		HashSet<AbstractSensor> sensors = generateSensors();
+		
+		// actuators
+		HashSet<AbstractActuator> actuators = generateActuators();
+		
 		// giant try block around everything that actually sets things to the
 		// world 
 		try {
 
-			tempWord.setBackgroundImage(image);
+			tempWorld.setBackgroundImage(image);
+			tempWorld.setRooms(rooms);
+			tempWorld.setAgents(agents);
+			tempWorld.setSensors(sensors);
+			tempWorld.setActuators(actuators);
+			tempWorld.setComponents(new HashSet<AbstractComponent>());
+			tempWorld.setStartTime(new SimulationTime("12/24/2011 02:03:42"));
+			tempWorld.seal();
 
-		} catch (IllegalAccessException e) {
-			// catches every Exception that may arise from sealed World or
-			// whatever
-			// TODO: logg that!
-			e.printStackTrace();
+		} catch (Exception e) {
+			// catches every Exception that may arise from sealed World
+			log.severe("Generator made a mistake! \n"+e.fillInStackTrace().toString());
 		}
-		return new World();
+		return tempWorld;
+	}
+
+	/**
+	 * @return
+	 */
+	private HashSet<AbstractActuator> generateActuators() {
+		// TODO generate actuators!
+		return new HashSet<AbstractActuator>();
+	}
+
+	/**
+	 * @return
+	 */
+	private HashSet<AbstractSensor> generateSensors() {
+		// TODO generator sensors!
+		return new HashSet<AbstractSensor>();
 	}
 
 	/**
@@ -102,7 +145,8 @@ public class WorldGenerator implements IWorldGenerator {
 	 * @return {@link HashSet} of {@link Agent}
 	 */
 	private HashSet<Agent> generateAgents() {
-
+		log.info("generating agents");
+		
 		HashSet<Agent> agents = new HashSet<Agent>();
 		Agent tempAgent = null;
 
@@ -136,6 +180,9 @@ public class WorldGenerator implements IWorldGenerator {
 	 * @return {@link HashSet} of {@link Room}
 	 */
 	private HashSet<Room> generateRooms() {
+		
+		log.info("generating rooms");
+		
 		HashSet<Room> rooms = new HashSet<Room>();
 		Wall theNewWall;
 		Door theNewDoor;

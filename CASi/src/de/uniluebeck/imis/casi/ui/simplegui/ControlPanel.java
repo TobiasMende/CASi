@@ -14,6 +14,7 @@ package de.uniluebeck.imis.casi.ui.simplegui;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.logging.Logger;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -29,6 +30,9 @@ import de.uniluebeck.imis.casi.simulation.engine.SimulationClock;
 @SuppressWarnings("serial")
 public class ControlPanel extends JPanel implements ActionListener {
 
+	private static final Logger log = Logger.getLogger(
+			ControlPanel.class.getName());
+	
 	public ControlPanel() {
 		
 		this.setBorder(BorderFactory.createTitledBorder("Control field:"));
@@ -63,7 +67,7 @@ public class ControlPanel extends JPanel implements ActionListener {
 			/** If simulation is running */
 			if(!SimulationClock.getInstance().isPaused()) {
 				
-				CASi.SIM_LOG.info("Pause simulation");
+				log.info("Pause simulation");
 				
 				/** Set simulation clock paused */
 				SimulationClock.getInstance().setPaused(true);
@@ -74,7 +78,7 @@ public class ControlPanel extends JPanel implements ActionListener {
 				/** If simulation is paused */
 			} else if(SimulationClock.getInstance().isPaused()) {
 				
-				CASi.SIM_LOG.info("Resume simulation");
+				log.info("Resume simulation");
 				
 				/** Set simulation clock started */
 				SimulationClock.getInstance().setPaused(false);

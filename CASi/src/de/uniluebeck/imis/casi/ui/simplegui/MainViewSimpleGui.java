@@ -12,9 +12,9 @@
 package de.uniluebeck.imis.casi.ui.simplegui;
 
 import java.awt.BorderLayout;
-import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.logging.Logger;
 
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -35,6 +35,9 @@ import de.uniluebeck.imis.casi.ui.IMainView;
 public class MainViewSimpleGui extends JFrame implements IMainView,
 		ActionListener {
 
+	private static final Logger log = Logger.getLogger(
+			MainViewSimpleGui.class.getName());
+	
 	private IUIController uicontroller;
 	private SimulationPanel simPanel;
 
@@ -121,7 +124,7 @@ public class MainViewSimpleGui extends JFrame implements IMainView,
 	public void showUi() {
 
 		this.setVisible(true);
-		CASi.SIM_LOG.info("Show simple GUI");
+		log.info("Show simple GUI");
 	}
 
 	@Override

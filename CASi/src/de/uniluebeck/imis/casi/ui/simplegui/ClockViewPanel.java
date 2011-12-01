@@ -14,6 +14,7 @@ package de.uniluebeck.imis.casi.ui.simplegui;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.util.logging.Logger;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
@@ -22,7 +23,6 @@ import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import de.uniluebeck.imis.casi.CASi;
 import de.uniluebeck.imis.casi.simulation.engine.ISimulationClockListener;
 import de.uniluebeck.imis.casi.simulation.engine.SimulationClock;
 import de.uniluebeck.imis.casi.simulation.model.SimulationTime;
@@ -35,6 +35,9 @@ import de.uniluebeck.imis.casi.simulation.model.SimulationTime;
  */
 @SuppressWarnings("serial")
 public class ClockViewPanel extends JPanel implements ISimulationClockListener, ChangeListener {
+	
+	private static final Logger log = Logger.getLogger(
+			ClockViewPanel.class.getName());
 	
 	private JLabel timeLabel;
 	private JSlider slider;
@@ -70,7 +73,7 @@ public class ClockViewPanel extends JPanel implements ISimulationClockListener, 
 		this.slider = new JSlider(JSlider.HORIZONTAL,
 				SimulationClock.MINIMUM_SCALE_FACTOR,
 				SimulationClock.MAXIMUM_SCALE_FACTOR,
-				-SimulationClock.DEFAULT_SCALE_FACTOR + 2100);
+				this.calculateScaledValue(SimulationClock.DEFAULT_SCALE_FACTOR));
 		this.slider.setMajorTickSpacing(200);
 		this.slider.setMinorTickSpacing(100);
 		this.slider.setSnapToTicks(true);
@@ -84,6 +87,37 @@ public class ClockViewPanel extends JPanel implements ISimulationClockListener, 
 		this.add(controlPanel);
 	}
 
+	/**
+	 * This method get a value between 2000 and 10 and computes a squared and
+	 * scaled value between 10 and 2000.
+	 * 
+	 * @param a - value between 2000 and 10
+	 * @return squared value between 10 and 2000
+	 */
+	private int calculateScaledValue(int a) {
+		
+		/** Invert the value limits */
+		a = - a + 2010;
+		
+		/** Square and scale the new value*/
+		double number = a*a/2010 + 2000/201;
+		
+		/** Check, if the new values are in range */
+		if((int) number < SimulationClock.MINIMUM_SCALE_FACTOR) {
+			
+			/** Else return minimum */
+			return SimulationClock.MINIMUM_SCALE_FACTOR;
+		}
+		if((int) number > SimulationClock.MAXIMUM_SCALE_FACTOR) {
+			
+			/** Else return maximum */
+			return SimulationClock.MAXIMUM_SCALE_FACTOR;
+		}
+		
+		/** Return the new value */
+		return  (int) (number);
+	}
+	
 	@Override
 	public void timeChanged(SimulationTime newTime) {
 
@@ -93,7 +127,10 @@ public class ClockViewPanel extends JPanel implements ISimulationClockListener, 
 
 	@Override
 	public void simulationPaused(boolean pause) {
-		// TODO Auto-generated method stub
+		if(pause) {
+			
+			
+		}
 		
 	}
 
@@ -114,16 +151,15 @@ public class ClockViewPanel extends JPanel implements ISimulationClockListener, 
 		
 		/** Calculate the new scale factor */
 		int newScaleFactor = this.slider.getValue();
-		newScaleFactor = -newScaleFactor + 2100;
+		newScaleFactor = this.calculateScaledValue(newScaleFactor);
 		
 		/** Only change at values that are multiple of 100 */
-		if(newScaleFactor % 100 == 0) {
+		if(newScaleFactor % 10 == 0) {
 			
 			/** Only change if the value has changed */
 			if(SimulationClock.getInstance().getScaleFactor() != 
 				newScaleFactor) {
 				
-				CASi.SIM_LOG.info("Set simulation delay to: "+newScaleFactor);
 				/** Set new value to SimulationClock */
 				SimulationClock.getInstance().setScaleFactor(newScaleFactor);
 				

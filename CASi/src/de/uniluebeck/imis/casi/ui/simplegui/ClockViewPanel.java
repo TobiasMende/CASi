@@ -88,19 +88,27 @@ public class ClockViewPanel extends JPanel implements ISimulationClockListener, 
 	}
 
 	/**
-	 * This method get a value between 2000 and 10 and computes a squared and
-	 * scaled value between 10 and 2000.
+	 * This method gets a value between maximum and minimum and computes a squared
+	 * and scaled value between minimum and maximum.
 	 * 
-	 * @param a - value between 2000 and 10
-	 * @return squared value between 10 and 2000
+	 * @param value - value between maximum and minimum
+	 * @return squared value between minimum and maximum
 	 */
-	private int calculateScaledValue(int a) {
+	private int calculateScaledValue(int value) {
+		
+		/** Save maximum and minimum in doubles */
+		double max = SimulationClock.MAXIMUM_SCALE_FACTOR;
+		double min = SimulationClock.MINIMUM_SCALE_FACTOR;
+		
+		/** Compute values of the quadratic function */
+		double a = (max - min)/(Math.pow(max, 2) - Math.pow(min, 2));
+		double c = max - a * Math.pow(max, 2);
 		
 		/** Invert the value limits */
-		a = - a + 2010;
+		double number = - value + max + min;
 		
 		/** Square and scale the new value*/
-		double number = a*a/2010 + 2000/201;
+		number = a * Math.pow(number, 2) + c;
 		
 		/** Check, if the new values are in range */
 		if((int) number < SimulationClock.MINIMUM_SCALE_FACTOR) {
@@ -120,8 +128,15 @@ public class ClockViewPanel extends JPanel implements ISimulationClockListener, 
 	
 	@Override
 	public void timeChanged(SimulationTime newTime) {
-
-		this.timeLabel.setText(newTime.getLocalizedDate()+" - "+newTime.getLocalizedTime());
+		
+		/** Calculate the new scale factor */
+		double newScaleFactor = this.calculateScaledValue(this.slider.getValue());
+		
+		double scaleFactor = 1000/newScaleFactor;
+		scaleFactor = Math.floor(scaleFactor*100)/100;
+		
+		this.timeLabel.setText(newTime.getLocalizedDate()+" - "
+				+newTime.getLocalizedTime()+" ("+scaleFactor+"x)");
 		
 	}
 
@@ -152,21 +167,17 @@ public class ClockViewPanel extends JPanel implements ISimulationClockListener, 
 		/** Calculate the new scale factor */
 		int newScaleFactor = this.slider.getValue();
 		newScaleFactor = this.calculateScaledValue(newScaleFactor);
-		
-		/** Only change at values that are multiple of 100 */
-		if(newScaleFactor % 10 == 0) {
+					
+		/** Only change if the value has changed */
+		if(SimulationClock.getInstance().getScaleFactor() != 
+			newScaleFactor) {
 			
-			/** Only change if the value has changed */
-			if(SimulationClock.getInstance().getScaleFactor() != 
-				newScaleFactor) {
-				
-				/** Set new value to SimulationClock */
-				SimulationClock.getInstance().setScaleFactor(newScaleFactor);
-				
-			}
+			/** Set new value to SimulationClock */
+			SimulationClock.getInstance().setScaleFactor(newScaleFactor);
+			
 		}
 		
-		
+		this.timeChanged(SimulationClock.getInstance().getCurrentTime());
 	}
 
 }

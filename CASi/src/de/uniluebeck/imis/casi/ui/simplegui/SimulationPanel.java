@@ -12,6 +12,7 @@
 package de.uniluebeck.imis.casi.ui.simplegui;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 
 import javax.swing.BorderFactory;
@@ -19,15 +20,22 @@ import javax.swing.JPanel;
 
 /**
  * 
- * @author Moritz Bürger
+ * @author Moritz Buerger
  * 
  */
 
 @SuppressWarnings("serial")
 public class SimulationPanel extends JPanel {
 
+	public static final int WIDTH = 1000;
+	public static final int HEIGHT = 1000;
+	
 	public SimulationPanel() {
 
+		this.setPreferredSize(new Dimension(
+				SimulationPanel.WIDTH,
+				SimulationPanel.HEIGHT));
+		
 		this.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 	}
 
@@ -36,8 +44,6 @@ public class SimulationPanel extends JPanel {
 		super.paintComponent(g);
 
 		g.setColor(Color.BLACK);
-		g.fillRect(5, 5, 200, 200);
-		g.setColor(Color.WHITE);
 		g.drawString("Test", 20, 20);
 	}
 

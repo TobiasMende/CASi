@@ -11,24 +11,17 @@
  */
 package de.uniluebeck.imis.casi.ui.simplegui;
 
-import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.logging.Logger;
 
 import javax.swing.BorderFactory;
-import javax.swing.JButton;
 import javax.swing.JPanel;
-
-import de.uniluebeck.imis.casi.CASi;
-import de.uniluebeck.imis.casi.simulation.engine.SimulationClock;
 
 /**
  * @author Moritz Buerger
  *
  */
 @SuppressWarnings("serial")
-public class ControlPanel extends JPanel implements ActionListener {
+public class ControlPanel extends JPanel {
 
 	private static final Logger log = Logger.getLogger(
 			ControlPanel.class.getName());
@@ -38,7 +31,7 @@ public class ControlPanel extends JPanel implements ActionListener {
 		this.setBorder(BorderFactory.createTitledBorder("Control field:"));
 		
 		/** Set Layout */
-		this.setLayout(new FlowLayout());
+		this.setLayout(null);
 		
 		/** Set the components */
 		this.setComponents();
@@ -48,46 +41,12 @@ public class ControlPanel extends JPanel implements ActionListener {
 	private void setComponents() {
 		
 		/** Set start button */
-		JButton startButton = new JButton("Pause");
-		startButton.setActionCommand("pause");
-		startButton.addActionListener(this);
-		this.add(startButton);
+		PauseButton pauseButton = new PauseButton();
+		pauseButton.setLocation(150, 20);
+		pauseButton.setSize(pauseButton.getPreferredSize());
+		this.add(pauseButton);
 		
 	}
 
-	@Override
-	public void actionPerformed(ActionEvent arg0) {
-		
-		/** CHeck, if start button was pressed */
-		if(arg0.getActionCommand().equals("pause")) {
-			
-			/** Get start button */
-			JButton startButton = (JButton)arg0.getSource();
-			
-			/** If simulation is running */
-			if(!SimulationClock.getInstance().isPaused()) {
-				
-				log.info("Pause simulation");
-				
-				/** Set simulation clock paused */
-				SimulationClock.getInstance().setPaused(true);
-				
-				/** Change text of button to "Resume"*/
-				startButton.setText("Resume");
-				
-				/** If simulation is paused */
-			} else if(SimulationClock.getInstance().isPaused()) {
-				
-				log.info("Resume simulation");
-				
-				/** Set simulation clock started */
-				SimulationClock.getInstance().setPaused(false);
-			
-				/** Change text of button to "Pause"*/
-				startButton.setText("Pause");
-			}
-			
-		}
-		
-	}
+	
 }

@@ -20,8 +20,8 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JScrollPane;
 
-import de.uniluebeck.imis.casi.CASi;
 import de.uniluebeck.imis.casi.controller.IUIController;
 import de.uniluebeck.imis.casi.ui.IMainView;
 
@@ -101,11 +101,12 @@ public class MainViewSimpleGui extends JFrame implements IMainView,
 
 		/** New SimulationPanel */
 		simPanel = new SimulationPanel();
+		JScrollPane scrollPane = new JScrollPane(simPanel);
 		
 		/** New ClockViewPanel */
 		ClockViewPanel clockViewPanel = new ClockViewPanel();
 		
-		this.add(simPanel, BorderLayout.CENTER);
+		this.add(scrollPane, BorderLayout.CENTER);
 		this.add(menuBar, BorderLayout.NORTH);
 		this.add(clockViewPanel, BorderLayout.SOUTH);
 	}

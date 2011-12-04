@@ -23,6 +23,7 @@ import javax.swing.JPanel;
 
 import de.uniluebeck.imis.casi.simulation.engine.ISimulationClockListener;
 import de.uniluebeck.imis.casi.simulation.engine.SimulationEngine;
+import de.uniluebeck.imis.casi.simulation.model.Agent;
 import de.uniluebeck.imis.casi.simulation.model.Door;
 import de.uniluebeck.imis.casi.simulation.model.Room;
 import de.uniluebeck.imis.casi.simulation.model.SimulationTime;
@@ -57,6 +58,30 @@ public class SimulationPanel extends JPanel implements ISimulationClockListener 
 		
 		 /* Draw Border */
 		this.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+
+	}
+	
+	/**
+	 * This method adds views for all components in the simulation. The views are listeners
+	 * of the particular components.
+	 */
+	public void paintSimulationComponents() {
+		
+		try {
+			
+			/** At first add views for the agents */
+			for(Agent agent : SimulationEngine.getInstance().getWorld().getAgents()) {
+				
+				AgentView agentView = new AgentView(agent.getCoordinates());
+				agent.addListener(agentView);
+				this.add(agentView);
+				
+			}
+			
+		} catch (IllegalAccessException e) {
+			
+			log.warning("Exception: "+e.toString());
+		}
 	}
 
 	/**

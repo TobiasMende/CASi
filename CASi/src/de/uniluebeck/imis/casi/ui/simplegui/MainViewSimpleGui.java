@@ -124,7 +124,9 @@ public class MainViewSimpleGui extends JFrame implements IMainView,
 	@Override
 	public void showUi() {
 
+		this.simPanel.paintSimulationComponents();
 		this.setVisible(true);
+		
 		log.info("Show simple GUI");
 	}
 

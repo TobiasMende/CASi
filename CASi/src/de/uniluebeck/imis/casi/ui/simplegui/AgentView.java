@@ -19,6 +19,7 @@ import java.awt.geom.Point2D;
 
 import javax.swing.JComponent;
 
+import de.uniluebeck.imis.casi.simulation.factory.GraphicFactory;
 import de.uniluebeck.imis.casi.simulation.model.Agent.STATE;
 import de.uniluebeck.imis.casi.simulation.model.IAgentListener;
 
@@ -29,14 +30,13 @@ import de.uniluebeck.imis.casi.simulation.model.IAgentListener;
 @SuppressWarnings("serial")
 public class AgentView extends JComponent implements IAgentListener {
 	
-	private Point2D oldPosition;
-	private Point2D newPosition;
+	private Point2D position;
 	private STATE newState;
 	
 	public AgentView(Point2D startPosition) {
 		
-		newPosition = startPosition;
-		this.setLocation((int)newPosition.getX(),(int)newPosition.getY());
+		position = startPosition;
+		this.setLocation(GraphicFactory.getPointRepresentation(startPosition));
 		this.setPreferredSize(new Dimension(10, 10));
 		invalidate();
 	}
@@ -50,7 +50,7 @@ public class AgentView extends JComponent implements IAgentListener {
 		Graphics2D g2D = (Graphics2D) g;
 		
 		g2D.setColor(Color.DARK_GRAY);
-		g2D.fillOval((int)(newPosition.getX()-2.5), (int)(newPosition.getY()-2.5), 5, 5);
+		g2D.fillOval((int)(position.getX()-2.5), (int)(position.getY()-2.5), 5, 5);
 	}
 
 	@Override
@@ -64,11 +64,8 @@ public class AgentView extends JComponent implements IAgentListener {
 	@Override
 	public void positionChanged(Point2D oldPosition, Point2D newPosition) {
 		
-		this.oldPosition = oldPosition;
-		this.newPosition = newPosition;
-		
 		/* Simply set the new location to the new position */
-		this.setLocation((int)newPosition.getX(),(int)newPosition.getY());
+		this.setLocation(GraphicFactory.getPointRepresentation(newPosition));
 		 invalidate();
 	}
 

@@ -16,7 +16,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Polygon;
+import java.awt.Point;
 import java.awt.geom.Point2D;
 import java.util.logging.Logger;
 
@@ -25,6 +25,7 @@ import javax.swing.JPanel;
 
 import de.uniluebeck.imis.casi.simulation.engine.ISimulationClockListener;
 import de.uniluebeck.imis.casi.simulation.engine.SimulationEngine;
+import de.uniluebeck.imis.casi.simulation.factory.GraphicFactory;
 import de.uniluebeck.imis.casi.simulation.model.Agent;
 import de.uniluebeck.imis.casi.simulation.model.Door;
 import de.uniluebeck.imis.casi.simulation.model.Room;
@@ -105,9 +106,6 @@ public class SimulationPanel extends JPanel implements ISimulationClockListener 
 			
 			/** Get all rooms of the simulation */
 			for(Room room : SimulationEngine.getInstance().getWorld().getRooms()) {
-				//g2D.drawString(room.toString(), (int)centralPoint.getX()-20, (int)centralPoint.getY()-20);
-				
-				
 				/** Get the walls of this room */
 				for(Wall wall : room.getWalls()) {
 					
@@ -121,13 +119,14 @@ public class SimulationPanel extends JPanel implements ISimulationClockListener 
 					g2D.draw(wall.getShapeRepresentation());
 				}
 				g2D.setColor(Color.LIGHT_GRAY);
-				g2D.fillPolygon((Polygon)room.getShapeRepresentation());
+				g2D.fill(room.getShapeRepresentation());
 				g2D.setColor(Color.ORANGE);
-				g2D.drawPolygon((Polygon)room.getShapeRepresentation());
+				g2D.draw(room.getShapeRepresentation());
 				
 				Point2D centralPoint = room.getCentralPoint();
 				g2D.setColor(Color.GREEN);
-				g2D.fillOval((int)(centralPoint.getX()-2.5), (int)(centralPoint.getY()-2.5), 5, 5);
+				Point centralPoint2 = GraphicFactory.getPoint(centralPoint.getX()-2.5, centralPoint.getY()-2.5);
+				g2D.fillOval(centralPoint2.x,centralPoint2.y, 5, 5);
 				/** Get the doors of this room */
 				for(Door door : room.getDoors()) {
 					
@@ -135,7 +134,8 @@ public class SimulationPanel extends JPanel implements ISimulationClockListener 
 					g2D.draw(door.getShapeRepresentation());
 					// Show central point:
 					g.setColor(Color.BLUE);
-					g2D.fillOval((int)Math.round(door.getCentralPoint().getX()-1.5), (int)Math.round(door.getCentralPoint().getY()-1.5), 3, 3);
+					Point doorPoint = GraphicFactory.getPoint(door.getCentralPoint().getX()-1.5, door.getCentralPoint().getY()-1.5);
+					g2D.fillOval(doorPoint.x, doorPoint.y, 3, 3);
 				}
 				
 			}

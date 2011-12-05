@@ -11,6 +11,7 @@
  */
 package de.uniluebeck.imis.casi.simulation.factory;
 
+import java.awt.Point;
 import java.awt.geom.Point2D;
 
 /**
@@ -60,6 +61,29 @@ public class GraphicFactory {
 	 */
 	public static double calculateVectorLength(Point2D vector) {
 		return Math.hypot(vector.getX(), vector.getY());
+	}
+	
+	/**
+	 * Creates a normal point from a provided point2d
+	 * @param point the point as {@link Point2D}
+	 * @return the point as {@link Point}
+	 */
+	public static Point getPointRepresentation(Point2D point) {
+		Point result = new Point();
+		result.setLocation(point);
+		return result;
+	}
+	
+	/**
+	 * Gets a point with given x and y 
+	 * @param x the x
+	 * @param y the y
+	 * @return the point
+	 */
+	public static Point getPoint(double x, double y) {
+		Point result = new Point();
+		result.setLocation(x, y);
+		return result;
 	}
 
 }

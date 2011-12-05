@@ -26,6 +26,7 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 
 import de.uniluebeck.imis.casi.generator.IWorldGenerator;
+import de.uniluebeck.imis.casi.simulation.factory.WallFactory;
 import de.uniluebeck.imis.casi.simulation.model.AbstractActuator;
 import de.uniluebeck.imis.casi.simulation.model.AbstractComponent;
 import de.uniluebeck.imis.casi.simulation.model.AbstractSensor;
@@ -40,7 +41,7 @@ import de.uniluebeck.imis.casi.simulation.model.actionHandling.AbstractAction;
 
 public class WorldGenerator implements IWorldGenerator {
 
-	private static final Logger log = Logger.getLogger(WorldGenerator.class.getName());  
+	private static final Logger log = Logger.getLogger(WorldGeneratorTest.class.getName());  
 	
 	/**
 	 * This generator creates an basic, pre coded World object
@@ -151,7 +152,7 @@ public class WorldGenerator implements IWorldGenerator {
 		Agent tempAgent = null;
 
 		// if we need a lot of agents...
-		for (int i = 0; i < 42; i++) {
+		for (int i = 0; i < 0; i++) {
 			tempAgent = new Agent("agent_" + i + "_smith", "A. Smith the " + i,
 					"crowd");
 			agents.add(tempAgent);
@@ -188,48 +189,151 @@ public class WorldGenerator implements IWorldGenerator {
 		Door theNewDoor;
 		Room theNewRoom = new Room();
 
+		// main floor
+		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(100, 20), new Point(100, 100)));
+		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(100, 100), new Point(100, 160)));
+		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(100, 160), new Point(100, 220)));
+		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(100, 220), new Point(100, 260)));
+		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(100, 260), new Point(120, 260)));
+		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(120, 260), new Point(150, 260)));		
+		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(150, 260), new Point(180, 260)));
+		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(180, 260), new Point(180, 310)));
+		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(180, 310), new Point(210, 340)));
+		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(210, 340), new Point(240, 340)));
+		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(240, 340), new Point(270, 310)));
+		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(270, 310), new Point(270, 280)));
+		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(270, 280), new Point(270, 210)));
+		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(270, 210), new Point(270, 150)));
+		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(270, 150), new Point(270, 20)));
+		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(270, 20), new Point(100, 20)));
+		rooms.add(theNewRoom);
+		
 		// Room #1 (top left)
-		theNewRoom.addWall(new Wall(new Point(20, 20), new Point(20, 100)));
-		theNewRoom.addWall(new Wall(new Point(20, 100), new Point(100, 100)));
-		theNewDoor = new Door(20, 20);
-		theNewWall = new Wall(new Point(100, 100), new Point(100, 20));
+		theNewRoom = new Room();
+		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(20, 20), new Point(20, 100)));
+		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(20, 100), new Point(100, 100)));
+		theNewDoor = new Door(20, 5);
+		theNewWall = WallFactory.getWallWithPoints(new Point(100, 100), new Point(100, 20));
 		theNewWall.addDoor(theNewDoor);
 		theNewRoom.addWall(theNewWall);
-		theNewRoom.addWall(new Wall(new Point(100, 20), new Point(20, 20)));
+		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(100, 20), new Point(20, 20)));
 		rooms.add(theNewRoom);
 
 		// Room #2 (second top left)
-		theNewRoom.addWall(new Wall(new Point(20, 100), new Point(20, 160)));
-		theNewRoom.addWall(new Wall(new Point(20, 160), new Point(100, 160)));
-		theNewDoor = new Door(20, 20);
-		theNewWall = new Wall(new Point(100, 160), new Point(100, 100));
+		theNewRoom = new Room();
+		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(20, 100), new Point(20, 160)));
+		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(20, 160), new Point(100, 160)));
+		theNewDoor = new Door(20, 5);
+		theNewWall = WallFactory.getWallWithPoints(new Point(100, 160), new Point(100, 100));
 		theNewWall.addDoor(theNewDoor);
 		theNewRoom.addWall(theNewWall);
-		theNewRoom.addWall(new Wall(new Point(100, 100), new Point(20, 100)));
+		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(100, 100), new Point(20, 100)));
 		rooms.add(theNewRoom);
 
 		// Room #3 (third top left)
-		theNewRoom.addWall(new Wall(new Point(20, 160), new Point(20, 220)));
-		theNewRoom.addWall(new Wall(new Point(20, 220), new Point(100, 220)));
-		theNewDoor = new Door(20, 20);
-		theNewWall = new Wall(new Point(100, 220), new Point(100, 160));
+		theNewRoom = new Room();
+		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(20, 160), new Point(20, 220)));
+		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(20, 220), new Point(100, 220)));
+		theNewDoor = new Door(20, 5);
+		theNewWall = WallFactory.getWallWithPoints(new Point(100, 220), new Point(100, 160));
 		theNewWall.addDoor(theNewDoor);
 		theNewRoom.addWall(theNewWall);
-		theNewRoom.addWall(new Wall(new Point(100, 160), new Point(20, 160)));
+		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(100, 160), new Point(20, 160)));
 		rooms.add(theNewRoom);
 
 		// Room #4 small kitchen
-		theNewRoom.addWall(new Wall(new Point(20, 220), new Point(20, 260)));
-		theNewRoom.addWall(new Wall(new Point(20, 260), new Point(100, 260)));
+		theNewRoom = new Room();
+		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(20, 220), new Point(20, 260)));
+		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(20, 260), new Point(100, 260)));
 		theNewDoor = new Door();
-		theNewWall = new Wall(new Point(100, 260), new Point(100, 220));
+		theNewWall = WallFactory.getWallWithPoints(new Point(100, 260), new Point(100, 220));
 		theNewWall.addDoor(theNewDoor);
 		theNewRoom.addWall(theNewWall);
-		theNewRoom.addWall(new Wall(new Point(100, 220), new Point(20, 220)));
+		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(100, 220), new Point(20, 220)));
 		rooms.add(theNewRoom);
 
-		// this are just a few rooms. Not a whole building for now.
-		// lets check first in the gui if the points are chosen correctly
+		// Room #5 womens restroom
+		theNewRoom = new Room();
+		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(120, 260), new Point(120, 310)));
+		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(120, 310), new Point(150, 310)));
+		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(150, 310), new Point(150, 260)));
+		theNewDoor = new Door();
+		theNewWall = WallFactory.getWallWithPoints(new Point(150, 260), new Point(120, 260));
+		theNewWall.addDoor(theNewDoor);
+		theNewRoom.addWall(theNewWall);
+		rooms.add(theNewRoom);
+		
+		// Room #6 mens restroom
+		theNewRoom = new Room();
+		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(150, 260), new Point(150, 310)));
+		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(150, 310), new Point(180, 310)));
+		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(180, 310), new Point(180, 260)));
+		theNewDoor = new Door();
+		theNewWall = WallFactory.getWallWithPoints(new Point(180, 260), new Point(150, 260));
+		theNewWall.addDoor(theNewDoor);
+		theNewRoom.addWall(theNewWall);
+		rooms.add(theNewRoom);
+		
+		// Room #7 secret room
+		theNewRoom = new Room();
+		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(270, 310), new Point(360, 310)));
+		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(360, 310), new Point(360, 280)));
+		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(360, 280), new Point(270, 280)));
+		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(270, 280), new Point(270, 310)));
+		rooms.add(theNewRoom);
+		
+		// crazy rooms
+		theNewRoom = new Room();
+		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(270, 280), new Point(360, 280)));
+		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(360, 280), new Point(360, 210)));
+		theNewWall = WallFactory.getWallWithPoints(new Point(360, 210), new Point(270, 210));
+		theNewWall.addDoor(new Door());
+		theNewRoom.addWall(theNewWall);
+		rooms.add(theNewRoom);
+
+		theNewRoom = new Room();
+		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(360, 210), new Point(270, 210)));
+		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(360, 210), new Point(360, 150)));
+		theNewWall = WallFactory.getWallWithPoints(new Point(360, 150), new Point(270, 150));
+		theNewWall.addDoor(new Door(80, 5));
+		theNewRoom.addWall(theNewWall);
+		theNewWall = WallFactory.getWallWithPoints(new Point(270, 150), new Point(270, 210));
+		theNewWall.addDoor(new Door());
+		theNewRoom.addWall(theNewWall);
+		rooms.add(theNewRoom);
+
+		theNewRoom = new Room();
+		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(360, 150), new Point(360, 120)));
+		theNewWall = WallFactory.getWallWithPoints(new Point(360, 120), new Point(270, 120));
+		theNewWall.addDoor(new Door(10,5));
+		theNewRoom.addWall(theNewWall);
+		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(270, 150), new Point(270, 120)));
+		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(270, 150), new Point(360, 150)));
+		rooms.add(theNewRoom);
+
+		theNewRoom = new Room();
+		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(360, 120), new Point(360, 100)));
+		theNewWall = WallFactory.getWallWithPoints(new Point(360, 100), new Point(270, 100));
+		theNewWall.addDoor(new Door(80,5));
+		theNewRoom.addWall(theNewWall);	
+		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(270, 120), new Point(270, 100)));
+		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(270, 120), new Point(360, 120)));
+		rooms.add(theNewRoom);
+		
+		theNewRoom = new Room();
+		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(360, 100), new Point(360, 20)));
+		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(360, 20), new Point(270, 20)));
+		theNewWall = WallFactory.getWallWithPoints(new Point(270, 20), new Point(270, 100));
+		theNewWall.addDoor(new Door(10,5));
+		theNewRoom.addWall(theNewWall);
+		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(270, 100), new Point(360, 100)));
+		
+		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(310, 50), new Point(310, 70)));
+		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(310, 70), new Point(330, 70)));
+		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(330, 70), new Point(330, 50)));
+		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(330, 50), new Point(310, 50)));
+		rooms.add(theNewRoom);
+		
 		return rooms;
 
 	}

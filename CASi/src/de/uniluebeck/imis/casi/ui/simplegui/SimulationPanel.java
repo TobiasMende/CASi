@@ -97,7 +97,7 @@ public class SimulationPanel extends JPanel implements ISimulationClockListener 
 		Graphics2D g2D = (Graphics2D) g;
 		
 		/** Set the stroke to 3 */
-		g2D.setStroke(new BasicStroke(3));
+		g2D.setStroke(new BasicStroke(1));
 		
 		try {
 			

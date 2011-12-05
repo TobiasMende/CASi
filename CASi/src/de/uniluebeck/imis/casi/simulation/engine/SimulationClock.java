@@ -29,6 +29,8 @@ import de.uniluebeck.imis.casi.utils.Listenable;
 public class SimulationClock implements Listenable<ISimulationClockListener> {
 	/** The maximum scale factor (the slowest speed) for the clock */
 	public static final int MAXIMUM_SCALE_FACTOR = 2000;
+	/** The default scale factor */
+	public static final int DEFAULT_SCALE_FACTOR = 1500;
 	/** The minimum scale factor (the highest speed) for the clock */
 	public static final int MINIMUM_SCALE_FACTOR = 10;
 	
@@ -43,8 +45,6 @@ public class SimulationClock implements Listenable<ISimulationClockListener> {
 	 * factor real milliseconds)
 	 */
 	private int scaleFactor;
-	/** The default scale factor */
-	public static final int DEFAULT_SCALE_FACTOR = 500;
 	/** flag shows whether simulation is started or not */
 	private boolean started;
 	/** flag shows whether simulation is paused */

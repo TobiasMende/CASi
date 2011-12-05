@@ -49,7 +49,7 @@ public class AgentView extends JComponent implements IAgentListener {
 		super.paintComponent(g);
 		Graphics2D g2D = (Graphics2D) g;
 		
-		g2D.setColor(Color.BLACK);
+		g2D.setColor(Color.DARK_GRAY);
 		g2D.fillOval((int)newPosition.getX(), (int)newPosition.getY(), 5, 5);
 	}
 

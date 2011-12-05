@@ -20,6 +20,7 @@ import java.awt.image.ImageProducer;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.Random;
 import java.util.Set;
 import java.util.logging.Logger;
 
@@ -37,11 +38,15 @@ import de.uniluebeck.imis.casi.simulation.model.SimulationTime;
 import de.uniluebeck.imis.casi.simulation.model.Wall;
 import de.uniluebeck.imis.casi.simulation.model.World;
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.AbstractAction;
+import de.uniluebeck.imis.casi.simulation.model.actions.Move;
 
 
 public class WorldGenerator implements IWorldGenerator {
 
 	private static final Logger log = Logger.getLogger(WorldGeneratorTest.class.getName());  
+	
+	World tempWorld = new World();
+	Room timsRoom;
 	
 	/**
 	 * This generator creates an basic, pre coded World object
@@ -80,8 +85,6 @@ public class WorldGenerator implements IWorldGenerator {
 		// They were three and we were two,
 		// so I booked one an Tim booked two..."
 
-		World tempWorld = new World();
-
 		// backroundimage
 		BufferedImage image = null;
 		try {
@@ -92,29 +95,31 @@ public class WorldGenerator implements IWorldGenerator {
 			// TODO: logg this!
 		}
 		
-		// rooms
-		HashSet<Room> rooms = generateRooms();
-		
-		// generate the agents
-		HashSet<Agent> agents = generateAgents();
-
-		// sensors
-		HashSet<AbstractSensor> sensors = generateSensors();
-		
-		// actuators
-		HashSet<AbstractActuator> actuators = generateActuators();
 		
 		// giant try block around everything that actually sets things to the
 		// world 
 		try {
 
-			tempWorld.setBackgroundImage(image);
-			tempWorld.setRooms(rooms);
-			tempWorld.setAgents(agents);
-			tempWorld.setSensors(sensors);
-			tempWorld.setActuators(actuators);
-			tempWorld.setComponents(new HashSet<AbstractComponent>());
 			tempWorld.setStartTime(new SimulationTime("12/24/2011 02:03:42"));
+			tempWorld.setBackgroundImage(image);
+			
+			// rooms
+			HashSet<Room> rooms = generateRooms();
+			tempWorld.setRooms(rooms);
+			
+			// generate the agents
+			HashSet<Agent> agents = generateAgents();
+			tempWorld.setAgents(agents);
+			
+			// sensors
+			HashSet<AbstractSensor> sensors = generateSensors();
+			tempWorld.setSensors(sensors);
+			
+			// actuators
+			HashSet<AbstractActuator> actuators = generateActuators();
+			tempWorld.setActuators(actuators);
+			
+			tempWorld.setComponents(new HashSet<AbstractComponent>());
 			tempWorld.seal();
 
 		} catch (Exception e) {
@@ -160,14 +165,16 @@ public class WorldGenerator implements IWorldGenerator {
 
 		tempAgent = new Agent("agent_00", "Father Moneymaker", "candidates");
 		agents.add(tempAgent);
-		tempAgent = new Agent("agent_01", "Tim", "candidates");
-		agents.add(tempAgent);
+		Agent tim = new Agent("agent_01", "Tim", "candidates");
+		tim.setCurrentPosition(timsRoom);
+		agents.add(tim);
 		tempAgent = new Agent("agent_02", "And I", "candidates");
 		agents.add(tempAgent);
 
 		for (int i = 0; i < 3; i++) {
 			tempAgent = new Agent("agent_" + i + "_lady", "Tentlady" + i,
 					"tendladies");
+			tempAgent = generateActionsForTentLady(tim, tempAgent);
 			agents.add(tempAgent);
 		}
 
@@ -175,6 +182,15 @@ public class WorldGenerator implements IWorldGenerator {
 
 	}
 
+	private Agent generateActionsForTentLady(Agent tim, Agent tentLady){
+
+		AbstractAction tempAction = new Move(tim);
+		tempAction.setPriority(5);
+		tempAction.setEarliestStartTime(tempWorld.getStartTime().plus(1+new Random().nextInt(10)));
+		tentLady.addActionToList(tempAction);
+		return tentLady;
+	}
+	
 	/**
 	 * Creates some rooms. Testing stuff.
 	 * 
@@ -208,7 +224,7 @@ public class WorldGenerator implements IWorldGenerator {
 		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(270, 20), new Point(100, 20)));
 		rooms.add(theNewRoom);
 		
-		// Room #1 (top left)
+		// Room #1 timsRoom (top left)
 		theNewRoom = new Room();
 		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(20, 20), new Point(20, 100)));
 		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(20, 100), new Point(100, 100)));
@@ -217,6 +233,7 @@ public class WorldGenerator implements IWorldGenerator {
 		theNewWall.addDoor(theNewDoor);
 		theNewRoom.addWall(theNewWall);
 		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(100, 20), new Point(20, 20)));
+		timsRoom = theNewRoom;
 		rooms.add(theNewRoom);
 
 		// Room #2 (second top left)

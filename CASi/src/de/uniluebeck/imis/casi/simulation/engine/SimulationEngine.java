@@ -126,6 +126,9 @@ public class SimulationEngine implements ISimulationClockListener {
 		if (world == null)
 			throw new IllegalStateException("World must be set");
 		try {
+			if (!world.isSealed()) {
+				throw new IllegalAccessException("World must be sealed!");
+			}
 			SimulationClock.getInstance().init(world.getStartTime());
 			SimulationClock.getInstance().start();
 		} catch (IllegalAccessException e) {

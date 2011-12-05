@@ -143,10 +143,8 @@ public class World {
 	 * 
 	 * @return the start time
 	 */
-	public SimulationTime getStartTime() throws IllegalAccessException {
-		if (!sealed) {
-			throw new IllegalAccessException("World isn't sealed!");
-		}
+	public SimulationTime getStartTime() {
+
 		return startTime;
 	}
 

@@ -90,29 +90,43 @@ public class SimulationTime extends Timestamp {
 	public void increment() {
 		setTime(getTime() + 1000);
 	}
-	
+
+	/**
+	 * Method to get a TimeStap of the this SimulationTime plus some supllied
+	 * seconds. Useful for relative times.
+	 * 
+	 * @param additionalSeconds the seconds to add to this TimeStamp
+	 * @return the new TimeStamp
+	 */
+	public SimulationTime plus(int additionalSeconds) {
+		return new SimulationTime(this.getTime() + (additionalSeconds * 1000));
+
+	}
+
 	/**
 	 * Getter for the time as localized string
+	 * 
 	 * @return the time as string
 	 */
 	public String getLocalizedTime() {
 		DateFormat formatter = new SimpleDateFormat("HH:mm:ss");
 		return formatter.format(new Date(getTime()));
 	}
-	
+
 	/**
 	 * Getter for the localized date of this time object
+	 * 
 	 * @return the date as string
 	 */
 	public String getLocalizedDate() {
 		Locale loc = Locale.getDefault();
 		DateFormat formatter = null;
-		if(loc.equals(Locale.GERMAN)) {
+		if (loc.equals(Locale.GERMAN)) {
 			formatter = new SimpleDateFormat("dd.MM.yyyy");
 		} else {
 			formatter = new SimpleDateFormat("MM/dd/yyyy");
 		}
-		
+
 		return formatter.format(new Date(getTime()));
 	}
 }

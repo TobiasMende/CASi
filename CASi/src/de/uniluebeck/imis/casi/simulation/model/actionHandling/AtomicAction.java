@@ -77,6 +77,9 @@ public abstract class AtomicAction extends AbstractAction {
 				"Don't decrement the duration! It's decremented automatically");
 	}
 	
-	
+	@Override
+	public void reset() {
+		setState(STATE.SCHEDULED);
+	}
 
 }

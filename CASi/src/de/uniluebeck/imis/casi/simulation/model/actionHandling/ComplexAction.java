@@ -158,5 +158,13 @@ public abstract class ComplexAction extends AbstractAction {
 			return false;
 		return true;
 	}
+	
+	@Override
+	public void reset() {
+		for(AtomicAction a : subActions) {
+			a.reset();
+		}
+		
+	}
 
 }

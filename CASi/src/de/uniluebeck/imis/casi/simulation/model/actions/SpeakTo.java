@@ -11,8 +11,6 @@
  */
 package de.uniluebeck.imis.casi.simulation.model.actions;
 
-import java.util.logging.Logger;
-
 import de.uniluebeck.imis.casi.CASi;
 import de.uniluebeck.imis.casi.simulation.model.AbstractComponent;
 import de.uniluebeck.imis.casi.simulation.model.Agent;

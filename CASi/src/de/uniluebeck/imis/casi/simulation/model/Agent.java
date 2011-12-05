@@ -186,6 +186,12 @@ public class Agent extends AbstractComponent implements
 		}
 		try {
 			currentAction.perform(this);
+			if(currentAction.getState().equals(AbstractAction.STATE.INTERRUPTED)) {
+				CASi.SIM_LOG.info("Current action was interrupted. Schedule for later");
+				currentAction.reset();
+				addActionToList(currentAction);
+				currentAction = null;
+			}
 		} catch (IllegalAccessException e) {
 			CASi.SIM_LOG
 					.severe("The last action wasn't performable. "

@@ -443,5 +443,9 @@ public abstract class AbstractAction implements Listenable<IActionListener>,
 	 */
 	protected void postActionTask(AbstractComponent performer) {
 	}
+	/**
+	 * Sets the state of the action to {@link STATE}.SCHEDULED
+	 */
+	public abstract void reset();
 
 }

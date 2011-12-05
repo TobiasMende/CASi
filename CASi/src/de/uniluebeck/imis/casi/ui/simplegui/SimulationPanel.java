@@ -105,9 +105,6 @@ public class SimulationPanel extends JPanel implements ISimulationClockListener 
 			
 			/** Get all rooms of the simulation */
 			for(Room room : SimulationEngine.getInstance().getWorld().getRooms()) {
-				Point2D centralPoint = room.getCentralPoint();
-				g2D.setColor(Color.GREEN);
-				g2D.fillOval((int)centralPoint.getX(), (int)centralPoint.getY(), 5, 5);
 				//g2D.drawString(room.toString(), (int)centralPoint.getX()-20, (int)centralPoint.getY()-20);
 				
 				
@@ -128,12 +125,17 @@ public class SimulationPanel extends JPanel implements ISimulationClockListener 
 				g2D.setColor(Color.ORANGE);
 				g2D.drawPolygon((Polygon)room.getShapeRepresentation());
 				
+				Point2D centralPoint = room.getCentralPoint();
+				g2D.setColor(Color.GREEN);
+				g2D.fillOval((int)(centralPoint.getX()-2.5), (int)(centralPoint.getY()-2.5), 5, 5);
 				/** Get the doors of this room */
 				for(Door door : room.getDoors()) {
 					
-					/** Paint the rooms in red */
 					g.setColor(Color.LIGHT_GRAY);
 					g2D.draw(door.getShapeRepresentation());
+					// Show central point:
+					g.setColor(Color.BLUE);
+					g2D.fillOval((int)Math.round(door.getCentralPoint().getX()-1.5), (int)Math.round(door.getCentralPoint().getY()-1.5), 3, 3);
 				}
 				
 			}

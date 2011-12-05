@@ -86,14 +86,19 @@ public class Wall implements IPosition {
 
 	@Override
 	public int hashCode() {
+		return Wall.calculateHashCode(start, end);
+	}
+
+	
+	public static int calculateHashCode(Point2D start, Point2D end){
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((doors == null) ? 0 : doors.hashCode());
+		// result = prime * result + ((doors == null) ? 0 : doors.hashCode());
 		result = prime * result + ((end == null) ? 0 : end.hashCode());
 		result = prime * result + ((start == null) ? 0 : start.hashCode());
 		return result;
 	}
-
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (!(obj instanceof Wall)) {

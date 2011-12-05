@@ -30,7 +30,7 @@ public class Door extends AbstractComponent {
 	/** the id for serialization */
 	private static final long serialVersionUID = 8551792658587147027L;
 	/** The default size for doors */
-	public static final int DEFAULT_DOOR_SIZE = 1;
+	public static final int DEFAULT_DOOR_SIZE = 5;
 	/** The default door offset, if <code>-1</code> the door will be centered */
 	public static final int DEFAULT_DOOR_OFFSET = -1;
 	/** The id counter */

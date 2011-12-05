@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
 
-import de.uniluebeck.imis.casi.CASi;
 import de.uniluebeck.imis.casi.simulation.engine.SimulationEngine;
 import de.uniluebeck.imis.casi.simulation.model.Door;
 import de.uniluebeck.imis.casi.simulation.model.IPosition;
@@ -53,73 +52,41 @@ public class PathFactory {
 	 *         found.
 	 */
 	public static Path findPath(IPosition start, IPosition end) {
-		// If both positions are doors, find path between doors
 		if ((start instanceof Door) && (end instanceof Door)) {
+			// start and end are doors
 			return findDoorToDoorPath((Door) start, (Door) end);
 		}
-		LinkedList<Room> startRooms = WorldFactory.getRoomsWithPoint(start.getCentralPoint());
-		LinkedList<Room> endRooms = WorldFactory.getRoomsWithPoint(end.getCentralPoint());
-		// If start and end room are equal, find path in room:
-		if (startRooms != null && endRooms != null) {
-			for(Room first : endRooms) {
-				if(startRooms.contains(first)) {
-					return findPathInRoom(start, end);
-				}
-			}
+		Point2D startPoint = start.getCentralPoint();
+		Point2D endPoint = end.getCentralPoint();
+		Room room = WorldFactory.getRoomWithPoints(startPoint, endPoint);
+		if (room != null) {
+			// Start and end are in the same room
+			return findPathInRoom(startPoint, endPoint, room);
 		}
-		if(startRooms.isEmpty() || endRooms.isEmpty()) {
-			CASi.SIM_LOG.severe("Can't get path. No start or end room!");
+
+		// Last case: different rooms
+		Room startRoom = WorldFactory.getRoomsWithPoint(startPoint).getFirst();
+		Room endRoom = WorldFactory.getRoomsWithPoint(endPoint).getFirst();
+		Set<Door> startDoors = startRoom.getDoors();
+		Set<Door> endDoors = endRoom.getDoors();
+		Path doorToDoor = findRoomToRoomPath(startDoors, endDoors);
+		Point2D startDoorPoint = doorToDoor.getFirst();
+		Point2D endDoorPoint = doorToDoor.getLast();
+		startRoom = WorldFactory.getRoomWithPoints(startPoint, startDoorPoint);
+		endRoom = WorldFactory.getRoomWithPoints(endPoint, endDoorPoint);
+		if (startRoom == null || endRoom == null) {
+			log.warning("Can't find a start or end room!");
 			return null;
 		}
-		// Case: Different Rooms:
-		if(startRooms.size() > 1 || endRooms.size() > 1) {
-			log.severe("More than one possible start or end room shouldn't happen!");
-		}
-		Set<Door> startRoomDoors = startRooms.getFirst().getDoors();
-		Set<Door> endRoomDoors = endRooms.getFirst().getDoors();
-		Path totalPath = new Path(start.getCentralPoint(),
-				end.getCentralPoint());
-		// Get the path between one door of the start room and one door of the
-		// end room
-		Path doorToDoorPath = findRoomToRoomPath(startRoomDoors, endRoomDoors);
-		if(doorToDoorPath == null) {
-			CASi.SIM_LOG.severe("Rooms arn't connected");
-			return null;
-		}
-		// Get the path from start point to the start door
-		// FIXME get multiple start rooms and check which one is the right
-		// find room:
-		log.info("Start Rooms: "+startRooms);
-		log.info("End Rooms: "+endRooms);
-		Room startRoom = null;
-		for(Room r : startRooms) {
-			if(r.contains(start) && r.contains(doorToDoorPath.getStartPoint())) {
-				startRoom = r;
-				break;
-			}
-		}
-		Room endRoom = null;
-		for(Room r : endRooms) {
-			if(r.contains(end) && r.contains(doorToDoorPath.getEndPoint())) {
-				endRoom = r;
-				break;
-			}
-		}
-		if(endRoom == null && startRoom == null) {
-			log.info("StartRoom = "+startRoom+", endRoom = "+endRoom);
-			log.severe("Can't find the start or end room!");
-			return null;
-		}
-		Path startPath = findPathInRoom(start.getCentralPoint(),
-				doorToDoorPath.getStartPoint(), startRoom);
-		// Get the path from the end door to the end point
-		Path endPath = findPathInRoom(doorToDoorPath.getEndPoint(),
-				end.getCentralPoint(), endRoom);
-		// Merging the sub paths together:
+
+		Path startPath = findPathInRoom(startPoint, startDoorPoint, startRoom);
+		Path endPath = findPathInRoom(endPoint, endDoorPoint, endRoom);
+		Path totalPath = new Path(startPoint, endPoint);
 		totalPath.addAll(startPath);
-		totalPath.addAll(doorToDoorPath);
+		totalPath.addAll(doorToDoor);
 		totalPath.addAll(endPath);
 		return totalPath;
+
 	}
 
 	/**
@@ -152,16 +119,18 @@ public class PathFactory {
 		List<Integer> minimumPath = new LinkedList<Integer>();
 		for (Door d : startDoors) {
 			List<Integer> path = solver.compute(d.getIntIdentifier());
+			log.info("Calculate path between " + d + " and " + endDoors);
 			if (path.size() < minimumPath.size() || minimumPath == null
 					|| minimumPath.isEmpty()) {
 				minimumPath = path;
 			}
 		}
+		log.info(minimumPath + " ");
 		// Find door to door path on the shortest path
-		Path doorToDoorPath = findDoorToDoorPath(
-				WorldFactory.findDoorForIdentifier(minimumPath.get(0)),
-				WorldFactory.findDoorForIdentifier(minimumPath.get(minimumPath
-						.size() - 1)));
+		Door startDoor = WorldFactory.findDoorForIdentifier(minimumPath.get(0));
+		Door endDoor = WorldFactory.findDoorForIdentifier(minimumPath
+				.get(minimumPath.size() - 1));
+		Path doorToDoorPath = findDoorToDoorPath(startDoor, endDoor);
 		return doorToDoorPath;
 	}
 
@@ -173,6 +142,13 @@ public class PathFactory {
 	 */
 	public static Path findDoorToDoorPath(Door start, Door end) {
 		double[][] adjacency;
+		if (start.equals(end)) {
+			Path result = new Path(start.getCentralPoint(),
+					end.getCentralPoint());
+			result.add(start.getCentralPoint());
+			log.info("Doors are equal: " + start + " " + end);
+			return result;
+		}
 		try {
 			adjacency = SimulationEngine.getInstance().getWorld()
 					.getDoorGraph();
@@ -189,7 +165,8 @@ public class PathFactory {
 				doorSet.add(end);
 				// two doors can belong to multiple rooms (in most cases they do
 				// not):
-				Set<Room> fittingRooms = WorldFactory.getRoomsWithDoors(doorSet);
+				Set<Room> fittingRooms = WorldFactory
+						.getRoomsWithDoors(doorSet);
 				if (fittingRooms.isEmpty()) {
 					log.severe("No room was found. This shouldn't happen!");
 					return null;
@@ -198,8 +175,8 @@ public class PathFactory {
 				Room room = fittingRooms.iterator().next();
 				InRoomPathSolver solver = new InRoomPathSolver(room,
 						(Point) end.getCentralPoint());
-				List<Point2D> tempPath = solver.compute(start
-						.getCentralPoint());
+				List<Point2D> tempPath = solver
+						.compute(start.getCentralPoint());
 				Path finalPath = new Path(start.getCentralPoint(),
 						end.getCentralPoint());
 				finalPath.addAll(tempPath);
@@ -230,8 +207,8 @@ public class PathFactory {
 		temp.add(end.getIntIdentifier());
 		GraphPathSolver solver = null;
 		try {
-			solver = new GraphPathSolver(temp, SimulationEngine
-					.getInstance().getWorld().getDoorGraph());
+			solver = new GraphPathSolver(temp, SimulationEngine.getInstance()
+					.getWorld().getDoorGraph());
 		} catch (IllegalAccessException e) {
 			log.severe("This shouldn't happen. Don't call this method at this time! "
 					+ e.fillInStackTrace());
@@ -272,15 +249,16 @@ public class PathFactory {
 	 * @return a path that describes the way
 	 */
 	private static Path findPathInRoom(IPosition start, IPosition end) {
-		LinkedList<Room> rooms = WorldFactory.getRoomsWithPoint(start.getCentralPoint());
+		LinkedList<Room> rooms = WorldFactory.getRoomsWithPoint(start
+				.getCentralPoint());
 		Room room = null;
-		for(Room r : rooms) {
-			if(r.contains(start) && r.contains(end)) {
+		for (Room r : rooms) {
+			if (r.contains(start) && r.contains(end)) {
 				room = r;
 				break;
 			}
 		}
-		if(room == null) {
+		if (room == null) {
 			log.warning("Can't handle this. Start and end are in different rooms");
 			return null;
 		}

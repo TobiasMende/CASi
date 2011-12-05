@@ -132,5 +132,10 @@ public abstract class AbstractComponent implements IPosition, Serializable {
 	public boolean contains(Point2D point) {
 		return getShapeRepresentation().contains(point);
 	}
+	
+	@Override
+	public String toString() {
+		return identifier;
+	}
 
 }

@@ -22,6 +22,7 @@ import java.util.logging.Logger;
 
 import de.uniluebeck.imis.casi.simulation.engine.SimulationEngine;
 import de.uniluebeck.imis.casi.simulation.model.Door;
+import de.uniluebeck.imis.casi.simulation.model.IPosition;
 import de.uniluebeck.imis.casi.simulation.model.Room;
 import de.uniluebeck.imis.casi.simulation.model.Wall;
 
@@ -161,6 +162,22 @@ public class WorldFactory {
 			allRooms = SimulationEngine.getInstance().getWorld().getRooms();
 			for(Room room : allRooms) {
 				if(room.getWalls().containsAll(walls)) {
+					return room;
+				}
+			}
+		} catch (IllegalAccessException e) {
+			log.severe("Method should not be called before sealing the world. "
+					+ e.fillInStackTrace());
+		}
+		return null;
+	}
+	
+	public static Room getRoomWithPoints(Point2D first, Point2D second) {
+		Set<Room> allRooms;
+		try {
+			allRooms = SimulationEngine.getInstance().getWorld().getRooms();
+			for(Room room : allRooms) {
+				if(room.contains(first) && room.contains(second)) {
 					return room;
 				}
 			}

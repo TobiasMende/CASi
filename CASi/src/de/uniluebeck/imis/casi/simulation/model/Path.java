@@ -32,18 +32,7 @@ public class Path extends LinkedList<Point2D> {
 	/** the end point */
 	private final Point2D endPoint;
 
-	/**
-	 * Constructor for a new path that saves the way between the given start and
-	 * end point
-	 * 
-	 * @param start
-	 *            the start point
-	 * @param end
-	 *            the end point
-	 */
-	public Path(Point start, Point end) {
-		this((Point2D) start, (Point2D) end);
-	}
+
 
 	/**
 	 * Constructor for a new path that saves the way between the given start and

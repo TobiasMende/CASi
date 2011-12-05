@@ -108,7 +108,12 @@ public class SimulationPanel extends JPanel implements ISimulationClockListener 
 				for(Wall wall : room.getWalls()) {
 					
 					/** Paint the walls in black */
-					g.setColor(Color.BLACK);
+					if (wall.getDoors().isEmpty()) {
+						// for debugging: make door-less walls red!
+						g.setColor(Color.RED);
+					} else {
+						g.setColor(Color.BLACK);	
+					}
 					g2D.draw(wall.getShapeRepresentation());
 				}
 				

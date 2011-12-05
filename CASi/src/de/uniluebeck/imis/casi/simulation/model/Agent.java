@@ -11,9 +11,7 @@
  */
 package de.uniluebeck.imis.casi.simulation.model;
 
-import java.awt.Point;
 import java.awt.Shape;
-import java.awt.geom.Arc2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.io.Serializable;
@@ -125,6 +123,9 @@ public class Agent extends AbstractComponent implements
 
 	public void setTodoList(Collection<AbstractAction> todoList) {
 		actionScheduler.setTodoList(todoList);
+		for(AbstractAction a : todoList) {
+			a.setState(AbstractAction.STATE.SCHEDULED);
+		}
 	}
 
 	public void addActionToPool(AbstractAction action) {
@@ -132,6 +133,7 @@ public class Agent extends AbstractComponent implements
 	}
 
 	public void addActionToList(AbstractAction action) {
+		action.setState(AbstractAction.STATE.SCHEDULED);
 		actionScheduler.schedule(action);
 	}
 
@@ -197,7 +199,7 @@ public class Agent extends AbstractComponent implements
 			CASi.SIM_LOG
 					.severe("The last action wasn't performable. "
 							+ this.name
-							+ " has better things to do than solving impossible problems. E.g Searching for a Club Mate!");
+							+ " has better things to do than solving impossible problems. E.g Searching for a Club Mate! State: "+currentAction.getState());
 			currentAction = null;
 		}
 	}
@@ -258,8 +260,8 @@ public class Agent extends AbstractComponent implements
 	}
 
 	@Override
-	public Point getCentralPoint() {
-		return (Point)getCoordinates();
+	public Point2D getCentralPoint() {
+		return getCoordinates();
 	}
 
 	@Override
@@ -278,6 +280,14 @@ public class Agent extends AbstractComponent implements
 	
 	public IPosition getDefaultPosition() {
 		return defaultPosition==null? getCurrentPosition(): defaultPosition;
+	}
+	
+	/**
+	 * @param defaultPosition the defaultPosition to set
+	 */
+	public void setDefaultPosition(IPosition defaultPosition) {
+		this.defaultPosition = defaultPosition;
+		coordinates = defaultPosition.getCentralPoint();
 	}
 
 }

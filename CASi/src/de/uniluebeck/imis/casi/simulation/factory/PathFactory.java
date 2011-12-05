@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
 
+import de.uniluebeck.imis.casi.CASi;
 import de.uniluebeck.imis.casi.simulation.engine.SimulationEngine;
 import de.uniluebeck.imis.casi.simulation.model.Door;
 import de.uniluebeck.imis.casi.simulation.model.IPosition;
@@ -62,6 +63,10 @@ public class PathFactory {
 		if (startRoom != null && endRoom != null && startRoom.equals(endRoom)) {
 			return findPathInRoom(start, end);
 		}
+		if(startRoom == null || endRoom == null) {
+			CASi.SIM_LOG.severe("Can't get path. No start or end room!");
+			return null;
+		}
 		// Case: Different Rooms:
 		Set<Door> startRoomDoors = startRoom.getDoors();
 		Set<Door> endRoomDoors = endRoom.getDoors();
@@ -70,7 +75,12 @@ public class PathFactory {
 		// Get the path between one door of the start room and one door of the
 		// end room
 		Path doorToDoorPath = findRoomToRoomPath(startRoomDoors, endRoomDoors);
+		if(doorToDoorPath == null) {
+			CASi.SIM_LOG.severe("Rooms arn't connected");
+			return null;
+		}
 		// Get the path from start point to the start door
+		// FIXME get multiple start rooms and check which one is the right
 		Path startPath = findPathInRoom(start.getCentralPoint(),
 				doorToDoorPath.getStartPoint(), startRoom);
 		// Get the path from the end door to the end point
@@ -159,7 +169,7 @@ public class PathFactory {
 				Room room = fittingRooms.iterator().next();
 				InRoomPathSolver solver = new InRoomPathSolver(room,
 						(Point) end.getCentralPoint());
-				List<Point> tempPath = solver.compute((Point) start
+				List<Point2D> tempPath = solver.compute(start
 						.getCentralPoint());
 				Path finalPath = new Path(start.getCentralPoint(),
 						end.getCentralPoint());
@@ -236,7 +246,7 @@ public class PathFactory {
 		Room room = WorldFactory.getRoomWithPoint(start.getCentralPoint());
 		InRoomPathSolver solver = new InRoomPathSolver(room,
 				(Point) end.getCentralPoint());
-		List<Point> points = solver.compute((Point) start.getCentralPoint());
+		List<Point2D> points = solver.compute(start.getCentralPoint());
 		Path path = new Path(start.getCentralPoint(), end.getCentralPoint());
 		path.addAll(points);
 		return path;
@@ -254,8 +264,8 @@ public class PathFactory {
 	 * @return a path if one was found or <code>null</code> otherwise.
 	 */
 	private static Path findPathInRoom(Point2D start, Point2D end, Room room) {
-		InRoomPathSolver solver = new InRoomPathSolver(room, (Point) end);
-		List<Point> path = solver.compute((Point) start);
+		InRoomPathSolver solver = new InRoomPathSolver(room, end);
+		List<Point2D> path = solver.compute(start);
 		Path finalPath = new Path(start, end);
 		finalPath.addAll(path);
 		return finalPath;

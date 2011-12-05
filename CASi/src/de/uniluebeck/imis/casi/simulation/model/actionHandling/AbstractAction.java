@@ -51,12 +51,6 @@ public abstract class AbstractAction implements Listenable<IActionListener>,
 		COMPLETED,
 		/** The action can't be performed at the moment */
 		INTERRUPTED,
-		/**
-		 * the action is interrupted, e.g. by another action with a higher
-		 * priority INTERRUPTED,
-		 * 
-		 * /**
-		 */
 		UNKNOWN,
 		/** The action is not used in any list at the moment */
 		RAW

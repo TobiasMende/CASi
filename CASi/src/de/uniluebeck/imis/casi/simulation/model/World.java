@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Set;
 import java.util.logging.Logger;
 
+import de.uniluebeck.imis.casi.simulation.engine.SimulationClock;
 import de.uniluebeck.imis.casi.simulation.factory.PathFactory;
 import de.uniluebeck.imis.casi.simulation.factory.WorldFactory;
 
@@ -246,6 +247,9 @@ public class World {
 			throw new IllegalAccessException("World is sealed!");
 		}
 		this.agents = agents;
+		for(Agent a : agents) {
+			SimulationClock.getInstance().addListener(a);
+		}
 	}
 
 	/**

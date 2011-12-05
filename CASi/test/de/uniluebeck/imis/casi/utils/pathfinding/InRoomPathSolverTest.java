@@ -11,9 +11,12 @@
  */
 package de.uniluebeck.imis.casi.utils.pathfinding;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.fail;
 
 import java.awt.Point;
+import java.awt.geom.Point2D;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -72,7 +75,7 @@ public class InRoomPathSolverTest {
 		Point destination = new Point(700, 100);
 
 		InRoomPathSolver solver = new InRoomPathSolver(room, destination);
-		List<Point> path = solver.compute(new Point(10, 10));
+		List<Point2D> path = solver.compute(new Point(10, 10));
 
 		assertNotNull("No path found", path);
 		log.info(path.toString());
@@ -107,7 +110,7 @@ public class InRoomPathSolverTest {
 	public void testComputeDoorToDoorWay() {
 		log.info("Testing door to door way (point on wall to point on wall)");
 		InRoomPathSolver solver = new InRoomPathSolver(room, new Point(50, 0));
-		List<Point> path = solver.compute(new Point(700, 0));
+		List<Point2D> path = solver.compute(new Point(700, 0));
 		assertNotNull("No path found", path);
 		log.info(path.toString());
 		log.info("Path length = " + path.size());

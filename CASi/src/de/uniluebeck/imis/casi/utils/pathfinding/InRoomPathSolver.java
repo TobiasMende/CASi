@@ -11,7 +11,6 @@
  */
 package de.uniluebeck.imis.casi.utils.pathfinding;
 
-import java.awt.Point;
 import java.awt.Shape;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
@@ -67,21 +66,20 @@ public class InRoomPathSolver extends AStar<Point2D> {
 	}
 
 	@Override
-	protected List<Point2D> calculateSuccessors(Point2D point) {
-		Point node = new Point((int)Math.round(point.getX()), (int)Math.round(point.getY()));
+	protected List<Point2D> calculateSuccessors(Point2D node) {
 		List<Point2D> successors = new LinkedList<Point2D>();
 		List<Point2D> temp = new ArrayList<Point2D>(8);
 		/*
 		 * Generating points so that (- marks the node): + + + + - + + + +
 		 */
-		temp.add((Point2D)new Point(node.x - 1, node.y - 1));
-		temp.add((Point2D)new Point(node.x + 1, node.y - 1));
-		temp.add((Point2D)new Point(node.x, node.y - 1));
-		temp.add((Point2D)new Point(node.x - 1, node.y + 1));
-		temp.add((Point2D)new Point(node.x + 1, node.y + 1));
-		temp.add((Point2D)new Point(node.x, node.y + 1));
-		temp.add((Point2D)new Point(node.x - 1, node.y));
-		temp.add((Point2D)new Point(node.x + 1, node.y));
+		temp.add(new Point2D.Double(node.getX() - 1, node.getY() - 1));
+		temp.add(new Point2D.Double(node.getX() + 1, node.getY() - 1));
+		temp.add(new Point2D.Double(node.getX(), node.getY() - 1));
+		temp.add(new Point2D.Double(node.getX() - 1, node.getY() + 1));
+		temp.add(new Point2D.Double(node.getX() + 1, node.getY() + 1));
+		temp.add(new Point2D.Double(node.getX(), node.getY() + 1));
+		temp.add(new Point2D.Double(node.getX() - 1, node.getY()));
+		temp.add(new Point2D.Double(node.getX() + 1, node.getY()));
 		// Add only points, that are in the room.
 		for (Point2D p : temp) {
 			if (room.contains(p)) {
@@ -93,13 +91,12 @@ public class InRoomPathSolver extends AStar<Point2D> {
 
 	@Override
 	public List<Point2D> compute(Point2D start) {
-		Point2D temp = new Point((int)Math.round(start.getX()), (int)Math.round(start.getY()));
 		if (start.equals(destination)) {
 			List<Point2D> path = new LinkedList<Point2D>();
-			path.add(temp);
+			path.add(start);
 			return path;
 		}
-		return super.compute(temp);
+		return super.compute(start);
 	}
 
 }

@@ -11,7 +11,6 @@
  */
 package de.uniluebeck.imis.casi.simulation.factory;
 
-import java.awt.Point;
 import java.awt.geom.Point2D;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -173,8 +172,7 @@ public class PathFactory {
 				}
 				// Take the first room and calculate a path:
 				Room room = fittingRooms.iterator().next();
-				InRoomPathSolver solver = new InRoomPathSolver(room,
-						(Point) end.getCentralPoint());
+				InRoomPathSolver solver = new InRoomPathSolver(room, end.getCentralPoint());
 				List<Point2D> tempPath = solver
 						.compute(start.getCentralPoint());
 				Path finalPath = new Path(start.getCentralPoint(),
@@ -262,8 +260,7 @@ public class PathFactory {
 			log.warning("Can't handle this. Start and end are in different rooms");
 			return null;
 		}
-		InRoomPathSolver solver = new InRoomPathSolver(room,
-				(Point) end.getCentralPoint());
+		InRoomPathSolver solver = new InRoomPathSolver(room, end.getCentralPoint());
 		List<Point2D> points = solver.compute(start.getCentralPoint());
 		Path path = new Path(start.getCentralPoint(), end.getCentralPoint());
 		path.addAll(points);
@@ -306,7 +303,7 @@ public class PathFactory {
 	 *            the end point
 	 * @return the path or <code>null</code> if no matching path was found
 	 */
-	public static Path findPathInSet(Set<Path> paths, Point start, Point end) {
+	public static Path findPathInSet(Set<Path> paths, Point2D start, Point2D end) {
 		Path p = new Path(start, end);
 		boolean reversed = false;
 		if (!paths.contains(p)) {

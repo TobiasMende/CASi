@@ -85,9 +85,14 @@ public class DefaultActionScheduler implements IActionScheduler {
 		if(!interruptAction.isEmpty()) {
 			return interruptAction.remove();
 		}
-		// TODO implement scheduling here
-		
-		return null;
+		// FIXME implement!!! It's just a quick fix
+		AbstractAction action;
+		if(!todoList.isEmpty()) {
+			action = todoList.pollFirst();
+		} else {
+			action = actionPool.pollFirst();
+		}
+		return action;
 	}
 
 	@Override

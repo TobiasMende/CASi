@@ -16,6 +16,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.geom.Point2D;
 import java.util.logging.Logger;
 
 import javax.swing.BorderFactory;
@@ -103,6 +104,9 @@ public class SimulationPanel extends JPanel implements ISimulationClockListener 
 			
 			/** Get all rooms of the simulation */
 			for(Room room : SimulationEngine.getInstance().getWorld().getRooms()) {
+				Point2D centralPoint = room.getCentralPoint();
+				g2D.setColor(Color.GREEN);
+				g2D.fillOval((int)centralPoint.getX(), (int)centralPoint.getY(), 5, 5);
 				
 				/** Get the walls of this room */
 				for(Wall wall : room.getWalls()) {

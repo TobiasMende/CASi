@@ -57,19 +57,26 @@ public class PathFactory {
 		if ((start instanceof Door) && (end instanceof Door)) {
 			return findDoorToDoorPath((Door) start, (Door) end);
 		}
-		Room startRoom = WorldFactory.getRoomWithPoint(start.getCentralPoint());
-		Room endRoom = WorldFactory.getRoomWithPoint(end.getCentralPoint());
+		LinkedList<Room> startRooms = WorldFactory.getRoomsWithPoint(start.getCentralPoint());
+		LinkedList<Room> endRooms = WorldFactory.getRoomsWithPoint(end.getCentralPoint());
 		// If start and end room are equal, find path in room:
-		if (startRoom != null && endRoom != null && startRoom.equals(endRoom)) {
-			return findPathInRoom(start, end);
+		if (startRooms != null && endRooms != null) {
+			for(Room first : endRooms) {
+				if(startRooms.contains(first)) {
+					return findPathInRoom(start, end);
+				}
+			}
 		}
-		if(startRoom == null || endRoom == null) {
+		if(startRooms.isEmpty() || endRooms.isEmpty()) {
 			CASi.SIM_LOG.severe("Can't get path. No start or end room!");
 			return null;
 		}
 		// Case: Different Rooms:
-		Set<Door> startRoomDoors = startRoom.getDoors();
-		Set<Door> endRoomDoors = endRoom.getDoors();
+		if(startRooms.size() > 1 || endRooms.size() > 1) {
+			log.severe("More than one possible start or end room shouldn't happen!");
+		}
+		Set<Door> startRoomDoors = startRooms.getFirst().getDoors();
+		Set<Door> endRoomDoors = endRooms.getFirst().getDoors();
 		Path totalPath = new Path(start.getCentralPoint(),
 				end.getCentralPoint());
 		// Get the path between one door of the start room and one door of the
@@ -81,6 +88,28 @@ public class PathFactory {
 		}
 		// Get the path from start point to the start door
 		// FIXME get multiple start rooms and check which one is the right
+		// find room:
+		log.info("Start Rooms: "+startRooms);
+		log.info("End Rooms: "+endRooms);
+		Room startRoom = null;
+		for(Room r : startRooms) {
+			if(r.contains(start) && r.contains(doorToDoorPath.getStartPoint())) {
+				startRoom = r;
+				break;
+			}
+		}
+		Room endRoom = null;
+		for(Room r : endRooms) {
+			if(r.contains(end) && r.contains(doorToDoorPath.getEndPoint())) {
+				endRoom = r;
+				break;
+			}
+		}
+		if(endRoom == null && startRoom == null) {
+			log.info("StartRoom = "+startRoom+", endRoom = "+endRoom);
+			log.severe("Can't find the start or end room!");
+			return null;
+		}
 		Path startPath = findPathInRoom(start.getCentralPoint(),
 				doorToDoorPath.getStartPoint(), startRoom);
 		// Get the path from the end door to the end point
@@ -243,7 +272,18 @@ public class PathFactory {
 	 * @return a path that describes the way
 	 */
 	private static Path findPathInRoom(IPosition start, IPosition end) {
-		Room room = WorldFactory.getRoomWithPoint(start.getCentralPoint());
+		LinkedList<Room> rooms = WorldFactory.getRoomsWithPoint(start.getCentralPoint());
+		Room room = null;
+		for(Room r : rooms) {
+			if(r.contains(start) && r.contains(end)) {
+				room = r;
+				break;
+			}
+		}
+		if(room == null) {
+			log.warning("Can't handle this. Start and end are in different rooms");
+			return null;
+		}
 		InRoomPathSolver solver = new InRoomPathSolver(room,
 				(Point) end.getCentralPoint());
 		List<Point2D> points = solver.compute(start.getCentralPoint());

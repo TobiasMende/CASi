@@ -15,6 +15,7 @@ import java.awt.geom.Point2D;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Logger;
@@ -130,20 +131,21 @@ public class WorldFactory {
 	 * @return a room containing the provided point or <code>null</code> if no
 	 *         room was found.
 	 */
-	public static Room getRoomWithPoint(final Point2D point) {
+	public static LinkedList<Room> getRoomsWithPoint(final Point2D point) {
 		Collection<Room> rooms;
+		LinkedList<Room> result = new LinkedList<Room>();
 		try {
 			rooms = SimulationEngine.getInstance().getWorld().getRooms();
 			for (Room r : rooms) {
 				if (r.contains(point)) {
-					return r;
+					result.add(r);
 				}
 			}
 		} catch (IllegalAccessException e) {
 			log.severe("Method should not be called before sealing the world. "
 					+ e.fillInStackTrace());
 		}
-		return null;
+		return result;
 	}
 
 	/**

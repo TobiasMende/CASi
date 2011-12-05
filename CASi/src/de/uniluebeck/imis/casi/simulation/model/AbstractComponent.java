@@ -60,7 +60,7 @@ public abstract class AbstractComponent implements IPosition, Serializable {
 	 */
 	public void setCoordinates(Point2D coordinates) {
 		this.coordinates = coordinates;
-		position = WorldFactory.getRoomWithPoint(coordinates);
+		position = WorldFactory.getRoomsWithPoint(coordinates).getFirst();
 	}
 
 	/**

@@ -224,8 +224,8 @@ public class WorldGenerator implements IWorldGenerator {
 				new Point(120, 260)));
 		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(120, 260),
 				new Point(150, 260)));
-		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(150, 260),
-				new Point(180, 260)));
+		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(180, 260),
+				new Point(150, 260)));
 		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(180, 260),
 				new Point(180, 310)));
 		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(180, 310),
@@ -236,8 +236,8 @@ public class WorldGenerator implements IWorldGenerator {
 				new Point(270, 310)));
 		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(270, 310),
 				new Point(270, 280)));
-		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(270, 280),
-				new Point(270, 210)));
+		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(270, 210),
+				new Point(270, 280)));
 		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(270, 210),
 				new Point(270, 150)));
 		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(270, 150),
@@ -325,17 +325,18 @@ public class WorldGenerator implements IWorldGenerator {
 
 		// Room #6 mens restroom
 		theNewRoom = new Room();
+		theNewWall = WallFactory.getWallWithPoints(new Point(180, 260),
+				new Point(150, 260));
+		theNewDoor = new Door();
+		theNewWall.addDoor(theNewDoor);
+		theNewRoom.addWall(theNewWall);
 		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(150, 260),
 				new Point(150, 310)));
 		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(150, 310),
 				new Point(180, 310)));
 		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(180, 310),
 				new Point(180, 260)));
-		theNewDoor = new Door();
-		theNewWall = WallFactory.getWallWithPoints(new Point(180, 260),
-				new Point(150, 260));
-		theNewWall.addDoor(theNewDoor);
-		theNewRoom.addWall(theNewWall);
+
 		rooms.add(theNewRoom);
 
 		// Room #7 secret room
@@ -344,22 +345,24 @@ public class WorldGenerator implements IWorldGenerator {
 				new Point(360, 310)));
 		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(360, 310),
 				new Point(360, 280)));
-		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(360, 280),
-				new Point(270, 280)));
+		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(270, 280),
+				new Point(360, 280)));
 		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(270, 280),
 				new Point(270, 310)));
 		rooms.add(theNewRoom);
 
 		// crazy rooms
 		theNewRoom = new Room();
-		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(270, 280),
-				new Point(360, 280)));
 		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(360, 280),
-				new Point(360, 210)));
-		theNewWall = WallFactory.getWallWithPoints(new Point(360, 210),
-				new Point(270, 210));
+				new Point(270, 280)));
+		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(360, 210),
+				new Point(360, 280)));
+		theNewWall = WallFactory.getWallWithPoints(new Point(270, 210),
+				new Point(360, 210));
 		theNewWall.addDoor(new Door());
 		theNewRoom.addWall(theNewWall);
+		theNewWall = WallFactory.getWallWithPoints(new Point(270, 280),
+				new Point(270, 210));
 		rooms.add(theNewRoom);
 
 		theNewRoom = new Room();
@@ -415,14 +418,16 @@ public class WorldGenerator implements IWorldGenerator {
 		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(270, 100),
 				new Point(360, 100)));
 
-		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(310, 50),
-				new Point(310, 70)));
-		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(310, 70),
-				new Point(330, 70)));
-		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(330, 70),
-				new Point(330, 50)));
-		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(330, 50),
-				new Point(310, 50)));
+		// this is the pillar like walls in the center of the room, seems we
+		// need a better idea for that
+//		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(310, 50),
+//				new Point(310, 70)));
+//		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(310, 70),
+//				new Point(330, 70)));
+//		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(330, 70),
+//				new Point(330, 50)));
+//		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(330, 50),
+//				new Point(310, 50)));
 		rooms.add(theNewRoom);
 
 		return rooms;

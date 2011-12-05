@@ -13,7 +13,9 @@ package de.uniluebeck.imis.casi.simulation.model;
 
 import java.awt.Point;
 import java.awt.Shape;
+import java.awt.geom.Arc2D;
 import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -68,7 +70,6 @@ public class Agent extends AbstractComponent implements
 		this(identifier);
 		this.type = type;
 		state = STATE.ABSTRACT;
-		// TODO Auto-generated constructor stub
 	}
 
 	/**
@@ -223,44 +224,42 @@ public class Agent extends AbstractComponent implements
 
 	@Override
 	public void simulationPaused(boolean pause) {
-		// TODO Auto-generated method stub
+		// nothing to do here
 
 	}
 
 	@Override
 	public void simulationStopped() {
-		// TODO Auto-generated method stub
+		// nothing to do here
 
 	}
 
 	@Override
 	public void simulationStarted() {
-		// TODO Auto-generated method stub
+		// nothing to do here
 
 	}
 
 	@Override
 	public boolean contains(IPosition position) {
-		// TODO Auto-generated method stub
+		// Agent contains nothing
+		// TODO think about better way
 		return false;
 	}
 
 	@Override
 	public boolean contains(Point2D point) {
-		// TODO Auto-generated method stub
-		return false;
+		return getShapeRepresentation().contains(point);
 	}
 
 	@Override
 	public Shape getShapeRepresentation() {
-		// TODO Auto-generated method stub
-		return null;
+		return new Rectangle2D.Double(getCoordinates().getX(), getCoordinates().getY(), 1, 1);
 	}
 
 	@Override
 	public Point getCentralPoint() {
-		// TODO Auto-generated method stub
-		return null;
+		return (Point)getCoordinates();
 	}
 
 	@Override

@@ -15,6 +15,8 @@ import java.awt.Image;
 import java.awt.geom.Point2D;
 import java.io.Serializable;
 
+import de.uniluebeck.imis.casi.simulation.factory.WorldFactory;
+
 /**
  * 
  * @author Marvin Frick, Moritz Bürger, Tobias Mende
@@ -41,8 +43,8 @@ public abstract class AbstractComponent implements IPosition, Serializable {
 	}
 
 	public boolean setCurrentPosition(IPosition currentPosition) {
-		this.position = position;
-		setCoordinates(position.getCentralPoint());
+		this.position = currentPosition;
+		this.coordinates = currentPosition.getCentralPoint();
 		return true;
 	}
 
@@ -58,6 +60,7 @@ public abstract class AbstractComponent implements IPosition, Serializable {
 	 */
 	public void setCoordinates(Point2D coordinates) {
 		this.coordinates = coordinates;
+		position = WorldFactory.getRoomWithPoint(coordinates);
 	}
 
 	/**

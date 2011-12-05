@@ -288,6 +288,8 @@ public class Agent extends AbstractComponent implements
 	public void setDefaultPosition(IPosition defaultPosition) {
 		this.defaultPosition = defaultPosition;
 		coordinates = defaultPosition.getCentralPoint();
+		Point2D oldPoint = super.getCoordinates();
+		informListenersAboutPositionChange(oldPoint, coordinates);
 	}
 
 }

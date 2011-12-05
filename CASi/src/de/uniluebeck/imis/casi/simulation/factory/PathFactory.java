@@ -75,7 +75,7 @@ public class PathFactory {
 		startRoom = WorldFactory.getRoomWithPoints(startPoint, startDoorPoint);
 		endRoom = WorldFactory.getRoomWithPoints(endPoint, endDoorPoint);
 		if (startRoom == null || endRoom == null) {
-			log.warning("Can't find a start or end room!");
+			log.warning("Can't find a start or end room! startRoom = "+startRoom+", endRoom = "+endRoom);
 			return null;
 		}
 

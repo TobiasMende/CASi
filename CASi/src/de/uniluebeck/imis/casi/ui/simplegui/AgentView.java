@@ -1,5 +1,5 @@
 /*  	CASi Context Awareness Simulation Software
- *   Copyright (C) 2011 2012  Moritz Bürger, Marvin Frick, Tobias Mende
+ *   Copyright (C) 2011 2012  Moritz Bï¿½rger, Marvin Frick, Tobias Mende
  *
  *  This program is free software. It is licensed under the
  *  GNU Lesser General Public License with one clarification.
@@ -38,6 +38,7 @@ public class AgentView extends JComponent implements IAgentListener {
 		newPosition = startPosition;
 		this.setLocation((int)newPosition.getX(),(int)newPosition.getY());
 		this.setPreferredSize(new Dimension(10, 10));
+		invalidate();
 	}
 	
 	/**
@@ -49,7 +50,7 @@ public class AgentView extends JComponent implements IAgentListener {
 		Graphics2D g2D = (Graphics2D) g;
 		
 		g2D.setColor(Color.BLACK);
-		g2D.fillOval(0, 0, 8, 8);
+		g2D.fillOval((int)newPosition.getX(), (int)newPosition.getY(), 5, 5);
 	}
 
 	@Override
@@ -57,7 +58,7 @@ public class AgentView extends JComponent implements IAgentListener {
 		
 		this.newState = newState;
 		
-		this.repaint();
+		invalidate();
 	}
 
 	@Override
@@ -68,7 +69,7 @@ public class AgentView extends JComponent implements IAgentListener {
 		
 		/* Simply set the new location to the new position */
 		this.setLocation((int)newPosition.getX(),(int)newPosition.getY());
-		/* this.repaint(); */
+		 invalidate();
 	}
 
 }

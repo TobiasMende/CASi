@@ -54,6 +54,18 @@ public interface IActionScheduler {
 	 *            the action to add.
 	 */
 	public void addPoolAction(AbstractAction action);
+	
+	/**
+	 * Adds an action that should be performed next.
+	 * @param action the action to set
+	 */
+	public void addInterruptAction(AbstractAction action);
+	
+	/**
+	 * Checks whether there is an interrupt action or not
+	 * @return <code>true</code> if there is an interrupt action, <code>false</code> otherwise.
+	 */
+	public boolean isInterruptScheduled();
 
 	/**
 	 * This method selects an action that should be performed next and deletes
@@ -63,4 +75,6 @@ public interface IActionScheduler {
 	 */
 	
 	public AbstractAction getNextAction();
+	
+	
 }

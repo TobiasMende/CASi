@@ -12,6 +12,7 @@
 package de.uniluebeck.imis.casi.simulation.model.actionHandling.schedulers;
 
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.TreeSet;
 
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.AbstractAction;
@@ -30,6 +31,7 @@ import de.uniluebeck.imis.casi.simulation.model.actionHandling.IActionScheduler;
 public class DefaultActionScheduler implements IActionScheduler {
 	private TreeSet<AbstractAction> todoList;
 	private TreeSet<AbstractAction> actionPool;
+	private LinkedList<AbstractAction> interruptAction;
 
 	/**
 	 * Constructor which uses provided lists of actions for initialization
@@ -52,6 +54,7 @@ public class DefaultActionScheduler implements IActionScheduler {
 	public DefaultActionScheduler() {
 		todoList = new TreeSet<AbstractAction>(new ActionComparator());
 		actionPool = new TreeSet<AbstractAction>(new ActionComparator());
+		interruptAction = new LinkedList<AbstractAction>();
 	}
 
 	@Override
@@ -79,9 +82,22 @@ public class DefaultActionScheduler implements IActionScheduler {
 
 	@Override
 	public AbstractAction getNextAction() {
+		if(!interruptAction.isEmpty()) {
+			return interruptAction.remove();
+		}
 		// TODO implement scheduling here
 		
 		return null;
+	}
+
+	@Override
+	public void addInterruptAction(AbstractAction action) {
+		interruptAction.add(action);
+	}
+
+	@Override
+	public boolean isInterruptScheduled() {
+		return !interruptAction.isEmpty();
 	}
 
 }

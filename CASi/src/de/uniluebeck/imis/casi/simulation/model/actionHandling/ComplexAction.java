@@ -37,12 +37,21 @@ public abstract class ComplexAction extends AbstractAction {
 		}
 		if (isCompleted()) {
 			// stop performing if completed
+			postActionTask(performer);
 			return true;
+		}
+		if (!initialized) {
+			if (!preActionTask(performer)) {
+				setState(STATE.INTERRUPTED);
+				return false;
+			}
+			initialized = true;
 		}
 		setState(STATE.ONGOING);
 		boolean completed = true;
 		for (AbstractAction a : subActions) {
 			completed &= a.perform(performer);
+			setState(a.getState());
 			if (!completed) {
 				// don't continue if last subaction wasn't completed yet
 				break;
@@ -51,6 +60,7 @@ public abstract class ComplexAction extends AbstractAction {
 		if (completed) {
 			// set state to completed if all subactions were completed
 			setState(STATE.COMPLETED);
+			postActionTask(performer);
 			return true;
 		}
 		return false;
@@ -148,7 +158,5 @@ public abstract class ComplexAction extends AbstractAction {
 			return false;
 		return true;
 	}
-	
-	
 
 }

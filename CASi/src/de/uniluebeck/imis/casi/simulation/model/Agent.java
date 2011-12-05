@@ -134,6 +134,23 @@ public class Agent extends AbstractComponent implements
 		actionScheduler.schedule(action);
 	}
 
+	/**
+	 * Tries to set an interrupt action
+	 * 
+	 * @param action
+	 *            the action to interrupt the agent with
+	 * @return <code>true</code> if the agent could be interrupted,
+	 *         <code>false</code> otherwise.
+	 */
+	public boolean interrupt(AbstractAction action) {
+		if (isInterruptible()) {
+			actionScheduler.addInterruptAction(action);
+			setInterruptibility(INTERRUPTIBILITY.INTERRUPT_SCHEDULED);
+			return true;
+		}
+		return false;
+	}
+
 	public void setActionPool(Collection<AbstractAction> actionPool) {
 		actionScheduler.setActionPool(actionPool);
 	}
@@ -150,12 +167,20 @@ public class Agent extends AbstractComponent implements
 
 	@Override
 	public void timeChanged(SimulationTime newTime) {
-		// TODO handle agent states and interdependent actions between agents
-		if (currentAction == null || currentAction.isCompleted()) {
+		if (actionScheduler.isInterruptScheduled()
+				&& interruptibility
+						.equals(INTERRUPTIBILITY.INTERRUPT_SCHEDULED)) {
+			// store current action as next action and perform interrupt action
+			AbstractAction tmp = currentAction;
+			currentAction = actionScheduler.getNextAction();
+			actionScheduler.addInterruptAction(tmp);
+			setInterruptibility(INTERRUPTIBILITY.INTERRUPTED);
+		} else if (currentAction == null || currentAction.isCompleted()) {
+			setInterruptibility(INTERRUPTIBILITY.INTERRUPTIBLE);
 			// need a new action to perform:
 			currentAction = actionScheduler.getNextAction();
-			if(currentAction == null) {
-				CASi.SIM_LOG.info(this.name+": Nothing to do at the moment.");
+			if (currentAction == null) {
+				CASi.SIM_LOG.info(this.name + ": Nothing to do at the moment.");
 				return;
 			}
 		}
@@ -244,6 +269,10 @@ public class Agent extends AbstractComponent implements
 		for (IAgentListener listener : agentListeners) {
 			listener.positionChanged(oldPoint, newPoint);
 		}
+	}
+	
+	public IPosition getDefaultPosition() {
+		return defaultPosition==null? getCurrentPosition(): defaultPosition;
 	}
 
 }

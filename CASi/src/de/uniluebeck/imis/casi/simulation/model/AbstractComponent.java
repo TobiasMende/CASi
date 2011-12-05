@@ -21,11 +21,16 @@ import java.io.Serializable;
  * 
  */
 public abstract class AbstractComponent implements IPosition, Serializable {
+	public enum INTERRUPTIBILITY {
+		INTERRUPTIBLE, UNINTERRUPTIBLE, INTERRUPT_SCHEDULED, INTERRUPTED
+	}
+
 	private static final long serialVersionUID = 7951474356106618134L;
 	private Image representation;
 	private IPosition position;
 	private Point2D coordinates = new Point2D.Double();
 	protected final String identifier;
+	protected INTERRUPTIBILITY interruptibility = INTERRUPTIBILITY.INTERRUPTIBLE;
 
 	public AbstractComponent(String identifier) {
 		this.identifier = identifier;
@@ -44,21 +49,49 @@ public abstract class AbstractComponent implements IPosition, Serializable {
 	public Point2D getCoordinates() {
 		return coordinates;
 	}
-	
+
 	/**
 	 * Setter for the coordinates of this component
-	 * @param coordinates the coordinates to set
+	 * 
+	 * @param coordinates
+	 *            the coordinates to set
 	 */
 	public void setCoordinates(Point2D coordinates) {
 		this.coordinates = coordinates;
 	}
-	
+
 	/**
 	 * Getter for the identifier
+	 * 
 	 * @return the identifier
 	 */
 	public final String getIdentifier() {
 		return identifier;
+	}
+
+	/**
+	 * @param interruptibility
+	 *            the interruptibility to set
+	 */
+	public void setInterruptibility(INTERRUPTIBILITY interruptibility) {
+		this.interruptibility = interruptibility;
+	}
+
+	/**
+	 * @return the interruptibility
+	 */
+	public INTERRUPTIBILITY getInterruptibility() {
+		return interruptibility;
+	}
+
+	/**
+	 * Checks whether the component is interruptible or not
+	 * 
+	 * @return <code>true</code> if the component is interruptible,
+	 *         <code>false</code> otherwise.
+	 */
+	public boolean isInterruptible() {
+		return interruptibility.equals(INTERRUPTIBILITY.INTERRUPTIBLE);
 	}
 
 	@Override

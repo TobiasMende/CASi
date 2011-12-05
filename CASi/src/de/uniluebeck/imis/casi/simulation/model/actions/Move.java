@@ -49,6 +49,14 @@ public class Move extends AtomicAction {
 	/** The iterator used for traveling along the path */
 	private Iterator<Point2D> pathIterator;
 
+	/**
+	 * Creates a new move action with a given destination
+	 * @param endPosition the destination to set
+	 */
+	public Move(IPosition endPosition) {
+		this.endPosition = endPosition;
+	}
+	
 	@Override
 	protected boolean internalPerform(AbstractComponent performer) {
 		if (path == null) {
@@ -145,6 +153,7 @@ public class Move extends AtomicAction {
 			return false;
 		return true;
 	}
+
 	
 	
 

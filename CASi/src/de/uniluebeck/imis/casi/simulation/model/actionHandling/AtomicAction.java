@@ -34,10 +34,18 @@ public abstract class AtomicAction extends AbstractAction {
 			// stop performing if completed
 			return true;
 		}
+		if(!initialized) {
+			if(!preActionTask(performer)) {
+				setState(STATE.INTERRUPTED);
+				return false;
+			}
+			initialized = true;
+		}
 		setState(STATE.ONGOING);
 
 		if (internalPerform(performer)) {
 			setState(STATE.COMPLETED);
+			postActionTask(performer);
 			return true;
 		}
 		if (getDurationSeconds() > 0) {
@@ -46,6 +54,7 @@ public abstract class AtomicAction extends AbstractAction {
 			if (getDurationSeconds() == 0) {
 				// if time elapsed, set state to completed
 				setState(STATE.COMPLETED);
+				postActionTask(performer);
 				return true;
 			}
 		}

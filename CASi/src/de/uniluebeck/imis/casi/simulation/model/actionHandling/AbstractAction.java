@@ -37,6 +37,7 @@ public abstract class AbstractAction implements Listenable<IActionListener>,
 	private static final long serialVersionUID = -4600404747026813557L;
 	/** the development logger */
 	private Logger log = Logger.getLogger(AbstractAction.class.getName());
+	protected boolean initialized;
 
 	/**
 	 * A pool of states in which this action can be
@@ -48,6 +49,8 @@ public abstract class AbstractAction implements Listenable<IActionListener>,
 		ONGOING,
 		/** the action was completed */
 		COMPLETED,
+		/** The action can't be performed at the moment */
+		INTERRUPTED,
 		/**
 		 * the action is interrupted, e.g. by another action with a higher
 		 * priority INTERRUPTED,
@@ -154,34 +157,39 @@ public abstract class AbstractAction implements Listenable<IActionListener>,
 			}
 		}
 	}
-	
-	
+
 	/**
 	 * Setter for the deadline for this action.
-	 * @param deadline the deadline to set
+	 * 
+	 * @param deadline
+	 *            the deadline to set
 	 */
 	public void setDeadline(SimulationTime deadline) {
 		this.deadline = deadline;
 	}
-	
+
 	/**
 	 * Sets the earliest time when this action should be performed
-	 * @param earliestStartTime the earliest start time to set
+	 * 
+	 * @param earliestStartTime
+	 *            the earliest start time to set
 	 */
 	public void setEarliestStartTime(SimulationTime earliestStartTime) {
 		this.earliestStartTime = earliestStartTime;
 	}
-	
+
 	/**
 	 * Getter for the deadline of this action
+	 * 
 	 * @return the deadline
 	 */
 	public SimulationTime getDeadline() {
 		return deadline;
 	}
-	
+
 	/**
 	 * Getter for the earliest start time of this action
+	 * 
 	 * @return the earliest start time
 	 */
 	public SimulationTime getEarliestStartTime() {
@@ -374,36 +382,66 @@ public abstract class AbstractAction implements Listenable<IActionListener>,
 		}
 		return null;
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
-		if(super.equals(obj)) {
+		if (super.equals(obj)) {
 			return true;
 		}
-		if(!(obj instanceof AbstractAction)) {
+		if (!(obj instanceof AbstractAction)) {
 			return false;
 		}
-		AbstractAction other = (AbstractAction)obj;
-		if(!type.equals(other.getType())) {
+		AbstractAction other = (AbstractAction) obj;
+		if (!type.equals(other.getType())) {
 			return false;
 		}
-		if(deadline != null && other.getDeadline() != null && !deadline.equals(other.getDeadline())) {
+		if (deadline != null && other.getDeadline() != null
+				&& !deadline.equals(other.getDeadline())) {
 			return false;
 		}
-		if(earliestStartTime != null && other.getEarliestStartTime() != null && !earliestStartTime.equals(other.getDeadline())) {
+		if (earliestStartTime != null && other.getEarliestStartTime() != null
+				&& !earliestStartTime.equals(other.getDeadline())) {
 			return false;
 		}
-		if(priority != other.getPriority() || duration != other.getDuration()) {
+		if (priority != other.getPriority() || duration != other.getDuration()) {
 			return false;
 		}
-		if((deadline != null && other.getDeadline() == null) || (deadline == null && other.getDeadline() != null)) {
+		if ((deadline != null && other.getDeadline() == null)
+				|| (deadline == null && other.getDeadline() != null)) {
 			return false;
 		}
-		if((earliestStartTime != null && other.getEarliestStartTime() == null) || (earliestStartTime == null && other.getEarliestStartTime() != null)) {
+		if ((earliestStartTime != null && other.getEarliestStartTime() == null)
+				|| (earliestStartTime == null && other.getEarliestStartTime() != null)) {
 			return false;
 		}
-		// TODO this isn't a complete equals method... further additions should be made in the concrete actions.
+		// TODO this isn't a complete equals method... further additions should
+		// be made in the concrete actions.
 		return true;
+	}
+
+	/**
+	 * Can be used to describe a task that should be executed before performing
+	 * this action
+	 * 
+	 * @param performer
+	 *            the performer
+	 * @return <code>true</code> if the initialization was performed successful
+	 *         and the action should be performed, <code>false</code> if
+	 *         something doesn't work as expected and the action should be
+	 *         interrupted.
+	 */
+	protected boolean preActionTask(AbstractComponent performer) {
+		return true;
+	}
+
+	/**
+	 * Can be used to describe a task that should be performed just after
+	 * completing this action.
+	 * 
+	 * @param performer
+	 *            the performer of the action
+	 */
+	protected void postActionTask(AbstractComponent performer) {
 	}
 
 }

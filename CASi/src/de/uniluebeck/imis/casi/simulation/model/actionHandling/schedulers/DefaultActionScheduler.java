@@ -15,6 +15,8 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.TreeSet;
 
+import de.uniluebeck.imis.casi.simulation.engine.SimulationClock;
+import de.uniluebeck.imis.casi.simulation.engine.SimulationEngine;
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.AbstractAction;
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.ActionComparator;
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.IActionScheduler;
@@ -86,11 +88,15 @@ public class DefaultActionScheduler implements IActionScheduler {
 			return interruptAction.remove();
 		}
 		// FIXME implement!!! It's just a quick fix
-		AbstractAction action;
+		AbstractAction action = null;
 		if(!todoList.isEmpty()) {
-			action = todoList.pollFirst();
+			if(todoList.first().getEarliestStartTime().before(SimulationClock.getInstance().getCurrentTime())) {
+				action = todoList.pollFirst();
+			}
 		} else {
-			action = actionPool.pollFirst();
+			if(!actionPool.isEmpty() && actionPool.first().getEarliestStartTime().before(SimulationClock.getInstance().getCurrentTime())) {
+				action = actionPool.pollFirst();
+			}
 		}
 		return action;
 	}

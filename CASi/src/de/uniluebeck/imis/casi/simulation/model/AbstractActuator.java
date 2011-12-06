@@ -12,6 +12,7 @@
 package de.uniluebeck.imis.casi.simulation.model;
 
 import java.awt.Shape;
+import java.awt.geom.Arc2D;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -30,6 +31,8 @@ import de.uniluebeck.imis.casi.utils.Listenable;
  */
 public abstract class AbstractActuator extends AbstractComponent implements
 		ICommunicationComponent, Listenable<IActuatorListener> {
+	private static final long serialVersionUID = -181371709984152749L;
+
 	public AbstractActuator(String identifier) {
 		super(identifier);
 	}

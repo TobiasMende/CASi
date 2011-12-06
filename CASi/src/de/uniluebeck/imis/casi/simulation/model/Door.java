@@ -141,7 +141,7 @@ public class Door extends AbstractComponent {
 
 	@Override
 	public boolean contains(Point2D point) {
-		return getShapeRepresentation().ptLineDist(point) == 0;
+		return getShapeRepresentation().ptLineDist(point) <= 1;
 	}
 
 	@Override
@@ -161,7 +161,8 @@ public class Door extends AbstractComponent {
 		Point2D endPoint = new Point2D.Double(centralPoint.getX()
 				+ endOffsetVector.getX(), centralPoint.getY()
 				+ endOffsetVector.getY());
-		return new Line2D.Double(startPoint, endPoint);
+		Line2D line = new Line2D.Double(startPoint, endPoint);
+		return line;
 	}
 
 	@Override

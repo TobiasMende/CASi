@@ -383,9 +383,7 @@ public class World {
 							.getIntIdentifier()] = 0.0;
 					continue;
 				}
-				double distance = first.getCentralPoint().distance(
-						second.getCentralPoint());
-				doorGraph[first.getIntIdentifier()][second.getIntIdentifier()] = distance;
+				doorGraph[first.getIntIdentifier()][second.getIntIdentifier()] = 1;
 			}
 		}
 
@@ -433,20 +431,20 @@ public class World {
 	 * Prints the adjacency matrix of doors
 	 */
 	private void printDoorGraph() {
-		log.info("The door graph:");
+		log.fine("The door graph:");
 		StringBuffer head = new StringBuffer();
 		head.append("\t ");
 		for (int j = 0; j < doorGraph.length; j++) {
 			head.append("d-" + j + "\t ");
 		}
-		log.info(head.toString());
+		log.fine(head.toString());
 		for (int i = 0; i < doorGraph.length; i++) {
 			StringBuffer b = new StringBuffer();
 			b.append("d-" + i + ":\t ");
 			for (int j = 0; j < doorGraph.length; j++) {
 				b.append(doorGraph[i][j] + "\t ");
 			}
-			log.info(b.toString());
+			log.fine(b.toString());
 		}
 	}
 }

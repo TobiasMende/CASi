@@ -69,7 +69,6 @@ public class PathFactory {
 		log.info("End Room: "+endRoom);
 		Set<Door> startDoors = startRoom.getDoors();
 		Set<Door> endDoors = endRoom.getDoors();
-		log.info(endDoors.toString());
 		Path doorToDoor = findRoomToRoomPath(startDoors, endDoors);
 		Point2D startDoorPoint = doorToDoor.getFirst();
 		Point2D endDoorPoint = doorToDoor.getLast();
@@ -81,11 +80,13 @@ public class PathFactory {
 		}
 
 		Path startPath = findPathInRoom(startPoint, startDoorPoint, startRoom);
-		Path endPath = findPathInRoom(endPoint, endDoorPoint, endRoom);
+		Path endPath = findPathInRoom(endDoorPoint, endPoint, endRoom);
 		Path totalPath = new Path(startPoint, endPoint);
+		log.info("StartPath: "+startPath);
 		totalPath.addAll(startPath);
 		totalPath.addAll(doorToDoor);
 		totalPath.addAll(endPath);
+		log.info("EndPath: "+endPath);
 		return totalPath;
 
 	}
@@ -107,7 +108,6 @@ public class PathFactory {
 		for (Door d : endDoors) {
 			identifiers.add(d.getIntIdentifier());
 		}
-		log.info("Door Identifiers: "+identifiers);
 		GraphPathSolver solver = null;
 		try {
 			solver = new GraphPathSolver(identifiers, SimulationEngine
@@ -130,7 +130,6 @@ public class PathFactory {
 		Door startDoor = WorldFactory.findDoorForIdentifier(minimumPath.get(0));
 		Door endDoor = WorldFactory.findDoorForIdentifier(minimumPath
 				.get(minimumPath.size() - 1));
-		log.info(startDoor+" "+minimumPath.get(0));
 		Path doorToDoorPath = findDoorToDoorPath(startDoor, endDoor);
 		return doorToDoorPath;
 	}

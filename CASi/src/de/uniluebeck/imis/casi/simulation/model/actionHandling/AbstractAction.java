@@ -65,7 +65,7 @@ public abstract class AbstractAction implements Listenable<IActionListener>,
 	}
 
 	/** the type of this action */
-	private TYPE type = TYPE.ABSTRACT;
+	private TYPE type = TYPE.NORMAL;
 
 	/** the state of this action */
 	private STATE state = STATE.RAW;

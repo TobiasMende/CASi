@@ -118,7 +118,7 @@ public class SimulationPanel extends JPanel implements ISimulationClockListener 
 				// Show room name:
 				g.setColor(Color.BLACK);
 				g.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 8));
-				g2D.drawString(room.toString(), centralPoint2.x-10, centralPoint2.y-5);
+				g2D.drawString("("+centralPoint2.x+"|"+centralPoint2.y+")", centralPoint2.x-10, centralPoint2.y-5);
 				/** Get the walls of this room */
 				for(Wall wall : room.getWalls()) {
 					

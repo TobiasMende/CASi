@@ -40,6 +40,7 @@ import de.uniluebeck.imis.casi.simulation.model.Wall;
 import de.uniluebeck.imis.casi.simulation.model.World;
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.AbstractAction;
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.AbstractAction.TYPE;
+import de.uniluebeck.imis.casi.simulation.model.actions.GoAndSpeakTo;
 import de.uniluebeck.imis.casi.simulation.model.actions.Move;
 
 public class WorldGenerator implements IWorldGenerator {
@@ -48,7 +49,7 @@ public class WorldGenerator implements IWorldGenerator {
 			.getName());
 
 	World tempWorld = new World();
-	Room timsRoom, mainFloor;
+	Room timsRoom, mainFloor, crazyRoom;
 
 	/**
 	 * This generator creates an basic, pre coded World object
@@ -174,13 +175,17 @@ public class WorldGenerator implements IWorldGenerator {
 		tim.setDefaultPosition(timsRoom);
 		agents.add(tim);
 		tempAgent = new Agent("agent_02", "And I", "candidates");
+		tempAgent.setDefaultPosition(crazyRoom);
+		tempAgent.setCurrentPosition(timsRoom);
+		Agent andI = tempAgent;
 		agents.add(tempAgent);
 
-		for (int i = 0; i < 3; i++) {
+		for (int i = 0; i < 1; i++) {
 			tempAgent = new Agent("agent_" + i + "_lady", "Tentlady" + i,
 					"tendladies");
 			tempAgent.setDefaultPosition(mainFloor);
-			tempAgent = generateActionsForTentLady(tim, tempAgent);
+			tempAgent = generateActionsForTentLady(andI, tempAgent);
+			
 
 			agents.add(tempAgent);
 		}
@@ -191,12 +196,17 @@ public class WorldGenerator implements IWorldGenerator {
 
 	private Agent generateActionsForTentLady(Agent tim, Agent tentLady) {
 
-		AbstractAction tempAction = new Move(tim);
+		AbstractAction tempAction = new Move(timsRoom);
 		tempAction.setType(TYPE.NORMAL);
 		tempAction.setPriority(5);
 		tempAction.setEarliestStartTime(tempWorld.getStartTime().plus(
 				1 + new Random().nextInt(10)));
 		tentLady.addActionToList(tempAction);
+		
+		AbstractAction speak = new GoAndSpeakTo(tim, 10);
+		speak.setType(TYPE.NORMAL);
+		speak.setEarliestStartTime(tempWorld.getStartTime().plus(20));
+		tentLady.addActionToList(speak);
 		return tentLady;
 	}
 
@@ -377,6 +387,7 @@ public class WorldGenerator implements IWorldGenerator {
 		theNewWall = WallFactory.getWallWithPoints(new Point(270, 280),
 				new Point(270, 210));
 		rooms.add(theNewRoom);
+		crazyRoom = theNewRoom;
 		theNewRoom.setIdentifier("Crazy Room");
 
 		theNewRoom = new Room();

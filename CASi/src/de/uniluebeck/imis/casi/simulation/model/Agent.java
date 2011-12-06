@@ -183,7 +183,7 @@ public class Agent extends AbstractComponent implements
 			// need a new action to perform:
 			currentAction = actionScheduler.getNextAction();
 			if (currentAction == null) {
-				CASi.SIM_LOG.info(this.name + ": Nothing to do at the moment.");
+				//CASi.SIM_LOG.info(this.name + ": Nothing to do at the moment.");
 				return;
 			}
 		}
@@ -200,6 +200,7 @@ public class Agent extends AbstractComponent implements
 					.severe("The last action wasn't performable. "
 							+ this.name
 							+ " has better things to do than solving impossible problems. E.g Searching for a Club Mate! State: "+currentAction.getState());
+			log.severe(e.fillInStackTrace().toString());
 			currentAction = null;
 		}
 	}
@@ -278,7 +279,7 @@ public class Agent extends AbstractComponent implements
 	 */
 	private void informListenersAboutPositionChange(Point2D oldPoint,
 			Point2D newPoint) {
-//		log.info("Position of "+toString()+" changed from "+oldPoint+" to "+newPoint);
+		log.fine("Position of "+toString()+" changed from "+oldPoint+" to "+newPoint);
 		for (IAgentListener listener : agentListeners) {
 			listener.positionChanged(oldPoint, newPoint);
 		}
@@ -293,7 +294,7 @@ public class Agent extends AbstractComponent implements
 	 */
 	public void setDefaultPosition(IPosition defaultPosition) {
 		this.defaultPosition = defaultPosition;
-		coordinates = defaultPosition.getCentralPoint();
+		super.setCurrentPosition(defaultPosition);
 		Point2D oldPoint = super.getCoordinates();
 		informListenersAboutPositionChange(oldPoint, coordinates);
 	}

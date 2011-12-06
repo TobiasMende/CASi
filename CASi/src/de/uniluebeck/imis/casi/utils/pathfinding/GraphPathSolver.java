@@ -71,6 +71,7 @@ public class GraphPathSolver extends AStar<Integer> {
 					minimum = adjacency[i][j];
 				}
 			}
+			//FIXME
 			heuristics[i] = minimum;
 		}
 	}

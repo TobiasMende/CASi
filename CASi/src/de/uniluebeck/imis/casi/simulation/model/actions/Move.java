@@ -75,10 +75,10 @@ public class Move extends AtomicAction {
 				return true;
 			}
 			pathIterator = path.iterator();
+			log.fine("Path calculated succesful, starting move action");
 			// Path calculation in the first second completed:
 			return false;
 		}
-		log.fine("Path calculated succesful, starting move action");
 		for (int i = 0; i < POINTS_PER_SECOND; i++) {
 			if (pathIterator.hasNext()) {
 				this.performer.setCoordinates(pathIterator.next());
@@ -153,8 +153,21 @@ public class Move extends AtomicAction {
 			return false;
 		return true;
 	}
-
 	
+	@Override
+	protected boolean preActionTask(AbstractComponent performer) {
+		log.info(performer+" starting Move from ");
+		return super.preActionTask(performer);
+	}
+
+	/* (non-Javadoc)
+	 * @see de.uniluebeck.imis.casi.simulation.model.actionHandling.AbstractAction#postActionTask(de.uniluebeck.imis.casi.simulation.model.AbstractComponent)
+	 */
+	@Override
+	protected void postActionTask(AbstractComponent performer) {
+		log.info("Move completed");
+		super.postActionTask(performer);
+	}
 	
 
 }

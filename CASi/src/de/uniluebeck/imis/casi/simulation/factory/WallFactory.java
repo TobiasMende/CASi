@@ -12,6 +12,7 @@
 package de.uniluebeck.imis.casi.simulation.factory;
 
 import java.awt.Point;
+import java.awt.geom.Point2D;
 import java.util.Hashtable;
 
 import de.uniluebeck.imis.casi.simulation.model.Wall;
@@ -25,7 +26,7 @@ public final class WallFactory {
 
 	private static final Hashtable<Integer, Wall> wallCache = new Hashtable<Integer, Wall>();
 
-	public static final Wall getWallWithPoints(Point start, Point end) {
+	public static final Wall getWallWithPoints(Point2D start, Point2D end) {
 
 		// check if this wall is in the cache
 		Wall cachedWall = wallCache.get(Wall.calculateHashCode(start, end));

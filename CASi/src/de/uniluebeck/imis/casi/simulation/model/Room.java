@@ -48,7 +48,7 @@ public class Room implements IPosition {
 	}
 
 	@Override
-	public Point getCoordinates() {
+	public Point2D getCoordinates() {
 		/**
 		 * returns the coordinates of the first wall
 		 */
@@ -106,14 +106,15 @@ public class Room implements IPosition {
 	@Override
 	public Shape getShapeRepresentation() {
 		if (polygonRepresentation == null) {
-			List<Point> points = getWallPoints();
+			List<Point2D> points = getWallPoints();
 			// Adding startpoint again for providing a closed path
 			points.add(walls.get(0).getStartPoint());
 			int[] x = new int[points.size()];
 			int[] y = new int[points.size()];
 			for (int i = 0; i < x.length; i++) {
-				x[i] = points.get(i).x;
-				y[i] = points.get(i).y;
+				// XXX: is this cast ok?
+				x[i] = (int) points.get(i).getX();
+				y[i] = (int) points.get(i).getY();
 			}
 			polygonRepresentation = new Polygon(x, y, x.length);
 		}
@@ -146,8 +147,8 @@ public class Room implements IPosition {
 	 * 
 	 * @return an ordered list of node points
 	 */
-	private List<Point> getWallPoints() {
-		List<Point> points = new LinkedList<Point>();
+	private List<Point2D> getWallPoints() {
+		List<Point2D> points = new LinkedList<Point2D>();
 		for (Wall w : walls) {
 			if (!points.contains(w.getStartPoint())) {
 				points.add(w.getStartPoint());

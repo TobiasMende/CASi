@@ -34,23 +34,23 @@ public class Wall implements IPosition {
 	 */
 	private static final long serialVersionUID = 717672722422035342L;
 	/** the point where this wall starts */
-	private Point start;
+	private Point2D start;
 	/** the point where this wall ends */
-	private Point end;
+	private Point2D end;
 	/** A collection of doors that are in this wall */
 	private final List<Door> doors = new ArrayList<Door>();
 
 	/**
 	 * Constructor creating a wall with provided start and end point
 	 * 
-	 * @param start
+	 * @param start2
 	 *            the start point
-	 * @param end
+	 * @param end2
 	 *            the end point
 	 */
-	public Wall(Point start, Point end) {
-		this.start = start;
-		this.end = end;
+	public Wall(Point2D start2, Point2D end2) {
+		this.start = start2;
+		this.end = end2;
 	}
 
 	/**
@@ -127,7 +127,7 @@ public class Wall implements IPosition {
 	 * 
 	 * @return the start point
 	 */
-	public Point getStartPoint() {
+	public Point2D getStartPoint() {
 		return start;
 	}
 
@@ -136,12 +136,12 @@ public class Wall implements IPosition {
 	 * 
 	 * @return the end point
 	 */
-	public Point getEndPoint() {
+	public Point2D getEndPoint() {
 		return end;
 	}
 
 	@Override
-	public Point getCoordinates() {
+	public Point2D getCoordinates() {
 		return getStartPoint();
 	}
 
@@ -162,8 +162,8 @@ public class Wall implements IPosition {
 
 	@Override
 	public Point2D getCentralPoint() {
-		double x = ((double) (start.x + end.x)) / 2;
-		double y = ((double) (start.y + end.y)) / 2;
+		double x = (start.getX() + end.getX()) / 2;
+		double y = (start.getY() + end.getY()) / 2;
 		Point2D middle = new Point2D.Double(x, y);
 		if (contains(middle)) {
 			return middle;

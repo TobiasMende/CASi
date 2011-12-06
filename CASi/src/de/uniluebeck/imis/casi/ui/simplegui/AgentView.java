@@ -17,7 +17,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
 
-import javax.swing.JComponent;
+import javax.swing.JPanel;
 
 import de.uniluebeck.imis.casi.simulation.factory.GraphicFactory;
 import de.uniluebeck.imis.casi.simulation.model.Agent.STATE;
@@ -28,7 +28,7 @@ import de.uniluebeck.imis.casi.simulation.model.IAgentListener;
  *
  */
 @SuppressWarnings("serial")
-public class AgentView extends JComponent implements IAgentListener {
+public class AgentView extends JPanel implements IAgentListener {
 	
 	private Point2D position;
 	private STATE newState;
@@ -37,7 +37,8 @@ public class AgentView extends JComponent implements IAgentListener {
 		
 		position = startPosition;
 		this.setLocation(GraphicFactory.getPointRepresentation(startPosition));
-		this.setPreferredSize(new Dimension(10, 10));
+		this.setPreferredSize(new Dimension(8, 8));
+		this.setBackground(Color.BLACK);
 		invalidate();
 	}
 	
@@ -66,7 +67,9 @@ public class AgentView extends JComponent implements IAgentListener {
 		
 		/* Simply set the new location to the new position */
 		this.setLocation(GraphicFactory.getPointRepresentation(newPosition));
-		 invalidate();
+		
+		invalidate();
+		 
 	}
 
 }

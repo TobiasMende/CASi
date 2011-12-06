@@ -152,7 +152,7 @@ public class PathFactory {
 		try {
 			adjacency = SimulationEngine.getInstance().getWorld()
 					.getDoorGraph();
-			if (adjacency[start.getIntIdentifier()][end.getIntIdentifier()] > 0) {
+			if (adjacency[start.getIntIdentifier()][end.getIntIdentifier()] >= 0) {
 				Path test = SimulationEngine.getInstance().getWorld()
 						.getDoorPath(start, end);
 				if (test != null) {
@@ -165,15 +165,13 @@ public class PathFactory {
 				doorSet.add(end);
 				// two doors can belong to multiple rooms (in most cases they do
 				// not):
-				Set<Room> fittingRooms = WorldFactory
-						.getRoomsWithDoors(doorSet);
-				if (fittingRooms.isEmpty()) {
+				Room fittingRoom = WorldFactory.getRoomWithPoints(start.getCentralPoint(), end.getCentralPoint());
+				if (fittingRoom == null) {
 					log.severe("No room was found. This shouldn't happen!");
 					return null;
 				}
 				// Take the first room and calculate a path:
-				Room room = fittingRooms.iterator().next();
-				InRoomPathSolver solver = new InRoomPathSolver(room, end.getCentralPoint());
+				InRoomPathSolver solver = new InRoomPathSolver(fittingRoom, end.getCentralPoint());
 				List<Point2D> tempPath = solver
 						.compute(start.getCentralPoint());
 				Path finalPath = new Path(start.getCentralPoint(),

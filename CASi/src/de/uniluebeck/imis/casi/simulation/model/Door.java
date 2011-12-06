@@ -14,6 +14,9 @@ package de.uniluebeck.imis.casi.simulation.model;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.security.InvalidParameterException;
+import java.util.logging.Logger;
+
+import org.apache.log4j.helpers.LogLog;
 
 import de.uniluebeck.imis.casi.CASi;
 import de.uniluebeck.imis.casi.simulation.factory.WorldFactory;
@@ -25,6 +28,7 @@ import de.uniluebeck.imis.casi.simulation.factory.WorldFactory;
  * 
  */
 public class Door extends AbstractComponent {
+	private static final Logger log = Logger.getLogger(Door.class.getName());
 	/** A prefix for the identifier of this door */
 	public static final String ID_PREFIX = "door-";
 	/** the id for serialization */

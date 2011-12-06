@@ -11,7 +11,6 @@
  */
 package de.uniluebeck.imis.casi.utils.pathfinding;
 
-import java.awt.Shape;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -27,7 +26,7 @@ import de.uniluebeck.imis.casi.simulation.model.Room;
  * 
  */
 public class InRoomPathSolver extends AStar<Point2D> {
-	private Shape room;
+	private Room room;
 	private Point2D destination;
 
 	/**
@@ -42,7 +41,7 @@ public class InRoomPathSolver extends AStar<Point2D> {
 	 */
 	public InRoomPathSolver(Room room, Point2D end)
 			throws IllegalArgumentException {
-		this.room = room.getShapeRepresentation();
+		this.room = room;
 		this.destination = end;
 		if (!this.room.contains(this.destination)) {
 			throw new IllegalArgumentException(

@@ -271,8 +271,14 @@ public class Agent extends AbstractComponent implements
 		informListenersAboutPositionChange(oldPoint, coordinates);
 	}
 
+	/**
+	 * Informs all listener about a new position
+	 * @param oldPoint where the agent came from
+	 * @param newPoint where the agent goes to.
+	 */
 	private void informListenersAboutPositionChange(Point2D oldPoint,
 			Point2D newPoint) {
+//		log.info("Position of "+toString()+" changed from "+oldPoint+" to "+newPoint);
 		for (IAgentListener listener : agentListeners) {
 			listener.positionChanged(oldPoint, newPoint);
 		}

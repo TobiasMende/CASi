@@ -63,19 +63,22 @@ public class World {
 
 	/**
 	 * Seals the world
-	 * @throws IllegalAccessException 
+	 * 
+	 * @throws IllegalAccessException
 	 */
 	public void seal() throws IllegalAccessException {
-		if(sealed) {
+		if (sealed) {
 			throw new IllegalAccessException("World is sealed yet");
 		}
 		sealed = true;
 	}
+
 	/**
 	 * Initializes the world
 	 */
 	public void init() {
-		if(doorGraph != null || SimulationEngine.getInstance().getWorld() == null) {
+		if (doorGraph != null
+				|| SimulationEngine.getInstance().getWorld() == null) {
 			log.warning("Don't call init yet!");
 			return;
 		}
@@ -262,7 +265,7 @@ public class World {
 			throw new IllegalAccessException("World is sealed!");
 		}
 		this.agents = agents;
-		for(Agent a : agents) {
+		for (Agent a : agents) {
 			SimulationClock.getInstance().addListener(a);
 		}
 	}
@@ -360,7 +363,7 @@ public class World {
 			ArrayList<Door> doors = new ArrayList<Door>(room.getDoors());
 			// For each door in this room, calculate distances to all other
 			// doors of this room.
-			log.info("Doors in "+room+": "+doors);
+			log.info("Doors in " + room + ": " + doors);
 			calculateAdjacencies(doors);
 		}
 	}
@@ -376,25 +379,27 @@ public class World {
 		for (Door first : doors) {
 			for (Door second : doors) {
 				if (first.equals(second)) {
-					doorGraph[first.getIntIdentifier()][second.getIntIdentifier()] = 0.0;
+					doorGraph[first.getIntIdentifier()][second
+							.getIntIdentifier()] = 0.0;
 					continue;
 				}
-				double distance = first.getCentralPoint().distance(second.getCentralPoint());
+				double distance = first.getCentralPoint().distance(
+						second.getCentralPoint());
 				doorGraph[first.getIntIdentifier()][second.getIntIdentifier()] = distance;
 			}
 		}
-		
+
 	}
 
 	/**
-	 * Sets all distances to <code>Double.NEGATIVE_INFINITY</code>, meaning that the doors arn't
-	 * adjacent.
+	 * Sets all distances to <code>Double.NEGATIVE_INFINITY</code>, meaning that
+	 * the doors arn't adjacent.
 	 */
 	private void initializeDoorGraph() {
 		log.info("Initializing Doorgraph");
 		int size = doorGraph.length;
-		for(int i = 0; i < size; i++) {
-			for(int j = 0; j < size; j++) {
+		for (int i = 0; i < size; i++) {
+			for (int j = 0; j < size; j++) {
 				doorGraph[i][j] = Double.NEGATIVE_INFINITY;
 			}
 		}
@@ -423,7 +428,7 @@ public class World {
 			}
 		}
 	}
-	
+
 	/**
 	 * Prints the adjacency matrix of doors
 	 */
@@ -431,15 +436,15 @@ public class World {
 		log.info("The door graph:");
 		StringBuffer head = new StringBuffer();
 		head.append("\t ");
-		for(int j = 0; j < doorGraph.length; j++) {
-			head.append("d-"+j+"\t ");
+		for (int j = 0; j < doorGraph.length; j++) {
+			head.append("d-" + j + "\t ");
 		}
 		log.info(head.toString());
-		for(int i = 0; i < doorGraph.length; i++) {
+		for (int i = 0; i < doorGraph.length; i++) {
 			StringBuffer b = new StringBuffer();
-			b.append("d-"+i+":\t ");
-			for(int j = 0; j < doorGraph.length; j++) {
-				b.append(doorGraph[i][j]+"\t ");
+			b.append("d-" + i + ":\t ");
+			for (int j = 0; j < doorGraph.length; j++) {
+				b.append(doorGraph[i][j] + "\t ");
 			}
 			log.info(b.toString());
 		}

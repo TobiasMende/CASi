@@ -11,6 +11,8 @@
  */
 package de.uniluebeck.imis.casi.simulation.model;
 
+import java.awt.Shape;
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -88,4 +90,34 @@ public abstract class AbstractSensor extends AbstractComponent implements
 	protected abstract boolean handleInternal(AbstractAction action);
 
 	public abstract String getHumanReadableValue();
+	
+	@Override
+	public Shape getShapeRepresentation() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	@Override
+	public Point2D getCentralPoint() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	@Override
+	public Point2D getCoordinates() {
+		// TODO Auto-generated method stub
+		return super.getCoordinates();
+	}
+	
+	@Override
+	public boolean contains(IPosition position) {
+		// TODO Auto-generated method stub
+		return super.contains(position);
+	}
+
+	@Override
+	public boolean contains(Point2D point) {
+		// TODO Auto-generated method stub
+		return super.contains(point);
+	}
 }

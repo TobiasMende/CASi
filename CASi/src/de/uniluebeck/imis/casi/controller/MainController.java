@@ -43,11 +43,12 @@ public class MainController {
 			ICommunicationHandler communicationHandler, IMainView mainView) {
 		this.mainView = mainView;
 		World world = generator.generateWorld();
-		if (!world.isSealed()) {
-			world.seal();
-		}
 		try {
-			SimulationEngine.getInstance().setWorld(world);
+			if (!world.isSealed()) {
+				world.seal();
+			}
+			// this is now done in World.seal() before the Pathfactory tries to read it!
+			//SimulationEngine.getInstance().setWorld(world);
 			SimulationEngine.getInstance().setCommunicationHandler(
 					communicationHandler);
 

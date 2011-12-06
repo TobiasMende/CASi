@@ -17,6 +17,7 @@ import java.util.Set;
 import java.util.logging.Logger;
 
 import de.uniluebeck.imis.casi.simulation.engine.SimulationClock;
+import de.uniluebeck.imis.casi.simulation.engine.SimulationEngine;
 import de.uniluebeck.imis.casi.simulation.factory.PathFactory;
 import de.uniluebeck.imis.casi.simulation.factory.WorldFactory;
 
@@ -62,9 +63,11 @@ public class World {
 
 	/**
 	 * Seals the world
+	 * @throws IllegalAccessException 
 	 */
-	public void seal() {
+	public void seal() throws IllegalAccessException {
 		sealed = true;
+		SimulationEngine.getInstance().setWorld(this);
 		calculateDoorGraph();
 		calculateDoorPaths();
 	}

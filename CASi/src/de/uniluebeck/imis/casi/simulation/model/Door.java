@@ -16,8 +16,6 @@ import java.awt.geom.Point2D;
 import java.security.InvalidParameterException;
 import java.util.logging.Logger;
 
-import org.apache.log4j.helpers.LogLog;
-
 import de.uniluebeck.imis.casi.CASi;
 import de.uniluebeck.imis.casi.simulation.factory.WorldFactory;
 

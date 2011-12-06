@@ -244,6 +244,10 @@ public class WorldGenerator implements IWorldGenerator {
 		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(270, 210),
 				new Point(270, 150)));
 		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(270, 150),
+				new Point(270, 120)));
+		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(270, 120),
+				new Point(270, 100)));
+		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(270, 100),
 				new Point(270, 20)));
 		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(270, 20),
 				new Point(100, 20)));

@@ -377,7 +377,7 @@ public class World {
 			for (Door second : doors) {
 				if (first.equals(second)) {
 					doorGraph[first.getIntIdentifier()][second
-							.getIntIdentifier()] = -1.0;
+							.getIntIdentifier()] = 0.0;
 					continue;
 				}
 				double distance = first.getCentralPoint().distance(

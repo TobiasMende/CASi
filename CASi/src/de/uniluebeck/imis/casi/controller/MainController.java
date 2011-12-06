@@ -47,11 +47,11 @@ public class MainController {
 			if (!world.isSealed()) {
 				world.seal();
 			}
-			// this is now done in World.seal() before the Pathfactory tries to read it!
-			//SimulationEngine.getInstance().setWorld(world);
+			SimulationEngine.getInstance().setWorld(world);
 			SimulationEngine.getInstance().setCommunicationHandler(
 					communicationHandler);
 
+			world.init();
 		} catch (IllegalAccessException e) {
 			CASi.SIM_LOG
 					.severe("Can't set components after starting the simulation: "

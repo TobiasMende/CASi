@@ -66,9 +66,21 @@ public class World {
 	 * @throws IllegalAccessException 
 	 */
 	public void seal() throws IllegalAccessException {
+		if(sealed) {
+			throw new IllegalAccessException("World is sealed yet");
+		}
 		sealed = true;
-		SimulationEngine.getInstance().setWorld(this);
+	}
+	/**
+	 * Initializes the world
+	 */
+	public void init() {
+		if(doorGraph != null || SimulationEngine.getInstance().getWorld() == null) {
+			log.warning("Don't call init yet!");
+			return;
+		}
 		calculateDoorGraph();
+		printDoorGraph();
 		calculateDoorPaths();
 	}
 
@@ -375,6 +387,7 @@ public class World {
 				doorGraph[first.getIntIdentifier()][second.getIntIdentifier()] = distance;
 			}
 		}
+		
 	}
 
 	/**
@@ -413,6 +426,27 @@ public class World {
 					doorPaths[i][j] = null;
 				}
 			}
+		}
+	}
+	
+	/**
+	 * Prints the adjacency matrix of doors
+	 */
+	private void printDoorGraph() {
+		log.info("The door graph:");
+		StringBuffer head = new StringBuffer();
+		head.append("\t\t ");
+		for(int j = 0; j < doorGraph.length; j++) {
+			head.append("door-"+j+"\t ");
+		}
+		log.info(head.toString());
+		for(int i = 0; i < doorGraph.length; i++) {
+			StringBuffer b = new StringBuffer();
+			b.append("door-"+i+":\t ");
+			for(int j = 0; j < doorGraph[i].length; j++) {
+				b.append(doorGraph[i][j]+"\t ");
+			}
+			log.info(b.toString());
 		}
 	}
 }

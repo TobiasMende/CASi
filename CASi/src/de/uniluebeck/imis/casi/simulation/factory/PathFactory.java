@@ -152,7 +152,7 @@ public class PathFactory {
 		try {
 			adjacency = SimulationEngine.getInstance().getWorld()
 					.getDoorGraph();
-			if (adjacency[start.getIntIdentifier()][end.getIntIdentifier()] >= 0) {
+			if (adjacency[start.getIntIdentifier()][end.getIntIdentifier()] > 0) {
 				Path test = SimulationEngine.getInstance().getWorld()
 						.getDoorPath(start, end);
 				if (test != null) {

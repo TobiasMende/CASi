@@ -12,12 +12,12 @@
 package de.uniluebeck.imis.casi.ui.simplegui;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
+import java.util.logging.Logger;
 
-import javax.swing.JPanel;
+import javax.swing.JComponent;
 
 import de.uniluebeck.imis.casi.simulation.factory.GraphicFactory;
 import de.uniluebeck.imis.casi.simulation.model.Agent.STATE;
@@ -28,7 +28,10 @@ import de.uniluebeck.imis.casi.simulation.model.IAgentListener;
  *
  */
 @SuppressWarnings("serial")
-public class AgentView extends JPanel implements IAgentListener {
+public class AgentView extends JComponent implements IAgentListener {
+	
+	private static final Logger log = Logger.getLogger(
+			AgentView.class.getName());
 	
 	private Point2D position;
 	private STATE newState;
@@ -36,9 +39,8 @@ public class AgentView extends JPanel implements IAgentListener {
 	public AgentView(Point2D startPosition) {
 		
 		position = startPosition;
-		this.setLocation(GraphicFactory.getPointRepresentation(startPosition));
-		this.setPreferredSize(new Dimension(8, 8));
-		this.setBackground(Color.BLACK);
+		this.setBounds(GraphicFactory.getPointRepresentation(startPosition).x,
+				       GraphicFactory.getPointRepresentation(startPosition).y,8,8);
 		invalidate();
 	}
 	
@@ -50,8 +52,10 @@ public class AgentView extends JPanel implements IAgentListener {
 		super.paintComponent(g);
 		Graphics2D g2D = (Graphics2D) g;
 		
-		g2D.setColor(Color.DARK_GRAY);
-		g2D.fillOval((int)(position.getX()-2.5), (int)(position.getY()-2.5), 5, 5);
+		g2D.setColor(Color.BLACK);
+		g2D.fillOval(0, 0, 8, 8);
+		g2D.setColor(Color.WHITE);
+		g2D.fillOval(2, 2, 4, 4);
 	}
 
 	@Override
@@ -65,10 +69,13 @@ public class AgentView extends JPanel implements IAgentListener {
 	@Override
 	public void positionChanged(Point2D oldPosition, Point2D newPosition) {
 		
+		this.position = newPosition;
 		/* Simply set the new location to the new position */
 		this.setLocation(GraphicFactory.getPointRepresentation(newPosition));
 		
 		invalidate();
+		
+		log.info("Set Position to: "+newPosition);
 		 
 	}
 

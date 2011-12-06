@@ -107,6 +107,18 @@ public class SimulationPanel extends JPanel implements ISimulationClockListener 
 			
 			/** Get all rooms of the simulation */
 			for(Room room : SimulationEngine.getInstance().getWorld().getRooms()) {
+				// Show shape representation of room:
+				g2D.setColor(Color.LIGHT_GRAY);
+				g2D.fill(room.getShapeRepresentation());
+				// Show central point of room:
+				Point2D centralPoint = room.getCentralPoint();
+				g2D.setColor(Color.GREEN);
+				Point centralPoint2 = GraphicFactory.getPoint(centralPoint.getX()-2.5, centralPoint.getY()-2.5);
+				g2D.fillOval(centralPoint2.x,centralPoint2.y, 5, 5);
+				// Show room name:
+				g.setColor(Color.BLACK);
+				g.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 8));
+				g2D.drawString(room.toString(), centralPoint2.x-10, centralPoint2.y-5);
 				/** Get the walls of this room */
 				for(Wall wall : room.getWalls()) {
 					
@@ -119,17 +131,7 @@ public class SimulationPanel extends JPanel implements ISimulationClockListener 
 					}
 					g2D.draw(wall.getShapeRepresentation());
 				}
-				g2D.setColor(Color.LIGHT_GRAY);
-				g2D.fill(room.getShapeRepresentation());
 				
-				
-				Point2D centralPoint = room.getCentralPoint();
-				g2D.setColor(Color.GREEN);
-				Point centralPoint2 = GraphicFactory.getPoint(centralPoint.getX()-2.5, centralPoint.getY()-2.5);
-				g2D.fillOval(centralPoint2.x,centralPoint2.y, 5, 5);
-				g.setColor(Color.BLACK);
-				g.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 8));
-				g2D.drawString(room.toString(), centralPoint2.x-10, centralPoint2.y-5);
 				/** Get the doors of this room */
 				for(Door door : room.getDoors()) {
 					g.setColor(Color.BLUE);
@@ -138,7 +140,7 @@ public class SimulationPanel extends JPanel implements ISimulationClockListener 
 					g2D.drawString(door.toString(), doorPoint.x, doorPoint.y);
 					g.setColor(Color.LIGHT_GRAY);
 					g2D.draw(door.getShapeRepresentation());
-					// Show central point:
+					// Show central point of door:
 					g.setColor(Color.BLUE);
 					g2D.fillOval(doorPoint.x, doorPoint.y, 3, 3);
 				}

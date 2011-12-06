@@ -33,7 +33,8 @@ public class ExtendedConsoleHandler extends Handler {
 
 	@Override
 	public void flush() {
-		// nothing to do here
+		System.err.flush();
+		System.out.flush();
 	}
 
 	@Override
@@ -63,6 +64,8 @@ public class ExtendedConsoleHandler extends Handler {
 			} else {
 				System.out.write(message.getBytes());
 			}
+			System.err.flush();
+			System.out.flush();
 		} catch (Exception exception) {
 			reportError(null, exception, ErrorManager.FORMAT_FAILURE);
 			return;

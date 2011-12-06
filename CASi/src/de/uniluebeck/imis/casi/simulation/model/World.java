@@ -358,9 +358,9 @@ public class World {
 		for (Room room : rooms) {
 			// Get a list of doors for each room
 			ArrayList<Door> doors = new ArrayList<Door>(room.getDoors());
-			log.info("Doors in "+room+": "+doors);
 			// For each door in this room, calculate distances to all other
 			// doors of this room.
+			log.info("Doors in "+room+": "+doors);
 			calculateAdjacencies(doors);
 		}
 	}
@@ -376,12 +376,10 @@ public class World {
 		for (Door first : doors) {
 			for (Door second : doors) {
 				if (first.equals(second)) {
-					doorGraph[first.getIntIdentifier()][second
-							.getIntIdentifier()] = 0.0;
+					doorGraph[first.getIntIdentifier()][second.getIntIdentifier()] = 0.0;
 					continue;
 				}
-				double distance = first.getCentralPoint().distance(
-						second.getCentralPoint());
+				double distance = first.getCentralPoint().distance(second.getCentralPoint());
 				doorGraph[first.getIntIdentifier()][second.getIntIdentifier()] = distance;
 			}
 		}
@@ -395,12 +393,10 @@ public class World {
 	private void initializeDoorGraph() {
 		log.info("Initializing Doorgraph");
 		int size = doorGraph.length;
-		double[] init = new double[size];
-		for (int i = 0; i < size; i++) {
-			init[i] = Double.NEGATIVE_INFINITY;
-		}
-		for (int i = 0; i < size; i++) {
-			doorGraph[i] = init;
+		for(int i = 0; i < size; i++) {
+			for(int j = 0; j < size; j++) {
+				doorGraph[i][j] = Double.NEGATIVE_INFINITY;
+			}
 		}
 	}
 
@@ -434,15 +430,15 @@ public class World {
 	private void printDoorGraph() {
 		log.info("The door graph:");
 		StringBuffer head = new StringBuffer();
-		head.append("\t\t ");
+		head.append("\t ");
 		for(int j = 0; j < doorGraph.length; j++) {
-			head.append("door-"+j+"\t ");
+			head.append("d-"+j+"\t ");
 		}
 		log.info(head.toString());
 		for(int i = 0; i < doorGraph.length; i++) {
 			StringBuffer b = new StringBuffer();
-			b.append("door-"+i+":\t ");
-			for(int j = 0; j < doorGraph[i].length; j++) {
+			b.append("d-"+i+":\t ");
+			for(int j = 0; j < doorGraph.length; j++) {
 				b.append(doorGraph[i][j]+"\t ");
 			}
 			log.info(b.toString());

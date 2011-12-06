@@ -36,6 +36,14 @@ public class Room implements IPosition {
 	private List<Wall> walls = new LinkedList<Wall>();
 	/** A polygon that representates the shape of this room */
 	private Polygon polygonRepresentation;
+	
+	private String identifier;
+	private static int idCounter;
+	public Room() {
+		super();
+		identifier = "room-"+idCounter;
+		idCounter++;
+	}
 
 	@Override
 	public Point getCoordinates() {
@@ -159,7 +167,15 @@ public class Room implements IPosition {
 
 	@Override
 	public boolean contains(Point2D point) {
-		return getShapeRepresentation().contains(point);
+		if(getShapeRepresentation().contains(point)) {
+			return true;
+		}
+		for(Wall w : walls) {
+			if(w.contains(point)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**
@@ -173,6 +189,18 @@ public class Room implements IPosition {
 	public void removeWall(Wall w) {
 		walls.remove(w);
 		invalidatePolygonRepresentation();
+	}
+	
+	/**
+	 * @param identifier the identifier to set
+	 */
+	public void setIdentifier(String identifier) {
+		this.identifier = identifier;
+	}
+
+	@Override
+	public String toString() {
+		return identifier;
 	}
 
 }

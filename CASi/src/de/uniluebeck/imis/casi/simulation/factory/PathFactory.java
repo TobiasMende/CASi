@@ -66,8 +66,10 @@ public class PathFactory {
 		// Last case: different rooms
 		Room startRoom = WorldFactory.getRoomsWithPoint(startPoint).getFirst();
 		Room endRoom = WorldFactory.getRoomsWithPoint(endPoint).getFirst();
+		log.info("End Room: "+endRoom);
 		Set<Door> startDoors = startRoom.getDoors();
 		Set<Door> endDoors = endRoom.getDoors();
+		log.info(endDoors.toString());
 		Path doorToDoor = findRoomToRoomPath(startDoors, endDoors);
 		Point2D startDoorPoint = doorToDoor.getFirst();
 		Point2D endDoorPoint = doorToDoor.getLast();
@@ -105,6 +107,7 @@ public class PathFactory {
 		for (Door d : endDoors) {
 			identifiers.add(d.getIntIdentifier());
 		}
+		log.info("Door Identifiers: "+identifiers);
 		GraphPathSolver solver = null;
 		try {
 			solver = new GraphPathSolver(identifiers, SimulationEngine
@@ -118,17 +121,16 @@ public class PathFactory {
 		List<Integer> minimumPath = new LinkedList<Integer>();
 		for (Door d : startDoors) {
 			List<Integer> path = solver.compute(d.getIntIdentifier());
-			log.info("Calculate path between " + d + " and " + endDoors);
 			if (path.size() < minimumPath.size() || minimumPath == null
 					|| minimumPath.isEmpty()) {
 				minimumPath = path;
 			}
 		}
-		log.info(minimumPath + " ");
 		// Find door to door path on the shortest path
 		Door startDoor = WorldFactory.findDoorForIdentifier(minimumPath.get(0));
 		Door endDoor = WorldFactory.findDoorForIdentifier(minimumPath
 				.get(minimumPath.size() - 1));
+		log.info(startDoor+" "+minimumPath.get(0));
 		Path doorToDoorPath = findDoorToDoorPath(startDoor, endDoor);
 		return doorToDoorPath;
 	}
@@ -145,7 +147,6 @@ public class PathFactory {
 			Path result = new Path(start.getCentralPoint(),
 					end.getCentralPoint());
 			result.add(start.getCentralPoint());
-			log.info("Doors are equal: " + start + " " + end);
 			return result;
 		}
 		try {

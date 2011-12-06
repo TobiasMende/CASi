@@ -56,13 +56,14 @@ public class Door extends AbstractComponent {
 	 */
 	private Door(int identifier) throws InvalidParameterException {
 		super(ID_PREFIX + identifier);
+		this.identifier = identifier;
+		id++;
 		if (WorldFactory.findDoorForIdentifier(ID_PREFIX + identifier) != null) {
 			throw new InvalidParameterException(
 					"There is a door with this identifier yet.");
 		}
 		WorldFactory.addDoor(this);
 	}
-
 	/**
 	 * Constructor for a door with a given offset of the walls start point
 	 * 
@@ -73,7 +74,7 @@ public class Door extends AbstractComponent {
 	 */
 	public Door(int offset, int size) {
 		this(id);
-		id++;
+		
 		this.offset = offset;
 		this.size = Math.abs(size);
 	}
@@ -191,5 +192,6 @@ public class Door extends AbstractComponent {
 	public static int getNumberOfDoors() {
 		return id;
 	}
+	
 
 }

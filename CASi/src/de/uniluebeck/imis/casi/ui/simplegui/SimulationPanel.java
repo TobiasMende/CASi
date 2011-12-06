@@ -14,6 +14,7 @@ package de.uniluebeck.imis.casi.ui.simplegui;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -120,21 +121,25 @@ public class SimulationPanel extends JPanel implements ISimulationClockListener 
 				}
 				g2D.setColor(Color.LIGHT_GRAY);
 				g2D.fill(room.getShapeRepresentation());
-				g2D.setColor(Color.ORANGE);
-				g2D.draw(room.getShapeRepresentation());
+				
 				
 				Point2D centralPoint = room.getCentralPoint();
 				g2D.setColor(Color.GREEN);
 				Point centralPoint2 = GraphicFactory.getPoint(centralPoint.getX()-2.5, centralPoint.getY()-2.5);
 				g2D.fillOval(centralPoint2.x,centralPoint2.y, 5, 5);
+				g.setColor(Color.BLACK);
+				g.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 8));
+				g2D.drawString(room.toString(), centralPoint2.x-10, centralPoint2.y-5);
 				/** Get the doors of this room */
 				for(Door door : room.getDoors()) {
-					
+					g.setColor(Color.BLUE);
+					g.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 8));
+					Point doorPoint = GraphicFactory.getPoint(door.getCentralPoint().getX()-1.5, door.getCentralPoint().getY()-1.5);
+					g2D.drawString(door.toString(), doorPoint.x, doorPoint.y);
 					g.setColor(Color.LIGHT_GRAY);
 					g2D.draw(door.getShapeRepresentation());
 					// Show central point:
 					g.setColor(Color.BLUE);
-					Point doorPoint = GraphicFactory.getPoint(door.getCentralPoint().getX()-1.5, door.getCentralPoint().getY()-1.5);
 					g2D.fillOval(doorPoint.x, doorPoint.y, 3, 3);
 				}
 				

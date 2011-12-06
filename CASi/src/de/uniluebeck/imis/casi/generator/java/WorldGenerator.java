@@ -19,6 +19,7 @@ import java.awt.image.ImageObserver;
 import java.awt.image.ImageProducer;
 import java.io.File;
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
@@ -98,35 +99,37 @@ public class WorldGenerator implements IWorldGenerator {
 
 		// giant try block around everything that actually sets things to the
 		// world
-		try {
 
-			tempWorld.setStartTime(new SimulationTime("12/24/2011 02:03:42"));
-			tempWorld.setBackgroundImage(image);
+			try {
+				tempWorld.setStartTime(new SimulationTime("12/24/2011 02:03:42"));
+				tempWorld.setBackgroundImage(image);
+				
+				// rooms
+				HashSet<Room> rooms = generateRooms();
+				tempWorld.setRooms(rooms);
+				
+				// generate the agents
+				HashSet<Agent> agents = generateAgents();
+				tempWorld.setAgents(agents);
+				
+				// sensors
+				HashSet<AbstractSensor> sensors = generateSensors();
+				tempWorld.setSensors(sensors);
+				
+				// actuators
+				HashSet<AbstractActuator> actuators = generateActuators();
+				tempWorld.setActuators(actuators);
+				
+				tempWorld.setComponents(new HashSet<AbstractComponent>());
+				tempWorld.seal();
+			} catch (IllegalAccessException e) {
+				log.severe("Illegal Access:" + e.fillInStackTrace());
+			} catch (ParseException e) {
+				log.severe("Parse Exception:" + e.fillInStackTrace());
+			} catch (Exception e) {
+				log.severe("Unknown Exception: "+e.fillInStackTrace());
+			}
 
-			// rooms
-			HashSet<Room> rooms = generateRooms();
-			tempWorld.setRooms(rooms);
-
-			// generate the agents
-			HashSet<Agent> agents = generateAgents();
-			tempWorld.setAgents(agents);
-
-			// sensors
-			HashSet<AbstractSensor> sensors = generateSensors();
-			tempWorld.setSensors(sensors);
-
-			// actuators
-			HashSet<AbstractActuator> actuators = generateActuators();
-			tempWorld.setActuators(actuators);
-
-			tempWorld.setComponents(new HashSet<AbstractComponent>());
-			tempWorld.seal();
-
-		} catch (Exception e) {
-			// catches every Exception that may arise from sealed World
-			log.severe("Generator made a mistake! \n"
-					+ e.fillInStackTrace().toString());
-		}
 		return tempWorld;
 	}
 
@@ -245,6 +248,7 @@ public class WorldGenerator implements IWorldGenerator {
 		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(270, 20),
 				new Point(100, 20)));
 		mainFloor = theNewRoom;
+		mainFloor.setIdentifier("Main Floor");
 		rooms.add(theNewRoom);
 
 		// Room #1 timsRoom (top left)
@@ -261,6 +265,7 @@ public class WorldGenerator implements IWorldGenerator {
 		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(100, 20),
 				new Point(20, 20)));
 		timsRoom = theNewRoom;
+		timsRoom.setIdentifier("Tim's Room");
 		rooms.add(theNewRoom);
 
 		// Room #2 (second top left)
@@ -307,6 +312,7 @@ public class WorldGenerator implements IWorldGenerator {
 		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(100, 220),
 				new Point(20, 220)));
 		rooms.add(theNewRoom);
+		theNewRoom.setIdentifier("Kitchen");
 
 		// Room #5 womens restroom
 		theNewRoom = new Room();
@@ -322,6 +328,7 @@ public class WorldGenerator implements IWorldGenerator {
 		theNewWall.addDoor(theNewDoor);
 		theNewRoom.addWall(theNewWall);
 		rooms.add(theNewRoom);
+		theNewRoom.setIdentifier("Womens restroom");
 
 		// Room #6 mens restroom
 		theNewRoom = new Room();
@@ -338,6 +345,7 @@ public class WorldGenerator implements IWorldGenerator {
 				new Point(180, 260)));
 
 		rooms.add(theNewRoom);
+		theNewRoom.setIdentifier("Mens restroom");
 
 		// Room #7 secret room
 		theNewRoom = new Room();
@@ -350,6 +358,7 @@ public class WorldGenerator implements IWorldGenerator {
 		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(270, 280),
 				new Point(270, 310)));
 		rooms.add(theNewRoom);
+		theNewRoom.setIdentifier("Secret Room");
 
 		// crazy rooms
 		theNewRoom = new Room();
@@ -364,6 +373,7 @@ public class WorldGenerator implements IWorldGenerator {
 		theNewWall = WallFactory.getWallWithPoints(new Point(270, 280),
 				new Point(270, 210));
 		rooms.add(theNewRoom);
+		theNewRoom.setIdentifier("Crazy Room");
 
 		theNewRoom = new Room();
 		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(360, 210),

@@ -52,7 +52,7 @@ public class InRoomPathSolver extends AStar<Point2D> {
 
 	@Override
 	protected boolean isDestination(Point2D node) {
-		return node.equals(destination);
+		return node.distance(destination) <= 1;
 	}
 
 	@Override

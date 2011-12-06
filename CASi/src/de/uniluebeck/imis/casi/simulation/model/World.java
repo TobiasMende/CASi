@@ -357,10 +357,7 @@ public class World {
 		initializeDoorGraph();
 		for (Room room : rooms) {
 			// Get a list of doors for each room
-			ArrayList<Door> doors = new ArrayList<Door>();
-			for (Wall wall : room.getWalls()) {
-				doors.addAll(wall.getDoors());
-			}
+			ArrayList<Door> doors = new ArrayList<Door>(room.getDoors());
 			log.info("Doors in "+room+": "+doors);
 			// For each door in this room, calculate distances to all other
 			// doors of this room.
@@ -380,7 +377,7 @@ public class World {
 			for (Door second : doors) {
 				if (first.equals(second)) {
 					doorGraph[first.getIntIdentifier()][second
-							.getIntIdentifier()] = 0;
+							.getIntIdentifier()] = -1.0;
 					continue;
 				}
 				double distance = first.getCentralPoint().distance(
@@ -392,14 +389,15 @@ public class World {
 	}
 
 	/**
-	 * Sets all distances to <code>-1</code>, meaning that the doors arn't
+	 * Sets all distances to <code>Double.NEGATIVE_INFINITY</code>, meaning that the doors arn't
 	 * adjacent.
 	 */
 	private void initializeDoorGraph() {
+		log.info("Initializing Doorgraph");
 		int size = doorGraph.length;
 		double[] init = new double[size];
 		for (int i = 0; i < size; i++) {
-			init[i] = -1;
+			init[i] = Double.NEGATIVE_INFINITY;
 		}
 		for (int i = 0; i < size; i++) {
 			doorGraph[i] = init;

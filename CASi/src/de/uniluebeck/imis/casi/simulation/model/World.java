@@ -361,6 +361,7 @@ public class World {
 			for (Wall wall : room.getWalls()) {
 				doors.addAll(wall.getDoors());
 			}
+			log.info("Doors in "+room+": "+doors);
 			// For each door in this room, calculate distances to all other
 			// doors of this room.
 			calculateAdjacencies(doors);

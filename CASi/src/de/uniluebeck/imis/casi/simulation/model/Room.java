@@ -37,6 +37,8 @@ public class Room implements IPosition {
 	/** A polygon that representates the shape of this room */
 	private Polygon polygonRepresentation;
 	
+	private Set<Door> doorsInRoom;
+	
 	private String identifier;
 	private static int idCounter;
 	public Room() {
@@ -92,11 +94,13 @@ public class Room implements IPosition {
 	 * @return a set of doors
 	 */
 	public Set<Door> getDoors() {
-		Set<Door> doors = new HashSet<Door>();
-		for (Wall w : walls) {
-			doors.addAll(w.getDoors());
+		if(doorsInRoom == null) {
+			doorsInRoom = new HashSet<Door>();
+			for (Wall w : walls) {
+				doorsInRoom.addAll(w.getDoors());
+			}
 		}
-		return doors;
+		return doorsInRoom;
 	}
 
 	@Override
@@ -126,7 +130,9 @@ public class Room implements IPosition {
 		if (!walls.contains(w)) {
 			walls.add(w);
 			invalidatePolygonRepresentation();
+			doorsInRoom = null;
 		}
+
 	}
 
 	public List<Wall> getWalls() {
@@ -170,8 +176,8 @@ public class Room implements IPosition {
 		if(getShapeRepresentation().contains(point)) {
 			return true;
 		}
-		for(Wall w : walls) {
-			if(w.contains(point)) {
+		for(Door d : getDoors()) {
+			if(d.contains(point)) {
 				return true;
 			}
 		}

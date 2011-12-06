@@ -110,7 +110,8 @@ public class Wall implements IPosition {
 				&& this.getEndPoint().equals(other.getEndPoint());
 		boolean areInversed = this.getStartPoint().equals(other.getEndPoint())
 				&& this.getEndPoint().equals(other.getStartPoint());
-		if (areIdentical || areInversed) {
+		boolean hashCodeEquals = (this.hashCode() == other.hashCode());
+		if (areIdentical || areInversed || hashCodeEquals) {
 			return true;
 		}
 		/*

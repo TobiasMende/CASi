@@ -184,18 +184,6 @@ public class Room implements IPosition {
 		return false;
 	}
 
-	/**
-	 * Removes a wall from the room. This method is deprecated because there is
-	 * no sense in removing walls
-	 * 
-	 * @param w
-	 *            the wall to remove
-	 */
-	@Deprecated
-	public void removeWall(Wall w) {
-		walls.remove(w);
-		invalidatePolygonRepresentation();
-	}
 	
 	/**
 	 * @param identifier the identifier to set
@@ -208,5 +196,46 @@ public class Room implements IPosition {
 	public String toString() {
 		return identifier;
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((doorsInRoom == null) ? 0 : doorsInRoom.hashCode());
+		result = prime * result
+				+ ((identifier == null) ? 0 : identifier.hashCode());
+		result = prime * result + ((walls == null) ? 0 : walls.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Room other = (Room) obj;
+		if (doorsInRoom == null) {
+			if (other.doorsInRoom != null)
+				return false;
+		} else if (!doorsInRoom.equals(other.doorsInRoom))
+			return false;
+		if (identifier == null) {
+			if (other.identifier != null)
+				return false;
+		} else if (!identifier.equals(other.identifier))
+			return false;
+		if (walls == null) {
+			if (other.walls != null)
+				return false;
+		} else if (!walls.equals(other.walls))
+			return false;
+		return true;
+	}
+	
+	
 
 }

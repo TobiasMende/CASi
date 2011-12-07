@@ -39,13 +39,16 @@ import de.uniluebeck.imis.casi.simulation.model.SimulationTime;
 import de.uniluebeck.imis.casi.simulation.model.Wall;
 import de.uniluebeck.imis.casi.simulation.model.World;
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.AbstractAction;
+import de.uniluebeck.imis.casi.simulation.model.actionHandling.AtomicAction;
+import de.uniluebeck.imis.casi.simulation.model.actionHandling.ComplexAction;
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.AbstractAction.TYPE;
 import de.uniluebeck.imis.casi.simulation.model.actions.GoAndSpeakTo;
 import de.uniluebeck.imis.casi.simulation.model.actions.Move;
+import de.uniluebeck.imis.casi.simulation.model.actions.SpeakTo;
 
 public class WorldGenerator implements IWorldGenerator {
 
-	private static final Logger log = Logger.getLogger(WorldGeneratorTest.class
+	private static final Logger log = Logger.getLogger(WorldGenerator.class
 			.getName());
 
 	World tempWorld = new World();
@@ -168,19 +171,22 @@ public class WorldGenerator implements IWorldGenerator {
 			agents.add(tempAgent);
 		}
 
-		tempAgent = new Agent("agent_00", "Father Moneymaker", "candidates");
+		tempAgent = new Agent("Father Moneymaker", "Father Moneymaker", "candidates");
 		agents.add(tempAgent);
-		Agent tim = new Agent("agent_01", "Tim", "candidates");
+		Agent tim = new Agent("Tim", "Tim", "candidates");
 		tim.setCurrentPosition(timsRoom);
 		tim.setDefaultPosition(timsRoom);
 		agents.add(tim);
-		tempAgent = new Agent("agent_02", "And I", "candidates");
+		tempAgent = new Agent("And I", "And I", "candidates");
 		tempAgent.setDefaultPosition(crazyRoom);
 		tempAgent.setCurrentPosition(timsRoom);
 		Agent andI = tempAgent;
+		AbstractAction goHome = new Move(crazyRoom);
+		goHome.setEarliestStartTime(tempWorld.getStartTime().plus(50));
+		tempAgent.addActionToList(goHome);
 		agents.add(tempAgent);
 
-		for (int i = 0; i < 1; i++) {
+		for (int i = 0; i < 3; i++) {
 			tempAgent = new Agent("agent_" + i + "_lady", "Tentlady" + i,
 					"tendladies");
 			tempAgent.setDefaultPosition(mainFloor);
@@ -197,6 +203,7 @@ public class WorldGenerator implements IWorldGenerator {
 	private Agent generateActionsForTentLady(Agent tim, Agent tentLady) {
 
 		AbstractAction tempAction = new Move(timsRoom);
+		AbstractAction move2 = tempAction.clone();
 		tempAction.setType(TYPE.NORMAL);
 		tempAction.setPriority(5);
 		tempAction.setEarliestStartTime(tempWorld.getStartTime().plus(
@@ -207,6 +214,14 @@ public class WorldGenerator implements IWorldGenerator {
 		speak.setType(TYPE.NORMAL);
 		speak.setEarliestStartTime(tempWorld.getStartTime().plus(20));
 		tentLady.addActionToList(speak);
+		ComplexAction speakInTimsRoom = new ComplexAction();
+		speakInTimsRoom.addSubAction((AtomicAction)move2);
+		speakInTimsRoom.addSubAction(new SpeakTo(tim, 10));
+		speakInTimsRoom.setEarliestStartTime(tempWorld.getStartTime().plus(30));
+		AbstractAction testMove = new Move(mainFloor);
+		testMove.setEarliestStartTime(speakInTimsRoom.getEarliestStartTime().plus(10));
+		tentLady.addActionToList(speakInTimsRoom);
+		tentLady.addActionToList(testMove);
 		return tentLady;
 	}
 

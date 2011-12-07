@@ -66,7 +66,6 @@ public class PathFactory {
 		// Last case: different rooms
 		Room startRoom = WorldFactory.getRoomsWithPoint(startPoint).getFirst();
 		Room endRoom = WorldFactory.getRoomsWithPoint(endPoint).getFirst();
-		log.info("End Room: "+endRoom);
 		Set<Door> startDoors = startRoom.getDoors();
 		Set<Door> endDoors = endRoom.getDoors();
 		Path doorToDoor = findRoomToRoomPath(startDoors, endDoors);
@@ -82,11 +81,9 @@ public class PathFactory {
 		Path startPath = findPathInRoom(startPoint, startDoorPoint, startRoom);
 		Path endPath = findPathInRoom(endDoorPoint, endPoint, endRoom);
 		Path totalPath = new Path(startPoint, endPoint);
-		log.info("StartPath: "+startPath);
 		totalPath.addAll(startPath);
 		totalPath.addAll(doorToDoor);
 		totalPath.addAll(endPath);
-		log.info("EndPath: "+endPath);
 		return totalPath;
 
 	}

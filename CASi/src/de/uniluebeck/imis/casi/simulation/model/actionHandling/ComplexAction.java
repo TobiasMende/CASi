@@ -24,7 +24,7 @@ import de.uniluebeck.imis.casi.simulation.model.AbstractComponent;
  * @author Tobias Mende
  * 
  */
-public abstract class ComplexAction extends AbstractAction {
+public class ComplexAction extends AbstractAction {
 	private static final long serialVersionUID = 7868816596381779417L;
 	/** a collection of actions this action consists of */
 	private Collection<AtomicAction> subActions = new Vector<AtomicAction>();
@@ -161,10 +161,17 @@ public abstract class ComplexAction extends AbstractAction {
 	
 	@Override
 	public void reset() {
+		super.reset();
 		for(AtomicAction a : subActions) {
 			a.reset();
 		}
 		
+		
+	}
+	
+	@Override
+	public String toString() {
+		return subActions.toString();
 	}
 
 }

@@ -14,9 +14,10 @@ package de.uniluebeck.imis.casi.simulation.model.actionHandling.schedulers;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.TreeSet;
+import java.util.logging.Logger;
 
 import de.uniluebeck.imis.casi.simulation.engine.SimulationClock;
-import de.uniluebeck.imis.casi.simulation.engine.SimulationEngine;
+import de.uniluebeck.imis.casi.simulation.model.Agent;
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.AbstractAction;
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.ActionComparator;
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.IActionScheduler;
@@ -34,6 +35,8 @@ public class DefaultActionScheduler implements IActionScheduler {
 	private TreeSet<AbstractAction> todoList;
 	private TreeSet<AbstractAction> actionPool;
 	private LinkedList<AbstractAction> interruptAction;
+	private Agent performer;
+	private static final Logger log = Logger.getLogger(DefaultActionScheduler.class.getName());
 
 	/**
 	 * Constructor which uses provided lists of actions for initialization
@@ -44,8 +47,8 @@ public class DefaultActionScheduler implements IActionScheduler {
 	 *            the action pool
 	 */
 	public DefaultActionScheduler(Collection<AbstractAction> todoList,
-			Collection<AbstractAction> actionPool) {
-		this();
+			Collection<AbstractAction> actionPool, Agent performer) {
+		this(performer);
 		this.todoList.addAll(todoList);
 		this.actionPool.addAll(actionPool);
 	}
@@ -57,6 +60,11 @@ public class DefaultActionScheduler implements IActionScheduler {
 		todoList = new TreeSet<AbstractAction>(new ActionComparator());
 		actionPool = new TreeSet<AbstractAction>(new ActionComparator());
 		interruptAction = new LinkedList<AbstractAction>();
+	}
+	
+	public DefaultActionScheduler(Agent performer) {
+		this();
+		this.performer = performer;
 	}
 
 	@Override
@@ -84,12 +92,11 @@ public class DefaultActionScheduler implements IActionScheduler {
 
 	@Override
 	public AbstractAction getNextAction() {
-		if(!interruptAction.isEmpty()) {
-			return interruptAction.remove();
-		}
-		// FIXME implement!!! It's just a quick fix
 		AbstractAction action = null;
-		if(!todoList.isEmpty()) {
+		// FIXME implement!!! It's just a quick fix
+		if(!interruptAction.isEmpty()) {
+			action = interruptAction.remove();
+		}else if(!todoList.isEmpty()) {
 			if(todoList.first().getEarliestStartTime().before(SimulationClock.getInstance().getCurrentTime())) {
 				action = todoList.pollFirst();
 			}
@@ -98,6 +105,9 @@ public class DefaultActionScheduler implements IActionScheduler {
 				action = actionPool.pollFirst();
 			}
 		}
+//		if(!(actionPool.isEmpty() && interruptAction.isEmpty() && todoList.isEmpty())) {
+//			log.info(performer+" - I: "+interruptAction.size()+", L: "+todoList.size()+", P: "+actionPool.size());
+//		}
 		return action;
 	}
 

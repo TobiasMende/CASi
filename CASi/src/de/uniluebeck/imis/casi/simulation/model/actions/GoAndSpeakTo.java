@@ -11,6 +11,8 @@
  */
 package de.uniluebeck.imis.casi.simulation.model.actions;
 
+import de.uniluebeck.imis.casi.CASi;
+import de.uniluebeck.imis.casi.simulation.model.AbstractComponent;
 import de.uniluebeck.imis.casi.simulation.model.Agent;
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.ComplexAction;
 
@@ -33,6 +35,12 @@ public class GoAndSpeakTo extends ComplexAction {
 		addSubAction(new Move(agent.getDefaultPosition()));
 		addSubAction(new SpeakTo(agent, duration));
 		
+	}
+	
+	@Override
+	protected void postActionTask(AbstractComponent performer) {
+		CASi.SIM_LOG.info(performer +" completes go and speak to action!");
+		super.postActionTask(performer);
 	}
 
 }

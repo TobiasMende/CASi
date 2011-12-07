@@ -12,6 +12,7 @@
 package de.uniluebeck.imis.casi.simulation.model.actions;
 
 import de.uniluebeck.imis.casi.CASi;
+import de.uniluebeck.imis.casi.simulation.factory.WorldFactory;
 import de.uniluebeck.imis.casi.simulation.model.AbstractComponent;
 import de.uniluebeck.imis.casi.simulation.model.Agent;
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.AtomicAction;
@@ -47,12 +48,12 @@ public class SpeakTo extends AtomicAction {
 
 	@Override
 	protected boolean preActionTask(AbstractComponent performer) {
-		if(performer.getCurrentPosition().contains(agent)) {
+		if(WorldFactory.getRoomWithPoints(performer.getCentralPoint(), agent.getCentralPoint()) != null) {
 			task = new Follow(performer);
 			return agent.interrupt(task);
 		} else {
 			// Performer and agent are not at the same position
-			CASi.SIM_LOG.severe("Can't speak to an agent at different position");
+			CASi.SIM_LOG.info("Can't speak to an agent at different position");
 			return false;
 		}
 	}

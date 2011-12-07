@@ -36,7 +36,7 @@ public abstract class AbstractAction implements Listenable<IActionListener>,
 	/** the id for serialization */
 	private static final long serialVersionUID = -4600404747026813557L;
 	/** the development logger */
-	private Logger log = Logger.getLogger(AbstractAction.class.getName());
+	private static final Logger log = Logger.getLogger(AbstractAction.class.getName());
 	protected boolean initialized;
 
 	/**
@@ -144,7 +144,6 @@ public abstract class AbstractAction implements Listenable<IActionListener>,
 		}
 		STATE oldState = this.state;
 		this.state = state;
-
 		if (!oldState.equals(state)) {
 			for (IActionListener listener : listeners) {
 				listener.stateChanged(state);
@@ -368,6 +367,7 @@ public abstract class AbstractAction implements Listenable<IActionListener>,
 		try {
 			newAction = (AbstractAction) Tools.deepCopy(this);
 			newAction.setType(TYPE.NORMAL);
+			newAction.listeners = new ArrayList<IActionListener>();
 			return newAction;
 		} catch (Exception e) {
 			log.severe("An error occured while cloning the action: "
@@ -440,6 +440,23 @@ public abstract class AbstractAction implements Listenable<IActionListener>,
 	/**
 	 * Sets the state of the action to {@link STATE}.SCHEDULED
 	 */
-	public abstract void reset();
+	public void reset() {
+		initialized = false;
+	}
+	
+	@Override
+	public String toString() {
+		StringBuffer b = new StringBuffer();
+		b.append(this.getClass().getSimpleName());
+		b.append("[");
+		b.append(type.toString()+", ");
+		b.append(state.toString()+", ");
+		b.append("Dur: "+duration+",");
+		b.append("S: "+earliestStartTime+",");
+		b.append("D: "+deadline+",");
+		b.append("P: "+priority);
+		b.append("]");
+		return b.toString();
+	}
 
 }

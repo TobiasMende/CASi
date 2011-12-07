@@ -156,18 +156,27 @@ public class Move extends AtomicAction {
 	
 	@Override
 	protected boolean preActionTask(AbstractComponent performer) {
-		log.info(performer+" starting Move from ");
+		log.info(performer+" starting Move from "+performer.getCurrentPosition()+" to "+endPosition);
 		return super.preActionTask(performer);
 	}
 
-	/* (non-Javadoc)
-	 * @see de.uniluebeck.imis.casi.simulation.model.actionHandling.AbstractAction#postActionTask(de.uniluebeck.imis.casi.simulation.model.AbstractComponent)
-	 */
 	@Override
 	protected void postActionTask(AbstractComponent performer) {
-		log.info("Move completed");
+		log.info(performer+" completes Move. Destination: "+performer.getCurrentPosition());
 		super.postActionTask(performer);
 	}
 	
+	@Override
+	public void reset() {
+		path = null;
+		pathIterator = null;
+		super.reset();
+	}
+	
+	@Override
+	public String toString() {
+		
+		return super.toString()+" - Dest: "+endPosition;
+	}
 
 }

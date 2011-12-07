@@ -11,6 +11,7 @@
  */
 package de.uniluebeck.imis.casi.simulation.model.actions;
 
+import de.uniluebeck.imis.casi.CASi;
 import de.uniluebeck.imis.casi.simulation.model.AbstractComponent;
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.AtomicAction;
 
@@ -53,5 +54,21 @@ public class Follow extends AtomicAction {
 	public void complete() {
 		completed = true;
 	}
+	
+	@Override
+	protected boolean preActionTask(AbstractComponent performer) {
+		CASi.SIM_LOG.info(performer+" starts following "+obj+". Current position: "+performer.getCurrentPosition());
+		return super.preActionTask(performer);
+	}
+	
+	@Override
+	protected void postActionTask(AbstractComponent performer) {
+		CASi.SIM_LOG.info(performer+" finished following "+obj+". Current position: "+performer.getCurrentPosition());
+		super.postActionTask(performer);
+	}
 
+	@Override
+	public String toString() {
+		return super.toString()+" - follow "+obj;
+	}
 }

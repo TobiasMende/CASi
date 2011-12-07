@@ -1,5 +1,5 @@
 /*  	CASi Context Awareness Simulation Software
- *   Copyright (C) 2011 2012  Moritz Bürger, Marvin Frick, Tobias Mende
+ *   Copyright (C) 2011 2012  Moritz Bï¿½rger, Marvin Frick, Tobias Mende
  *
  *  This program is free software. It is licensed under the
  *  GNU Lesser General Public License with one clarification.
@@ -82,7 +82,7 @@ public class BackroundPanel extends JPanel {
 				// Show room name:
 				g.setColor(Color.BLACK);
 				g.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 8));
-				g2D.drawString("("+centralPoint2.x+"|"+centralPoint2.y+")", centralPoint2.x-10, centralPoint2.y-5);
+				g2D.drawString(room.toString(), centralPoint2.x-10, centralPoint2.y-5);
 				/** Get the walls of this room */
 				for(Wall wall : room.getWalls()) {
 					

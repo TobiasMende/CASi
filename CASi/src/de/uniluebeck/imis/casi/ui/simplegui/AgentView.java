@@ -75,7 +75,6 @@ public class AgentView extends JComponent implements IAgentListener {
 		
 		invalidate();
 		
-		log.info("Set Position to: "+newPosition);
 		 
 	}
 

@@ -55,7 +55,7 @@ public class Agent extends AbstractComponent implements
 
 	private Agent(String identifier) {
 		super(identifier);
-		actionScheduler = new DefaultActionScheduler();
+		actionScheduler = new DefaultActionScheduler(this);
 	}
 
 	/**
@@ -176,7 +176,10 @@ public class Agent extends AbstractComponent implements
 			// store current action as next action and perform interrupt action
 			AbstractAction tmp = currentAction;
 			currentAction = actionScheduler.getNextAction();
-			actionScheduler.addInterruptAction(tmp);
+			if(tmp != null) {
+				tmp.setState(AbstractAction.STATE.INTERRUPTED);
+				actionScheduler.addInterruptAction(tmp);
+			}
 			setInterruptibility(INTERRUPTIBILITY.INTERRUPTED);
 		} else if (currentAction == null || currentAction.isCompleted()) {
 			setInterruptibility(INTERRUPTIBILITY.INTERRUPTIBLE);
@@ -190,7 +193,8 @@ public class Agent extends AbstractComponent implements
 		try {
 			currentAction.perform(this);
 			if(currentAction.getState().equals(AbstractAction.STATE.INTERRUPTED)) {
-				CASi.SIM_LOG.info("Current action was interrupted. Schedule for later");
+				currentAction.setEarliestStartTime(currentAction.getEarliestStartTime().plus(360));
+				CASi.SIM_LOG.info(this+": Current action was interrupted. Schedule for later");
 				currentAction.reset();
 				addActionToList(currentAction);
 				currentAction = null;

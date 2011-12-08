@@ -11,13 +11,11 @@
  */
 package de.uniluebeck.imis.casi.simulation.model;
 
-import java.awt.Shape;
-import java.awt.geom.Point2D;
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import de.uniluebeck.imis.casi.communication.ICommunicationComponent;
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.AbstractAction;
 import de.uniluebeck.imis.casi.utils.Listenable;
 
@@ -27,23 +25,30 @@ import de.uniluebeck.imis.casi.utils.Listenable;
  * @author Tobias Mende
  * 
  */
-public abstract class AbstractSensor extends AbstractComponent implements
-		ICommunicationComponent, Listenable<ISensorListener> {
+public abstract class AbstractSensor extends AbstractInteractionComponent implements
+		Listenable<ISensorListener> {
+
+
 
 	/**
-	 * id for serialisation
+	 * id for serialization
 	 */
 	private static final long serialVersionUID = 7356505164039904916L;
-
-	public AbstractSensor(String identifier) {
-		super(identifier);
-	}
 
 	/** List of actions, that can be recognized by this sensor */
 	protected Collection<AbstractAction> sensableActions;
 	/** actual value this sensor has recognized */
 	protected Object lastValue;
 	protected List<ISensorListener> listeners = new ArrayList<ISensorListener>();
+	
+	public AbstractSensor(Point coordinates, int radius, Face direction,
+			int opening) {
+		super(coordinates, radius, direction, opening);
+	}
+	
+	public AbstractSensor(Point point) {
+		super(point);
+	}
 
 	/**
 	 * Getter for the type of this sensor
@@ -91,33 +96,4 @@ public abstract class AbstractSensor extends AbstractComponent implements
 
 	public abstract String getHumanReadableValue();
 	
-	@Override
-	public Shape getShapeRepresentation() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-	@Override
-	public Point2D getCentralPoint() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-	@Override
-	public Point2D getCoordinates() {
-		// TODO Auto-generated method stub
-		return super.getCoordinates();
-	}
-	
-	@Override
-	public boolean contains(IPosition position) {
-		// TODO Auto-generated method stub
-		return super.contains(position);
-	}
-
-	@Override
-	public boolean contains(Point2D point) {
-		// TODO Auto-generated method stub
-		return super.contains(point);
-	}
 }

@@ -20,8 +20,11 @@ import java.util.logging.Logger;
 import javax.swing.JComponent;
 
 import de.uniluebeck.imis.casi.simulation.factory.GraphicFactory;
+import de.uniluebeck.imis.casi.simulation.model.AbstractComponent.INTERRUPTIBILITY;
+import de.uniluebeck.imis.casi.simulation.model.Agent;
 import de.uniluebeck.imis.casi.simulation.model.Agent.STATE;
 import de.uniluebeck.imis.casi.simulation.model.IAgentListener;
+import de.uniluebeck.imis.casi.simulation.model.actionHandling.AbstractAction;
 
 /**
  * @author Moritz Buerger
@@ -59,7 +62,7 @@ public class AgentView extends JComponent implements IAgentListener {
 	}
 
 	@Override
-	public void stateChanged(STATE newState) {
+	public void stateChanged(STATE newState, Agent agent) {
 		
 		this.newState = newState;
 		
@@ -67,7 +70,7 @@ public class AgentView extends JComponent implements IAgentListener {
 	}
 
 	@Override
-	public void positionChanged(Point2D oldPosition, Point2D newPosition) {
+	public void positionChanged(Point2D oldPosition, Point2D newPosition, Agent agent) {
 		
 		this.position = newPosition;
 		/* Simply set the new location to the new position */
@@ -76,6 +79,25 @@ public class AgentView extends JComponent implements IAgentListener {
 		invalidate();
 		
 		 
+	}
+
+	@Override
+	public void interruptibilityChanged(INTERRUPTIBILITY interruptibility,
+			Agent agent) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void startPerformingAction(AbstractAction action, Agent agent) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void finishPerformingAction(AbstractAction action, Agent agent) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

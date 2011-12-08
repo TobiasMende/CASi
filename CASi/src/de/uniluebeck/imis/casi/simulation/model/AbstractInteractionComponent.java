@@ -27,7 +27,7 @@ import de.uniluebeck.imis.casi.simulation.model.actionHandling.AbstractAction;
  * @author Tobias Mende
  * 
  */
-public abstract class AbstractInteractionComponent extends AbstractComponent implements ICommunicationComponent{
+public abstract class AbstractInteractionComponent extends AbstractComponent implements ICommunicationComponent, IVetoableAgentListener{
 	/** Enumeration for possible directions in which this component looks */
 	public enum Face {
 		NORTH(0), SOUTH(180), EAST(90), WEST(270), NORTH_EAST(45), SOUTH_EAST(
@@ -59,6 +59,8 @@ public abstract class AbstractInteractionComponent extends AbstractComponent imp
 	protected Face direction;
 	/** The extent of the monitored area */
 	protected double opening = -1;
+	/** The action which wears this component */
+	protected Agent agent = null;
 	
 	
 	/** The {@link Arc2D} representation of the monitored area */
@@ -78,9 +80,34 @@ public abstract class AbstractInteractionComponent extends AbstractComponent imp
 	 * @param coordinates
 	 *            the coordinates of this component
 	 */
-	public AbstractInteractionComponent(String identifier, Point coordinates) {
+	public AbstractInteractionComponent(String identifier, Point2D coordinates) {
 		super(identifier);
 		this.coordinates = coordinates;
+	}
+	
+	/**
+	 * Creates a wearable for the provided agent
+	 * @param agent the agent which wears this component
+	 */
+	public AbstractInteractionComponent(Agent agent) {
+		this(agent.getCoordinates());
+		this.agent = agent;
+		
+	}
+	
+	/**
+	 * Sets the agents which wears this component
+	 * @param agent the agent to set
+	 */
+	public void setAgent(Agent agent) {
+		this.agent = agent;
+	}
+	
+	/**
+	 * @return the agent which wears this component
+	 */
+	public Agent getAgent() {
+		return agent;
 	}
 
 	/**
@@ -89,7 +116,7 @@ public abstract class AbstractInteractionComponent extends AbstractComponent imp
 	 * @param coordinates
 	 *            the coordinates of this component
 	 */
-	public AbstractInteractionComponent(Point coordinates) {
+	public AbstractInteractionComponent(Point2D coordinates) {
 		this("ioComponent-" + idCounter, coordinates);
 		idCounter++;
 	}
@@ -113,6 +140,14 @@ public abstract class AbstractInteractionComponent extends AbstractComponent imp
 		this.radius = radius;
 		this.direction = direction;
 		this.opening = opening;
+	}
+	
+	/**
+	 * Checks whether this component actually is weared by an agent
+	 * @return <code>true</code> if the wearing agent is not null, <code>false</code> otherwise.
+	 */
+	public boolean isWeared() {
+		return agent != null;
 	}
 
 	@Override
@@ -195,19 +230,6 @@ public abstract class AbstractInteractionComponent extends AbstractComponent imp
 	public abstract String getHumanReadableValue();
 	
 	/**
-	 * Method for handling an action
-	 * 
-	 * @param action
-	 *            the action to handle
-	 * @return <code>true</code> if the action is allowed, <code>false</code>
-	 *         otherwise
-	 */
-	public final boolean handle(AbstractAction action, Agent agent) {
-		// TODO Do fancy things
-		return handleInternal(action, agent);
-	}
-	
-	/**
 	 * Getter for the type of this sensor
 	 * 
 	 * @return the sensor type
@@ -218,7 +240,19 @@ public abstract class AbstractInteractionComponent extends AbstractComponent imp
 	
 	@Override
 	public String toString() {
-		// TODO Auto-generated method stub
 		return super.toString()+" ("+getType()+")";
+	}
+	
+	@Override
+	public boolean handle(AbstractAction action, Agent agent) {
+		return this.contains(agent) ? handleInternal(action, agent) : true;
+	}
+
+	@Override
+	public void positionChanged(Point2D oldPosition, Point2D newPosition, Agent agent) {
+		if(this.agent != null && this.agent.equals(agent)) {
+			setCoordinates(newPosition);
+			shapeRepresentation = null;
+		}
 	}
 }

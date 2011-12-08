@@ -85,6 +85,25 @@ public class World {
 		calculateDoorGraph();
 		printDoorGraph();
 		calculateDoorPaths();
+		
+		connectInteractionComponentsWithAgents();
+	}
+
+	/**
+	 * Adds all sensors and actuators as listeners to the agents.
+	 */
+	private void connectInteractionComponentsWithAgents() {
+		log.fine("Connecting agents with sensors and actuators");
+		for(Agent agent : agents) {
+			for(AbstractActuator actuator : actuators) {
+				agent.addVetoableListener(actuator);
+			}
+			for(AbstractSensor sensor : sensors) {
+				agent.addVetoableListener(sensor);
+			}
+		}
+		log.fine("All agents are connected");
+		
 	}
 
 	/**

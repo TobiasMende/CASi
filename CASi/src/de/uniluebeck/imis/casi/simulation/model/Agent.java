@@ -17,11 +17,13 @@ import java.awt.geom.Rectangle2D;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.logging.Logger;
 
 import de.uniluebeck.imis.casi.CASi;
 import de.uniluebeck.imis.casi.simulation.engine.ISimulationClockListener;
 import de.uniluebeck.imis.casi.simulation.engine.SimulationClock;
+import de.uniluebeck.imis.casi.simulation.factory.WorldFactory;
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.AbstractAction;
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.IActionScheduler;
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.schedulers.DefaultActionScheduler;
@@ -190,6 +192,44 @@ public class Agent extends AbstractComponent implements
 				return;
 			}
 		}
+		
+		if(!askActuators()) {
+			return;
+		}
+		
+		informSensors();
+		performAction();
+	}
+
+	/**
+	 * Informs the sensors befor performing the action
+	 */
+	private void informSensors() {
+		List<AbstractSensor> interestedSensors = WorldFactory.getSensorsForPosition(coordinates);
+		for(AbstractSensor sensor : interestedSensors) {
+			sensor.handle(currentAction, this);
+		}
+	}
+
+	/**
+	 * Asks the actuators whether the currentAction should be performed or not.
+	 * @return <code>true</code> if the action should be performed, <code>false</code> otherwise.
+	 */
+	private boolean askActuators() {
+		List<AbstractActuator> interestedActuators = WorldFactory.getActuatorsForPosition(coordinates);
+		for(AbstractActuator actuator : interestedActuators) {
+			if(!actuator.handle(currentAction, this)) {
+				CASi.SIM_LOG.info(this+": "+actuator+" doesn't allow to perform "+currentAction);
+				return false;
+			}
+		}
+		return true;
+	}
+
+	/**
+	 * Performs the current action.
+	 */
+	private void performAction() {
 		try {
 			currentAction.perform(this);
 			if(currentAction.getState().equals(AbstractAction.STATE.INTERRUPTED)) {

@@ -21,8 +21,9 @@ import java.util.Set;
 import java.util.logging.Logger;
 
 import de.uniluebeck.imis.casi.simulation.engine.SimulationEngine;
+import de.uniluebeck.imis.casi.simulation.model.AbstractActuator;
+import de.uniluebeck.imis.casi.simulation.model.AbstractSensor;
 import de.uniluebeck.imis.casi.simulation.model.Door;
-import de.uniluebeck.imis.casi.simulation.model.IPosition;
 import de.uniluebeck.imis.casi.simulation.model.Room;
 import de.uniluebeck.imis.casi.simulation.model.Wall;
 
@@ -186,6 +187,48 @@ public class WorldFactory {
 					+ e.fillInStackTrace());
 		}
 		return null;
+	}
+	
+	/**
+	 * Gets a list of sensors that may be interested in actions occurring at a given position
+	 * @param coordinates the position
+	 * @return a list of sensors which monitor this point.
+	 */
+	public static LinkedList<AbstractSensor> getSensorsForPosition(Point2D coordinates) {
+		LinkedList<AbstractSensor> sensors = new LinkedList<AbstractSensor>();
+		Set<AbstractSensor> allSensors;
+		try {
+			allSensors = SimulationEngine.getInstance().getWorld().getSensors();
+			for(AbstractSensor sensor : allSensors) {
+				if(sensor.contains(coordinates)) {
+					sensors.add(sensor);
+				}
+			}
+		} catch (IllegalAccessException e) {
+			log.severe("Don't call this method before sealing the world!");
+		}
+		return sensors;
+	}
+	
+	/**
+	 * Gets a list of actuators that may be interested in actions occurring at a given position
+	 * @param coordinates the position
+	 * @return a list of actuators which monitor this point.
+	 */
+	public static LinkedList<AbstractActuator> getActuatorsForPosition(Point2D coordinates) {
+		LinkedList<AbstractActuator> actuators = new LinkedList<AbstractActuator>();
+		Set<AbstractActuator> allActuators;
+		try {
+			allActuators = SimulationEngine.getInstance().getWorld().getActuators();
+			for(AbstractActuator actuator : allActuators) {
+				if(actuator.contains(coordinates)) {
+					actuators.add(actuator);
+				}
+			}
+		} catch (IllegalAccessException e) {
+			log.severe("Don't call this method before sealing the world!");
+		}
+		return actuators;
 	}
 
 }

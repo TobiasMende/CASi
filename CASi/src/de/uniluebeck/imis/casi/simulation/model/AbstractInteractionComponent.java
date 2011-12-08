@@ -186,7 +186,7 @@ public abstract class AbstractInteractionComponent extends AbstractComponent imp
 	 * @return <code>true</code> if the action is allowed, <code>false</code>
 	 *         otherwise
 	 */
-	protected abstract boolean handleInternal(AbstractAction action);
+	protected abstract boolean handleInternal(AbstractAction action, Agent agent);
 	
 	/**
 	 * Getter for human readable version of the current value
@@ -202,9 +202,9 @@ public abstract class AbstractInteractionComponent extends AbstractComponent imp
 	 * @return <code>true</code> if the action is allowed, <code>false</code>
 	 *         otherwise
 	 */
-	public final boolean handle(AbstractAction action) {
+	public final boolean handle(AbstractAction action, Agent agent) {
 		// TODO Do fancy things
-		return handleInternal(action);
+		return handleInternal(action, agent);
 	}
 	
 	/**
@@ -213,6 +213,12 @@ public abstract class AbstractInteractionComponent extends AbstractComponent imp
 	 * @return the sensor type
 	 */
 	public String getType() {
-		return this.getClass().getName();
+		return getClass().getSimpleName();
+	}
+	
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return super.toString()+" ("+getType()+")";
 	}
 }

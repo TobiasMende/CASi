@@ -18,6 +18,7 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
 import de.uniluebeck.imis.casi.communication.ICommunicationComponent;
+import de.uniluebeck.imis.casi.simulation.model.actionHandling.AbstractAction;
 
 /**
  * This class represents components that are able to interact with their
@@ -177,4 +178,41 @@ public abstract class AbstractInteractionComponent extends AbstractComponent imp
 		setMonitoredArea(null, -1, -1);
 	}
 
+	/**
+	 * Method for handling an action internal. Overwrite for customized behavior
+	 * 
+	 * @param action
+	 *            the action to handle
+	 * @return <code>true</code> if the action is allowed, <code>false</code>
+	 *         otherwise
+	 */
+	protected abstract boolean handleInternal(AbstractAction action);
+	
+	/**
+	 * Getter for human readable version of the current value
+	 * @return the value in a nicer format
+	 */
+	public abstract String getHumanReadableValue();
+	
+	/**
+	 * Method for handling an action
+	 * 
+	 * @param action
+	 *            the action to handle
+	 * @return <code>true</code> if the action is allowed, <code>false</code>
+	 *         otherwise
+	 */
+	public final boolean handle(AbstractAction action) {
+		// TODO Do fancy things
+		return handleInternal(action);
+	}
+	
+	/**
+	 * Getter for the type of this sensor
+	 * 
+	 * @return the sensor type
+	 */
+	public String getType() {
+		return this.getClass().getName();
+	}
 }

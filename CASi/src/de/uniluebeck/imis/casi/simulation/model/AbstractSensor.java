@@ -50,28 +50,6 @@ public abstract class AbstractSensor extends AbstractInteractionComponent implem
 		super(point);
 	}
 
-	/**
-	 * Getter for the type of this sensor
-	 * 
-	 * @return the sensor type
-	 */
-	public String getType() {
-		return this.getClass().getName();
-	}
-
-	/**
-	 * Method for handling an action
-	 * 
-	 * @param action
-	 *            the action to handle
-	 * @return <code>true</code> if the action was handled successful,
-	 *         <code>false</code> otherwise
-	 */
-	public boolean handle(AbstractAction action) {
-		// Do fancy things
-		return handleInternal(action);
-	}
-
 	@Override
 	public void addListener(ISensorListener listener) {
 		if (!listeners.contains(listener)) {
@@ -84,16 +62,4 @@ public abstract class AbstractSensor extends AbstractInteractionComponent implem
 		listeners.remove(listener);
 	}
 
-	/**
-	 * Method for handling an action internal. Overwrite for customized behavior
-	 * 
-	 * @param action
-	 *            the action to handle
-	 * @return <code>true</code> if the action is allowed, <code>false</code>
-	 *         otherwise
-	 */
-	protected abstract boolean handleInternal(AbstractAction action);
-
-	public abstract String getHumanReadableValue();
-	
 }

@@ -1,5 +1,5 @@
 /*  	CASi Context Awareness Simulation Software
- *   Copyright (C) 2011 2012  Moritz Bürger, Marvin Frick, Tobias Mende
+ *   Copyright (C) 2011 2012  Moritz BÃ¼rger, Marvin Frick, Tobias Mende
  *
  *  This program is free software. It is licensed under the
  *  GNU Lesser General Public License with one clarification.

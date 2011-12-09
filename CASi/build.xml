@@ -9,8 +9,7 @@
 	<property name="test.dir" location="test" />
 	<property name="test.reports" location="reports" />
 
-	<path id="classpath.base">
-	</path>
+	<path id="classpath.base" path="${build.dir}" />
 	<path id="classpath.test">
 		<pathelement location="lib/junit-4.10.jar" />
 		<pathelement location="${test.dir}" />
@@ -18,6 +17,7 @@
 	</path>
 
 	<target name="clean">
+		<description>Cleans the project folder</description>
 		<delete dir="${build.dir}" />
 		<delete dir="${docs.dir}" />
 		<delete dir="${dist.dir}" />
@@ -25,6 +25,7 @@
 		<delete dir="${test.reports}" />
 	</target>
 	<target name="makedir">
+		<description>Creates all needed directories</description>
 		<mkdir dir="${build.dir}" />
 		<mkdir dir="${docs.dir}" />
 		<mkdir dir="${dist.dir}" />
@@ -32,22 +33,26 @@
 		<mkdir dir="${test.reports}" />
 	</target>
 	<target name="compile" depends="clean, makedir">
+		<description>Compiles the project</description>
 		<javac srcdir="${src.dir}" destdir="${build.dir}" includeantruntime="false">
 		</javac>
 
 	</target>
-	<target name="compile-test">
-		<javac srcdir="${test.dir}" verbose="${TALK}" includeantruntime="false">
+	<target name="compile-test" depends="compile">
+		<description>Compiles all tests</description>
+		<javac srcdir="${test.dir}" verbose="${TALK}" includeantruntime="false" debug="true">
 			<classpath refid="classpath.test" />
 		</javac>
 	</target>
-	<target name="clean-compile-test">
+	<target name="clean-test">
+		<description>Cleans the test directory</description>
 		<delete verbose="${TALK}">
 			<fileset dir="${test.dir}" includes="**/*.class" />
 		</delete>
 	</target>
 	<target name="test" depends="compile-test">
-		<junit>
+		<description>Compiles the JUnit test cases</description>
+		<junit fork="yes" printsummary="yes">
 			<classpath refid="classpath.test" />
 			<formatter type="brief" usefile="false" />
 			<batchtest>
@@ -56,6 +61,7 @@
 		</junit>
 	</target>
 	<target name="test-html" depends="compile-test"> 
+		<description>Creates a html report for the JUnit tests</description>
 		<junit fork="yes" printsummary="no" haltonfailure="no">
 			<batchtest fork="yes" todir="${test.reports}">
 				<fileset dir="${test.dir}">
@@ -74,6 +80,7 @@
 		</junitreport>
 	</target>
 	<target name="doc" depends="compile">
+		<description>Creates the JavaDoc in the doc directory</description>
 		<javadoc packagenames="src" sourcepath="${src.dir}" destdir="${docs.dir}" access="private">
 			<!-- Define which files / directory should get included, we include all -->
 			<fileset dir="${src.dir}">
@@ -82,7 +89,8 @@
 		</javadoc>
 	</target>
 	<target name="jar" depends="compile">
-		<jar destfile="${dist.dir}\de.uniluebeck.imis.CASi.jar" basedir="${build.dir}">
+		<description>Builds a runnable jar file</description>
+		<jar destfile="${dist.dir}\CASi.jar" basedir="${build.dir}">
 			<manifest>
 				<attribute name="Main-Class" value="de.uniluebeck.imis.casi.CASi" />
 			</manifest>

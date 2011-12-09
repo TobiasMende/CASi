@@ -11,6 +11,7 @@
  */
 package de.uniluebeck.imis.casi.simulation.model.actionHandling;
 
+import java.io.Serializable;
 import java.util.Collection;
 
 /**
@@ -20,7 +21,7 @@ import java.util.Collection;
  * @author Tobias Mende
  * 
  */
-public interface IActionScheduler {
+public interface IActionScheduler extends Serializable{
 
 	/**
 	 * Sets the list of actions that should be performed in every case

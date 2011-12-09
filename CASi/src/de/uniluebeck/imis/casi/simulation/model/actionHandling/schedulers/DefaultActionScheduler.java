@@ -32,6 +32,7 @@ import de.uniluebeck.imis.casi.simulation.model.actionHandling.IActionScheduler;
  * 
  */
 public class DefaultActionScheduler implements IActionScheduler {
+	private static final long serialVersionUID = -234471419299766380L;
 	private TreeSet<AbstractAction> todoList;
 	private TreeSet<AbstractAction> actionPool;
 	private LinkedList<AbstractAction> interruptAction;

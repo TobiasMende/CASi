@@ -61,6 +61,8 @@ public abstract class AbstractInteractionComponent extends AbstractComponent imp
 	protected double opening = -1;
 	/** The action which wears this component */
 	protected Agent agent = null;
+	/** is this component a wearable? */
+	protected boolean wearable = false;
 	
 	
 	/** The {@link Arc2D} representation of the monitored area */
@@ -147,7 +149,22 @@ public abstract class AbstractInteractionComponent extends AbstractComponent imp
 	 * @return <code>true</code> if the wearing agent is not null, <code>false</code> otherwise.
 	 */
 	public boolean isWeared() {
-		return agent != null;
+		return agent != null && isWearable();
+	}
+	
+	/**
+	 *	Sets the wearable state of this component
+	 * @param wearable if <code>true</code>, the assigned agent wears this component. 
+	 */
+	public void setWearable(boolean wearable) {
+		this.wearable = wearable;
+	}
+	/**
+	 * Is this component a wearable?
+	 * @return the wearable
+	 */
+	public boolean isWearable() {
+		return wearable;
 	}
 
 	@Override
@@ -250,9 +267,11 @@ public abstract class AbstractInteractionComponent extends AbstractComponent imp
 
 	@Override
 	public void positionChanged(Point2D oldPosition, Point2D newPosition, Agent agent) {
-		if(this.agent != null && this.agent.equals(agent)) {
+		if(isWeared() && this.agent.equals(agent)) {
 			setCoordinates(newPosition);
 			shapeRepresentation = null;
 		}
 	}
+	
+
 }

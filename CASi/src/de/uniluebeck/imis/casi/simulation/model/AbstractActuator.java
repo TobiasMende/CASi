@@ -19,7 +19,6 @@ import java.util.List;
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.AbstractAction;
 import de.uniluebeck.imis.casi.utils.Listenable;
 
-//TODO add fancy solution for triggering actions
 /**
  * Template for an actuator, that can be integrated in the simulation world
  * 

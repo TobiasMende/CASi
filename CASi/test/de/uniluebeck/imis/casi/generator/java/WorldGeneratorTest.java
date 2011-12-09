@@ -35,9 +35,8 @@ public class WorldGeneratorTest {
 		try {
 			assertNotNull("Backroundimage is null!",
 					generatedWorld.getBackgroundImage());
-			assertNotNull("Actuators are null!", generatedWorld.getActuators());
+			assertNotNull("Actuators or Sensors are null!", generatedWorld.getInteractionComponents());
 			assertNotNull("Agents are null!", generatedWorld.getAgents());
-			assertNotNull("Sensors are null!", generatedWorld.getSensors());
 			assertNotNull("Rooms are null!", generatedWorld.getRooms());
 
 			assertNotNull("Componets are null!", generatedWorld.getComponents());

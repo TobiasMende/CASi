@@ -11,27 +11,21 @@
  */
 package de.uniluebeck.imis.casi.generator.java;
 
-import java.awt.Graphics;
-import java.awt.Image;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
-import java.awt.image.ImageObserver;
-import java.awt.image.ImageProducer;
 import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.HashSet;
 import java.util.Random;
-import java.util.Set;
 import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
 
 import de.uniluebeck.imis.casi.generator.IWorldGenerator;
 import de.uniluebeck.imis.casi.simulation.factory.WallFactory;
-import de.uniluebeck.imis.casi.simulation.model.AbstractActuator;
 import de.uniluebeck.imis.casi.simulation.model.AbstractComponent;
-import de.uniluebeck.imis.casi.simulation.model.AbstractSensor;
+import de.uniluebeck.imis.casi.simulation.model.AbstractInteractionComponent;
 import de.uniluebeck.imis.casi.simulation.model.Agent;
 import de.uniluebeck.imis.casi.simulation.model.Door;
 import de.uniluebeck.imis.casi.simulation.model.Room;
@@ -39,9 +33,9 @@ import de.uniluebeck.imis.casi.simulation.model.SimulationTime;
 import de.uniluebeck.imis.casi.simulation.model.Wall;
 import de.uniluebeck.imis.casi.simulation.model.World;
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.AbstractAction;
+import de.uniluebeck.imis.casi.simulation.model.actionHandling.AbstractAction.TYPE;
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.AtomicAction;
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.ComplexAction;
-import de.uniluebeck.imis.casi.simulation.model.actionHandling.AbstractAction.TYPE;
 import de.uniluebeck.imis.casi.simulation.model.actions.GoAndSpeakTo;
 import de.uniluebeck.imis.casi.simulation.model.actions.Move;
 import de.uniluebeck.imis.casi.simulation.model.actions.SpeakTo;
@@ -116,13 +110,10 @@ public class WorldGenerator implements IWorldGenerator {
 				HashSet<Agent> agents = generateAgents();
 				tempWorld.setAgents(agents);
 				
-				// sensors
-				HashSet<AbstractSensor> sensors = generateSensors();
-				tempWorld.setSensors(sensors);
 				
-				// actuators
-				HashSet<AbstractActuator> actuators = generateActuators();
-				tempWorld.setActuators(actuators);
+				// actuators & sensors
+				HashSet<AbstractInteractionComponent> interactionComps = generateActuators();
+				tempWorld.setInteractionComponents(interactionComps);
 				
 				tempWorld.setComponents(new HashSet<AbstractComponent>());
 				tempWorld.seal();
@@ -140,18 +131,11 @@ public class WorldGenerator implements IWorldGenerator {
 	/**
 	 * @return
 	 */
-	private HashSet<AbstractActuator> generateActuators() {
+	private HashSet<AbstractInteractionComponent> generateActuators() {
 		// TODO generate actuators!
-		return new HashSet<AbstractActuator>();
+		return new HashSet<AbstractInteractionComponent>();
 	}
 
-	/**
-	 * @return
-	 */
-	private HashSet<AbstractSensor> generateSensors() {
-		// TODO generator sensors!
-		return new HashSet<AbstractSensor>();
-	}
 
 	/**
 	 * Only creates some agents. Testing stuff

@@ -22,7 +22,7 @@ import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 import de.uniluebeck.imis.casi.generator.IWorldGenerator;
-import de.uniluebeck.imis.casi.simulation.model.AbstractSensor;
+import de.uniluebeck.imis.casi.simulation.model.AbstractInteractionComponent;
 import de.uniluebeck.imis.casi.simulation.model.Agent;
 import de.uniluebeck.imis.casi.simulation.model.Room;
 import de.uniluebeck.imis.casi.simulation.model.World;
@@ -41,26 +41,24 @@ public class WorldGenerator implements IWorldGenerator {
 				doc.getElementsByTagName("agent")).genObjectFromXML();
 		Collection<AbstractAction> actions = new ActionsGenerator(
 				doc.getElementsByTagName("action")).genObjectFromXML();
-		Collection<AbstractSensor> sensors = new SensorsGenerator(
-				doc.getElementsByTagName("sensors")).genObjectFromXML();
 		Collection<Room> rooms = new RoomsGenerator(
 				doc.getElementsByTagName("room")).genObjectFromXML();
 
-		buildUpReferences(agents, actions, sensors, rooms);
-		return worldFromCollectionsAndConfs(agents, actions, sensors, rooms);
+		buildUpReferences(agents, actions, null, rooms);
+		return worldFromCollectionsAndConfs(agents, actions, null, rooms);
 
 	}
 
 	private World worldFromCollectionsAndConfs(Collection<Agent> agents,
 			Collection<AbstractAction> actions,
-			Collection<AbstractSensor> sensors, Collection<Room> rooms) {
+			Collection<AbstractInteractionComponent> interactionComps, Collection<Room> rooms) {
 		// TODO Auto-generated method stub
 		return new World();
 	}
 
 	private void buildUpReferences(Collection<Agent> agents,
 			Collection<AbstractAction> actions,
-			Collection<AbstractSensor> sensors, Collection<Room> rooms) {
+			Collection<AbstractInteractionComponent> interactionComps, Collection<Room> rooms) {
 		// TODO Auto-generated method stub
 	}
 

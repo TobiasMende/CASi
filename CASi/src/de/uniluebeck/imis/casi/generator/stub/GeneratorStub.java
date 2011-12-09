@@ -16,9 +16,8 @@ import java.util.HashSet;
 import java.util.logging.Logger;
 
 import de.uniluebeck.imis.casi.generator.IWorldGenerator;
-import de.uniluebeck.imis.casi.simulation.model.AbstractActuator;
 import de.uniluebeck.imis.casi.simulation.model.AbstractComponent;
-import de.uniluebeck.imis.casi.simulation.model.AbstractSensor;
+import de.uniluebeck.imis.casi.simulation.model.AbstractInteractionComponent;
 import de.uniluebeck.imis.casi.simulation.model.Agent;
 import de.uniluebeck.imis.casi.simulation.model.Room;
 import de.uniluebeck.imis.casi.simulation.model.SimulationTime;
@@ -78,8 +77,7 @@ public class GeneratorStub implements IWorldGenerator {
 	 *             if the world is sealed
 	 */
 	private void generateComponents() throws IllegalAccessException {
-		world.setActuators(new HashSet<AbstractActuator>());
-		world.setSensors(new HashSet<AbstractSensor>());
+		world.setInteractionComponents(new HashSet<AbstractInteractionComponent>());
 		world.setComponents(new HashSet<AbstractComponent>());
 	}
 

@@ -16,8 +16,11 @@ import java.awt.Shape;
 import java.awt.geom.Arc2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+import java.util.Collection;
 
 import de.uniluebeck.imis.casi.communication.ICommunicationComponent;
+import de.uniluebeck.imis.casi.simulation.engine.ISimulationClockListener;
+import de.uniluebeck.imis.casi.simulation.engine.SimulationEngine;
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.AbstractAction;
 
 /**
@@ -27,7 +30,7 @@ import de.uniluebeck.imis.casi.simulation.model.actionHandling.AbstractAction;
  * @author Tobias Mende
  * 
  */
-public abstract class AbstractInteractionComponent extends AbstractComponent implements ICommunicationComponent, IVetoableAgentListener{
+public abstract class AbstractInteractionComponent extends AbstractComponent implements ICommunicationComponent, IVetoableAgentListener, ISimulationClockListener{
 	/** Enumeration for possible directions in which this component looks */
 	public enum Face {
 		NORTH(0), SOUTH(180), EAST(90), WEST(270), NORTH_EAST(45), SOUTH_EAST(
@@ -63,6 +66,19 @@ public abstract class AbstractInteractionComponent extends AbstractComponent imp
 	protected Agent agent = null;
 	/** is this component a wearable? */
 	protected boolean wearable = false;
+	
+	/** List of actions, that can be recognized and vetoed by this component */
+	protected Collection<AbstractAction> interestingActions;
+	/** actual value this sensor has recognized */
+	protected Object lastValue;
+	/** Last message, the actuator has received from the network controller */
+	protected Object lastResponse;
+	/** Time for pulling values from the server in seconds */
+	public static final int PULL_INTERVALL = 10;
+	/** Is pull enabled? */
+	protected boolean pullEnabled = false;
+	/** Counts the ticks of the clock */
+	protected int clockTickCounter = 0;
 	
 	
 	/** The {@link Arc2D} representation of the monitored area */
@@ -271,6 +287,29 @@ public abstract class AbstractInteractionComponent extends AbstractComponent imp
 			setCoordinates(newPosition);
 			shapeRepresentation = null;
 		}
+	}
+	
+	@Override
+	public void timeChanged(SimulationTime newTime) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void simulationPaused(boolean pause) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void simulationStopped() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void simulationStarted() {
+		// TODO Auto-generated method stub
+		
 	}
 	
 

@@ -15,7 +15,6 @@ import java.awt.Shape;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -255,24 +254,13 @@ public class Agent extends AbstractComponent implements
 			}
 		}
 
-		if (!askActuators()) {
+		if (!askInteractionComponents()) {
 			return;
 		}
 
-		informSensors();
 		performAction();
 	}
 
-	/**
-	 * Informs the sensors before performing the action
-	 */
-	private void informSensors() {
-		for (IVetoableAgentListener listener : vetoableListeners) {
-			if (listener instanceof AbstractSensor) {
-				listener.handle(currentAction, this);
-			}
-		}
-	}
 
 	/**
 	 * Asks the actuators whether the currentAction should be performed or not.
@@ -280,10 +268,9 @@ public class Agent extends AbstractComponent implements
 	 * @return <code>true</code> if the action should be performed,
 	 *         <code>false</code> otherwise.
 	 */
-	private boolean askActuators() {
+	private boolean askInteractionComponents() {
 		for (IVetoableAgentListener listener : vetoableListeners) {
-			if ((listener instanceof AbstractActuator)
-					&& !listener.handle(currentAction, this)) {
+			if (!listener.handle(currentAction, this)) {
 				CASi.SIM_LOG.info(this + ": " + listener
 						+ " doesn't allow to perform " + currentAction);
 				return false;

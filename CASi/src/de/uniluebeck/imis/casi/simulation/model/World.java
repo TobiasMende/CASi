@@ -35,9 +35,7 @@ public class World {
 	/** A set containing the agents */
 	private Set<Agent> agents;
 	/** A set containing the actuators */
-	private Set<AbstractActuator> actuators;
-	/** A set containing the sensors */
-	private Set<AbstractSensor> sensors;
+	private Set<AbstractInteractionComponent> interactionComponents;
 
 	/** Collection of components that are neither agents, actuators nor sensors */
 	private Set<AbstractComponent> components;
@@ -95,11 +93,8 @@ public class World {
 	private void connectInteractionComponentsWithAgents() {
 		log.fine("Connecting agents with sensors and actuators");
 		for(Agent agent : agents) {
-			for(AbstractActuator actuator : actuators) {
-				agent.addVetoableListener(actuator);
-			}
-			for(AbstractSensor sensor : sensors) {
-				agent.addVetoableListener(sensor);
+			for(AbstractInteractionComponent comp : interactionComponents) {
+				agent.addVetoableListener(comp);
 			}
 		}
 		log.fine("All agents are connected");
@@ -141,26 +136,13 @@ public class World {
 	 * @throws IllegalAccessException
 	 *             if the world isn't sealed
 	 */
-	public Set<AbstractActuator> getActuators() throws IllegalAccessException {
+	public Set<AbstractInteractionComponent> getInteractionComponents() throws IllegalAccessException {
 		if (!sealed) {
 			throw new IllegalAccessException("World isn't sealed!");
 		}
-		return actuators;
+		return interactionComponents;
 	}
 
-	/**
-	 * Getter for all sensors in this world
-	 * 
-	 * @return a collection of sensors
-	 * @throws IllegalAccessException
-	 *             if the world isn't sealed
-	 */
-	public Set<AbstractSensor> getSensors() throws IllegalAccessException {
-		if (!sealed) {
-			throw new IllegalAccessException("World isn't sealed!");
-		}
-		return sensors;
-	}
 
 	/**
 	 * Getter for components that are neither actuators nor sensors.
@@ -290,36 +272,21 @@ public class World {
 	}
 
 	/**
-	 * Setter for actuators
+	 * Setter for actuators and sensors
 	 * 
-	 * @param actuators
-	 *            a collection of actuators
+	 * @param interactionComponents
+	 *            a collection of actuators and sensors
 	 * @throws IllegalAccessException
 	 *             if the world is sealed.
 	 */
-	public void setActuators(Set<AbstractActuator> actuators)
+	public void setInteractionComponents(Set<AbstractInteractionComponent> interactionComponents)
 			throws IllegalAccessException {
 		if (sealed) {
 			throw new IllegalAccessException("World is sealed!");
 		}
-		this.actuators = actuators;
+		this.interactionComponents = interactionComponents;
 	}
 
-	/**
-	 * Setter for sensors
-	 * 
-	 * @param sensors
-	 *            a collection of sensors to set
-	 * @throws IllegalAccessException
-	 *             if the world is sealed.
-	 */
-	public void setSensors(Set<AbstractSensor> sensors)
-			throws IllegalAccessException {
-		if (sealed) {
-			throw new IllegalAccessException("World is sealed!");
-		}
-		this.sensors = sensors;
-	}
 
 	/**
 	 * Setter for unspecified components

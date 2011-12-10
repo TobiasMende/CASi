@@ -12,6 +12,7 @@
 package de.uniluebeck.imis.casi.simulation.model.actions;
 
 import java.awt.geom.Point2D;
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.logging.Logger;
 
@@ -21,6 +22,7 @@ import de.uniluebeck.imis.casi.simulation.model.AbstractComponent;
 import de.uniluebeck.imis.casi.simulation.model.IPosition;
 import de.uniluebeck.imis.casi.simulation.model.Path;
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.AtomicAction;
+import de.uniluebeck.imis.casi.utils.Tools;
 
 /**
  * This class is the representation of a move action.
@@ -177,6 +179,20 @@ public class Move extends AtomicAction {
 	public String toString() {
 		
 		return super.toString()+" - Dest: "+endPosition;
+	}
+	
+	/**
+	 *Getter for a copy of the path iterator
+	 * @return the pathIterator
+	 */
+	@SuppressWarnings("unchecked")
+	public Iterator<Point2D> getPathIterator() {
+		try {
+			return pathIterator != null? (Iterator<Point2D>)Tools.deepCopy(pathIterator) : null;
+		} catch (Exception e) {
+			log.severe("Can't clone path iterator: "+e.fillInStackTrace());
+		} 
+		return null;
 	}
 
 }

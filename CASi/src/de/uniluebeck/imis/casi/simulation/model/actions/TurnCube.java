@@ -15,7 +15,7 @@ import java.util.logging.Logger;
 
 import de.uniluebeck.imis.casi.simulation.model.AbstractComponent;
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.AtomicAction;
-import de.uniluebeck.imis.casi.simulation.model.interactionComponents.Cube;
+import de.uniluebeck.imis.casi.simulation.model.mateComponents.Cube;
 
 /**
  * This action can be used to let an agent turn a cube.

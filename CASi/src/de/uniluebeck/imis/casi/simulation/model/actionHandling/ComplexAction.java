@@ -28,6 +28,7 @@ public class ComplexAction extends AbstractAction {
 	private static final long serialVersionUID = 7868816596381779417L;
 	/** a collection of actions this action consists of */
 	private Collection<AtomicAction> subActions = new Vector<AtomicAction>();
+	private AbstractAction currentAction;
 
 	@Override
 	public final boolean perform(AbstractComponent performer)
@@ -50,6 +51,7 @@ public class ComplexAction extends AbstractAction {
 		setState(STATE.ONGOING);
 		boolean completed = true;
 		for (AbstractAction a : subActions) {
+			currentAction = a;
 			completed &= a.perform(performer);
 			setState(a.getState());
 			if (!completed) {
@@ -172,6 +174,14 @@ public class ComplexAction extends AbstractAction {
 	@Override
 	public String toString() {
 		return subActions.toString();
+	}
+	
+	/**
+	 * Getter for the subaction that is actually performed.
+	 * @return the currentAction
+	 */
+	public AbstractAction getCurrentAction() {
+		return currentAction;
 	}
 
 }

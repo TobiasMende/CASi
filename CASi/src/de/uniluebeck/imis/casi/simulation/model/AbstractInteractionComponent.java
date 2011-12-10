@@ -21,6 +21,8 @@ import java.util.Collection;
 import de.uniluebeck.imis.casi.communication.ICommunicationComponent;
 import de.uniluebeck.imis.casi.simulation.engine.ISimulationClockListener;
 import de.uniluebeck.imis.casi.simulation.engine.SimulationEngine;
+import de.uniluebeck.imis.casi.simulation.model.AbstractComponent.INTERRUPTIBILITY;
+import de.uniluebeck.imis.casi.simulation.model.Agent.STATE;
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.AbstractAction;
 
 /**
@@ -30,7 +32,9 @@ import de.uniluebeck.imis.casi.simulation.model.actionHandling.AbstractAction;
  * @author Tobias Mende
  * 
  */
-public abstract class AbstractInteractionComponent extends AbstractComponent implements ICommunicationComponent, IVetoableAgentListener, ISimulationClockListener{
+public abstract class AbstractInteractionComponent extends AbstractComponent
+		implements ICommunicationComponent, IExtendedAgentListener,
+		ISimulationClockListener {
 	/** Enumeration for possible directions in which this component looks */
 	public enum Face {
 		NORTH(0), SOUTH(180), EAST(90), WEST(270), NORTH_EAST(45), SOUTH_EAST(
@@ -53,6 +57,16 @@ public abstract class AbstractInteractionComponent extends AbstractComponent imp
 		}
 	}
 
+	/** Types this component can be */
+	public enum Type {
+		/** This component represents a sensor */
+		SENSOR,
+		/** This component represents an actuator */
+		ACTUATOR,
+		/** The component is as well a sensor as an actuator. */
+		MIXED;
+	}
+
 	/** Counter for created interaction components */
 	private static int idCounter;
 
@@ -66,7 +80,7 @@ public abstract class AbstractInteractionComponent extends AbstractComponent imp
 	protected Agent agent = null;
 	/** is this component a wearable? */
 	protected boolean wearable = false;
-	
+
 	/** List of actions, that can be recognized and vetoed by this component */
 	protected Collection<AbstractAction> interestingActions;
 	/** actual value this sensor has recognized */
@@ -79,8 +93,9 @@ public abstract class AbstractInteractionComponent extends AbstractComponent imp
 	protected boolean pullEnabled = false;
 	/** Counts the ticks of the clock */
 	protected int clockTickCounter = 0;
-	
-	
+	/** The type of this component */
+	protected Type type = Type.SENSOR;
+
 	/** The {@link Arc2D} representation of the monitored area */
 	private Shape shapeRepresentation;
 
@@ -102,25 +117,29 @@ public abstract class AbstractInteractionComponent extends AbstractComponent imp
 		super(identifier);
 		this.coordinates = coordinates;
 	}
-	
+
 	/**
 	 * Creates a wearable for the provided agent
-	 * @param agent the agent which wears this component
+	 * 
+	 * @param agent
+	 *            the agent which wears this component
 	 */
 	public AbstractInteractionComponent(Agent agent) {
 		this(agent.getCoordinates());
 		this.agent = agent;
-		
+
 	}
-	
+
 	/**
 	 * Sets the agents which wears this component
-	 * @param agent the agent to set
+	 * 
+	 * @param agent
+	 *            the agent to set
 	 */
 	public void setAgent(Agent agent) {
 		this.agent = agent;
 	}
-	
+
 	/**
 	 * @return the agent which wears this component
 	 */
@@ -159,24 +178,30 @@ public abstract class AbstractInteractionComponent extends AbstractComponent imp
 		this.direction = direction;
 		this.opening = opening;
 	}
-	
+
 	/**
 	 * Checks whether this component actually is weared by an agent
-	 * @return <code>true</code> if the wearing agent is not null, <code>false</code> otherwise.
+	 * 
+	 * @return <code>true</code> if the wearing agent is not null,
+	 *         <code>false</code> otherwise.
 	 */
 	public boolean isWeared() {
 		return agent != null && isWearable();
 	}
-	
+
 	/**
-	 *	Sets the wearable state of this component
-	 * @param wearable if <code>true</code>, the assigned agent wears this component. 
+	 * Sets the wearable state of this component
+	 * 
+	 * @param wearable
+	 *            if <code>true</code>, the assigned agent wears this component.
 	 */
 	public void setWearable(boolean wearable) {
 		this.wearable = wearable;
 	}
+
 	/**
 	 * Is this component a wearable?
+	 * 
 	 * @return the wearable
 	 */
 	public boolean isWearable() {
@@ -219,7 +244,7 @@ public abstract class AbstractInteractionComponent extends AbstractComponent imp
 	public Point2D getCentralPoint() {
 		return getCoordinates();
 	}
-	
+
 	/**
 	 * Setter for a new monitored area
 	 * 
@@ -255,13 +280,14 @@ public abstract class AbstractInteractionComponent extends AbstractComponent imp
 	 *         otherwise
 	 */
 	protected abstract boolean handleInternal(AbstractAction action, Agent agent);
-	
+
 	/**
 	 * Getter for human readable version of the current value
+	 * 
 	 * @return the value in a nicer format
 	 */
 	public abstract String getHumanReadableValue();
-	
+
 	/**
 	 * Getter for the type of this sensor
 	 * 
@@ -270,47 +296,125 @@ public abstract class AbstractInteractionComponent extends AbstractComponent imp
 	public String getType() {
 		return getClass().getSimpleName();
 	}
-	
+
 	@Override
 	public String toString() {
-		return super.toString()+" ("+getType()+")";
+		return super.toString() + " (" + getType() + ")";
 	}
-	
+
 	@Override
 	public boolean handle(AbstractAction action, Agent agent) {
 		return this.contains(agent) ? handleInternal(action, agent) : true;
 	}
 
 	@Override
-	public void positionChanged(Point2D oldPosition, Point2D newPosition, Agent agent) {
-		if(isWeared() && this.agent.equals(agent)) {
+	public void positionChanged(Point2D oldPosition, Point2D newPosition,
+			Agent agent) {
+		if (isWeared() && this.agent.equals(agent)) {
 			setCoordinates(newPosition);
 			shapeRepresentation = null;
 		}
 	}
-	
+
 	@Override
 	public void timeChanged(SimulationTime newTime) {
-		// TODO Auto-generated method stub
-		
+		if ((clockTickCounter = (++clockTickCounter) % PULL_INTERVALL) == 0) {
+			makePullRequest(newTime);
+		}
 	}
+	
+	/** Overwrite to let the component periodically pull informations from the communication handler */
+	protected void makePullRequest(SimulationTime newTime) {
+		// nothing to doo here.
+	}
+
 	@Override
 	public void simulationPaused(boolean pause) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void simulationStopped() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void simulationStarted() {
 		// TODO Auto-generated method stub
-		
+
+	}
+
+	/**
+	 * Checks if this component has a veto right when an agent tries to perform
+	 * an action. (Only actuators and mixed components have a veto right)
+	 * 
+	 * @return <code>true</code> if this component is allowed to interrupt an
+	 *         action, <code>false</code> otherwise.
+	 */
+	public final boolean hasVetoRight() {
+		return !type.equals(Type.SENSOR);
 	}
 	
+	/**
+	 * Sets a new shape representation of the monitored area
+	 * @param shape the shape do monitor
+	 */
+	public void setShapeRepresentation(Shape shape) {
+		this.shapeRepresentation = shape;
+	}
+	
+	/**
+	 * Checks whether this cube is interested in a given action and agent. (default: interested in nothing)
+	 * 
+	 * @param action
+	 *            the action
+	 * @param agent
+	 *            the agent
+	 * @return <code>true</code> if the cube is interested, <code>false</code>
+	 *         otherwise.
+	 */
+	protected boolean checkInterest(AbstractAction action, Agent agent) {
+		return false;
+	}
+	
+	/**
+	 * Checks whether this cube is interested in a given agent (default: interested in nothing)
+	 * 
+	 * @param agent
+	 *            the agent
+	 * @return <code>true</code> if the cube is interested, <code>false</code>
+	 *         otherwise.
+	 */
+	protected boolean checkInterest(Agent agent) {
+		return false;
+	}
+	
+
+	@Override
+	public void stateChanged(STATE newState, Agent agent) {
+		// nothing to do here
+
+	}
+
+	@Override
+	public void interruptibilityChanged(INTERRUPTIBILITY interruptibility,
+			Agent agent) {
+		// nothing to do here
+
+	}
+
+	@Override
+	public void startPerformingAction(AbstractAction action, Agent agent) {
+		// nothing to do here
+
+	}
+
+	@Override
+	public void finishPerformingAction(AbstractAction action, Agent agent) {
+		// nothing to do here
+
+	}
 
 }

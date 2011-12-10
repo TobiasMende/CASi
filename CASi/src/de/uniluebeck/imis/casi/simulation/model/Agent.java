@@ -53,7 +53,7 @@ public class Agent extends AbstractComponent implements
 
 	/** Listeners, perhaps already needed in AbstractComponent */
 	private transient List<IAgentListener> agentListeners = new LinkedList<IAgentListener>();
-	private transient List<IVetoableAgentListener> vetoableListeners = new LinkedList<IVetoableAgentListener>();
+	private transient List<IExtendedAgentListener> extendedListeners = new LinkedList<IExtendedAgentListener>();
 	private Agent.STATE state = STATE.UNKNOWN;
 
 	private Agent(String identifier) {
@@ -201,7 +201,7 @@ public class Agent extends AbstractComponent implements
 	 */
 	public void removeListener(IAgentListener listener) {
 		agentListeners.remove(listener);
-		vetoableListeners.remove(listener);
+		extendedListeners.remove(listener);
 	}
 
 	/**
@@ -210,9 +210,9 @@ public class Agent extends AbstractComponent implements
 	 * @param listener
 	 *            the listener
 	 */
-	public void addVetoableListener(IVetoableAgentListener listener) {
-		if (!vetoableListeners.contains(listener)) {
-			vetoableListeners.add(listener);
+	public void addVetoableListener(IExtendedAgentListener listener) {
+		if (!extendedListeners.contains(listener)) {
+			extendedListeners.add(listener);
 		}
 	}
 
@@ -223,7 +223,7 @@ public class Agent extends AbstractComponent implements
 	 *            the listener
 	 */
 	public void removeVetoableListener(IAgentListener listener) {
-		vetoableListeners.remove(listener);
+		extendedListeners.remove(listener);
 	}
 
 	@Override
@@ -269,11 +269,13 @@ public class Agent extends AbstractComponent implements
 	 *         <code>false</code> otherwise.
 	 */
 	private boolean askInteractionComponents() {
-		for (IVetoableAgentListener listener : vetoableListeners) {
+		for (IExtendedAgentListener listener : extendedListeners) {
 			if (!listener.handle(currentAction, this)) {
-				CASi.SIM_LOG.info(this + ": " + listener
-						+ " doesn't allow to perform " + currentAction);
-				return false;
+				if(listener.hasVetoRight()) {
+					CASi.SIM_LOG.info(this + ": " + listener
+							+ " doesn't allow to perform " + currentAction);
+					return false;
+				}
 			}
 		}
 		return true;
@@ -319,7 +321,7 @@ public class Agent extends AbstractComponent implements
 			newAgent = (Agent) Tools.deepCopy(this);
 			newAgent.setState(STATE.IDLE);
 			newAgent.agentListeners = new LinkedList<IAgentListener>();
-			newAgent.vetoableListeners = new LinkedList<IVetoableAgentListener>();
+			newAgent.extendedListeners = new LinkedList<IExtendedAgentListener>();
 			return newAgent;
 		} catch (Exception e) {
 			log.severe("An error occured while cloning the agent: "
@@ -387,7 +389,7 @@ public class Agent extends AbstractComponent implements
 			Point2D newPoint) {
 		log.fine("Position of " + toString() + " changed from " + oldPoint
 				+ " to " + newPoint);
-		for (IAgentListener listener : vetoableListeners) {
+		for (IAgentListener listener : extendedListeners) {
 			listener.positionChanged(oldPoint, newPoint, this);
 		}
 		for (IAgentListener listener : agentListeners) {
@@ -406,7 +408,7 @@ public class Agent extends AbstractComponent implements
 			return;
 		}
 
-		for (IAgentListener listener : vetoableListeners) {
+		for (IAgentListener listener : extendedListeners) {
 			listener.stateChanged(state, this);
 		}
 		for (IAgentListener listener : agentListeners) {
@@ -436,7 +438,7 @@ public class Agent extends AbstractComponent implements
 			return;
 		}
 		super.setInterruptibility(interruptibility);
-		for (IAgentListener listener : vetoableListeners) {
+		for (IAgentListener listener : extendedListeners) {
 			listener.interruptibilityChanged(interruptibility, this);
 		}
 		for (IAgentListener listener : agentListeners) {
@@ -454,7 +456,7 @@ public class Agent extends AbstractComponent implements
 		if (action == null || !action.isCompleted()) {
 			return;
 		}
-		for (IAgentListener listener : vetoableListeners) {
+		for (IAgentListener listener : extendedListeners) {
 			listener.finishPerformingAction(action, this);
 		}
 		for (IAgentListener listener : agentListeners) {
@@ -472,7 +474,7 @@ public class Agent extends AbstractComponent implements
 		if (action == null) {
 			return;
 		}
-		for (IAgentListener listener : vetoableListeners) {
+		for (IAgentListener listener : extendedListeners) {
 			listener.startPerformingAction(action, this);
 		}
 		for (IAgentListener listener : agentListeners) {

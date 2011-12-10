@@ -12,12 +12,15 @@
 package de.uniluebeck.imis.casi.ui.simplegui;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.geom.Point2D;
 import java.util.logging.Logger;
 
 import javax.swing.JComponent;
+import javax.swing.SwingUtilities;
 
 import de.uniluebeck.imis.casi.simulation.factory.GraphicFactory;
 import de.uniluebeck.imis.casi.simulation.model.AbstractComponent.INTERRUPTIBILITY;
@@ -28,37 +31,37 @@ import de.uniluebeck.imis.casi.simulation.model.actionHandling.AbstractAction;
 
 /**
  * @author Moritz Buerger
- *
+ * 
  */
 @SuppressWarnings("serial")
 public class AgentView extends JComponent implements IAgentListener {
-	
-	private static final Logger log = Logger.getLogger(
-			AgentView.class.getName());
-	
+
+	private static final Logger log = Logger.getLogger(AgentView.class
+			.getName());
+
 	private Point2D position;
 
 	private Color stateColor;
-	
+
 	public AgentView(Point2D startPosition) {
-		
+
 		position = startPosition;
 		this.setBounds(GraphicFactory.getPointRepresentation(startPosition).x,
-				       GraphicFactory.getPointRepresentation(startPosition).y,8,8);
-		
+				GraphicFactory.getPointRepresentation(startPosition).y, 8, 8);
+
 		/* Set state color to yellow for debugging */
 		this.stateColor = Color.YELLOW;
-		
+
 		invalidate();
 	}
-	
+
 	/**
 	 * Overrides the paint-method to paint the agent as a 8x8 filled oval.
 	 */
 	public void paint(Graphics g) {
-		
+
 		Graphics2D g2D = (Graphics2D) g;
-		
+
 		g2D.setColor(Color.BLACK);
 		g2D.fillOval(0, 0, 8, 8);
 		g2D.setColor(this.stateColor);
@@ -66,58 +69,104 @@ public class AgentView extends JComponent implements IAgentListener {
 	}
 
 	@Override
-	public void stateChanged(STATE newState, Agent agent) {
-		
-		/** Set state color depending on the new state */
-		switch (newState) {
-			case ABSTRACT:
-				this.stateColor = Color.GREEN;
-				
-			case BUSY:
-				this.stateColor = Color.RED;
-				
-			case IDLE: 
-				this.stateColor = Color.WHITE;
-				
-			case UNKNOWN:
-				this.stateColor = Color.GRAY;
-				
-			default:
-				this.stateColor = Color.BLACK;
-		}
-		
-		invalidate();
+	public void stateChanged(final STATE newState, Agent agent) {
+		SwingUtilities.invokeLater(new Runnable() {
+
+			@Override
+			public void run() {
+
+				/** Set state color depending on the new state */
+				switch (newState) {
+
+				case BUSY:
+					AgentView.this.stateColor = Color.RED;
+					break;
+				case IDLE:
+					AgentView.this.stateColor = Color.GREEN;
+					break;
+				case UNKNOWN:
+					AgentView.this.stateColor = Color.YELLOW;
+					break;
+				default:
+					AgentView.this.stateColor = Color.BLACK;
+				}
+
+				AgentView.this.invalidate();
+			}
+		});
 	}
 
 	@Override
-	public void positionChanged(Point2D oldPosition, Point2D newPosition, Agent agent) {
-		
-		this.position = newPosition;
-		/* Simply set the new location to the new position */
-		this.setLocation(GraphicFactory.getPointRepresentation(newPosition));
-		
-		invalidate();
-		
-		 
-	}
-
-	@Override
-	public void interruptibilityChanged(INTERRUPTIBILITY interruptibility,
+	public void positionChanged(Point2D oldPosition, final Point2D newPosition,
 			Agent agent) {
-		// TODO Auto-generated method stub
-		
+		SwingUtilities.invokeLater(new Runnable() {
+
+			@Override
+			public void run() {
+				AgentView.this.position = newPosition;
+				/* Simply set the new location to the new position */
+				AgentView.this.setLocation(getOptimizedPosition(newPosition));
+
+				AgentView.this.invalidate();
+
+			}
+		});
+
+	}
+
+	/**
+	 * Gets the real position for the agent
+	 * 
+	 * @param position
+	 *            the new position
+	 * @return the optimized position
+	 */
+	private Point getOptimizedPosition(Point2D position) {
+		Dimension dim = getBounds().getSize();
+		Point point = GraphicFactory.getPointRepresentation(position);
+		return new Point(point.x - dim.width / 2, point.y - dim.height / 2);
 	}
 
 	@Override
-	public void startPerformingAction(AbstractAction action, Agent agent) {
-		// TODO Auto-generated method stub
-		
+	public void interruptibilityChanged(
+			final INTERRUPTIBILITY interruptibility, final Agent agent) {
+		SwingUtilities.invokeLater(new Runnable() {
+
+			@Override
+			public void run() {
+				// Handle here!!!
+
+			}
+		});
+
 	}
 
 	@Override
-	public void finishPerformingAction(AbstractAction action, Agent agent) {
-		// TODO Auto-generated method stub
-		
+	public void startPerformingAction(final AbstractAction action,
+			final Agent agent) {
+		SwingUtilities.invokeLater(new Runnable() {
+
+			@Override
+			public void run() {
+				// Handle here!!!
+
+			}
+		});
+
+	}
+
+	@Override
+	public void finishPerformingAction(final AbstractAction action,
+			final Agent agent) {
+		SwingUtilities.invokeLater(new Runnable() {
+
+			@Override
+			public void run() {
+				// Handle here!!!
+
+			}
+		});
+
 	}
 
 }

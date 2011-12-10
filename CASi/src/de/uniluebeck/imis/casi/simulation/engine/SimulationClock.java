@@ -33,7 +33,7 @@ public class SimulationClock implements Listenable<ISimulationClockListener> {
 	public static final int DEFAULT_SCALE_FACTOR = 1000;
 	/** The minimum scale factor (the highest speed) for the clock */
 	public static final int MINIMUM_SCALE_FACTOR = 10;
-	
+
 	/** The instance of this singleton class */
 	private static SimulationClock instance;
 	/** The starttime of this simulation */
@@ -71,7 +71,7 @@ public class SimulationClock implements Listenable<ISimulationClockListener> {
 	 * 
 	 * @return the instance
 	 */
-	public static SimulationClock getInstance() {
+	public synchronized static SimulationClock getInstance() {
 		if (instance == null) {
 			instance = new SimulationClock();
 		}
@@ -163,7 +163,7 @@ public class SimulationClock implements Listenable<ISimulationClockListener> {
 
 			@Override
 			public void run() {
-				if(invalidateTimer) {
+				if (invalidateTimer) {
 					timer.cancel();
 					renewTimer();
 					return;
@@ -253,11 +253,15 @@ public class SimulationClock implements Listenable<ISimulationClockListener> {
 	 *            the factor to set
 	 */
 	public synchronized void setScaleFactor(int scaleFactor) {
-		if(scaleFactor > MAXIMUM_SCALE_FACTOR) {
-			CASi.SIM_LOG.warning("scale factor was too high. Set scale factor to "+MAXIMUM_SCALE_FACTOR);
+		if (scaleFactor > MAXIMUM_SCALE_FACTOR) {
+			CASi.SIM_LOG
+					.warning("scale factor was too high. Set scale factor to "
+							+ MAXIMUM_SCALE_FACTOR);
 			this.scaleFactor = MAXIMUM_SCALE_FACTOR;
-		} else if(scaleFactor < MINIMUM_SCALE_FACTOR) {
-			CASi.SIM_LOG.warning("scale factor was too low. Set scale factor to "+MINIMUM_SCALE_FACTOR);
+		} else if (scaleFactor < MINIMUM_SCALE_FACTOR) {
+			CASi.SIM_LOG
+					.warning("scale factor was too low. Set scale factor to "
+							+ MINIMUM_SCALE_FACTOR);
 			this.scaleFactor = MINIMUM_SCALE_FACTOR;
 		} else {
 			this.scaleFactor = scaleFactor;
@@ -306,8 +310,10 @@ public class SimulationClock implements Listenable<ISimulationClockListener> {
 		for (ISimulationClockListener l : listeners) {
 			l.timeChanged(currentTime);
 		}
-		log.fine("Informed " + listeners.size()
-				+ " clock listeners about time change");
+		if (CASi.VERBOSE && CASi.DEV_MODE) {
+			log.fine("Informed " + listeners.size()
+					+ " clock listeners about time change");
+		}
 	}
 
 	/**

@@ -78,7 +78,6 @@ public class PauseButton extends JButton implements ActionListener {
 	
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		
 		/** If simulation is running */
 		if(!SimulationClock.getInstance().isPaused()) {
 			
@@ -96,7 +95,6 @@ public class PauseButton extends JButton implements ActionListener {
 			SimulationClock.getInstance().setPaused(false);
 		
 		}			
-		
 		this.repaint();
 		
 		

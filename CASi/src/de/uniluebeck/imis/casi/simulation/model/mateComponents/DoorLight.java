@@ -172,9 +172,13 @@ public class DoorLight extends AbstractInteractionComponent {
 	}
 
 	/**
-	 * Gets the move out of this action ore <code>null</code> if no {@link Move} action was found.
-	 * @param action the action to extract the move from
-	 * @return the move out of this action ore <code>null</code> if no {@link Move} action was found
+	 * Gets the move out of this action ore <code>null</code> if no {@link Move}
+	 * action was found.
+	 * 
+	 * @param action
+	 *            the action to extract the move from
+	 * @return the move out of this action ore <code>null</code> if no
+	 *         {@link Move} action was found
 	 */
 	private Move getMoveAction(AbstractAction action) {
 		if (action instanceof Move) {

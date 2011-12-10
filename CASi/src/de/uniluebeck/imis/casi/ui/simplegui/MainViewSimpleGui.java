@@ -44,22 +44,6 @@ public class MainViewSimpleGui extends JFrame implements IMainView,
 	public static final int WIDTH = 1020;
 	public static final int HEIGHT = 650;
 
-	public MainViewSimpleGui() {
-
-		/** Set size of simple GUI */
-		this.setSize(MainViewSimpleGui.WIDTH, MainViewSimpleGui.HEIGHT);
-		/** Set default close operation to 'exit on close' */
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		/** Set the location of the frame in the center of screen */
-		this.setLocationRelativeTo(null);
-		/** Set layout to 'null' */
-		this.setLayout(new BorderLayout()); // BorderLayout for testing
-		/** Set title of the frame */
-		this.setTitle("CASi (MACK Simulator)");
-
-		/** Set up components */
-		this.setComponents();
-	}
 
 	/**
 	 * Sets up the components of the simple GUI main frame.
@@ -124,6 +108,20 @@ public class MainViewSimpleGui extends JFrame implements IMainView,
 	@Override
 	public void showUi() {
 
+		/** Set size of simple GUI */
+		this.setSize(MainViewSimpleGui.WIDTH, MainViewSimpleGui.HEIGHT);
+		/** Set default close operation to 'exit on close' */
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		/** Set the location of the frame in the center of screen */
+		this.setLocationRelativeTo(null);
+		/** Set layout to 'null' */
+		this.setLayout(new BorderLayout()); // BorderLayout for testing
+		/** Set title of the frame */
+		this.setTitle("CASi (MACK Simulator)");
+
+		/** Set up components */
+		this.setComponents();
+		
 		this.simPanel.paintSimulationComponents();
 		this.setVisible(true);
 		

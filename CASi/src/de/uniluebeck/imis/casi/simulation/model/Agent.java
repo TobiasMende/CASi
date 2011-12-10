@@ -22,7 +22,6 @@ import java.util.logging.Logger;
 
 import de.uniluebeck.imis.casi.CASi;
 import de.uniluebeck.imis.casi.simulation.engine.ISimulationClockListener;
-import de.uniluebeck.imis.casi.simulation.engine.SimulationClock;
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.AbstractAction;
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.IActionScheduler;
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.schedulers.DefaultActionScheduler;
@@ -41,7 +40,7 @@ public class Agent extends AbstractComponent implements
 	private static final Logger log = Logger.getLogger(Agent.class.getName());
 
 	public enum STATE {
-		ABSTRACT, IDLE, BUSY, UNKNOWN;
+		IDLE, BUSY, UNKNOWN;
 	}
 
 	// Name of the agent
@@ -70,7 +69,6 @@ public class Agent extends AbstractComponent implements
 	public Agent(String identifier, String type) {
 		this(identifier);
 		this.type = type;
-		state = STATE.ABSTRACT;
 	}
 
 	/**
@@ -103,26 +101,9 @@ public class Agent extends AbstractComponent implements
 		this(identifier, name, type, null);
 	}
 
-	public void setState(STATE state) throws IllegalStateException {
-		if (state.equals(STATE.ABSTRACT) && this.state != STATE.UNKNOWN) {
-			// Deny changes to unknown or abstract
-			throw new IllegalStateException("Can't change the state to "
-					+ state);
-		}
-		if (state.equals(STATE.ABSTRACT)) {
-			// remove the agent as clock listener if state changes to abstract
-			SimulationClock.getInstance().removeListener(this);
-		} else if (this.state.equals(STATE.ABSTRACT)) {
-			// add the agent as clock listener if state changes from abstract to
-			// some other state
-			SimulationClock.getInstance().addListener(this);
-		}
+	public void setState(STATE state) {
 		informListenersAboutStateChange(state);
 		this.state = state;
-	}
-
-	public boolean isTemplate() {
-		return state.equals(STATE.ABSTRACT);
 	}
 
 	public void setTodoList(Collection<AbstractAction> todoList) {
@@ -250,6 +231,7 @@ public class Agent extends AbstractComponent implements
 			if (currentAction == null) {
 				// CASi.SIM_LOG.info(this.name +
 				// ": Nothing to do at the moment.");
+				setState(STATE.IDLE);
 				return;
 			}
 		}
@@ -286,6 +268,7 @@ public class Agent extends AbstractComponent implements
 	 */
 	private void performAction() {
 		try {
+			setState(STATE.BUSY);
 			currentAction.perform(this);
 			if (currentAction.getState().equals(
 					AbstractAction.STATE.INTERRUPTED)) {
@@ -305,6 +288,7 @@ public class Agent extends AbstractComponent implements
 							+ " has better things to do than solving impossible problems. E.g Searching for a Club Mate! State: "
 							+ currentAction.getState());
 			log.severe(e.fillInStackTrace().toString());
+			setState(STATE.UNKNOWN);
 			currentAction = null;
 		}
 	}
@@ -387,8 +371,10 @@ public class Agent extends AbstractComponent implements
 	 */
 	private void informListenersAboutPositionChange(Point2D oldPoint,
 			Point2D newPoint) {
-		log.fine("Position of " + toString() + " changed from " + oldPoint
-				+ " to " + newPoint);
+		if(CASi.VERBOSE && CASi.DEV_MODE) {
+			log.fine("Position of " + toString() + " changed from " + oldPoint
+					+ " to " + newPoint);
+		}
 		for (IAgentListener listener : extendedListeners) {
 			listener.positionChanged(oldPoint, newPoint, this);
 		}

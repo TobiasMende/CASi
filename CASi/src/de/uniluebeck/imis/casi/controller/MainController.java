@@ -11,6 +11,10 @@
  */
 package de.uniluebeck.imis.casi.controller;
 
+import java.util.logging.Logger;
+
+import javax.swing.SwingUtilities;
+
 import de.uniluebeck.imis.casi.CASi;
 import de.uniluebeck.imis.casi.communication.ICommunicationHandler;
 import de.uniluebeck.imis.casi.generator.IWorldGenerator;
@@ -28,6 +32,8 @@ import de.uniluebeck.imis.casi.ui.IMainView;
 public class MainController {
 	/** Holds the main view to deal with */
 	private final IMainView mainView;
+	private static final Logger log = Logger.getLogger(MainController.class
+			.getName());
 
 	/**
 	 * The constructor for the main controller
@@ -66,5 +72,10 @@ public class MainController {
 	public void start() {
 		CASi.SIM_LOG.info("Starting the Simulation ...");
 		SimulationEngine.getInstance().start();
+		log.info("Started successfull");
+	}
+
+	public void init() {
+		mainView.showUi();
 	}
 }

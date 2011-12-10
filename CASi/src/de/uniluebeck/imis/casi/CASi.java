@@ -18,6 +18,8 @@ import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.swing.SwingUtilities;
+
 import de.uniluebeck.imis.casi.communication.ICommunicationHandler;
 import de.uniluebeck.imis.casi.communication.comLogger.CommunicationLogger;
 import de.uniluebeck.imis.casi.controller.MainController;
@@ -46,7 +48,9 @@ public class CASi {
 	 */
 	public static final Logger SIM_LOG = Logger.getLogger("SimulationLoggger");
 	/** flag for determining whether productive mode is on or off */
-	public static final boolean PRODUCTIVE_MODE = false;
+	public static boolean DEV_MODE = true;
+	/** Enables really verbose output */
+	public static boolean VERBOSE = false;
 	/** Handlers for logging in file */
 	private static FileHandler devFileHandler, simFileHandler;
 	/** Handlers for logging on the console */
@@ -64,16 +68,20 @@ public class CASi {
 
 		// DO WHAT YOU WANT:
 		log.info("TESTSIMULATION");
-		IWorldGenerator generator = new de.uniluebeck.imis.casi.generator.java.WorldGenerator();
+		final IWorldGenerator generator = new de.uniluebeck.imis.casi.generator.java.WorldGenerator();
 		Locale.setDefault(Locale.GERMAN);
-		ICommunicationHandler networkLogger = new CommunicationLogger();
-		IMainView mainView = new MainViewSimpleGui();
-
-		// Call the main controller and let it work:
-		MainController mc = new MainController(generator, networkLogger,
+		final ICommunicationHandler networkLogger = new CommunicationLogger();
+		final IMainView mainView = new MainViewSimpleGui();
+		final MainController mc = new MainController(generator, networkLogger,
 				mainView);
-		mainView.showUi();
-		mc.start();
+		
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				// Call the main controller and let it work:
+				mc.init();
+				mc.start();
+			}
+		});
 	}
 
 	/**
@@ -89,16 +97,16 @@ public class CASi {
 		log.addHandler(devConsoleHandler);
 
 		// configure the lowest levels for different loggers
-		if (PRODUCTIVE_MODE) {
+		if (DEV_MODE) {
+			// use the dev console for sim logging only in dev mode
+			SIM_LOG.addHandler(devConsoleHandler);
+		} else {
 			// Create the sim log only in productive mode
 			configureSimulationLogging();
 			SIM_LOG.addHandler(simConsoleHandler);
 			if (simFileHandler != null) {
 				SIM_LOG.addHandler(simFileHandler);
 			}
-		} else {
-			// use the dev console for sim logging only in dev mode
-			SIM_LOG.addHandler(devConsoleHandler);
 		}
 		// write simulation information to the dev log in every case
 		if (devFileHandler != null) {
@@ -129,26 +137,26 @@ public class CASi {
 																// HTMLFormatter
 			// for fancy output
 
-			if (PRODUCTIVE_MODE) {
+			if (DEV_MODE) {
+				// log everything to the log file
+				devFileHandler.setLevel(Level.ALL);
+			} else {
 				// define the behavior of the development handler in productive
 				// mode
 				// log everything important into the dev log file
 				devFileHandler.setLevel(Level.CONFIG);
-			} else {
-				// log everything to the log file
-				devFileHandler.setLevel(Level.ALL);
 			}
 		} catch (Exception e) {
 			log.info("Es wird keine Protokolldatei erzeugt: " + e.getMessage());
 		}
 
-		if (PRODUCTIVE_MODE) {
+		if (DEV_MODE) {
+			// log more information on the console
+			devConsoleHandler.setLevel(Level.FINE);
+		} else {
 			// define the behavior of the development handler in productive mode
 			devConsoleHandler.setLevel(Level.SEVERE); // show important errors
-														// on the console
-		} else {
-			// log more information on the console
-			devConsoleHandler.setLevel(Level.INFO);
+			// on the console
 		}
 	}
 

@@ -37,13 +37,18 @@ public class AgentView extends JComponent implements IAgentListener {
 			AgentView.class.getName());
 	
 	private Point2D position;
-	private STATE newState;
+
+	private Color stateColor;
 	
 	public AgentView(Point2D startPosition) {
 		
 		position = startPosition;
 		this.setBounds(GraphicFactory.getPointRepresentation(startPosition).x,
 				       GraphicFactory.getPointRepresentation(startPosition).y,8,8);
+		
+		/* Set state color to yellow for debugging */
+		this.stateColor = Color.YELLOW;
+		
 		invalidate();
 	}
 	
@@ -57,14 +62,30 @@ public class AgentView extends JComponent implements IAgentListener {
 		
 		g2D.setColor(Color.BLACK);
 		g2D.fillOval(0, 0, 8, 8);
-		g2D.setColor(Color.WHITE);
+		g2D.setColor(this.stateColor);
 		g2D.fillOval(2, 2, 4, 4);
 	}
 
 	@Override
 	public void stateChanged(STATE newState, Agent agent) {
 		
-		this.newState = newState;
+		/** Set state color depending on the new state */
+		switch (newState) {
+			case ABSTRACT:
+				this.stateColor = Color.GREEN;
+				
+			case BUSY:
+				this.stateColor = Color.RED;
+				
+			case IDLE: 
+				this.stateColor = Color.WHITE;
+				
+			case UNKNOWN:
+				this.stateColor = Color.GRAY;
+				
+			default:
+				this.stateColor = Color.BLACK;
+		}
 		
 		invalidate();
 	}

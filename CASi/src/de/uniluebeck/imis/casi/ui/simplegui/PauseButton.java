@@ -46,7 +46,7 @@ public class PauseButton extends JButton implements ActionListener {
 	}
 	
 	/**
-	 * Paints the pause button depending on the state od the simulation clock.
+	 * Paints the pause button depending on the state of the simulation clock.
 	 */
 	public void paintComponent(Graphics g) {
 		

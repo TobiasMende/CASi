@@ -53,11 +53,10 @@ public class AgentView extends JComponent implements IAgentListener {
 	}
 	
 	/**
-	 * Overrides the paintComponents to paint the agent as a 8x8 filled oval.
+	 * Overrides the paint-method to paint the agent as a 8x8 filled oval.
 	 */
-	public void paintComponent(Graphics g) {
+	public void paint(Graphics g) {
 		
-		super.paintComponent(g);
 		Graphics2D g2D = (Graphics2D) g;
 		
 		g2D.setColor(Color.BLACK);

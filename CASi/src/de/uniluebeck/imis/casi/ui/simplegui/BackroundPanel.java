@@ -53,13 +53,10 @@ public class BackroundPanel extends JPanel {
 	}
 	
 	/**
-	 * Overrides the paintComponent method to paint walls and doors of the
+	 * Overrides the paint-method to paint walls and doors of the
 	 * simulation.
 	 */
-	public void paintComponent(Graphics g) {
-				
-		/** Call paintComponents of the superior class */
-		super.paintComponent(g);
+	public void paint(Graphics g) {
 		
 		/** Cast graphics into 2DGraphics */
 		Graphics2D g2D = (Graphics2D) g;

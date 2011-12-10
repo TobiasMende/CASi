@@ -349,7 +349,7 @@ public class World {
 			ArrayList<Door> doors = new ArrayList<Door>(room.getDoors());
 			// For each door in this room, calculate distances to all other
 			// doors of this room.
-			log.info("Doors in " + room + ": " + doors);
+			log.config("Doors in " + room + ": " + doors);
 			calculateAdjacencies(doors);
 		}
 	}

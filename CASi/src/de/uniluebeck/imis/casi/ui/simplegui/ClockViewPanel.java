@@ -218,7 +218,6 @@ public class ClockViewPanel extends JPanel implements ISimulationClockListener,
 
 				ClockViewPanel.this.timeChanged(SimulationClock.getInstance()
 						.getCurrentTime());
-				// TODO Auto-generated method stub
 
 			}
 		});

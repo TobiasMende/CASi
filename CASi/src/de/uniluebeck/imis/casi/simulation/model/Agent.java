@@ -103,6 +103,7 @@ public class Agent extends AbstractComponent implements
 
 	public void setState(STATE state) {
 		informListenersAboutStateChange(state);
+		CASi.SIM_LOG.config("State of "+this+" changed to "+state);
 		this.state = state;
 	}
 
@@ -147,6 +148,7 @@ public class Agent extends AbstractComponent implements
 		if (isInterruptible()) {
 			actionScheduler.addInterruptAction(action);
 			setInterruptibility(INTERRUPTIBILITY.INTERRUPT_SCHEDULED);
+			CASi.SIM_LOG.info(action+" was scheduled for interrupt");
 			return true;
 		}
 		return false;

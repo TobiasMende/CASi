@@ -19,6 +19,7 @@ import java.util.logging.Logger;
 import de.uniluebeck.imis.casi.simulation.engine.SimulationClock;
 import de.uniluebeck.imis.casi.simulation.model.Agent;
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.AbstractAction;
+import de.uniluebeck.imis.casi.simulation.model.actionHandling.AbstractAction.STATE;
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.ActionComparator;
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.IActionScheduler;
 
@@ -88,6 +89,7 @@ public class DefaultActionScheduler implements IActionScheduler {
 
 	@Override
 	public void addPoolAction(AbstractAction action) {
+		action.setState(STATE.SCHEDULED);
 		actionPool.add(action);
 	}
 
@@ -114,6 +116,7 @@ public class DefaultActionScheduler implements IActionScheduler {
 
 	@Override
 	public void addInterruptAction(AbstractAction action) {
+		action.setState(AbstractAction.STATE.SCHEDULED);
 		interruptAction.add(action);
 	}
 

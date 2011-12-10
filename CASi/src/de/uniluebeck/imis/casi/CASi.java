@@ -65,9 +65,9 @@ public class CASi {
 	public static void main(String[] args) {
 		// DON'T REMOVE THESE LINES:
 		setupLogging();
-
+		logHeader();
 		// DO WHAT YOU WANT:
-		log.info("TESTSIMULATION");
+		
 		final IWorldGenerator generator = new de.uniluebeck.imis.casi.generator.java.WorldGenerator();
 		Locale.setDefault(Locale.GERMAN);
 		final ICommunicationHandler networkLogger = new CommunicationLogger();
@@ -82,6 +82,19 @@ public class CASi {
 				mc.start();
 			}
 		});
+	}
+	
+	/**
+	 * Writes the header to the simulation logger
+	 */
+	private static void logHeader() {
+		SIM_LOG.info("===================================================");
+		SIM_LOG.info("CASi - Context Awareness Simulator");
+		SIM_LOG.info("Simulation for testing the MACK Framework");
+		SIM_LOG.info("by Moritz Bürger, Marvin Frick and Tobias Mende");
+		SIM_LOG.info("---------------------------------------------------");
+		SIM_LOG.info("\tsettle back and enjoy the simulation :-)");
+		SIM_LOG.info("===================================================");
 	}
 
 	/**
@@ -152,7 +165,11 @@ public class CASi {
 
 		if (DEV_MODE) {
 			// log more information on the console
-			devConsoleHandler.setLevel(Level.FINE);
+			if(VERBOSE) {
+				devConsoleHandler.setLevel(Level.ALL);
+			} else {
+				devConsoleHandler.setLevel(Level.INFO);
+			}
 		} else {
 			// define the behavior of the development handler in productive mode
 			devConsoleHandler.setLevel(Level.SEVERE); // show important errors

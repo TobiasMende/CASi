@@ -158,13 +158,13 @@ public class Move extends AtomicAction {
 	
 	@Override
 	protected boolean preActionTask(AbstractComponent performer) {
-		log.info(performer+" starting Move from "+performer.getCurrentPosition()+" to "+endPosition);
+		CASi.SIM_LOG.info(performer+" starting Move from "+performer.getCurrentPosition()+" to "+endPosition);
 		return super.preActionTask(performer);
 	}
 
 	@Override
 	protected void postActionTask(AbstractComponent performer) {
-		log.info(performer+" completes Move. Destination: "+performer.getCurrentPosition());
+		CASi.SIM_LOG.info(performer+" completes Move. Destination: "+performer.getCurrentPosition());
 		super.postActionTask(performer);
 	}
 	

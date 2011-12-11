@@ -33,13 +33,13 @@
 		<mkdir dir="${test.reports}" />
 	</target>
 	<target name="compile" depends="clean, makedir" description="Compiles the project">
-		<javac srcdir="${src.dir}" destdir="${build.dir}" includeantruntime="false">
+		<javac srcdir="${src.dir}" destdir="${build.dir}" encoding = "utf-8" includeantruntime="false">
 		</javac>
 	</target>
 	
 	<!-- Targets needed for JUnit tests -->
 	<target name="compile-test" depends="compile" description="Compiles all tests">
-		<javac srcdir="${test.dir}" verbose="${TALK}" includeantruntime="false" debug="true">
+		<javac srcdir="${test.dir}" verbose="${TALK}" encoding = "utf-8" includeantruntime="false" debug="true">
 			<classpath refid="classpath.test" />
 		</javac>
 	</target>
@@ -80,7 +80,7 @@
 	
 	<!-- Basic targets -->
 	<target name="doc" depends="compile" description="Creates the JavaDoc in the doc directory">
-		<javadoc packagenames="src" sourcepath="${src.dir}" destdir="${docs.dir}" access="private">
+		<javadoc packagenames="src" sourcepath="${src.dir}" destdir="${docs.dir}"  access="private">
 			<!-- Define which files / directory should get included, we include all -->
 			<fileset dir="${src.dir}">
 				<include name="**" />

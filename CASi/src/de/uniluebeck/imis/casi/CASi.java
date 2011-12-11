@@ -11,6 +11,7 @@
  */
 package de.uniluebeck.imis.casi;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.Locale;
@@ -145,6 +146,7 @@ public class CASi {
 		// Configure file logger
 		long time = Calendar.getInstance().getTimeInMillis();
 		try {
+			new File("./log").mkdir();
 			devFileHandler = new FileHandler(String.format("log/%d.log", time));
 			devFileHandler.setFormatter(new DevLogFormatter()); // Use
 																// HTMLFormatter
@@ -160,7 +162,7 @@ public class CASi {
 				devFileHandler.setLevel(Level.CONFIG);
 			}
 		} catch (Exception e) {
-			log.info("Es wird keine Protokolldatei erzeugt: " + e.getMessage());
+			System.out.println("Es wird keine Protokolldatei erzeugt: " + e.getMessage());
 		}
 
 		if (DEV_MODE) {
@@ -194,13 +196,14 @@ public class CASi {
 		long time = Calendar.getInstance().getTimeInMillis();
 
 		try {
+			new File("./log").mkdir();
 			simFileHandler = new FileHandler(String.format("log/sim-%d.log",
 					time));
 			simFileHandler.setFormatter(new SimLogFormatter()); // Use
 																// HTMLFormatter
 			simFileHandler.setLevel(Level.ALL);
 		} catch (Exception e) {
-			log.info("Es wird keine Protokolldatei erzeugt: " + e.getMessage());
+			System.out.println("Es wird keine Protokolldatei erzeugt: " + e.getMessage());
 		}
 		// for fancy output
 		simConsoleHandler.setLevel(Level.INFO);

@@ -38,7 +38,7 @@ public class MACKInformation {
 	 * The mode of the message
 	 */
 	public enum MessageMode {
-		pull, push;
+		pull, push, undefined;
 	}
 
 	/** Possible request types */

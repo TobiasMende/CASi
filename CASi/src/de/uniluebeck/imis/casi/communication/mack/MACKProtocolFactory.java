@@ -14,104 +14,70 @@ package de.uniluebeck.imis.casi.communication.mack;
 import java.io.StringReader;
 import java.util.logging.Logger;
 
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLStreamConstants;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamReader;
+import org.xml.sax.InputSource;
+import org.xml.sax.XMLReader;
+import org.xml.sax.helpers.XMLReaderFactory;
 
 import de.uniluebeck.imis.casi.simulation.model.Agent;
 
 /**
- * This class generates messages for the communication with the MACK framework. These messages could be send by using the {@link MACKNetworkHandler}.
+ * This class generates messages for the communication with the MACK framework.
+ * These messages could be send by using the {@link MACKNetworkHandler}.
+ * 
  * @author Tobias Mende
- *
+ * 
  */
 public class MACKProtocolFactory {
-	private static final Logger log = Logger.getLogger(MACKProtocolFactory.class.getName());
+	private static final Logger log = Logger
+			.getLogger(MACKProtocolFactory.class.getName());
 
 	/**
-	 * Generates a pull request message for communication with the MACK framework
-	 * @param dataObject the agent to get information for
-	 * @param subject the component type
-	 * @param entities the interesting entities
+	 * Generates a pull request message for communication with the MACK
+	 * framework
+	 * 
+	 * @param dataObject
+	 *            the agent to get information for
+	 * @param subject
+	 *            the component type
+	 * @param entities
+	 *            the interesting entities
 	 * @return the message
 	 */
-	public static String generatePullRequest(Agent dataObject, String subject, String... entities) {
+	public static String generatePullRequest(Agent dataObject, String subject,
+			String... entities) {
 		StringBuffer buffer = new StringBuffer();
 		buffer.append("<message type=\"status\">\n");
 		buffer.append("\t<mode>pull</mode>\n");
-		buffer.append("\t<subject>"+subject+"</subject>\n");
-		buffer.append("\t<request type=\"data\" object=\"" + dataObject + "\">\n");
-		for(String entity : entities) {
-			buffer.append("\t\t<entity name=\""+entity+"\"></entity>\n");
+		buffer.append("\t<subject>" + subject + "</subject>\n");
+		buffer.append("\t<request type=\"data\" object=\"" + dataObject
+				+ "\">\n");
+		for (String entity : entities) {
+			buffer.append("\t\t<entity name=\"" + entity + "\"></entity>\n");
 		}
 		buffer.append("\t</request>\n");
 		buffer.append("</message>");
 		return buffer.toString();
 	}
-	
-	
-	
+
+	/**
+	 * Parses a provided XML message according to the XML standard of the MACK
+	 * framework and returns the information as object
+	 * 
+	 * @param message
+	 *            the XML message
+	 * @return the information object
+	 */
 	public static MACKInformation parseMessage(String message) {
-		XMLInputFactory factory = XMLInputFactory.newInstance();
-		XMLStreamReader parser = null;
-		MACKInformation information = null;
+		MACKInformation information = new MACKInformation(message);
 		try {
-			parser = factory.createXMLStreamReader(new StringReader(message));
-			information = parseMessageInternal(parser);
-		} catch (XMLStreamException e) {
-			log.severe("Can't handle XML Message: "+e.fillInStackTrace());
-		}
-		
-		return information;
-	}
-	
-	private static MACKInformation parseMessageInternal(XMLStreamReader parser) throws XMLStreamException {
-		MACKInformation information = null;
-		while(parser.hasNext()) {
-			switch(parser.getEventType()) {
-			case XMLStreamConstants.START_DOCUMENT:
-				log.fine("START_DOCUMENT: "+parser.getVersion());
-				parser.next();
-				break;
-			case XMLStreamConstants.END_DOCUMENT:
-				log.fine("END_DOCUMENT: Message successful parsed!");
-				parser.next();
-				parser.close();
-				break;
-			case XMLStreamConstants.START_ELEMENT:
-				if(parser.getLocalName().equalsIgnoreCase("message")) {
-					information = parseMessageHeader(parser);
-				}
-				break;
-			//TODO implement other cases
-			}
-		}
-		return information;
-	}
-	
-	private static MACKInformation parseMessageHeader(XMLStreamReader parser) throws XMLStreamException {
-		// We have the message element:
-		MACKInformation.MessageType type;
-		MACKInformation information = null;
-		for(int i = 0; i < parser.getAttributeCount(); i++) {
-			if(parser.getAttributeLocalName(i).equalsIgnoreCase("type")) {
-				for(MACKInformation.MessageType t : MACKInformation.MessageType.values()) {
-					if(t.toString().equalsIgnoreCase(parser.getAttributeValue(i))) {
-						type = t;
-						break;
-					}
-				}
-			}
-		}
-		if(!parser.hasNext()) {
-			log.warning("Invalid message. Can't extract header");
+			XMLReader parser = XMLReaderFactory.createXMLReader();
+			parser.setContentHandler(new MACKMessageContentHandler(information));
+			parser.parse(new InputSource(new StringReader(message)));
+		} catch (Exception e) {
+			log.severe("Can't handle XML Message: " + e.fillInStackTrace());
 			return null;
 		}
-		parser.next();
-		// TODO parse  mode, subject, requestType and object. Create MACKInformation
-	
-		
+
 		return information;
 	}
 }

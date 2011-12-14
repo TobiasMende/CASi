@@ -31,7 +31,7 @@ public class MACKInformation {
 	 * The types of which messages can be
 	 */
 	public enum MessageType {
-		status, response;
+		status, response, undefined;
 	}
 
 	/**
@@ -43,7 +43,7 @@ public class MACKInformation {
 
 	/** Possible request types */
 	public enum RequestType {
-		data;
+		data, undefined;
 	}
 
 	/** The type of the message */
@@ -78,13 +78,25 @@ public class MACKInformation {
 	 * @param object
 	 *            the object (should be an {@link Agent} identifier)
 	 */
-	public MACKInformation(MessageType messageType, MessageMode messageMode,
+	public MACKInformation(MessageType messageType, MessageMode messageMode, RequestType requestType,
 			String originalMessage, String subject, String object) {
 		this.messageType = messageType;
 		this.messageMode = messageMode;
 		this.originalMessage = originalMessage;
+		this.requestType = requestType;
 		this.subject = subject;
 		this.object = object;
+	}
+	
+	/**
+	 * Default Constructor
+	 * @param message the raw xml message
+	 */
+	public MACKInformation(String message) {
+		messageMode = MessageMode.undefined;
+		messageType = MessageType.undefined;
+		requestType = RequestType.undefined;
+		originalMessage = message;
 	}
 
 	/**
@@ -141,10 +153,45 @@ public class MACKInformation {
 	}
 
 	/**
+	 * @param messageMode the messageMode to set
+	 */
+	public void setMessageMode(MessageMode messageMode) {
+		this.messageMode = messageMode;
+	}
+	
+	/**
+	 * @param messageType the messageType to set
+	 */
+	public void setMessageType(MessageType messageType) {
+		this.messageType = messageType;
+	}
+	
+	/**
+	 * @param requestType the requestType to set
+	 */
+	public void setRequestType(RequestType requestType) {
+		this.requestType = requestType;
+	}
+	
+	/**
 	 * @return the messageType
 	 */
 	public MessageType getMessageType() {
 		return messageType;
+	}
+	
+	/**
+	 * @return the requestType
+	 */
+	public RequestType getRequestType() {
+		return requestType;
+	}
+	
+	/**
+	 * @return the originalMessage
+	 */
+	public String getOriginalMessage() {
+		return originalMessage;
 	}
 
 	/**

@@ -24,6 +24,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
+import de.uniluebeck.imis.casi.communication.mack.MACKInformation;
 import de.uniluebeck.imis.casi.communication.mack.MACKNetworkHandler;
 import de.uniluebeck.imis.casi.communication.mack.MACKProtocolFactory;
 import de.uniluebeck.imis.casi.simulation.engine.SimulationClock;
@@ -121,36 +122,21 @@ public class Cube extends AbstractInteractionComponent {
 			log.severe("Unknown message format. Can't receive information");
 			return;
 		}
-		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-		try {
-			DocumentBuilder builder = factory.newDocumentBuilder();
-			StringReader inStream = new StringReader((String) message);
-			InputSource is = new InputSource(inStream);
-			Document doc = builder.parse(is);
-			NodeList nodes = doc.getElementsByTagName("entity");
-			inStream.close();
-			for (int i = 0; i < nodes.getLength(); i++) {
-				Node node = nodes.item(i);
-				if (node.getNodeType() == Node.ELEMENT_NODE
-						&& node.hasAttributes()) {
-					NamedNodeMap attributes = node.getAttributes();
-					Node nameNode = attributes.getNamedItem("name");
-					if (nameNode != null
-							&& nameNode.getNodeValue().equalsIgnoreCase(
-									"cubusstate")) {
-						String value = node.getNodeValue();
-						for (State s : State.values()) {
-							if (value.equals(s.toString())) {
-								setCurrentState(s);
-								return;
-							}
-						}
-					}
+		MACKInformation info = MACKProtocolFactory.parseMessage((String)message);
+		if(info == null) {
+			log.severe("Message was invalid");
+			return;
+		}
+		String activity = info.getAccessibleEntities().get("activity");
+		if(activity != null) {
+			for(State s : State.values()) {
+				if(s.toString().equalsIgnoreCase(activity)) {
+					setCurrentState(s);
+					break;
 				}
 			}
-
-		} catch (Exception e) {
-			log.severe("Can't parse XML: " + e.fillInStackTrace());
+		} else {
+			setCurrentState(State.unknown);
 		}
 
 	}

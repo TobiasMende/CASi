@@ -12,22 +12,12 @@
 package de.uniluebeck.imis.casi.simulation.model.mateComponents;
 
 import java.awt.geom.Point2D;
-import java.io.StringReader;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Random;
 import java.util.logging.Logger;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
-
+import de.uniluebeck.imis.casi.CASi;
+import de.uniluebeck.imis.casi.communication.mack.MACKInformation;
 import de.uniluebeck.imis.casi.communication.mack.MACKProtocolFactory;
 import de.uniluebeck.imis.casi.simulation.engine.SimulationEngine;
 import de.uniluebeck.imis.casi.simulation.model.AbstractInteractionComponent;
@@ -38,7 +28,6 @@ import de.uniluebeck.imis.casi.simulation.model.SimulationTime;
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.AbstractAction;
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.ComplexAction;
 import de.uniluebeck.imis.casi.simulation.model.actions.Move;
-import de.uniluebeck.imis.casi.simulation.model.mateComponents.Cube.State;
 
 /**
  * This is an implementation of the MATe DoorLight which is an actuator.
@@ -103,46 +92,33 @@ public class DoorLight extends AbstractInteractionComponent {
 			log.severe("Unknown message format. Can't receive information");
 			return;
 		}
-		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-		DocumentBuilder builder;
+		
+		MACKInformation info = MACKProtocolFactory.parseMessage((String)message);
+		if(info == null) {
+			log.severe("Message was invalid");
+			return;
+		}
+		String interrupt = info.getAccessibleEntities().get("interruptibility");
+		if(interrupt == null) {
+			CASi.SIM_LOG.info(this+": No accesible information for the interruptibility of "+agent);
+			return;
+		}
 		try {
-			builder = factory.newDocumentBuilder();
-			StringReader inStream = new StringReader((String) message);
-			InputSource is = new InputSource(inStream);
-			Document doc = builder.parse(is);
-			NodeList nodes = doc.getElementsByTagName("entity");
-			inStream.close();
-			for (int i = 0; i < nodes.getLength(); i++) {
-				Node node = nodes.item(i);
-				if (node.getNodeType() == Node.ELEMENT_NODE
-						&& node.hasAttributes()) {
-					NamedNodeMap attributes = node.getAttributes();
-					Node nameNode = attributes.getNamedItem("name");
-					if (nameNode != null
-							&& nameNode.getNodeValue().equalsIgnoreCase(
-									"doorstate")) {
-						int doorState = -1;
-						try {
-							doorState = Integer.parseInt(node.getNodeValue());
-						} catch (NumberFormatException e) {
-							log.warning("Exception whil parsing door state");
-							setCurrentState(State.maybeInterruptible);
-						}
-							switch (doorState) {
-							case 0:
-								setCurrentState(State.uninterruptible);
-								break;
-							case 1:
-								setCurrentState(State.interruptible);
-							default:
-								setCurrentState(State.maybeInterruptible);
-								break;
-							}
-					}
-				}
+			int value = Integer.parseInt(interrupt);
+			switch (value) {
+			case 1:
+				setCurrentState(State.interruptible);
+				break;
+			case 0:
+				setCurrentState(State.uninterruptible);
+				break;
+			default:
+				setCurrentState(State.maybeInterruptible);
+				break;
 			}
-		} catch (Exception e) {
-			log.severe("Can't parse XML: " + e.fillInStackTrace());
+		} catch (NumberFormatException e) {
+			CASi.SIM_LOG.info("Invalid Number Format, setting state to "+State.maybeInterruptible);
+			setCurrentState(State.maybeInterruptible);
 		}
 	}
 	

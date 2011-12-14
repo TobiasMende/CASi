@@ -66,7 +66,7 @@ public class Cube extends AbstractInteractionComponent {
 	 */
 	private static final long serialVersionUID = -3061958723193321546L;
 	/** The current state of this cube */
-	private static State currentState;
+	private State currentState;
 	/** The message which is send as pull request */
 	private String pullMessage;
 
@@ -135,11 +135,11 @@ public class Cube extends AbstractInteractionComponent {
 					Node nameNode = attributes.getNamedItem("name");
 					if (nameNode != null
 							&& nameNode.getNodeValue().equalsIgnoreCase(
-									"activity")) {
+									"cubusstate")) {
 						String value = node.getNodeValue();
 						for (State s : State.values()) {
 							if (value.equals(s.toString())) {
-								currentState = s;
+								setCurrentState(s);
 								return;
 							}
 						}
@@ -150,10 +150,16 @@ public class Cube extends AbstractInteractionComponent {
 		} catch (Exception e) {
 			log.severe("Can't parse XML: " + e.fillInStackTrace());
 		}
-		// TODO Parse XML Message and set state
 
 	}
-
+	
+	/**
+	 * Sets the state which is currently represented by this cube
+	 * @param currentState the currentState to set
+	 */
+	private void setCurrentState(State currentState) {
+		this.currentState = currentState;
+	}
 	@Override
 	public void stateChanged(STATE newState, Agent agent) {
 		if (!checkInterest(agent)) {

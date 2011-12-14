@@ -12,20 +12,31 @@
 package de.uniluebeck.imis.casi.simulation.model.mateComponents;
 
 import java.awt.geom.Point2D;
+import java.io.StringReader;
 import java.util.Iterator;
 import java.util.Random;
 import java.util.logging.Logger;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
+
 import de.uniluebeck.imis.casi.simulation.engine.SimulationEngine;
 import de.uniluebeck.imis.casi.simulation.model.AbstractInteractionComponent;
 import de.uniluebeck.imis.casi.simulation.model.Agent;
-import de.uniluebeck.imis.casi.simulation.model.Agent.STATE;
 import de.uniluebeck.imis.casi.simulation.model.Door;
 import de.uniluebeck.imis.casi.simulation.model.Room;
 import de.uniluebeck.imis.casi.simulation.model.SimulationTime;
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.AbstractAction;
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.ComplexAction;
 import de.uniluebeck.imis.casi.simulation.model.actions.Move;
+import de.uniluebeck.imis.casi.simulation.model.mateComponents.Cube.State;
 
 /**
  * This is an implementation of the MATe DoorLight which is an actuator.
@@ -44,18 +55,24 @@ public class DoorLight extends AbstractInteractionComponent {
 	 */
 	public enum State {
 		/** The agents in this room are interruptible */
-		GREEN,
+		interruptible,
 		/** The system doesn't know the state */
-		YELLOW,
+		maybeInterruptible,
 		/** The agents in the room arn't interruptible */
-		RED;
+		uninterruptible;
 	}
 
 	/** The current state of this door light */
-	private State currentState = State.YELLOW;
+	private State currentState = State.maybeInterruptible;
+	/** The agent which state is represented by this door light */
 	private Agent agent;
+	/** The door to which this actuator is attached  */
 	private Door door;
+	/** The room to which the access is restricted by this light */
 	private Room room;
+	
+	/** The message which is send as pull request */
+	private String pullMessage;
 
 	/**
 	 * Creates a new DoorLight which is connected to the provided door. The area
@@ -75,12 +92,64 @@ public class DoorLight extends AbstractInteractionComponent {
 		this.door = door;
 		this.room = room;
 		this.agent = agent;
+		pullMessage = createPullMessage(agent);
 	}
 
 	@Override
 	public void receive(Object message) {
-		// TODO Auto-generated method stub
-
+		if (!(message instanceof String)) {
+			log.severe("Unknown message format. Can't receive information");
+			return;
+		}
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder builder;
+		try {
+			builder = factory.newDocumentBuilder();
+			StringReader inStream = new StringReader((String) message);
+			InputSource is = new InputSource(inStream);
+			Document doc = builder.parse(is);
+			NodeList nodes = doc.getElementsByTagName("entity");
+			inStream.close();
+			for (int i = 0; i < nodes.getLength(); i++) {
+				Node node = nodes.item(i);
+				if (node.getNodeType() == Node.ELEMENT_NODE
+						&& node.hasAttributes()) {
+					NamedNodeMap attributes = node.getAttributes();
+					Node nameNode = attributes.getNamedItem("name");
+					if (nameNode != null
+							&& nameNode.getNodeValue().equalsIgnoreCase(
+									"doorstate")) {
+						int doorState = -1;
+						try {
+							doorState = Integer.parseInt(node.getNodeValue());
+						} catch (NumberFormatException e) {
+							log.warning("Exception whil parsing door state");
+							setCurrentState(State.maybeInterruptible);
+						}
+							switch (doorState) {
+							case 0:
+								setCurrentState(State.uninterruptible);
+								break;
+							case 1:
+								setCurrentState(State.interruptible);
+							default:
+								setCurrentState(State.maybeInterruptible);
+								break;
+							}
+					}
+				}
+			}
+		} catch (Exception e) {
+			log.severe("Can't parse XML: " + e.fillInStackTrace());
+		}
+	}
+	
+	/**
+	 * Sets the current state which is represented by this door light
+	 * @param currentState the currentState to set
+	 */
+	private void setCurrentState(State currentState) {
+		this.currentState = currentState;
 	}
 
 	@Override
@@ -99,13 +168,13 @@ public class DoorLight extends AbstractInteractionComponent {
 			return true;
 		}
 		switch (currentState) {
-		case GREEN:
+		case interruptible:
 			allowAccess = true;
 			break;
-		case YELLOW:
+		case maybeInterruptible:
 			allowAccess = handleYellow(action, agent, iter);
 			break;
-		case RED:
+		case uninterruptible:
 			allowAccess = handleRed(action, agent, iter);
 			break;
 		}
@@ -220,7 +289,27 @@ public class DoorLight extends AbstractInteractionComponent {
 	@Override
 	protected void makePullRequest(SimulationTime newTime) {
 		SimulationEngine.getInstance().getCommunicationHandler()
-				.send(this, this + ": Pull Request");
+				.send(this, pullMessage);
+	}
+	
+	/**
+	 * Creates the message that is used for pull requests
+	 * 
+	 * @param agent
+	 *            the agent who's state should be pulled
+	 * @return the pull message
+	 */
+	private String createPullMessage(Agent agent) {
+		StringBuffer buffer = new StringBuffer();
+		buffer.append("<message type=\"status\">\n");
+		buffer.append("\t<mode>pull</mode>\n");
+		buffer.append("\t<subject>doorlight</subject>\n");
+		buffer.append("\t<request type=\"data\" object=\"" + agent + "\">\n");
+		buffer.append("\t\t<entity name=\"interruptibility\"></entity>\n");
+//		buffer.append("\t\t<entity name=\"activity\"></entity>\n");
+		buffer.append("\t</request>\n");
+		buffer.append("</message>");
+		return buffer.toString();
 	}
 
 }

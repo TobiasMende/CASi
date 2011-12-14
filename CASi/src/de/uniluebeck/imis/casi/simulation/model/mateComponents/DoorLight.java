@@ -13,6 +13,7 @@ package de.uniluebeck.imis.casi.simulation.model.mateComponents;
 
 import java.awt.geom.Point2D;
 import java.io.StringReader;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Random;
 import java.util.logging.Logger;
@@ -27,6 +28,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
+import de.uniluebeck.imis.casi.communication.mack.MACKProtocolFactory;
 import de.uniluebeck.imis.casi.simulation.engine.SimulationEngine;
 import de.uniluebeck.imis.casi.simulation.model.AbstractInteractionComponent;
 import de.uniluebeck.imis.casi.simulation.model.Agent;
@@ -92,7 +94,7 @@ public class DoorLight extends AbstractInteractionComponent {
 		this.door = door;
 		this.room = room;
 		this.agent = agent;
-		pullMessage = createPullMessage(agent);
+		pullMessage = MACKProtocolFactory.generatePullRequest(agent, "doorlight", "interruptibility");
 	}
 
 	@Override
@@ -292,24 +294,4 @@ public class DoorLight extends AbstractInteractionComponent {
 				.send(this, pullMessage);
 	}
 	
-	/**
-	 * Creates the message that is used for pull requests
-	 * 
-	 * @param agent
-	 *            the agent who's state should be pulled
-	 * @return the pull message
-	 */
-	private String createPullMessage(Agent agent) {
-		StringBuffer buffer = new StringBuffer();
-		buffer.append("<message type=\"status\">\n");
-		buffer.append("\t<mode>pull</mode>\n");
-		buffer.append("\t<subject>doorlight</subject>\n");
-		buffer.append("\t<request type=\"data\" object=\"" + agent + "\">\n");
-		buffer.append("\t\t<entity name=\"interruptibility\"></entity>\n");
-//		buffer.append("\t\t<entity name=\"activity\"></entity>\n");
-		buffer.append("\t</request>\n");
-		buffer.append("</message>");
-		return buffer.toString();
-	}
-
 }

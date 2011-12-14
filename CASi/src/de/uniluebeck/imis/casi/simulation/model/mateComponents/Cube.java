@@ -25,6 +25,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
 import de.uniluebeck.imis.casi.communication.mack.MACKNetworkHandler;
+import de.uniluebeck.imis.casi.communication.mack.MACKProtocolFactory;
 import de.uniluebeck.imis.casi.simulation.engine.SimulationClock;
 import de.uniluebeck.imis.casi.simulation.engine.SimulationEngine;
 import de.uniluebeck.imis.casi.simulation.model.AbstractInteractionComponent;
@@ -81,7 +82,8 @@ public class Cube extends AbstractInteractionComponent {
 		currentState = State.unknown;
 		type = Type.MIXED;
 		agent = owner;
-		pullMessage = createPullMessage(owner);
+		pullMessage = MACKProtocolFactory.generatePullRequest(owner, "cubus",
+				"activity", "interruptibility");
 	}
 
 	@Override
@@ -152,14 +154,17 @@ public class Cube extends AbstractInteractionComponent {
 		}
 
 	}
-	
+
 	/**
 	 * Sets the state which is currently represented by this cube
-	 * @param currentState the currentState to set
+	 * 
+	 * @param currentState
+	 *            the currentState to set
 	 */
 	private void setCurrentState(State currentState) {
 		this.currentState = currentState;
 	}
+
 	@Override
 	public void stateChanged(STATE newState, Agent agent) {
 		if (!checkInterest(agent)) {
@@ -201,29 +206,6 @@ public class Cube extends AbstractInteractionComponent {
 	@Override
 	public void makePullRequest(SimulationTime newTime) {
 		SimulationEngine.getInstance().getCommunicationHandler()
-					.send(this, pullMessage);
+				.send(this, pullMessage);
 	}
-
-	/**
-	 * Creates the message that is used for pull requests
-	 * 
-	 * @param agent
-	 *            the agent who's state should be pulled
-	 * @return the pull message
-	 */
-	private String createPullMessage(Agent agent) {
-		StringBuffer buffer = new StringBuffer();
-		buffer.append("<message type=\"status\">\n");
-		buffer.append("\t<mode>pull</mode>\n");
-		buffer.append("\t<subject>cubus</subject>\n");
-		buffer.append("\t<request type=\"data\" object=\"" + agent + "\">\n");
-		buffer.append("\t\t<entity name=\"interruptibility\"></entity>\n");
-		buffer.append("\t\t<entity name=\"activity\"></entity>\n");
-		buffer.append("\t</request>\n");
-		buffer.append("</message>");
-		return buffer.toString();
-	}
-	
-	
-
 }

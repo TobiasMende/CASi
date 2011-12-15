@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
 
+import de.uniluebeck.imis.casi.CASi;
 import de.uniluebeck.imis.casi.simulation.engine.SimulationEngine;
 import de.uniluebeck.imis.casi.simulation.model.Door;
 import de.uniluebeck.imis.casi.simulation.model.IPosition;
@@ -69,6 +70,9 @@ public class PathFactory {
 		Set<Door> startDoors = startRoom.getDoors();
 		Set<Door> endDoors = endRoom.getDoors();
 		Path doorToDoor = findRoomToRoomPath(startDoors, endDoors);
+		if(doorToDoor == null) {
+			return null;
+		}
 		Point2D startDoorPoint = doorToDoor.getFirst();
 		Point2D endDoorPoint = doorToDoor.getLast();
 		startRoom = WorldFactory.getRoomWithPoints(startPoint, startDoorPoint);
@@ -101,6 +105,10 @@ public class PathFactory {
 	public static Path findRoomToRoomPath(Set<Door> startDoors,
 			Set<Door> endDoors) {
 		// Get identifiers for end doors:
+		if(endDoors.isEmpty() || startDoors.isEmpty()) {
+			CASi.SIM_LOG.warning("No doors in start or end room");
+			return null;
+		}
 		Set<Integer> identifiers = new HashSet<Integer>();
 		for (Door d : endDoors) {
 			identifiers.add(d.getIntIdentifier());
@@ -118,7 +126,7 @@ public class PathFactory {
 		List<Integer> minimumPath = new LinkedList<Integer>();
 		for (Door d : startDoors) {
 			List<Integer> path = solver.compute(d.getIntIdentifier());
-			if (path.size() < minimumPath.size() || minimumPath == null
+			if (minimumPath == null || path.size() < minimumPath.size()
 					|| minimumPath.isEmpty()) {
 				minimumPath = path;
 			}

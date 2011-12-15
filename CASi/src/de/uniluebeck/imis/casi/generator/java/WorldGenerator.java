@@ -16,7 +16,11 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Random;
 import java.util.logging.Logger;
 
@@ -46,7 +50,8 @@ public class WorldGenerator implements IWorldGenerator {
 			.getName());
 
 	World tempWorld = new World();
-	Room timsRoom, mainFloor, crazyRoom;
+	Room timsRoom, mainFloor, crazyRoom, randomRoom, womensRoom, kitchen;
+	HashSet<Room> rooms = new HashSet<Room>();
 
 	/**
 	 * This generator creates an basic, pre coded World object
@@ -179,7 +184,32 @@ public class WorldGenerator implements IWorldGenerator {
 
 			agents.add(tempAgent);
 		}
-
+		tempAgent = new Agent("crazy-guy", "Crazy Guy", "randomGuy");
+		ComplexAction runCrazy = new ComplexAction();
+		runCrazy.addSubAction(new Move(crazyRoom));
+		runCrazy.addSubAction(new Move(randomRoom));
+		runCrazy.addSubAction(new Move(womensRoom));
+		runCrazy.addSubAction(new Move(kitchen));
+		runCrazy.setEarliestStartTime(tempWorld.getStartTime().plus(15));
+		for(Room r : rooms) {
+			runCrazy.addSubAction(new Move(r));
+		}
+		List<Room> temp = new ArrayList<Room>(rooms);
+		Collections.shuffle(temp);
+		for(Room r : temp) {
+			runCrazy.addSubAction(new Move(r));
+		}
+		tempAgent.addActionToList(runCrazy);
+		agents.add(tempAgent);
+		
+		// If agents have no default positions: choose a random one
+		for(Agent a : agents) {
+			if(a.getDefaultPosition() == null) {
+				List<Room> r = new ArrayList<Room>(rooms);
+				Collections.shuffle(r);
+				a.setDefaultPosition(r.get(0));
+			}
+		}
 		return agents;
 
 	}
@@ -218,7 +248,7 @@ public class WorldGenerator implements IWorldGenerator {
 
 		log.info("generating rooms");
 
-		HashSet<Room> rooms = new HashSet<Room>();
+
 		Wall theNewWall;
 		Door theNewDoor;
 		Room theNewRoom = new Room();
@@ -324,6 +354,7 @@ public class WorldGenerator implements IWorldGenerator {
 		theNewRoom.addWall(theNewWall);
 		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(100, 220),
 				new Point(20, 220)));
+		kitchen = theNewRoom;
 		rooms.add(theNewRoom);
 		theNewRoom.setIdentifier("Kitchen");
 
@@ -341,6 +372,7 @@ public class WorldGenerator implements IWorldGenerator {
 		theNewWall.addDoor(theNewDoor);
 		theNewRoom.addWall(theNewWall);
 		rooms.add(theNewRoom);
+		womensRoom = theNewRoom;
 		theNewRoom.setIdentifier("Womens restroom");
 
 		// Room #6 mens restroom
@@ -441,6 +473,7 @@ public class WorldGenerator implements IWorldGenerator {
 		theNewRoom.addWall(theNewWall);
 		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(270, 100),
 				new Point(360, 100)));
+		randomRoom = theNewRoom;
 
 		// this is the pillar like walls in the center of the room, seems we
 		// need a better idea for that

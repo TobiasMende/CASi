@@ -30,7 +30,7 @@ public class SimulationClock implements Listenable<ISimulationClockListener> {
 	/** The maximum scale factor (the slowest speed) for the clock */
 	public static final int MAXIMUM_SCALE_FACTOR = 2000;
 	/** The default scale factor */
-	public static final int DEFAULT_SCALE_FACTOR = 1000;
+	public static final int DEFAULT_SCALE_FACTOR = 500;
 	/** The minimum scale factor (the highest speed) for the clock */
 	public static final int MINIMUM_SCALE_FACTOR = 10;
 

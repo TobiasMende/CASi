@@ -12,6 +12,7 @@
 package de.uniluebeck.imis.casi.communication.mack;
 
 import java.io.StringReader;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import org.xml.sax.InputSource;
@@ -54,6 +55,23 @@ public class MACKProtocolFactory {
 		for (String entity : entities) {
 			buffer.append("\t\t<entity name=\"" + entity + "\"></entity>\n");
 		}
+		buffer.append("\t</request>\n");
+		buffer.append("</message>");
+		return buffer.toString();
+	}
+	
+	public static String generatePushMessage(Agent dataObject, String subject,
+			Map<String,String> values) {
+		StringBuffer buffer = new StringBuffer();
+		buffer.append("<message type=\"status\">\n");
+		buffer.append("\t<mode>push</mode>\n");
+		buffer.append("\t<subject>" + subject + "</subject>\n");
+		buffer.append("\t<request type=\"data\" object=\"" + dataObject
+				+ "\">\n");
+//		for (String entity : entities) {
+//			buffer.append("\t\t<entity name=\"" + entity + "\"></entity>\n");
+//		}
+		// TODO build entity - value -elements
 		buffer.append("\t</request>\n");
 		buffer.append("</message>");
 		return buffer.toString();

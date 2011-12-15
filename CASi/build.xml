@@ -88,7 +88,7 @@
 		</javadoc>
 	</target>
 	<target name="jar" depends="compile" description="Builds a runnable jar file">
-		<jar destfile="${dist.dir}\CASi.jar" basedir="${build.dir}">
+		<jar destfile="${dist.dir}\CASi.jar" basedir="${build.dir}" encoding="utf-8" manifestencoding="utf-8">
 			<manifest>
 				<attribute name="Main-Class" value="de.uniluebeck.imis.casi.CASi" />
 				<attribute name="Built-By" value="${user.name}"/>

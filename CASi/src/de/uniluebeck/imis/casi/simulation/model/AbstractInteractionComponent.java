@@ -18,6 +18,8 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.Collection;
 
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+
 import de.uniluebeck.imis.casi.communication.ICommunicationComponent;
 import de.uniluebeck.imis.casi.simulation.engine.ISimulationClockListener;
 import de.uniluebeck.imis.casi.simulation.engine.SimulationEngine;
@@ -76,7 +78,7 @@ public abstract class AbstractInteractionComponent extends AbstractComponent
 	protected Face direction;
 	/** The extent of the monitored area */
 	protected double opening = -1;
-	/** The action which wears this component */
+	/** The action to which this component is connected */
 	protected Agent agent = null;
 	/** is this component a wearable? */
 	protected boolean wearable = false;
@@ -330,20 +332,14 @@ public abstract class AbstractInteractionComponent extends AbstractComponent
 
 	@Override
 	public void simulationPaused(boolean pause) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void simulationStopped() {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void simulationStarted() {
-		// TODO Auto-generated method stub
-
 	}
 
 	/**
@@ -415,6 +411,14 @@ public abstract class AbstractInteractionComponent extends AbstractComponent
 	public void finishPerformingAction(AbstractAction action, Agent agent) {
 		// nothing to do here
 
+	}
+	
+	@Override
+	public void receive(Object message) {
+		/* Should be implemented by components that want to receive messages from the communication handler. 
+		 * On other components, this call should fail because it's an unexpected behavior.
+		 * */
+		throw new NotImplementedException();
 	}
 
 }

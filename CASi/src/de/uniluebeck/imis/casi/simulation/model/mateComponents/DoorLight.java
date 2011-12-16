@@ -55,8 +55,6 @@ public class DoorLight extends AbstractInteractionComponent {
 
 	/** The current state of this door light */
 	private State currentState = State.maybeInterruptible;
-	/** The agent which state is represented by this door light */
-	private Agent agent;
 	/** The door to which this actuator is attached  */
 	private Door door;
 	/** The room to which the access is restricted by this light */

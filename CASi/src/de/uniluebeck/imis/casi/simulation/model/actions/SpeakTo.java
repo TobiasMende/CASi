@@ -62,5 +62,13 @@ public class SpeakTo extends AtomicAction {
 	protected void postActionTask(AbstractComponent performer) {
 		task.complete();
 	}
+	
+	/**
+	 * Getter for the object of this action.
+	 * @return the agent to which the performer speaks to.
+	 */
+	public Agent getAgent() {
+		return agent;
+	}
 
 }

@@ -12,7 +12,10 @@
 package de.uniluebeck.imis.casi.simulation.model.mateComponents;
 
 import java.awt.Point;
+import java.util.HashMap;
 
+import de.uniluebeck.imis.casi.communication.mack.MACKProtocolFactory;
+import de.uniluebeck.imis.casi.simulation.engine.SimulationEngine;
 import de.uniluebeck.imis.casi.simulation.model.AbstractInteractionComponent;
 import de.uniluebeck.imis.casi.simulation.model.Agent;
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.AbstractAction;
@@ -45,9 +48,10 @@ public class Desktop extends AbstractInteractionComponent {
 	 * @param coordinates
 	 *            the exact position of this daa.
 	 */
-	public Desktop(Point coordinates) {
+	public Desktop(Point coordinates, Agent agent) {
 		super("daa-"+idCounter, coordinates);
 		type = Type.SENSOR;
+		this.agent = agent;
 		
 	}
 
@@ -56,15 +60,10 @@ public class Desktop extends AbstractInteractionComponent {
 	 */
 	private static final long serialVersionUID = 8750391465421352206L;
 
-	@Override
-	public void receive(Object message) {
-		// don't receive messages
-
-	}
 
 	@Override
 	protected boolean handleInternal(AbstractAction action, Agent agent) {
-		// don't handle indirect actions
+		agent.removeVetoableListener(this);
 		return false;
 	}
 
@@ -84,8 +83,15 @@ public class Desktop extends AbstractInteractionComponent {
 		send();
 	}
 	
+	/**
+	 * Finally sends a message to the communication handler.
+	 */
 	private void send() {
-		
+		HashMap<String, String> values = new HashMap<String, String>();
+		values.put("frequency", currentFrequency.toString());
+		values.put("program", currentProgram.toString());
+		String message = MACKProtocolFactory.generatePushMessage(agent, "daa", values);
+		SimulationEngine.getInstance().getCommunicationHandler().send(this, message);
 	}
 
 }

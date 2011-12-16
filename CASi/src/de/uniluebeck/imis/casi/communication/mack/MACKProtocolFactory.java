@@ -59,19 +59,31 @@ public class MACKProtocolFactory {
 		buffer.append("</message>");
 		return buffer.toString();
 	}
-	
+
+	/**
+	 * Generates a push message which can be send to the MACK framework by using
+	 * the {@link MACKNetworkHandler}
+	 * 
+	 * @param dataObject
+	 *            the agent who is request object
+	 * @param subject
+	 *            the component that sends this request.
+	 * @param values
+	 *            the entity value pairs which should be send
+	 * @return a xml message according to the MACK protocol
+	 */
 	public static String generatePushMessage(Agent dataObject, String subject,
-			Map<String,String> values) {
+			Map<String, String> values) {
 		StringBuffer buffer = new StringBuffer();
 		buffer.append("<message type=\"status\">\n");
 		buffer.append("\t<mode>push</mode>\n");
 		buffer.append("\t<subject>" + subject + "</subject>\n");
 		buffer.append("\t<request type=\"data\" object=\"" + dataObject
 				+ "\">\n");
-//		for (String entity : entities) {
-//			buffer.append("\t\t<entity name=\"" + entity + "\"></entity>\n");
-//		}
-		// TODO build entity - value -elements
+		for (String key : values.keySet()) {
+			buffer.append("\t\t<entity name=\"" + key + "\">" + values.get(key)
+					+ "</entity>\n");
+		}
 		buffer.append("\t</request>\n");
 		buffer.append("</message>");
 		return buffer.toString();

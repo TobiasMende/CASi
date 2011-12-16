@@ -14,6 +14,7 @@ package de.uniluebeck.imis.casi.simulation.model;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.security.InvalidParameterException;
+import java.util.ArrayList;
 import java.util.logging.Logger;
 
 import de.uniluebeck.imis.casi.CASi;
@@ -26,6 +27,10 @@ import de.uniluebeck.imis.casi.simulation.factory.WorldFactory;
  * 
  */
 public class Door extends AbstractComponent {
+	public enum State {
+		OPEN, CLOSED, LOCKED
+	}
+
 	private static final Logger log = Logger.getLogger(Door.class.getName());
 	/** A prefix for the identifier of this door */
 	public static final String ID_PREFIX = "door-";
@@ -41,6 +46,8 @@ public class Door extends AbstractComponent {
 	private int offset;
 	/** The size of the door */
 	private int size;
+
+	private ArrayList<IDoorListener> listeners = new ArrayList<IDoorListener>();
 	/**
 	 * The wall that contains this door and is used for calculating the position
 	 */
@@ -49,6 +56,8 @@ public class Door extends AbstractComponent {
 	private Wall secondWall;
 	/** The identifier */
 	private int identifier;
+/** The current state of this door */
+	private State currentState = State.CLOSED;
 
 	/**
 	 * Creates a door with a given identifier
@@ -66,6 +75,7 @@ public class Door extends AbstractComponent {
 		}
 		WorldFactory.addDoor(this);
 	}
+
 	/**
 	 * Constructor for a door with a given offset of the walls start point
 	 * 
@@ -76,7 +86,7 @@ public class Door extends AbstractComponent {
 	 */
 	public Door(int offset, int size) {
 		this(id);
-		
+
 		this.offset = offset;
 		this.size = Math.abs(size);
 	}
@@ -195,6 +205,7 @@ public class Door extends AbstractComponent {
 	public static int getNumberOfDoors() {
 		return id;
 	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -202,6 +213,7 @@ public class Door extends AbstractComponent {
 		result = prime * result + identifier;
 		return result;
 	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -215,11 +227,70 @@ public class Door extends AbstractComponent {
 			return false;
 		return true;
 	}
-	
-	
+
 	@Override
 	public String toString() {
-		return super.toString();//+" ("+getIntIdentifier()+")";
+		return super.toString();// +" ("+getIntIdentifier()+")";
+	}
+
+	/**
+	 * Informs listeners about state changes of this door
+	 * 
+	 * @param oldState
+	 *            the old state
+	 * @param newState
+	 *            the new current state
+	 */
+	private void informListenersAboutStateChange(State oldState, State newState) {
+		for (IDoorListener l : listeners) {
+			l.stateChanged(oldState, newState);
+		}
+	}
+
+	/**
+	 * Sets the state
+	 * 
+	 * @param state
+	 *            the state to set
+	 */
+	public void setState(State state) {
+		if(state.equals(currentState)) {
+			return;
+		}
+		State oldState = currentState;
+		currentState = state;
+		informListenersAboutStateChange(oldState, state);
+	}
+
+	/**
+	 * Gets the state
+	 * 
+	 * @return the current state
+	 */
+	public State getState() {
+		return currentState;
+	}
+
+	/**
+	 * Adds a door listener
+	 * 
+	 * @param listener
+	 *            the listener
+	 */
+	public void addListener(IDoorListener listener) {
+		if (!listeners.contains(listener)) {
+			listeners.add(listener);
+		}
+	}
+
+	/**
+	 * Removes a door listener
+	 * 
+	 * @param listener
+	 *            the listener to remove.
+	 */
+	public void removeListener(IDoorListener listener) {
+		listeners.remove(listener);
 	}
 
 }

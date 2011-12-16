@@ -150,7 +150,8 @@ public class WorldFactory {
 	}
 
 	/**
-	 * Method for getting a room with a provided collection of walls. Searches for a room that contains these walls.
+	 * Method for getting a room with a provided collection of walls. Searches
+	 * for a room that contains these walls.
 	 * 
 	 * @param walls
 	 *            the walls to search the room for
@@ -160,8 +161,8 @@ public class WorldFactory {
 		Set<Room> allRooms;
 		try {
 			allRooms = SimulationEngine.getInstance().getWorld().getRooms();
-			for(Room room : allRooms) {
-				if(room.getWalls().containsAll(walls)) {
+			for (Room room : allRooms) {
+				if (room.getWalls().containsAll(walls)) {
 					return room;
 				}
 			}
@@ -171,13 +172,13 @@ public class WorldFactory {
 		}
 		return null;
 	}
-	
+
 	public static Room getRoomWithPoints(Point2D first, Point2D second) {
 		Set<Room> allRooms;
 		try {
 			allRooms = SimulationEngine.getInstance().getWorld().getRooms();
-			for(Room room : allRooms) {
-				if(room.contains(first) && room.contains(second)) {
+			for (Room room : allRooms) {
+				if (room.contains(first) && room.contains(second)) {
 					return room;
 				}
 			}
@@ -187,19 +188,24 @@ public class WorldFactory {
 		}
 		return null;
 	}
-	
+
 	/**
-	 * Gets a list of actuators and sensors that may be interested in actions occurring at a given position
-	 * @param coordinates the position
+	 * Gets a list of actuators and sensors that may be interested in actions
+	 * occurring at a given position
+	 * 
+	 * @param coordinates
+	 *            the position
 	 * @return a list of actuators and sensors which monitor this point.
 	 */
-	public static LinkedList<AbstractInteractionComponent> getInteractionComponentsForPosition(Point2D coordinates) {
+	public static LinkedList<AbstractInteractionComponent> getInteractionComponentsForPosition(
+			Point2D coordinates) {
 		LinkedList<AbstractInteractionComponent> components = new LinkedList<AbstractInteractionComponent>();
 		Set<AbstractInteractionComponent> allComponents;
 		try {
-			allComponents = SimulationEngine.getInstance().getWorld().getInteractionComponents();
-			for(AbstractInteractionComponent comp : allComponents) {
-				if(comp.contains(coordinates)) {
+			allComponents = SimulationEngine.getInstance().getWorld()
+					.getInteractionComponents();
+			for (AbstractInteractionComponent comp : allComponents) {
+				if (comp.contains(coordinates)) {
 					components.add(comp);
 				}
 			}
@@ -207,6 +213,23 @@ public class WorldFactory {
 			log.severe("Don't call this method before sealing the world!");
 		}
 		return components;
+	}
+
+	/**
+	 * Searches a door with a provided point
+	 * 
+	 * @param point
+	 *            the point to search a door for
+	 * @return the door which's shape contains this point or {@code null} if no
+	 *         door was found.
+	 */
+	public static Door getDoorWithPoint(Point2D point) {
+		for (Door d : doors.values()) {
+			if (d.getCentralPoint().equals(point)) {
+				return d;
+			}
+		}
+		return null;
 	}
 
 }

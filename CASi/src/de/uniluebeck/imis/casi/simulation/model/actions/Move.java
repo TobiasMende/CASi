@@ -12,13 +12,14 @@
 package de.uniluebeck.imis.casi.simulation.model.actions;
 
 import java.awt.geom.Point2D;
-import java.io.IOException;
 import java.util.Iterator;
 import java.util.logging.Logger;
 
 import de.uniluebeck.imis.casi.CASi;
 import de.uniluebeck.imis.casi.simulation.factory.PathFactory;
+import de.uniluebeck.imis.casi.simulation.factory.WorldFactory;
 import de.uniluebeck.imis.casi.simulation.model.AbstractComponent;
+import de.uniluebeck.imis.casi.simulation.model.Door;
 import de.uniluebeck.imis.casi.simulation.model.IPosition;
 import de.uniluebeck.imis.casi.simulation.model.Path;
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.AtomicAction;
@@ -48,17 +49,28 @@ public class Move extends AtomicAction {
 	private IPosition endPosition;
 	/** the path from start to end point */
 	private Path path;
+	/** the point which was visited in the last iteration */
+	private Point2D lastPoint;
+	/** A door which has to be opened while going on */
+	private Door doorToOpen;
+	/** A door which has to be closed while going on */
+	private Door doorToClose;
+	/** The last state of the door (to rescue after entering the room) */
+	
+	private Door.State doorsLastState;
 	/** The iterator used for traveling along the path */
 	private Iterator<Point2D> pathIterator;
 
 	/**
 	 * Creates a new move action with a given destination
-	 * @param endPosition the destination to set
+	 * 
+	 * @param endPosition
+	 *            the destination to set
 	 */
 	public Move(IPosition endPosition) {
 		this.endPosition = endPosition;
 	}
-	
+
 	@Override
 	protected boolean internalPerform(AbstractComponent performer) {
 		if (path == null) {
@@ -82,8 +94,22 @@ public class Move extends AtomicAction {
 			return false;
 		}
 		for (int i = 0; i < POINTS_PER_SECOND; i++) {
+			if(doorToClose != null) {
+				doorToClose.setState(doorsLastState);
+				doorToClose = null;
+			}
+			if (affectingDoor()) {
+				if(doorToOpen.getState().equals(Door.State.LOCKED)) {
+					CASi.SIM_LOG.warning("Door "+doorToOpen+" is locked. Aborting move");
+					return true;
+				}
+				doorsLastState = doorToOpen.getState();
+				doorToOpen.setState(Door.State.OPEN);
+				doorToClose = doorToOpen;
+			}
 			if (pathIterator.hasNext()) {
-				this.performer.setCoordinates(pathIterator.next());
+				lastPoint = pathIterator.next();
+				this.performer.setCoordinates(lastPoint);
 			} else {
 				// Finally arrived:
 				return true;
@@ -93,6 +119,20 @@ public class Move extends AtomicAction {
 			return true;
 		}
 		return false;
+	}
+
+	/**
+	 * Checks whether this move affects a door or not. saves the affected door
+	 * in {@link Move#doorToOpen} if one is found.
+	 * 
+	 * @return {@code true} if a door is affected or {@code false} otherwise.
+	 */
+	private boolean affectingDoor() {
+		if (lastPoint == null) {
+			return false;
+		}
+		doorToOpen = WorldFactory.getDoorWithPoint(lastPoint);
+		return !(doorToOpen == null);
 	}
 
 	/**
@@ -155,43 +195,47 @@ public class Move extends AtomicAction {
 			return false;
 		return true;
 	}
-	
+
 	@Override
 	protected boolean preActionTask(AbstractComponent performer) {
-		CASi.SIM_LOG.info(performer+" starting Move from "+performer.getCurrentPosition()+" to "+endPosition);
+		CASi.SIM_LOG.info(performer + " starting Move from "
+				+ performer.getCurrentPosition() + " to " + endPosition);
 		return super.preActionTask(performer);
 	}
 
 	@Override
 	protected void postActionTask(AbstractComponent performer) {
-		CASi.SIM_LOG.info(performer+" completes Move. Destination: "+performer.getCurrentPosition());
+		CASi.SIM_LOG.info(performer + " completes Move. Destination: "
+				+ performer.getCurrentPosition());
 		super.postActionTask(performer);
 	}
-	
+
 	@Override
 	public void reset() {
 		path = null;
 		pathIterator = null;
 		super.reset();
 	}
-	
+
 	@Override
 	public String toString() {
-		
-		return super.toString()+" - Dest: "+endPosition;
+
+		return super.toString() + " - Dest: " + endPosition;
 	}
-	
+
 	/**
-	 *Getter for a copy of the path iterator
+	 * Getter for a copy of the path iterator
+	 * 
 	 * @return the pathIterator
 	 */
 	@SuppressWarnings("unchecked")
 	public Iterator<Point2D> getPathIterator() {
 		try {
-			return pathIterator != null? (Iterator<Point2D>)Tools.deepCopy(pathIterator) : null;
+			return pathIterator != null ? (Iterator<Point2D>) Tools
+					.deepCopy(pathIterator) : null;
 		} catch (Exception e) {
-			log.severe("Can't clone path iterator: "+e.fillInStackTrace());
-		} 
+			log.severe("Can't clone path iterator: " + e.fillInStackTrace());
+		}
 		return null;
 	}
 

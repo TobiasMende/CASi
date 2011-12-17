@@ -99,7 +99,7 @@ public class BackroundPanel extends JPanel {
 					g.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 8));
 					Point doorPoint = GraphicFactory.getPoint(door.getCentralPoint().getX()-1.5, door.getCentralPoint().getY()-1.5);
 					g2D.drawString(door.toString(), doorPoint.x, doorPoint.y);
-					g.setColor(Color.LIGHT_GRAY);
+					g.setColor(Color.YELLOW);
 					g2D.draw(door.getShapeRepresentation());
 					// Show central point of door:
 					g.setColor(Color.BLUE);

@@ -19,6 +19,7 @@ import java.util.logging.Logger;
 
 import de.uniluebeck.imis.casi.CASi;
 import de.uniluebeck.imis.casi.simulation.factory.WorldFactory;
+import de.uniluebeck.imis.casi.simulation.model.mateComponents.DoorSensor;
 
 /**
  * The representation for a door that can be added to a wall
@@ -27,10 +28,11 @@ import de.uniluebeck.imis.casi.simulation.factory.WorldFactory;
  * 
  */
 public class Door extends AbstractComponent {
+	/** Possible door states which are sensed by attached {@link DoorSensor}s */
 	public enum State {
 		OPEN, CLOSED, LOCKED
 	}
-
+	/** the development logger */
 	private static final Logger log = Logger.getLogger(Door.class.getName());
 	/** A prefix for the identifier of this door */
 	public static final String ID_PREFIX = "door-";
@@ -46,7 +48,7 @@ public class Door extends AbstractComponent {
 	private int offset;
 	/** The size of the door */
 	private int size;
-
+	/** A list of listeners */
 	private ArrayList<IDoorListener> listeners = new ArrayList<IDoorListener>();
 	/**
 	 * The wall that contains this door and is used for calculating the position
@@ -151,7 +153,7 @@ public class Door extends AbstractComponent {
 
 	@Override
 	public boolean contains(Point2D point) {
-		return getShapeRepresentation().ptLineDist(point) <= 1;
+		return getShapeRepresentation().ptSegDist(point) <= 1;
 	}
 
 	@Override
@@ -259,6 +261,7 @@ public class Door extends AbstractComponent {
 		}
 		State oldState = currentState;
 		currentState = state;
+		log.info("Changed state to "+state);
 		informListenersAboutStateChange(oldState, state);
 	}
 

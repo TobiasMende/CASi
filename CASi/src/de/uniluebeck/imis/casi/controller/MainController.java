@@ -57,7 +57,7 @@ public class MainController {
 			SimulationEngine.getInstance().setCommunicationHandler(
 					communicationHandler);
 
-			world.init();
+			SimulationEngine.getInstance().init();
 		} catch (IllegalAccessException e) {
 			CASi.SIM_LOG
 					.severe("Can't set components after starting the simulation: "

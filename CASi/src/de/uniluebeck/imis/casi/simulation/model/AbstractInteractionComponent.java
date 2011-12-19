@@ -420,5 +420,10 @@ public abstract class AbstractInteractionComponent extends AbstractComponent
 		 * */
 		throw new NotImplementedException();
 	}
+	
+	@Override
+	public void init() {
+		SimulationEngine.getInstance().getCommunicationHandler().register(this);
+	}
 
 }

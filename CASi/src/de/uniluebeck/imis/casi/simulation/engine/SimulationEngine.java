@@ -11,8 +11,10 @@
  */
 package de.uniluebeck.imis.casi.simulation.engine;
 
+import de.uniluebeck.imis.casi.CASi;
+import de.uniluebeck.imis.casi.communication.ICommunicationComponent;
 import de.uniluebeck.imis.casi.communication.ICommunicationHandler;
-import de.uniluebeck.imis.casi.simulation.model.SimulationTime;
+import de.uniluebeck.imis.casi.simulation.model.AbstractInteractionComponent;
 import de.uniluebeck.imis.casi.simulation.model.World;
 
 /**
@@ -25,7 +27,7 @@ import de.uniluebeck.imis.casi.simulation.model.World;
  * @author Tobias Mende
  * 
  */
-public class SimulationEngine implements ISimulationClockListener {
+public class SimulationEngine {
 	/** The instance of this singleton */
 	private static SimulationEngine instance;
 	/**
@@ -44,7 +46,6 @@ public class SimulationEngine implements ISimulationClockListener {
 	 * The private constructor of this singleton
 	 */
 	private SimulationEngine() {
-		SimulationClock.getInstance().addListener(this);
 		// just here for prohibiting external access
 	}
 
@@ -135,26 +136,19 @@ public class SimulationEngine implements ISimulationClockListener {
 			throw new IllegalStateException("Can't start if world isn't sealed");
 		}
 	}
-
-	// THINK needs the engine to be a clock listener?
-
-	@Override
-	public void timeChanged(SimulationTime newTime) {
-		// nothing to do here at the moment
+	/**
+	 * Initializes the Simulation
+	 */
+	public void init() {
+		CASi.SIM_LOG.info("Initializing the simulation!");
+		world.init();
+		try {
+			for(AbstractInteractionComponent comp : world.getInteractionComponents()) {
+					comp.init();
+			}
+		} catch (IllegalAccessException e) {
+			CASi.SIM_LOG.severe("World isn't sealed. Can't init!");
+		}
 	}
 
-	@Override
-	public void simulationPaused(boolean pause) {
-		// nothing to do here at the moment
-	}
-
-	@Override
-	public void simulationStopped() {
-		// nothing to do here at the moment
-	}
-
-	@Override
-	public void simulationStarted() {
-		// nothing to do here at the moment
-	}
 }

@@ -34,4 +34,8 @@ public interface ICommunicationComponent {
 	 *            the message
 	 */
 	public void receive(Object message);
+	/**
+	 * This method should be used to init the component (the component should register at the {@link ICommunicationHandler}).
+	 */
+	public void init();
 }

@@ -26,6 +26,7 @@ import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
 
+import de.uniluebeck.imis.casi.CASi;
 import de.uniluebeck.imis.casi.generator.IWorldGenerator;
 import de.uniluebeck.imis.casi.simulation.factory.WallFactory;
 import de.uniluebeck.imis.casi.simulation.model.AbstractComponent;
@@ -64,7 +65,6 @@ public class WorldGenerator implements IWorldGenerator {
 	 */
 	@Override
 	public World generateWorld() {
-		// TODO Auto-generated method stub
 
 		// Ein Geistlicher und ein australischer Schafhirte treten bei einem
 		// Quiz gegeneinander an.
@@ -96,8 +96,8 @@ public class WorldGenerator implements IWorldGenerator {
 			image = ImageIO
 					.read(new File("sims/dev_office_java/backround.png"));
 		} catch (IOException e) {
-			// there could be something wrong
-			// TODO: logg this!
+			CASi.SIM_LOG.severe("Can't read the background image for the simulation. Something is wrong!");
+			log.severe("Can't read image: "+e.fillInStackTrace());
 		}
 
 		// giant try block around everything that actually sets things to the

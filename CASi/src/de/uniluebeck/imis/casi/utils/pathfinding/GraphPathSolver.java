@@ -71,7 +71,6 @@ public class GraphPathSolver extends AStar<Integer> {
 					minimum = adjacency[i][j];
 				}
 			}
-			//FIXME
 			heuristics[i] = minimum;
 		}
 	}
@@ -88,9 +87,6 @@ public class GraphPathSolver extends AStar<Integer> {
 
 	@Override
 	protected double heuristic(Integer from, Integer to) {
-		// TODO: add better heuristic if possible
-		// IDEA: take the minimum costs over all possible next steps as
-		// heuristic
 		return heuristics[from.intValue()];
 	}
 

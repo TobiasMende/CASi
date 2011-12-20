@@ -11,18 +11,11 @@
  */
 package de.uniluebeck.imis.casi.controller;
 
-import de.uniluebeck.imis.casi.simulation.engine.SimulationClock;
-import de.uniluebeck.imis.casi.simulation.engine.SimulationEngine;
 
 /**
  * Interface for ui controllers. Implement it to provide a ui/ gui controller
  * 
  * @author Tobias Mende
- * 
- *         TODO do we need this interface? All functionalities are provided by
- *         the {@link SimulationEngine}, the {@link SimulationClock} or the
- *         {@link MainController}. But perhaps it's good to encapsulate these
- *         functionalities
  */
 public interface IUIController {
 	/**

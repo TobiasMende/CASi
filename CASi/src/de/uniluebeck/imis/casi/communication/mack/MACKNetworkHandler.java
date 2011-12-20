@@ -11,51 +11,49 @@
  */
 package de.uniluebeck.imis.casi.communication.mack;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import de.uniluebeck.imis.casi.communication.ICommunicationComponent;
 import de.uniluebeck.imis.casi.communication.ICommunicationHandler;
 
+/**
+ * The MACKNetworkHandler handles the communication with the MACK Framework (the
+ * jabber server)
+ * 
+ * @author Tobias Mende
+ * 
+ */
 public final class MACKNetworkHandler implements ICommunicationHandler {
 
-	private static MACKNetworkHandler instance;
-	private String xmppID;
+	/**
+	 * the component map holds all components with their identifier which should
+	 * also be used in the MACK framework TODO: if not so: change getIdentifier
+	 * of the components to work as expected.
+	 */
+	private Map<String, ICommunicationComponent> components = new HashMap<String, ICommunicationComponent>();
 
 	public MACKNetworkHandler() {
 		// TODO implement
 	}
 
-	private String getXmppID() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/**
-	 * Setter method for xmmpdID. This need to be set before the first usage of
-	 * this Object!
-	 * 
-	 * @param xmmpID
-	 */
-	public void setXmppID(String xmmpID) {
-		this.xmppID = xmmpID;
-	}
-
 	@Override
 	public synchronized boolean send(ICommunicationComponent sender,
 			Object message) {
-		checkIfConnected();
-		// TODO Auto-generated method stub
+		// TODO send the message with the correct identifier to the mack framework
 		return false;
 	}
 
 	@Override
 	public synchronized void register(ICommunicationComponent comp) {
-		// TODO Auto-generated method stub
-
+		components.put(comp.getIdentifier(), comp);
+		// TODO: Handle further connections here?
 	}
 
-	private static void checkIfConnected()
-			throws java.nio.channels.NotYetConnectedException {
-		if (instance.getXmppID() == null) {
-			throw new java.nio.channels.NotYetConnectedException();
-		}
-	}
+	/*
+	 * TODO: * Connect to Server * Create a map of jabber identifiers and
+	 * component identifiers * Send messages with the correct jabber identifiers
+	 * * Receive and forward messages to the correct components (maybe it is
+	 * better to extract MACKInformation here than in the components)
+	 */
 }

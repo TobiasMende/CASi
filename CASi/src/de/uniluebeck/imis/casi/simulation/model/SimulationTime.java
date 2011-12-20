@@ -31,8 +31,6 @@ import java.util.Locale;
  */
 public class SimulationTime extends Timestamp {
 	/*
-	 * XXX Extend the implementation of the SimulationTime
-	 * 
 	 * - We need more abilities to parse localized time strings when
 	 * constructing new time objects.
 	 * 

@@ -86,27 +86,22 @@ public class SimulationPanel extends JLayeredPane implements ISimulationClockLis
 
 	@Override
 	public void timeChanged(SimulationTime newTime) {
-		// TODO Auto-generated method stub
-		
+		// nothing to do here at the moment
 	}
 
 	@Override
 	public void simulationPaused(boolean pause) {
-		// TODO Auto-generated method stub
-		
+		// nothing to do here at the moment
 	}
 
 	@Override
 	public void simulationStopped() {
-		// TODO Auto-generated method stub
-		
+		// nothing to do here at the moment
 	}
 
 	@Override
 	public void simulationStarted() {
-
 		this.repaint();
-		
 	}
 
 }

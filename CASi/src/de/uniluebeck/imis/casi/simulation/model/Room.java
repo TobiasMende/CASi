@@ -112,7 +112,6 @@ public class Room implements IPosition {
 			int[] x = new int[points.size()];
 			int[] y = new int[points.size()];
 			for (int i = 0; i < x.length; i++) {
-				// XXX: is this cast ok?
 				x[i] = (int) points.get(i).getX();
 				y[i] = (int) points.get(i).getY();
 			}

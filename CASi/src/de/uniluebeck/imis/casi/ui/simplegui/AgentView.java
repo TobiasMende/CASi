@@ -39,15 +39,15 @@ public class AgentView extends JComponent implements IAgentListener {
 	private static final Logger log = Logger.getLogger(AgentView.class
 			.getName());
 
-	private Point2D position;
-
 	private Color stateColor;
 
 	public AgentView(Point2D startPosition) {
 
-		position = startPosition;
-		this.setBounds(GraphicFactory.getPointRepresentation(startPosition).x,
-				GraphicFactory.getPointRepresentation(startPosition).y, 8, 8);
+		Point startPoint = SimpleGuiScaler
+				.getPointRepresentation(getOptimizedPosition(startPosition));
+		
+		this.setBounds(GraphicFactory.getPointRepresentation(startPoint).x,
+				GraphicFactory.getPointRepresentation(startPoint).y, 8, 8);
 
 		/* Set state color to yellow for debugging */
 		this.stateColor = Color.YELLOW;
@@ -103,9 +103,10 @@ public class AgentView extends JComponent implements IAgentListener {
 
 			@Override
 			public void run() {
-				AgentView.this.position = newPosition;
+
 				/* Simply set the new location to the new position */
-				AgentView.this.setLocation(getOptimizedPosition(newPosition));
+				AgentView.this.setLocation(SimpleGuiScaler
+						.getPointRepresentation(getOptimizedPosition(newPosition)));
 
 				AgentView.this.invalidate();
 

@@ -94,7 +94,9 @@ public class World {
 		log.fine("Connecting agents with sensors and actuators");
 		for(Agent agent : agents) {
 			for(AbstractInteractionComponent comp : interactionComponents) {
-				agent.addVetoableListener(comp);
+				if(comp.checkInterest(agent)) {
+					agent.addVetoableListener(comp);
+				}
 			}
 		}
 		log.fine("All agents are connected");

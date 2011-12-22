@@ -250,11 +250,7 @@ public class DoorLight extends AbstractInteractionComponent {
 
 	@Override
 	protected boolean checkInterest(Agent agent) {
-		if (agent == this.agent) {
-			agent.removeVetoableListener(this);
-			return false;
-		}
-		return true;
+		return agent != this.agent;
 	}
 
 	@Override

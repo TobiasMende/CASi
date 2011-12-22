@@ -64,7 +64,6 @@ public class Desktop extends AbstractInteractionComponent {
 
 	@Override
 	protected boolean handleInternal(AbstractAction action, Agent agent) {
-		agent.removeVetoableListener(this);
 		return false;
 	}
 

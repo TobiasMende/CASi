@@ -181,7 +181,6 @@ public class Cube extends AbstractInteractionComponent {
 	@Override
 	protected boolean checkInterest(Agent agent) {
 		if (!agent.equals(this.agent)) {
-			agent.removeVetoableListener(this);
 			return false;
 		}
 		if (!this.contains(agent)) {

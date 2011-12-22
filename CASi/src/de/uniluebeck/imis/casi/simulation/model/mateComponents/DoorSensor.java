@@ -66,8 +66,7 @@ public class DoorSensor extends AbstractInteractionComponent implements
 
 	@Override
 	protected boolean handleInternal(AbstractAction action, Agent agent) {
-		agent.removeVetoableListener(this);
-		return true;
+		return false;
 	}
 
 	@Override

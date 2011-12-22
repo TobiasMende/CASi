@@ -12,6 +12,7 @@
 package de.uniluebeck.imis.casi.generator.java;
 
 import java.awt.Point;
+import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -44,6 +45,11 @@ import de.uniluebeck.imis.casi.simulation.model.actionHandling.ComplexAction;
 import de.uniluebeck.imis.casi.simulation.model.actions.GoAndSpeakTo;
 import de.uniluebeck.imis.casi.simulation.model.actions.Move;
 import de.uniluebeck.imis.casi.simulation.model.actions.SpeakTo;
+import de.uniluebeck.imis.casi.simulation.model.mateComponents.Cube;
+import de.uniluebeck.imis.casi.simulation.model.mateComponents.Desktop;
+import de.uniluebeck.imis.casi.simulation.model.mateComponents.DoorLight;
+import de.uniluebeck.imis.casi.simulation.model.mateComponents.DoorSensor;
+import de.uniluebeck.imis.casi.simulation.model.mateComponents.Mike;
 
 public class WorldGenerator implements IWorldGenerator {
 
@@ -53,6 +59,8 @@ public class WorldGenerator implements IWorldGenerator {
 	World tempWorld = new World();
 	Room timsRoom, mainFloor, crazyRoom, randomRoom, womensRoom, kitchen;
 	HashSet<Room> rooms = new HashSet<Room>();
+	HashSet<Agent> agents;
+	Agent tim, crazyGuy;
 
 	/**
 	 * This generator creates an basic, pre coded World object
@@ -96,39 +104,39 @@ public class WorldGenerator implements IWorldGenerator {
 			image = ImageIO
 					.read(new File("sims/dev_office_java/backround.png"));
 		} catch (IOException e) {
-			CASi.SIM_LOG.severe("Can't read the background image for the simulation. Something is wrong!");
-			log.severe("Can't read image: "+e.fillInStackTrace());
+			CASi.SIM_LOG
+					.severe("Can't read the background image for the simulation. Something is wrong!");
+			log.severe("Can't read image: " + e.fillInStackTrace());
 		}
 
 		// giant try block around everything that actually sets things to the
 		// world
 
-			try {
-				tempWorld.setStartTime(new SimulationTime("12/24/2011 02:03:42"));
-				tempWorld.setBackgroundImage(image);
-				
-				// rooms
-				HashSet<Room> rooms = generateRooms();
-				tempWorld.setRooms(rooms);
-				
-				// generate the agents
-				HashSet<Agent> agents = generateAgents();
-				tempWorld.setAgents(agents);
-				
-				
-				// actuators & sensors
-				HashSet<AbstractInteractionComponent> interactionComps = generateActuators();
-				tempWorld.setInteractionComponents(interactionComps);
-				
-				tempWorld.setComponents(new HashSet<AbstractComponent>());
-				tempWorld.seal();
-			} catch (IllegalAccessException e) {
-				log.severe("Illegal Access:" + e.fillInStackTrace());
-			} catch (ParseException e) {
-				log.severe("Parse Exception:" + e.fillInStackTrace());
-			} catch (Exception e) {
-				log.severe("Unknown Exception: "+e.fillInStackTrace());
-			}
+		try {
+			tempWorld.setStartTime(new SimulationTime("12/24/2011 02:03:42"));
+			tempWorld.setBackgroundImage(image);
+
+			// rooms
+			rooms = generateRooms();
+			tempWorld.setRooms(rooms);
+
+			// generate the agents
+			agents = generateAgents();
+			tempWorld.setAgents(agents);
+
+			// actuators & sensors
+			HashSet<AbstractInteractionComponent> interactionComps = generateActuators();
+			tempWorld.setInteractionComponents(interactionComps);
+
+			tempWorld.setComponents(new HashSet<AbstractComponent>());
+			tempWorld.seal();
+		} catch (IllegalAccessException e) {
+			log.severe("Illegal Access:" + e.fillInStackTrace());
+		} catch (ParseException e) {
+			log.severe("Parse Exception:" + e.fillInStackTrace());
+		} catch (Exception e) {
+			log.severe("Unknown Exception: " + e.fillInStackTrace());
+		}
 
 		return tempWorld;
 	}
@@ -137,10 +145,14 @@ public class WorldGenerator implements IWorldGenerator {
 	 * @return
 	 */
 	private HashSet<AbstractInteractionComponent> generateActuators() {
-		// TODO generate actuators!
-		return new HashSet<AbstractInteractionComponent>();
+		HashSet<AbstractInteractionComponent> res = new HashSet<AbstractInteractionComponent>();
+		// TODO generate more actuators!
+		
+		res.addAll(addThingsToRoomWithOwner(timsRoom, tim));
+		res.addAll(addThingsToRoomWithOwner(crazyRoom, crazyGuy));
+		
+		return res;
 	}
-
 
 	/**
 	 * Only creates some agents. Testing stuff
@@ -160,12 +172,24 @@ public class WorldGenerator implements IWorldGenerator {
 			agents.add(tempAgent);
 		}
 
-		tempAgent = new Agent("Father Moneymaker", "Father Moneymaker", "candidates");
+		//##########
+		// Father Moneymaker
+		//##########
+		tempAgent = new Agent("Father Moneymaker", "Father Moneymaker",
+				"candidates");
 		agents.add(tempAgent);
-		Agent tim = new Agent("Tim", "Tim", "candidates");
+		
+		//##########
+		// Tim
+		//##########
+		tim = new Agent("Tim", "Tim", "candidates");
 		tim.setCurrentPosition(timsRoom);
 		tim.setDefaultPosition(timsRoom);
 		agents.add(tim);
+		
+		//##########
+		// And I
+		//##########
 		tempAgent = new Agent("And I", "And I", "candidates");
 		tempAgent.setDefaultPosition(crazyRoom);
 		tempAgent.setCurrentPosition(timsRoom);
@@ -175,36 +199,42 @@ public class WorldGenerator implements IWorldGenerator {
 		tempAgent.addActionToList(goHome);
 		agents.add(tempAgent);
 
+		//##########
+		// Tentladies
+		//##########
 		for (int i = 0; i < 3; i++) {
 			tempAgent = new Agent("agent_" + i + "_lady", "Tentlady" + i,
 					"tendladies");
 			tempAgent.setDefaultPosition(mainFloor);
 			tempAgent = generateActionsForTentLady(andI, tempAgent);
-			
 
 			agents.add(tempAgent);
 		}
-		tempAgent = new Agent("crazy-guy", "Crazy Guy", "randomGuy");
+		
+		//##########
+		// Crazy-Guy
+		//##########
+		crazyGuy = new Agent("crazy-guy", "Crazy Guy", "randomGuy");
 		ComplexAction runCrazy = new ComplexAction();
 		runCrazy.addSubAction(new Move(crazyRoom));
 		runCrazy.addSubAction(new Move(randomRoom));
 		runCrazy.addSubAction(new Move(womensRoom));
 		runCrazy.addSubAction(new Move(kitchen));
 		runCrazy.setEarliestStartTime(tempWorld.getStartTime().plus(15));
-		for(Room r : rooms) {
+		for (Room r : rooms) {
 			runCrazy.addSubAction(new Move(r));
 		}
 		List<Room> temp = new ArrayList<Room>(rooms);
 		Collections.shuffle(temp);
-		for(Room r : temp) {
+		for (Room r : temp) {
 			runCrazy.addSubAction(new Move(r));
 		}
 		tempAgent.addActionToList(runCrazy);
-		agents.add(tempAgent);
-		
+		agents.add(crazyGuy);
+
 		// If agents have no default positions: choose a random one
-		for(Agent a : agents) {
-			if(a.getDefaultPosition() == null) {
+		for (Agent a : agents) {
+			if (a.getDefaultPosition() == null) {
 				List<Room> r = new ArrayList<Room>(rooms);
 				Collections.shuffle(r);
 				a.setDefaultPosition(r.get(0));
@@ -212,6 +242,36 @@ public class WorldGenerator implements IWorldGenerator {
 		}
 		return agents;
 
+	}
+
+
+	/**
+	 * Adds things to given room with a given owner. Used for doorSensors and DoorPlates...
+	 * 
+	 * @param room TODO
+	 * @param owner TODO
+	 * 
+	 */
+	private HashSet<AbstractInteractionComponent> addThingsToRoomWithOwner(Room room, Agent owner) {
+		HashSet<AbstractInteractionComponent> res = new HashSet<AbstractInteractionComponent>();
+		
+		// adding door related things to each door
+		for (Door door : room.getDoors()) {
+			res.add(new DoorLight(door, room, owner));
+			res.add(new DoorSensor(door, owner));
+		}
+		
+		// adding desk related things
+		res.add(new Desktop(room.getCentralPoint(), owner));
+		res.add(new Cube(room.getCentralPoint(), owner));
+		res.add(new Mike(room));
+		return res;
+
+	}
+
+	private Agent generateActionsForAgentSmith(Agent smith, Point2D center) {
+
+		return smith;
 	}
 
 	private Agent generateActionsForTentLady(Agent tim, Agent tentLady) {
@@ -223,17 +283,18 @@ public class WorldGenerator implements IWorldGenerator {
 		tempAction.setEarliestStartTime(tempWorld.getStartTime().plus(
 				1 + new Random().nextInt(10)));
 		tentLady.addActionToList(tempAction);
-		
+
 		AbstractAction speak = new GoAndSpeakTo(tim, 10);
 		speak.setType(TYPE.NORMAL);
 		speak.setEarliestStartTime(tempWorld.getStartTime().plus(20));
 		tentLady.addActionToList(speak);
 		ComplexAction speakInTimsRoom = new ComplexAction();
-		speakInTimsRoom.addSubAction((AtomicAction)move2);
+		speakInTimsRoom.addSubAction((AtomicAction) move2);
 		speakInTimsRoom.addSubAction(new SpeakTo(tim, 10));
 		speakInTimsRoom.setEarliestStartTime(tempWorld.getStartTime().plus(30));
 		AbstractAction testMove = new Move(mainFloor);
-		testMove.setEarliestStartTime(speakInTimsRoom.getEarliestStartTime().plus(10));
+		testMove.setEarliestStartTime(speakInTimsRoom.getEarliestStartTime()
+				.plus(10));
 		tentLady.addActionToList(speakInTimsRoom);
 		tentLady.addActionToList(testMove);
 		return tentLady;
@@ -247,7 +308,6 @@ public class WorldGenerator implements IWorldGenerator {
 	private HashSet<Room> generateRooms() {
 
 		log.info("generating rooms");
-
 
 		Wall theNewWall;
 		Door theNewDoor;
@@ -477,14 +537,14 @@ public class WorldGenerator implements IWorldGenerator {
 
 		// this is the pillar like walls in the center of the room, seems we
 		// need a better idea for that
-//		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(310, 50),
-//				new Point(310, 70)));
-//		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(310, 70),
-//				new Point(330, 70)));
-//		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(330, 70),
-//				new Point(330, 50)));
-//		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(330, 50),
-//				new Point(310, 50)));
+		// theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(310, 50),
+		// new Point(310, 70)));
+		// theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(310, 70),
+		// new Point(330, 70)));
+		// theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(330, 70),
+		// new Point(330, 50)));
+		// theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(330, 50),
+		// new Point(310, 50)));
 		rooms.add(theNewRoom);
 
 		return rooms;

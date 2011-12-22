@@ -95,7 +95,9 @@ public class Mike extends AbstractInteractionComponent {
 		for (String name : values.values()) {
 			buf.append(name + ", ");
 		}
-		buf.delete(buf.length() - 2, buf.length() - 1);
+		if (!values.isEmpty()) {
+			buf.delete(buf.length() - 2, buf.length() - 1);	
+		}
 		buf.append(")");
 		return buf.toString();
 	}

@@ -261,7 +261,7 @@ public class Door extends AbstractComponent {
 		}
 		State oldState = currentState;
 		currentState = state;
-		log.info("Changed state to "+state);
+		log.info(this.getIdentifier()+" changed state to "+state);
 		informListenersAboutStateChange(oldState, state);
 	}
 

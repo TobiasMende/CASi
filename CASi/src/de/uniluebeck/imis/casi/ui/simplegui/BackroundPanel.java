@@ -18,6 +18,7 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 import java.util.logging.Logger;
 
@@ -42,9 +43,11 @@ public class BackroundPanel extends JPanel {
 
 	public static final int WIDTH = 1000;
 	public static final int HEIGHT = 1000;
+	
+	private final AffineTransform transform;
 
-	public BackroundPanel() {
-
+	public BackroundPanel(AffineTransform transform) {
+		this.transform = transform;
 		/** Set preferred size */
 		this.setSize(new Dimension(BackroundPanel.WIDTH, BackroundPanel.HEIGHT));
 
@@ -69,12 +72,12 @@ public class BackroundPanel extends JPanel {
 					.getRooms()) {
 				// Show shape representation of room:
 				g2D.setColor(Color.LIGHT_GRAY);
-				g2D.fill(SimpleGuiScaler.getShapeRepresentation(room
+				g2D.fill(transform.createTransformedShape(room
 						.getShapeRepresentation()));
 
 				// Show central point of room:
-				Point2D centralPoint = SimpleGuiScaler
-						.getPointRepresentation(room.getCentralPoint());
+				Point2D centralPoint = null;
+				centralPoint = transform.deltaTransform(room.getCentralPoint(), centralPoint);
 				g2D.setColor(Color.GREEN);
 				Point centralPoint2 = GraphicFactory.getPoint(
 						centralPoint.getX() - 2.5, centralPoint.getY() - 2.5);
@@ -83,7 +86,7 @@ public class BackroundPanel extends JPanel {
 				// Show room name:
 				g.setColor(Color.BLACK);
 				g.setFont(new Font(Font.MONOSPACED, Font.PLAIN,
-						(int) (8 * SimpleGuiScaler.getScaleFactor())));
+						(int) (8 * transform.getScaleX())));
 				g2D.drawString(room.toString(), centralPoint2.x - 10,
 						centralPoint2.y - 5);
 				/** Get the walls of this room */
@@ -96,7 +99,7 @@ public class BackroundPanel extends JPanel {
 					} else {
 						g.setColor(Color.BLACK);
 					}
-					g2D.draw(SimpleGuiScaler.getShapeRepresentation(wall
+					g2D.draw(transform.createTransformedShape(wall
 							.getShapeRepresentation()));
 				}
 
@@ -105,13 +108,13 @@ public class BackroundPanel extends JPanel {
 
 					g.setColor(Color.BLUE);
 					g.setFont(new Font(Font.MONOSPACED, Font.PLAIN,
-							(int) (8 * SimpleGuiScaler.getScaleFactor())));
-					Point doorPoint = SimpleGuiScaler.getPoint(door
-							.getCentralPoint().getX() - 1.5, door
-							.getCentralPoint().getY() - 1.5);
+							(int) (8 * transform.getScaleX())));
+					Point2D internalDoorPoint = null;
+					internalDoorPoint = transform.deltaTransform(door.getCentralPoint(), internalDoorPoint);
+					Point doorPoint = GraphicFactory.getPoint(internalDoorPoint.getX()-1.5, internalDoorPoint.getY()-1.5);
 					g2D.drawString(door.toString(), doorPoint.x, doorPoint.y);
 					g.setColor(Color.YELLOW);
-					g2D.draw(SimpleGuiScaler.getShapeRepresentation(door
+					g2D.draw(transform.createTransformedShape(door
 							.getShapeRepresentation()));
 					// Show central point of door:
 					g.setColor(Color.BLUE);
@@ -124,11 +127,12 @@ public class BackroundPanel extends JPanel {
 					.getInstance().getWorld().getInteractionComponents()) {
 
 				g.setColor(Color.BLUE);
-				g2D.draw(interactionComp.getShapeRepresentation());
-
-				Point sensorPoint = GraphicFactory.getPoint(interactionComp
-						.getCentralPoint().getX(), interactionComp
-						.getCentralPoint().getY() - 1.5);
+				g2D.draw(transform.createTransformedShape(interactionComp.getShapeRepresentation()));
+				Point2D internalSensorPoint = null;
+				internalSensorPoint = transform.deltaTransform(interactionComp
+						.getCentralPoint(), internalSensorPoint);
+				Point sensorPoint = GraphicFactory.getPoint(internalSensorPoint.getX(), internalSensorPoint.getY() - 1.5);
+				
 
 				g.setColor(Color.BLACK);
 				g.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 8));

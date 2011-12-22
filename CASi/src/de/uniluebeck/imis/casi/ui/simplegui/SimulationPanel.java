@@ -13,6 +13,7 @@ package de.uniluebeck.imis.casi.ui.simplegui;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.geom.AffineTransform;
 import java.util.logging.Logger;
 
 import javax.swing.BorderFactory;
@@ -40,11 +41,14 @@ public class SimulationPanel extends JLayeredPane implements ISimulationClockLis
 	public static final int WIDTH = 1000;
 	public static final int HEIGHT = 1000;
 	
+	private final AffineTransform transform;
+	
 	/**
 	 * Constructor of the simulation panel sets the preferred size.
 	 */
 	public SimulationPanel() {
-
+		transform = new AffineTransform();
+		transform.setToScale(2,2);
 		/** Set preferred size */
 		this.setPreferredSize(new Dimension(
 				SimulationPanel.WIDTH,
@@ -63,7 +67,7 @@ public class SimulationPanel extends JLayeredPane implements ISimulationClockLis
 	 */
 	public void paintSimulationComponents() {
 		
-		BackroundPanel backroundPanel = new BackroundPanel();
+		BackroundPanel backroundPanel = new BackroundPanel(transform);
 		backroundPanel.setLocation(0, 0);
 		this.add(backroundPanel,new Integer(1));
 		
@@ -72,7 +76,7 @@ public class SimulationPanel extends JLayeredPane implements ISimulationClockLis
 			/** At first add views for the agents */
 			for(Agent agent : SimulationEngine.getInstance().getWorld().getAgents()) {
 				
-				AgentView agentView = new AgentView(agent.getCoordinates());
+				AgentView agentView = new AgentView(agent.getCoordinates(), transform);
 				agent.addListener(agentView);
 				this.add(agentView,new Integer(2));
 				

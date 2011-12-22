@@ -16,6 +16,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 import java.util.logging.Logger;
 
@@ -40,11 +41,10 @@ public class AgentView extends JComponent implements IAgentListener {
 			.getName());
 
 	private Color stateColor;
-
-	public AgentView(Point2D startPosition) {
-
-		Point startPoint = SimpleGuiScaler
-				.getPointRepresentation(getOptimizedPosition(startPosition));
+	private final AffineTransform transform;
+	public AgentView(Point2D startPosition, AffineTransform transform) {
+		this.transform = transform;
+		Point startPoint = getOptimizedPosition(startPosition);
 		
 		this.setBounds(GraphicFactory.getPointRepresentation(startPoint).x,
 				GraphicFactory.getPointRepresentation(startPoint).y, 8, 8);
@@ -105,9 +105,7 @@ public class AgentView extends JComponent implements IAgentListener {
 			public void run() {
 
 				/* Simply set the new location to the new position */
-				AgentView.this.setLocation(SimpleGuiScaler
-						.getPointRepresentation(getOptimizedPosition(newPosition)));
-
+				AgentView.this.setLocation(getOptimizedPosition(newPosition));
 				AgentView.this.invalidate();
 
 			}
@@ -124,8 +122,9 @@ public class AgentView extends JComponent implements IAgentListener {
 	 */
 	private Point getOptimizedPosition(Point2D position) {
 		Dimension dim = getBounds().getSize();
-		Point point = GraphicFactory.getPointRepresentation(position);
-		return new Point(point.x - dim.width / 2, point.y - dim.height / 2);
+		Point2D point = new Point2D.Double(position.getX() - dim.width / 2, position.getY() - dim.height / 2);
+		point = transform.deltaTransform(point, point);		
+		return GraphicFactory.getPointRepresentation(point);
 	}
 
 	@Override

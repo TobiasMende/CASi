@@ -12,6 +12,7 @@
 package de.uniluebeck.imis.casi.simulation.model.mateComponents;
 
 import java.awt.Point;
+import java.awt.geom.Point2D;
 import java.io.StringReader;
 import java.util.logging.Logger;
 
@@ -73,11 +74,11 @@ public class Cube extends AbstractInteractionComponent {
 	private String pullMessage;
 
 	/**
-	 * @param coordinates
+	 * @param point2d
 	 *            the position of this cube
 	 */
-	public Cube(Point coordinates, Agent owner) {
-		super(coordinates);
+	public Cube(Point2D point2d, Agent owner) {
+		super(point2d);
 		pullEnabled = true;
 		SimulationClock.getInstance().addListener(this);
 		currentState = State.unknown;

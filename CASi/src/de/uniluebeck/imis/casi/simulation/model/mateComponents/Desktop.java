@@ -12,6 +12,7 @@
 package de.uniluebeck.imis.casi.simulation.model.mateComponents;
 
 import java.awt.Point;
+import java.awt.geom.Point2D;
 import java.util.HashMap;
 
 import de.uniluebeck.imis.casi.communication.mack.MACKProtocolFactory;
@@ -48,7 +49,7 @@ public class Desktop extends AbstractInteractionComponent {
 	 * @param coordinates
 	 *            the exact position of this daa.
 	 */
-	public Desktop(Point coordinates, Agent agent) {
+	public Desktop(Point2D coordinates, Agent agent) {
 		super("daa-"+idCounter, coordinates);
 		type = Type.SENSOR;
 		this.agent = agent;

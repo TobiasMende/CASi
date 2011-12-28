@@ -13,10 +13,14 @@ package de.uniluebeck.imis.casi.ui.simplegui;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.awt.geom.AffineTransform;
+import java.util.ArrayList;
 import java.util.logging.Logger;
 
 import javax.swing.BorderFactory;
+import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 
 import de.uniluebeck.imis.casi.simulation.engine.ISimulationClockListener;
@@ -32,59 +36,76 @@ import de.uniluebeck.imis.casi.simulation.model.SimulationTime;
  */
 
 @SuppressWarnings("serial")
-public class SimulationPanel extends JLayeredPane implements ISimulationClockListener {
+public class SimulationPanel extends JLayeredPane implements
+		ISimulationClockListener, ComponentListener {
 
 	/** Attributes of simulation panel */
-	private static final Logger log = Logger.getLogger(
-			SimulationPanel.class.getName());
+	private static final Logger log = Logger.getLogger(SimulationPanel.class
+			.getName());
 
 	public static final int WIDTH = 1000;
 	public static final int HEIGHT = 1000;
-	
+
 	private final AffineTransform transform;
-	
+
+	private ArrayList<AgentView> agents = new ArrayList<AgentView>();
+
 	/**
 	 * Constructor of the simulation panel sets the preferred size.
 	 */
 	public SimulationPanel() {
+
 		transform = new AffineTransform();
-		transform.setToScale(2,2);
-		/** Set preferred size */
-		this.setPreferredSize(new Dimension(
-				SimulationPanel.WIDTH,
-				SimulationPanel.HEIGHT));
-		
+
 		this.setLayout(null);
-		
-		 /* Draw Border */
+
+		/* set scale to 0 for debugging TODO */
+		setSimulationToScale(0);
+
+		/* Draw Border */
 		this.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 
 	}
-	
+
 	/**
-	 * This method adds views for all components in the simulation. The views are listeners
-	 * of the particular components.
+	 * This method sets the affine transform and the size of the simulation
+	 * panel to the right scale.
+	 * 
+	 * @param size
+	 */
+	private void setSimulationToScale(double size) {
+
+		this.transform.setToScale(size / 1000, size / 1000);
+		this.setPreferredSize(new Dimension((int) size, (int) size));
+	}
+
+	/**
+	 * This method adds views for all components in the simulation. The views
+	 * are listeners of the particular components.
 	 */
 	public void paintSimulationComponents() {
-		
+
 		BackroundPanel backroundPanel = new BackroundPanel(transform);
 		backroundPanel.setLocation(0, 0);
-		this.add(backroundPanel,new Integer(1));
-		
+		this.add(backroundPanel, new Integer(1));
+
 		try {
-			
+
 			/** At first add views for the agents */
-			for(Agent agent : SimulationEngine.getInstance().getWorld().getAgents()) {
-				
-				AgentView agentView = new AgentView(agent.getCoordinates(), transform);
+			for (Agent agent : SimulationEngine.getInstance().getWorld()
+					.getAgents()) {
+
+				AgentView agentView = new AgentView(agent.getCoordinates(),
+						transform);
 				agent.addListener(agentView);
-				this.add(agentView,new Integer(2));
-				
+				agents.add(agentView);
+				this.add(agentView, new Integer(2));
+
 			}
-			
+
 		} catch (IllegalAccessException e) {
-			
-			log.warning("Exception: "+e.toString());
+
+			log.warning("Exception: " + e.toString());
 		}
 	}
 
@@ -106,6 +127,41 @@ public class SimulationPanel extends JLayeredPane implements ISimulationClockLis
 	@Override
 	public void simulationStarted() {
 		this.repaint();
+	}
+
+	@Override
+	public void componentHidden(ComponentEvent arg0) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void componentMoved(ComponentEvent arg0) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void componentResized(final ComponentEvent arg0) {
+
+		JFrame mainFrame = (JFrame) arg0.getSource();
+		double size = Math.max(mainFrame.getWidth() - 35,
+				mainFrame.getHeight() - 145);
+
+		setSimulationToScale(size);
+
+		for (AgentView agentView : agents) {
+
+			agentView.setPos();
+		}
+		SimulationPanel.this.invalidate();
+
+	}
+
+	@Override
+	public void componentShown(ComponentEvent arg0) {
+		// TODO Auto-generated method stub
+
 	}
 
 }

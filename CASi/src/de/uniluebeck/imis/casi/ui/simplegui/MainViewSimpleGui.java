@@ -86,6 +86,7 @@ public class MainViewSimpleGui extends JFrame implements IMainView,
 		/** New SimulationPanel */
 		simPanel = new SimulationPanel();
 		JScrollPane scrollPane = new JScrollPane(simPanel);
+		this.addComponentListener(simPanel);
 		
 		/** New ClockViewPanel */
 		ClockViewPanel clockViewPanel = new ClockViewPanel();

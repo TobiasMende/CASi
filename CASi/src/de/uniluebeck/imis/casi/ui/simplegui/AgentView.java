@@ -18,7 +18,6 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
-import java.util.logging.Logger;
 
 import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
@@ -37,15 +36,15 @@ import de.uniluebeck.imis.casi.simulation.model.actionHandling.AbstractAction;
 @SuppressWarnings("serial")
 public class AgentView extends JComponent implements IAgentListener {
 
-	private static final Logger log = Logger.getLogger(AgentView.class
-			.getName());
-
 	private Color stateColor;
 	private final AffineTransform transform;
+	private Point2D position;
+
 	public AgentView(Point2D startPosition, AffineTransform transform) {
 		this.transform = transform;
-		Point startPoint = getOptimizedPosition(startPosition);
+		position = startPosition;
 		
+		Point startPoint = getOptimizedPosition(startPosition);
 		this.setBounds(GraphicFactory.getPointRepresentation(startPoint).x,
 				GraphicFactory.getPointRepresentation(startPoint).y, 8, 8);
 
@@ -53,6 +52,22 @@ public class AgentView extends JComponent implements IAgentListener {
 		this.stateColor = Color.YELLOW;
 
 		invalidate();
+	}
+
+	/**
+	 * Gets the real position for the agent
+	 * 
+	 * @param position
+	 *            the new position
+	 * @return the optimized position
+	 */
+	private Point getOptimizedPosition(Point2D position) {
+
+		Dimension dim = getBounds().getSize();
+		Point2D point = new Point2D.Double(position.getX() - dim.width / 2,
+				position.getY() - dim.height / 2);
+		point = transform.deltaTransform(point, point);
+		return GraphicFactory.getPointRepresentation(point);
 	}
 
 	/**
@@ -66,6 +81,15 @@ public class AgentView extends JComponent implements IAgentListener {
 		g2D.fillOval(0, 0, 8, 8);
 		g2D.setColor(this.stateColor);
 		g2D.fillOval(2, 2, 4, 4);
+	}
+
+	/**
+	 * This method sets the position of the agent depending on affine transform.
+	 */
+	public void setPos() {
+		
+		this.setLocation(getOptimizedPosition(position));
+		super.invalidate();
 	}
 
 	@Override
@@ -92,6 +116,7 @@ public class AgentView extends JComponent implements IAgentListener {
 				}
 
 				AgentView.this.invalidate();
+				AgentView.this.repaint();
 			}
 		});
 	}
@@ -103,28 +128,15 @@ public class AgentView extends JComponent implements IAgentListener {
 
 			@Override
 			public void run() {
-
+				
 				/* Simply set the new location to the new position */
-				AgentView.this.setLocation(getOptimizedPosition(newPosition));
-				AgentView.this.invalidate();
+				position = newPosition;
+				
+				AgentView.this.setPos();
 
 			}
 		});
 
-	}
-
-	/**
-	 * Gets the real position for the agent
-	 * 
-	 * @param position
-	 *            the new position
-	 * @return the optimized position
-	 */
-	private Point getOptimizedPosition(Point2D position) {
-		Dimension dim = getBounds().getSize();
-		Point2D point = new Point2D.Double(position.getX() - dim.width / 2, position.getY() - dim.height / 2);
-		point = transform.deltaTransform(point, point);		
-		return GraphicFactory.getPointRepresentation(point);
 	}
 
 	@Override

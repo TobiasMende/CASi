@@ -43,7 +43,7 @@ public class BackroundPanel extends JPanel {
 
 	public static final int WIDTH = 1000;
 	public static final int HEIGHT = 1000;
-	
+
 	private final AffineTransform transform;
 
 	public BackroundPanel(AffineTransform transform) {
@@ -77,7 +77,8 @@ public class BackroundPanel extends JPanel {
 
 				// Show central point of room:
 				Point2D centralPoint = null;
-				centralPoint = transform.deltaTransform(room.getCentralPoint(), centralPoint);
+				centralPoint = transform.deltaTransform(room.getCentralPoint(),
+						centralPoint);
 				g2D.setColor(Color.GREEN);
 				Point centralPoint2 = GraphicFactory.getPoint(
 						centralPoint.getX() - 2.5, centralPoint.getY() - 2.5);
@@ -110,8 +111,11 @@ public class BackroundPanel extends JPanel {
 					g.setFont(new Font(Font.MONOSPACED, Font.PLAIN,
 							(int) (8 * transform.getScaleX())));
 					Point2D internalDoorPoint = null;
-					internalDoorPoint = transform.deltaTransform(door.getCentralPoint(), internalDoorPoint);
-					Point doorPoint = GraphicFactory.getPoint(internalDoorPoint.getX()-1.5, internalDoorPoint.getY()-1.5);
+					internalDoorPoint = transform.deltaTransform(
+							door.getCentralPoint(), internalDoorPoint);
+					Point doorPoint = GraphicFactory.getPoint(
+							internalDoorPoint.getX() - 1.5,
+							internalDoorPoint.getY() - 1.5);
 					g2D.drawString(door.toString(), doorPoint.x, doorPoint.y);
 					g.setColor(Color.YELLOW);
 					g2D.draw(transform.createTransformedShape(door
@@ -127,20 +131,21 @@ public class BackroundPanel extends JPanel {
 					.getInstance().getWorld().getInteractionComponents()) {
 
 				g.setColor(Color.BLUE);
-				g2D.draw(transform.createTransformedShape(interactionComp.getShapeRepresentation()));
+				g2D.draw(transform.createTransformedShape(interactionComp
+						.getShapeRepresentation()));
 				Point2D internalSensorPoint = null;
-				internalSensorPoint = transform.deltaTransform(interactionComp
-						.getCentralPoint(), internalSensorPoint);
-				Point sensorPoint = GraphicFactory.getPoint(internalSensorPoint.getX(), internalSensorPoint.getY() - 1.5);
-				
+				internalSensorPoint = transform.deltaTransform(
+						interactionComp.getCentralPoint(), internalSensorPoint);
+				Point sensorPoint = GraphicFactory.getPoint(
+						internalSensorPoint.getX(),
+						internalSensorPoint.getY() - 1.5);
 
 				g.setColor(Color.BLACK);
-				g.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 8));
+				g.setFont(new Font(Font.MONOSPACED, Font.PLAIN,
+						(int) (6 * transform.getScaleX())));
 				g2D.drawString(interactionComp.getHumanReadableValue(),
-						sensorPoint.x, sensorPoint.y);
-				// show that a interactionComp was painted
-				log.info("Painting... " + interactionComp.toString()
-						+ " [TEST]");
+						sensorPoint.x,
+						sensorPoint.y + (int) (5 * transform.getScaleX()));
 
 			}
 

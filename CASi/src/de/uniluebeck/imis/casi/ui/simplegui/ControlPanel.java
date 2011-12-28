@@ -11,7 +11,7 @@
  */
 package de.uniluebeck.imis.casi.ui.simplegui;
 
-import java.util.logging.Logger;
+import java.awt.FlowLayout;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
@@ -22,16 +22,13 @@ import javax.swing.JPanel;
  */
 @SuppressWarnings("serial")
 public class ControlPanel extends JPanel {
-
-	private static final Logger log = Logger.getLogger(
-			ControlPanel.class.getName());
 	
 	public ControlPanel() {
 		
 		this.setBorder(BorderFactory.createTitledBorder("Control field:"));
 		
 		/** Set Layout */
-		this.setLayout(null);
+		this.setLayout(new FlowLayout());
 		
 		/** Set the components */
 		this.setComponents();
@@ -42,7 +39,6 @@ public class ControlPanel extends JPanel {
 		
 		/** Set start button */
 		PauseButton pauseButton = new PauseButton();
-		pauseButton.setLocation(150, 20);
 		pauseButton.setSize(pauseButton.getPreferredSize());
 		this.add(pauseButton);
 		

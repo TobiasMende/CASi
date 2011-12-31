@@ -93,5 +93,10 @@ public class Desktop extends AbstractInteractionComponent {
 		String message = MACKProtocolFactory.generatePushMessage(agent, "daa", values);
 		SimulationEngine.getInstance().getCommunicationHandler().send(this, message);
 	}
+	
+	@Override
+	public String getType() {
+		return "daa";
+	}
 
 }

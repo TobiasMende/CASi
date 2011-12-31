@@ -175,14 +175,14 @@ public class WorldGenerator implements IWorldGenerator {
 		//##########
 		// Father Moneymaker
 		//##########
-		tempAgent = new Agent("Father Moneymaker", "Father Moneymaker",
+		tempAgent = new Agent("casi_father_moneymaker", "Father Moneymaker",
 				"candidates");
 		agents.add(tempAgent);
 		
 		//##########
 		// Tim
 		//##########
-		tim = new Agent("Tim", "Tim", "candidates");
+		tim = new Agent("casi_tim", "Tim", "candidates");
 		tim.setCurrentPosition(timsRoom);
 		tim.setDefaultPosition(timsRoom);
 		agents.add(tim);
@@ -190,7 +190,7 @@ public class WorldGenerator implements IWorldGenerator {
 		//##########
 		// And I
 		//##########
-		tempAgent = new Agent("And I", "And I", "candidates");
+		tempAgent = new Agent("casi_and_i", "And I", "candidates");
 		tempAgent.setDefaultPosition(crazyRoom);
 		tempAgent.setCurrentPosition(timsRoom);
 		Agent andI = tempAgent;
@@ -203,7 +203,7 @@ public class WorldGenerator implements IWorldGenerator {
 		// Tentladies
 		//##########
 		for (int i = 0; i < 3; i++) {
-			tempAgent = new Agent("agent_" + i + "_lady", "Tentlady" + i,
+			tempAgent = new Agent("casi_tendlady_" + i, "Tentlady" + i,
 					"tendladies");
 			tempAgent.setDefaultPosition(mainFloor);
 			tempAgent = generateActionsForTentLady(andI, tempAgent);
@@ -214,7 +214,7 @@ public class WorldGenerator implements IWorldGenerator {
 		//##########
 		// Crazy-Guy
 		//##########
-		crazyGuy = new Agent("crazy-guy", "Crazy Guy", "randomGuy");
+		crazyGuy = new Agent("casi_crazy_guy", "Crazy Guy", "randomGuy");
 		ComplexAction runCrazy = new ComplexAction();
 		runCrazy.addSubAction(new Move(crazyRoom));
 		runCrazy.addSubAction(new Move(randomRoom));
@@ -264,7 +264,7 @@ public class WorldGenerator implements IWorldGenerator {
 		// adding desk related things
 		res.add(new Desktop(room.getCentralPoint(), owner));
 		res.add(new Cube(room.getCentralPoint(), owner));
-		res.add(new Mike(room));
+		res.add(new Mike(room, owner));
 		return res;
 
 	}

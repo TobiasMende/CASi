@@ -264,4 +264,9 @@ public class DoorLight extends AbstractInteractionComponent {
 				.send(this, pullMessage);
 	}
 	
+	@Override
+	public String getType() {
+		return "doorlight";
+	}
+	
 }

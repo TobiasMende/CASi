@@ -41,20 +41,22 @@ public class Mike extends AbstractInteractionComponent {
 	 * 
 	 * @param room
 	 *            the room to observe
+	 * @param agent the agent to which this mike belongs
 	 */
-	public Mike(Room room) {
-		this(room, room.getCentralPoint());
+	public Mike(Room room, Agent agent) {
+		this(room, room.getCentralPoint(), agent);
 	}
 
 	/**
 	 * Constructor for a mike which observes a given room and is positioned at
 	 * an explicit point.
 	 * 
-	 * @param room
-	 * @param position
+	 * @param room the room which is observed by the myke
+	 * @param the position where this mike stands
+	 * @param agent the agent to which this component belongs
 	 */
-	public Mike(Room room, Point position) {
-		this(room, (Point2D) position);
+	public Mike(Room room, Point position, Agent agent) {
+		this(room, (Point2D) position, agent);
 	}
 
 	/**
@@ -65,11 +67,13 @@ public class Mike extends AbstractInteractionComponent {
 	 *            the room to observe
 	 * @param position
 	 *            the coordinates of this component.
+	 * @param agent the agent to which this component belongs
 	 */
-	private Mike(Room room, Point2D position) {
+	private Mike(Room room, Point2D position, Agent agent) {
 		super(position);
 		setShapeRepresentation(room.getShapeRepresentation());
 		type = Type.SENSOR;
+		this.agent = agent;
 	}
 
 	@Override
@@ -100,6 +104,11 @@ public class Mike extends AbstractInteractionComponent {
 		}
 		buf.append(")");
 		return buf.toString();
+	}
+	
+	@Override
+	public String getType() {
+		return "mike";
 	}
 
 }

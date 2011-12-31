@@ -11,11 +11,32 @@
  */
 package de.uniluebeck.imis.casi.communication.mack;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Logger;
 
+import org.jivesoftware.smack.AccountManager;
+import org.jivesoftware.smack.Chat;
+import org.jivesoftware.smack.ChatManager;
+import org.jivesoftware.smack.Connection;
+import org.jivesoftware.smack.ConnectionConfiguration;
+import org.jivesoftware.smack.MessageListener;
+import org.jivesoftware.smack.PacketCollector;
+import org.jivesoftware.smack.PacketListener;
+import org.jivesoftware.smack.XMPPConnection;
+import org.jivesoftware.smack.XMPPException;
+import org.jivesoftware.smack.filter.AndFilter;
+import org.jivesoftware.smack.filter.FromContainsFilter;
+import org.jivesoftware.smack.filter.PacketFilter;
+import org.jivesoftware.smack.filter.PacketTypeFilter;
+import org.jivesoftware.smack.packet.Message;
+import org.jivesoftware.smack.packet.Packet;
+
+import de.uniluebeck.imis.casi.CASi;
 import de.uniluebeck.imis.casi.communication.ICommunicationComponent;
 import de.uniluebeck.imis.casi.communication.ICommunicationHandler;
+import de.uniluebeck.imis.casi.simulation.model.AbstractInteractionComponent;
 
 /**
  * The MACKNetworkHandler handles the communication with the MACK Framework (the
@@ -25,35 +46,215 @@ import de.uniluebeck.imis.casi.communication.ICommunicationHandler;
  * 
  */
 public final class MACKNetworkHandler implements ICommunicationHandler {
+	private static final Logger log = Logger.getLogger(MACKNetworkHandler.class
+			.getName());
+
+	private static final String MACK_SERVER_IDENTIFIER = "mate_server_1@macjabber.de";
+
+	/** The port on which to connecto to the XMPP_SERVER */
+	private static final int XMPP_PORT = 5222;
+	/** The xmpp server to connet to */
+	private static final String XMPP_SERVER = "macjabber.de";
+
+	/** The password for all accounts */
+	private static final String XMPP_PASSWORD = "ao8Thim2iengeehoeyae4aequigaeV";
+
+	/** Flag which handles the interrupt before registering a new component */
+	private boolean registeredLastTime = false;
 
 	/**
 	 * the component map holds all components with their identifier which should
 	 * also be used in the MACK framework TODO: if not so: change getIdentifier
 	 * of the components to work as expected.
 	 */
-	private Map<String, ICommunicationComponent> components = new HashMap<String, ICommunicationComponent>();
+	private Map<ICommunicationComponent, Chat> components = new HashMap<ICommunicationComponent, Chat>();
+
+	/** A list of jabber identifiers which are free to use by the simulator */
+	private static ArrayList<XmppIdentifier> usableJabberIdentifiers = new ArrayList<XmppIdentifier>();
+
+	/**
+	 * Sets up the list of jabber identifier which could be used for the
+	 * communication
+	 */
+	private static void setupUsableJabberIdentifiers() {
+		usableJabberIdentifiers.add(new XmppIdentifier("casi_tim", "doorlight",
+				"CASi_doorlight_0"));
+		usableJabberIdentifiers.add(new XmppIdentifier("casi_tim",
+				"doorsensor", "CASi_doorsensor_0"));
+		usableJabberIdentifiers.add(new XmppIdentifier("casi_tim", "daa",
+				"CASi_daa_0"));
+		usableJabberIdentifiers.add(new XmppIdentifier("casi_tim", "cubus",
+				"CASi_cubus_0"));
+		usableJabberIdentifiers.add(new XmppIdentifier("casi_tim", "mike",
+				"CASi_mike_0"));
+
+		usableJabberIdentifiers.add(new XmppIdentifier("casi_crazy_guy",
+				"doorlight", "CASi_doorlight_1"));
+		usableJabberIdentifiers.add(new XmppIdentifier("casi_crazy_guy",
+				"doorlight", "CASi_doorlight_2"));
+		usableJabberIdentifiers.add(new XmppIdentifier("casi_crazy_guy",
+				"doorsensor", "CASi_doorsensor_1"));
+		usableJabberIdentifiers.add(new XmppIdentifier("casi_crazy_guy",
+				"doorsensor", "CASi_doorsensor_2"));
+		usableJabberIdentifiers.add(new XmppIdentifier("casi_crazy_guy", "daa",
+				"CASi_daa_1"));
+		usableJabberIdentifiers.add(new XmppIdentifier("casi_crazy_guy",
+				"cubus", "CASi_cubus_1"));
+		usableJabberIdentifiers.add(new XmppIdentifier("casi_crazy_guy",
+				"mike", "CASi_mike_1"));
+
+	}
 
 	public MACKNetworkHandler() {
-		// TODO implement
+		setupUsableJabberIdentifiers();
 	}
 
 	@Override
 	public synchronized boolean send(ICommunicationComponent sender,
 			Object message) {
-		// TODO send the message with the correct identifier to the mack framework
-		return false;
+		Chat chat = components.get(sender);
+		if (chat == null) {
+			log.warning(sender + " is not registered");
+			return false;
+		}
+
+		try {
+			CASi.SIM_LOG.info("Sending: "+message);
+			chat.sendMessage((String) message);
+		} catch (XMPPException e) {
+			CASi.SIM_LOG.severe("Can't send to mack server: "
+					+ e.fillInStackTrace());
+			return false;
+		}
+		return true;
 	}
 
 	@Override
 	public synchronized void register(ICommunicationComponent comp) {
-		components.put(comp.getIdentifier(), comp);
-		// TODO: Handle further connections here?
+		if (comp instanceof AbstractInteractionComponent) {
+			AbstractInteractionComponent component = ((AbstractInteractionComponent) comp);
+			XmppIdentifier result = null;
+			for (XmppIdentifier id : usableJabberIdentifiers) {
+				if (id.getComponentOwner().equals(
+						component.getAgent().getIdentifier())
+						&& id.getComponentType().equals(component.getType())) {
+					result = id;
+					break;
+				}
+			}
+			if (result != null) {
+				usableJabberIdentifiers.remove(result);
+				setupXmppConnection(result, comp);
+			} else {
+				log.severe("Can't find a jabber identifier for the component "
+						+ comp);
+			}
+		} else {
+			log.warning("Component isn't an interaction component. Don't know what to do with it. Ignoring...");
+		}
 	}
 
-	/*
-	 * TODO: * Connect to Server * Create a map of jabber identifiers and
-	 * component identifiers * Send messages with the correct jabber identifiers
-	 * * Receive and forward messages to the correct components (maybe it is
-	 * better to extract MACKInformation here than in the components)
+	/**
+	 * Creates a new xmpp connection for the provided component and identifier
+	 * 
+	 * @param identifier
+	 *            the identifier
+	 * @param comp
+	 *            the component
 	 */
+	private synchronized void setupXmppConnection(XmppIdentifier identifier,
+			final ICommunicationComponent comp) {
+		ConnectionConfiguration config = new ConnectionConfiguration(
+				XMPP_SERVER, XMPP_PORT);
+		Connection connection = new XMPPConnection(config);
+		try {
+			if (registeredLastTime) {
+				CASi.SIM_LOG
+				.info("Sleeping for 10 minutes. Need to wait for macjabber.de");
+				try {
+					// macjabber.de allows new account creation only every
+					// 10 minutes
+					Thread.sleep(600010);
+				} catch (InterruptedException e1) {
+					log.warning("Can't sleep");
+				}
+			}
+			connection.connect();
+			boolean createdAccount = false;
+			try {
+				connection.login(identifier.getId(), XMPP_PASSWORD);
+			} catch (XMPPException e) {
+				log.info(identifier.getId()
+						+ " seems not to be registered. Trying to register now");
+				createdAccount = checkAndRegister(identifier.getId(),
+						connection);
+				if (createdAccount) {
+					registeredLastTime = true;
+					log.info("Account for " + identifier.getId()
+							+ " was registered successfull. Logging in...");
+					connection.login(identifier.getId(), XMPP_PASSWORD);
+				}
+			}
+			// Creating chat with server:
+			if(connection.isAuthenticated()) {
+				ChatManager chatmanager = connection.getChatManager();
+				Chat chat = chatmanager.createChat(MACK_SERVER_IDENTIFIER,
+						new MessageListener() {
+					public void processMessage(Chat chat, Message message) {
+						CASi.SIM_LOG.info("Receiving: "+message.getBody());
+						comp.receive(message.getBody());
+					}
+				});
+				components.put(comp, chat);
+				log.info(identifier.getId()
+						+ ": Component is connected now. Chat with server was initialized");
+			} else {
+				log.warning(comp+ "is not authenticated");
+			}
+		} catch (XMPPException e1) {
+			log.severe("Can't connect: " + e1.fillInStackTrace());
+			return;
+		}
+		// Only listen to messages from the server:
+		PacketFilter filter = new AndFilter(
+				new PacketTypeFilter(Message.class), new FromContainsFilter(
+						MACK_SERVER_IDENTIFIER));
+
+		PacketCollector myCollector = connection.createPacketCollector(filter);
+
+		PacketListener myListener = new PacketListener() {
+			public void processPacket(Packet packet) {
+				if (packet instanceof Message) {
+					comp.receive(((Message) packet).getBody());
+				} else {
+					log.warning("The packet isn't a message: " + packet.toXML());
+				}
+			}
+		};
+
+		connection.addPacketListener(myListener, filter);
+
+	}
+
+	/**
+	 * @param id
+	 *            the xmpp user identifier
+	 * @param connection
+	 *            the connection to use
+	 * @return {@code true} if the id was registered successful or {@code false}
+	 *         otherwise.
+	 */
+	private boolean checkAndRegister(String id, Connection connection) {
+		if (!connection.isAuthenticated()) {
+			AccountManager acManager = connection.getAccountManager();
+			try {
+				acManager.createAccount(id, XMPP_PASSWORD);
+			} catch (XMPPException e) {
+				log.severe("The registration failed! "
+						+ e.getLocalizedMessage());
+				return false;
+			}
+		}
+		return true;
+	}
 }

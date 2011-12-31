@@ -73,5 +73,10 @@ public class DoorSensor extends AbstractInteractionComponent implements
 	public String getHumanReadableValue() {
 		return door.getState().toString();
 	}
+	
+	@Override
+	public String getType() {
+		return "doorsensor";
+	}
 
 }

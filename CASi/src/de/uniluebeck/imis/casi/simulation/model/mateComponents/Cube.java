@@ -74,11 +74,11 @@ public class Cube extends AbstractInteractionComponent {
 	private String pullMessage;
 
 	/**
-	 * @param point2d
+	 * @param coordinates
 	 *            the position of this cube
 	 */
-	public Cube(Point2D point2d, Agent owner) {
-		super(point2d);
+	public Cube(Point2D coordinates, Agent owner) {
+		super(coordinates);
 		pullEnabled = true;
 		SimulationClock.getInstance().addListener(this);
 		currentState = State.unknown;
@@ -193,5 +193,10 @@ public class Cube extends AbstractInteractionComponent {
 	public void makePullRequest(SimulationTime newTime) {
 		SimulationEngine.getInstance().getCommunicationHandler()
 				.send(this, pullMessage);
+	}
+	
+	@Override
+	public String getType() {
+		return "cubus";
 	}
 }

@@ -75,7 +75,7 @@ public class CASi {
 		if(args.length > 0) {
 			networkHandler = new MACKNetworkHandler(args[0]);
 		} else {
-			networkHandler = new MACKNetworkHandler("sims/dev_office_java/network.conf.xml");
+			networkHandler = new MACKNetworkHandler();
 		}
 //		((MACKNetworkHandler)networkHandler).serializeSettings();
 		final IMainView mainView = new MainViewSimpleGui();

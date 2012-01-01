@@ -152,7 +152,6 @@ public class ClockViewPanel extends JPanel implements ISimulationClockListener,
 						+ scaleFactor
 						+ "x)");
 
-				log.info("Time changed...");
 			}
 		});
 

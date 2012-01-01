@@ -34,7 +34,7 @@
 		<mkdir dir="${test.reports}" />
 	</target>
 	<target name="compile" depends="clean, makedir" description="Compiles the project">
-		<javac srcdir="${src.dir}" destdir="${build.dir}" encoding = "utf-8" includeantruntime="false">
+		<javac srcdir="${src.dir}" destdir="${build.dir}" encoding = "utf-8" includeantruntime="false" classpath="${lib.dir}/smack.jar:${lib.dir}/smackx.jar">
 		</javac>
 	</target>
 	

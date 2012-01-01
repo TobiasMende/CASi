@@ -1,45 +1,131 @@
 \chapter{Konzeption}\label{chapter:concept}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\imiscomment{Grobkonzeption der Arbeit}
+%\imiscomment{Grobkonzeption der Arbeit}
 
-\imiscomment{Keine Codedarstellung, allenfalls Pseudocode}
+%\imiscomment{Keine Codedarstellung, allenfalls Pseudocode}
 
-\imiscomment{Struktur dieses Kapitel kann je nach Problemstellung unterschiedlich gestaltet werden}
+%\imiscomment{Struktur dieses Kapitel kann je nach Problemstellung unterschiedlich gestaltet werden}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Systemarchitektur}\label{sec:architecture}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\imiscomment{Struktur des Gesamtsystems mit seinen Subsystemen}
+In Abbildung \ref{fig:architecture} wird die Modularität der Architektur des Simulators deutlich. Die Komponenten in den weißen Kästchen stellen Module dar, die durch den Austausch weniger Codezeilen ausgewechselt werden können. Diese Komponenten sind zum Teil simulationsspezifisch. Zum Beispiel sind Sensoren, Aktuatoren und Aktionen vom Simulationsumfeld abhängig. Darüber hinaus bestehen auch die Abhängigkeiten Sensoren $\leftrightarrow$ Aktionen und Aktuatoren $\leftrightarrow$ Aktionen, da Sensoren auf bestimmte Aktionen reagieren und Aktuatoren bestimmte Aktionen auslösen können.
+
+Die Pfeile in der Abbildung geben den Hauptinformationsfluss zwischen den Komponenten an.
 
 % this is an example for using TikZ:
 \begin{figure}[htb]
   \begin{center}
-    \begin{tikzpicture}[minimum width=2cm,minimum height=0.6cm]
-      {\sffamily
-        \node (artefact)      at (2,0)  [draw] {Artefact};
-        \node (subject)       at (0,-2) [draw] {Subject};
-        \node (object)        at (4,-2) [draw] {Object};
-        \node (rules)         at (-2,-4) [draw] {Rules};
-        \node (community)     at (2,-4) [draw] {Community};
-        \node (dol)           at (6,-4) [draw] {Division of Labour};
-
-        \draw (artefact) -- (subject) -- (object) -- (artefact);
-        \draw (subject) -- (rules) -- (community) -- (dol) -- (object) -- (community) -- (subject);
-      }
+	\begin{tikzpicture}[minimum width=3.3cm,minimum height=0.8cm]
+	\tikzset{
+    myarrow/.style={->, >=latex', shorten >=1pt, thick},
+	highlight/.style={rectangle, draw, fill=black!10},
+	normal/.style={rectangle,rounded corners, draw}
+} 
+	\node[highlight] (engine) at (2,-2) [draw] {\emph{Simulationsengine}};
+	\node[normal] (generator) [above left=of engine]{Generatoren};
+	\node[normal] (kommunikation) [right=of engine]{Kommunikation};
+	\node[normal] (benutzung) [below left=of engine]{Benutzung};
+	\node[normal] (sensoren) [above right=of engine]{Sensoren};
+	\node[normal] (aktuatoren) [below right=of engine]{Aktuatoren};
+	\node[normal] (aktionen) [above=of engine]{Aktionen};
+	\node[normal] (aktionsverwaltung) [below=of engine]{Aktionsverwaltung};
+	
+	\draw[->, thick, >=latex', shorten >=1pt]
+	(generator) edge (engine)
+	(aktuatoren) edge (engine)
+	(engine) edge (sensoren)
+	(kommunikation) edge (aktuatoren)
+	(sensoren) edge (kommunikation)
+	;
+	\draw[<->, thick, >=latex', shorten >=1pt]
+	(engine) edge (kommunikation)
+	(engine) edge (aktionen)
+	(engine) edge (benutzung)
+	(engine) edge (aktionsverwaltung)
+	;
     \end{tikzpicture}
   \end{center}
-  \caption{{Cultural Historical Activity Theory: Expanded triangle, incorporating the community and other mediators.}}
-  \label{fig:chat}
+  \caption{{Unterteilung der Simulatorarchitektur in Module}}
+  \label{fig:architecture}
 \end{figure}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Konzeption von Modul 1}\label{subsec:concept_module_1}
+\subsection{Konzeption der Simulationsengine}\label{subsec:concept_engine}
+
+Der Kern des Simulationsframeworks ist die Simulationsengine, die im wesentlichen aus den Klasse \emph{SimulationEngine} und \emph{SimulationClock} besteht. Sowohl die Clock als auch die Engine sind als Singleton realisiert und können deshalb von überall angesprochen werden.
+
+Die SimulationClock repräsentiert die Zeit in der Simulation. Die Geschwindigkeit der Uhr und somit die Geschwindigkeit der Simulation kann skaliert werden. Der Skalierungsfaktor in der Uhr gibt dabei an, wieviele Millisekunden in Echtzeit einer simulierten Sekunde entsprechen. Somit resultiert ein niedriger Wert in einer höheren Geschwindigkeit.
+
+Klassen können das \emph{ISimulationClockListener}-Interface implementieren und sich bei der Clock als Listener registrieren, um über Events wie das Ticken der Uhr, das Pausieren, Starten und Stoppen der Simulation informiert zu werden.
+
+Die Engine hält die Welt (\emph{World}) bereit, welche die Konfiguration und das Verhalten der Simulation beschreibt. Außerdem hält die Engine Referenzen auf den Kommunikationshandler \ref{subsec:conecpt_communication}, der in unserer Implementierung für die Kommunikation mit dem MACK Server zuständig ist.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\imiscomment{Grobkonzeption eines einzelnen Moduls}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Konzeption von Generatoren}\label{subsec:concept_generators}
+Generatoren erzeugen \emph{World}-Objekte, die von der Simulationsengine simuliert werden können.
+
+Ein Generator muss sich darum kümmern, Räume, Sensoren, Aktuatoren, Agenten und Aktionen zur erzeugen und geeignet zu verknüpfen. In unserer Implementierung gibt es einen Generator, der eine Welt erzeugt, in dem fest einprogrammiert Java-Objekte erzeugt werden.
+
+Eine weitere, wesentlich flexiblere Möglichkeit, wie ein Generator aussehen könne, ist unter anderem, dass der Generator ein Simulation aus einem XML-File ausließt und auf dieser Grundlage Java-Objekte und die Welt erzeugt.
+
+Generatoren können in der Main-Klasse des Simulators ausgetauscht werden. Die einzigen Vorraussetzungen, die ein Generator erfüllen muss, sind, dass er das \emph{IWorldGenerator}-Interface implementiert und eine vollständige Welt erzeugt.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\imiscomment{Grobkonzeption eines einzelnen Moduls}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Konzeption von Modul 2}\label{subsec:concept_module_2}
+\subsection{Konzeption von Benutzungsschnittstellen}\label{subsec:concept_interfaces}
+Benutzungsschnittstellen können bereit gestellt werden, indem eine Implementierung des Interfaces \emph{IMainView} in der Main-Klasse des Simulators an den \emph{MainController} übergeben wird. Die Benutzungsschnittstellen können sowohl passiv als auch interaktiv gestaltet werden. Hierfür können sich Objekte des Interfaces als Listener bei den Objekten des Modells registrieren und auf die SimulationClock und die Engine zugreifen, da beide Komponenten als Singleton realisiert sind.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Konzeption von Aktionen}\label{subsec:concept_actions}
+Aktionen können allgemein durch folgende Parameter spezifiziert werden:
+\begin{description}
+	\item[priority] Die Priorität einer Aktion als Integer zwischen $0$ und $10$.
+	\item[duration] Die Dauer in Sekunden oder $-1$, falls keine Dauer angegeben wird (z.B. bei \emph{Move}-Aktionen, die dann fertig sind, wenn das Ziel erreicht wurde).
+	\item[earliestStartTime] eine Simulationszeit ab dem die Aktion gestartet werden darf oder \texttt{null}, falls die Aktion zu einem beliebigen Zeitpunkt gestartet werden kann.
+	\item[deadline] ein Zeitpunkt, zu dem die Aktion erledigt sein muss oder \texttt{null}, falls keine Headline angegeben wurde.
+	\item[state] der aktuelle Status der Aktion, z.B. \texttt{SCHEDULED}, wenn die Aktion einem Agenten hinzugefügt wurde, dieser sie aber noch nicht ausgeführt hat, \texttt{ONGOING}, wenn die Aktion gerade durchgeführt wird oder \texttt{COMPLETED}, wenn die Aktion erfolgreich durchgeführt wurde.
+\end{description}
+Es gibt \emph{AtomicAction}s und \emph{ComplexAction}s, welche aus einer Liste von atomaren Aktionen bestehen können. Mit diesem Konstrukt lassen sich unter anderem Aktionen wie das aufsuchen und reden mit einer anderen Person (Agent) beschreiben.
+
+Um eine neue Aktion zur Verfügung zu stellen, muss eine neue Klasse implementiert wird, die von einer der abstrakten Klassen AtomicAction oder ComplexAction erbt. Die eigentliche Aktion muss in der \emph{internalPerform(AbstractComponent performer)}-Methode beschrieben werden. Sollten vor der ersten Ausführung der Aktion Konfigurationsschritte notwendig sein, können diese in der Methode \emph{preActionTask(AbstractComponent performer)} beschrieben werden. Analog dazu gibt es auch eine Methode \emph{postActionTask(AbstractComponent performer)}, die vom Framework aufgerufen wird, nachdem der Job erledigt wurde.
+
+Wenn eine Dauer angegeben wurde, kümmert sich dass Simulationsframework um dekrementieren der Zeit, in diesem Fall muss die \emph{internalPerform(AbstractComponent performer)}-Methode immer \texttt{false} zurückgeben. Sobald diese Methode \emph{true} zurückgibt, gilt die Aktion als erledigt und es wird im Falle einer komplexen Aktion mit der nächsten atomaren Aktion fortgefahren.
+
+Aktionen müssen vom Generator erzeugt werden und einem Agent hinzugefügt werden.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Konzeption der Aktionsverwaltung}\label{subsec:concept_actionhandling}
+Zur Aktionsverwaltung hat jeder Agent einen \emph{IActionScheduler}, der im Konstruktor ausgetauscht werden kann. Die Aufgabe des Schedulers ist es, die Aktions-Sammlungen bereit zu halten. Das Konzept sieht vor, dass es für jeden Agenten drei Listen von Aktionen gibt:
+\begin{description}
+	\item[todoList] Diese Liste beinhaltet Aufgaben, die in jedem Fall während der Simulation entsprechend ihrer oben beschriebenen Parameter ausgeführt werden sollen.
+	\item[actionPool] Diese Menge enthält Aufgaben, die optional ausgeführt werden können, wenn der Agent gerade keine anderen Aufgaben zu erledigen hat.
+	\item[interruptActionList] In diese Liste werden während der Simulation Aktionen eingeordnet, die in jedem Fall unmittelbar als nächste Aktionen ausgeführt werden müssen. Sinnvoll ist dies insbesondere dann, wenn ein Agent darauf angewiesen ist, dass ein anderer Agent mit ihm interagiert. Dem zweiten Agenten kann dann eine Aktion auf die Interuppt-Liste gesetzt werden, damit er unmittelbar bei der nächsten Gelegenheit mit dem ersten Agenten interagiert und keine anderen Aktionen vorzieht.
+\end{description}
+
+Die Kernfunktionalität eines ActionSchedulers ist es, mit geeigneten Algorithmen zu jedem Zeitpunkt eine Aktion auszuwählen. Hierzu ruft der Agent die \emph{getNextAction()}-Methode auf, worauf hin der Scheduler eine Aktion auswählt und diese von der Liste löscht.
+
+In unserer Implementierung nutzt der ActionScheduler im Wesentlichen den Scheduling-Algorithmus \emph{Earliest Deadline First}. Darüber hinaus nutzt der Scheduler weitere Möglichkeiten um auch Parameter außer der Deadline zu berücksichtigen, da nicht jede Aufgabe eine Deadline haben muss.  
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Konzeption von Kommunikationshandlern}\label{subsec:concept_communication}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Konzeption von Aktuatoren}\label{subsec:concept_actuators}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Konzeption von Sensoren}\label{subsec:concept_sensors}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

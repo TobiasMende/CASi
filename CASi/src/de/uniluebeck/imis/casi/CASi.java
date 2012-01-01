@@ -22,7 +22,6 @@ import java.util.logging.Logger;
 import javax.swing.SwingUtilities;
 
 import de.uniluebeck.imis.casi.communication.ICommunicationHandler;
-import de.uniluebeck.imis.casi.communication.comLogger.CommunicationLogger;
 import de.uniluebeck.imis.casi.communication.mack.MACKNetworkHandler;
 import de.uniluebeck.imis.casi.controller.MainController;
 import de.uniluebeck.imis.casi.generator.IWorldGenerator;
@@ -62,7 +61,7 @@ public class CASi {
 	 * The starting point for the entire program, changes can be made here to
 	 * customize the simulator
 	 * 
-	 * @param args
+	 * @param args optional arguments: NetworkConfig
 	 */
 	public static void main(String[] args) {
 		// DON'T REMOVE THESE LINES:
@@ -72,9 +71,15 @@ public class CASi {
 		
 		final IWorldGenerator generator = new de.uniluebeck.imis.casi.generator.java.WorldGenerator();
 		Locale.setDefault(Locale.GERMAN);
-		final ICommunicationHandler networkLogger = new MACKNetworkHandler();
+		final ICommunicationHandler networkHandler;
+		if(args.length > 0) {
+			networkHandler = new MACKNetworkHandler(args[0]);
+		} else {
+			networkHandler = new MACKNetworkHandler("sims/dev_office_java/network.conf.xml");
+		}
+//		((MACKNetworkHandler)networkHandler).serializeSettings();
 		final IMainView mainView = new MainViewSimpleGui();
-		final MainController mc = new MainController(generator, networkLogger,
+		final MainController mc = new MainController(generator, networkHandler,
 				mainView);
 		
 		SwingUtilities.invokeLater(new Runnable() {

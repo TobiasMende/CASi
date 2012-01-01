@@ -110,5 +110,7 @@ public class Mike extends AbstractInteractionComponent {
 	public String getType() {
 		return "mike";
 	}
+	
+	
 
 }

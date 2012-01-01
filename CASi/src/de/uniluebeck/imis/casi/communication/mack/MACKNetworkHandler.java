@@ -11,6 +11,11 @@
  */
 package de.uniluebeck.imis.casi.communication.mack;
 
+import java.beans.XMLDecoder;
+import java.beans.XMLEncoder;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -22,7 +27,6 @@ import org.jivesoftware.smack.ChatManager;
 import org.jivesoftware.smack.Connection;
 import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.MessageListener;
-import org.jivesoftware.smack.PacketCollector;
 import org.jivesoftware.smack.PacketListener;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
@@ -48,16 +52,16 @@ import de.uniluebeck.imis.casi.simulation.model.AbstractInteractionComponent;
 public final class MACKNetworkHandler implements ICommunicationHandler {
 	private static final Logger log = Logger.getLogger(MACKNetworkHandler.class
 			.getName());
+	/** The jabber identifier of the mack server */
+	private String MACK_SERVER_IDENTIFIER;
 
-	private static final String MACK_SERVER_IDENTIFIER = "mate_server_1@macjabber.de";
-
-	/** The port on which to connecto to the XMPP_SERVER */
-	private static final int XMPP_PORT = 5222;
-	/** The xmpp server to connet to */
-	private static final String XMPP_SERVER = "macjabber.de";
+	/** The port on which to connect to to the XMPP_SERVER */
+	private int XMPP_PORT;
+	/** The xmpp server to connect to */
+	private String XMPP_SERVER;
 
 	/** The password for all accounts */
-	private static final String XMPP_PASSWORD = "ao8Thim2iengeehoeyae4aequigaeV";
+	private String XMPP_PASSWORD;
 
 	/** Flag which handles the interrupt before registering a new component */
 	private boolean registeredLastTime = false;
@@ -71,6 +75,54 @@ public final class MACKNetworkHandler implements ICommunicationHandler {
 
 	/** A list of jabber identifiers which are free to use by the simulator */
 	private static ArrayList<XmppIdentifier> usableJabberIdentifiers = new ArrayList<XmppIdentifier>();
+
+	/**
+	 * Creates a new network handler with the default configuration which fits
+	 * to MATe office simulation
+	 */
+	public MACKNetworkHandler() {
+		setupDefaults();
+		setupUsableJabberIdentifiers();
+	}
+
+	/**
+	 * Sets the default configuration
+	 */
+	private void setupDefaults() {
+		XMPP_PORT = 5222;
+		XMPP_SERVER = "macjabber.de";
+		XMPP_PASSWORD = "ao8Thim2iengeehoeyae4aequigaeV";
+		MACK_SERVER_IDENTIFIER = "mate_server_1@macjabber.de";
+	}
+
+	/**
+	 * Constructor for a new MACKNetworkHandler which uses a xml configuration
+	 * file
+	 * 
+	 * @param path
+	 *            the path to the configuration file
+	 */
+	@SuppressWarnings("unchecked")
+	public MACKNetworkHandler(String path) {
+		log.info("Loading setup from config file!");
+		XMLDecoder dec = null;
+		try {
+			dec = new XMLDecoder(new FileInputStream(path));
+			XMPP_SERVER = (String) dec.readObject();
+			XMPP_PASSWORD = (String) dec.readObject();
+			XMPP_PORT = (Integer) dec.readObject();
+			MACK_SERVER_IDENTIFIER = (String) dec.readObject();
+			usableJabberIdentifiers = (ArrayList<XmppIdentifier>) dec
+					.readObject();
+		} catch (IOException e) {
+			log.severe("Can't deserialize the config: " + e.fillInStackTrace());
+			setupDefaults();
+			setupUsableJabberIdentifiers();
+		} finally {
+			if (dec != null)
+				dec.close();
+		}
+	}
 
 	/**
 	 * Sets up the list of jabber identifier which could be used for the
@@ -105,10 +157,6 @@ public final class MACKNetworkHandler implements ICommunicationHandler {
 
 	}
 
-	public MACKNetworkHandler() {
-		setupUsableJabberIdentifiers();
-	}
-
 	@Override
 	public synchronized boolean send(ICommunicationComponent sender,
 			Object message) {
@@ -119,7 +167,7 @@ public final class MACKNetworkHandler implements ICommunicationHandler {
 		}
 
 		try {
-			CASi.SIM_LOG.info("Sending: "+message);
+			CASi.SIM_LOG.info("Sending: " + message);
 			chat.sendMessage((String) message);
 		} catch (XMPPException e) {
 			CASi.SIM_LOG.severe("Can't send to mack server: "
@@ -170,7 +218,7 @@ public final class MACKNetworkHandler implements ICommunicationHandler {
 		try {
 			if (registeredLastTime) {
 				CASi.SIM_LOG
-				.info("Sleeping for 10 minutes. Need to wait for macjabber.de");
+						.info("Sleeping for 10 minutes. Need to wait for macjabber.de");
 				try {
 					// macjabber.de allows new account creation only every
 					// 10 minutes
@@ -196,20 +244,22 @@ public final class MACKNetworkHandler implements ICommunicationHandler {
 				}
 			}
 			// Creating chat with server:
-			if(connection.isAuthenticated()) {
+			if (connection.isAuthenticated()) {
 				ChatManager chatmanager = connection.getChatManager();
 				Chat chat = chatmanager.createChat(MACK_SERVER_IDENTIFIER,
 						new MessageListener() {
-					public void processMessage(Chat chat, Message message) {
-						CASi.SIM_LOG.info("Receiving: "+message.getBody());
-						comp.receive(message.getBody());
-					}
-				});
+							public void processMessage(Chat chat,
+									Message message) {
+								CASi.SIM_LOG.info("Receiving: "
+										+ message.getBody());
+								comp.receive(message.getBody());
+							}
+						});
 				components.put(comp, chat);
 				log.info(identifier.getId()
 						+ ": Component is connected now. Chat with server was initialized");
 			} else {
-				log.warning(comp+ "is not authenticated");
+				log.warning(comp + "is not authenticated");
 			}
 		} catch (XMPPException e1) {
 			log.severe("Can't connect: " + e1.fillInStackTrace());
@@ -220,7 +270,7 @@ public final class MACKNetworkHandler implements ICommunicationHandler {
 				new PacketTypeFilter(Message.class), new FromContainsFilter(
 						MACK_SERVER_IDENTIFIER));
 
-		PacketCollector myCollector = connection.createPacketCollector(filter);
+		//PacketCollector myCollector = connection.createPacketCollector(filter);
 
 		PacketListener myListener = new PacketListener() {
 			public void processPacket(Packet packet) {
@@ -256,5 +306,28 @@ public final class MACKNetworkHandler implements ICommunicationHandler {
 			}
 		}
 		return true;
+	}
+
+	/**
+	 * Creates the xml representation of the configuration and stores it in
+	 * {@code sims/dev_office_java/network.conf.xml}
+	 */
+	public void serializeSettings() {
+		log.info("Serializing network handler settings");
+		String filename = "sims/dev_office_java/network.conf.xml";
+		XMLEncoder enc = null;
+		try {
+			enc = new XMLEncoder(new FileOutputStream(filename));
+			enc.writeObject(XMPP_SERVER);
+			enc.writeObject(XMPP_PASSWORD);
+			enc.writeObject(XMPP_PORT);
+			enc.writeObject(MACK_SERVER_IDENTIFIER);
+			enc.writeObject(usableJabberIdentifiers);
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			if (enc != null)
+				enc.close();
+		}
 	}
 }

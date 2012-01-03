@@ -55,31 +55,31 @@ Die Pfeile in der Abbildung geben den Hauptinformationsfluss zwischen den Kompon
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Konzeption der Simulationsengine}\label{subsec:concept_engine}
 
-Der Kern des Simulationsframeworks ist die Simulationsengine, die im wesentlichen aus den Klasse \emph{SimulationEngine} und \emph{SimulationClock} besteht. Sowohl die Clock als auch die Engine sind als Singleton realisiert und können deshalb von überall angesprochen werden.
+Der Kern des Simulationsframeworks ist die Simulationsengine, die im wesentlichen aus den Klasse \texttt{SimulationEngine} und \texttt{SimulationClock} besteht. Sowohl die Clock als auch die Engine sind als Singleton realisiert und können deshalb von überall angesprochen werden.
 
 Die SimulationClock repräsentiert die Zeit in der Simulation. Die Geschwindigkeit der Uhr und somit die Geschwindigkeit der Simulation kann skaliert werden. Der Skalierungsfaktor in der Uhr gibt dabei an, wieviele Millisekunden in Echtzeit einer simulierten Sekunde entsprechen. Somit resultiert ein niedriger Wert in einer höheren Geschwindigkeit.
 
-Klassen können das \emph{ISimulationClockListener}-Interface implementieren und sich bei der Clock als Listener registrieren, um über Events wie das Ticken der Uhr, das Pausieren, Starten und Stoppen der Simulation informiert zu werden.
+Klassen können das \texttt{ISimulationClockListener}-Interface implementieren und sich bei der Clock als Listener registrieren, um über Events wie das Ticken der Uhr, das Pausieren, Starten und Stoppen der Simulation informiert zu werden.
 
-Die Engine hält die Welt (\emph{World}) bereit, welche die Konfiguration und das Verhalten der Simulation beschreibt. Außerdem hält die Engine Referenzen auf den Kommunikationshandler \ref{subsec:conecpt_communication}, der in unserer Implementierung für die Kommunikation mit dem MACK Server zuständig ist.
+Die Engine hält die Welt (\texttt{World}) bereit, welche die Konfiguration und das Verhalten der Simulation beschreibt. Außerdem hält die Engine Referenzen auf den Kommunikationshandler \ref{subsec:conecpt_communication}, der in unserer Implementierung für die Kommunikation mit dem MACK Server zuständig ist.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\imiscomment{Grobkonzeption eines einzelnen Moduls}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Konzeption von Generatoren}\label{subsec:concept_generators}
-Generatoren erzeugen \emph{World}-Objekte, die von der Simulationsengine simuliert werden können.
+Generatoren erzeugen \texttt{World}-Objekte, die von der Simulationsengine simuliert werden können.
 
 Ein Generator muss sich darum kümmern, Räume, Sensoren, Aktuatoren, Agenten und Aktionen zur erzeugen und geeignet zu verknüpfen. In unserer Implementierung gibt es einen Generator, der eine Welt erzeugt, in dem fest einprogrammiert Java-Objekte erzeugt werden.
 
 Eine weitere, wesentlich flexiblere Möglichkeit, wie ein Generator aussehen könne, ist unter anderem, dass der Generator ein Simulation aus einem XML-File ausließt und auf dieser Grundlage Java-Objekte und die Welt erzeugt.
 
-Generatoren können in der Main-Klasse des Simulators ausgetauscht werden. Die einzigen Vorraussetzungen, die ein Generator erfüllen muss, sind, dass er das \emph{IWorldGenerator}-Interface implementiert und eine vollständige Welt erzeugt.
+Generatoren können in der Main-Klasse des Simulators ausgetauscht werden. Die einzigen Vorraussetzungen, die ein Generator erfüllen muss, sind, dass er das \texttt{IWorldGenerator}-Interface implementiert und eine vollständige Welt erzeugt.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Konzeption von Benutzungsschnittstellen}\label{subsec:concept_interfaces}
-Benutzungsschnittstellen können bereit gestellt werden, indem eine Implementierung des Interfaces \emph{IMainView} in der Main-Klasse des Simulators an den \emph{MainController} übergeben wird. Die Benutzungsschnittstellen können sowohl passiv als auch interaktiv gestaltet werden. Hierfür können sich Objekte des Interfaces als Listener bei den Objekten des Modells registrieren und auf die SimulationClock und die Engine zugreifen, da beide Komponenten als Singleton realisiert sind.
+Benutzungsschnittstellen können bereit gestellt werden, indem eine Implementierung des Interfaces \texttt{IMainView} in der Main-Klasse des Simulators an den \texttt{MainController} übergeben wird. Die Benutzungsschnittstellen können sowohl passiv als auch interaktiv gestaltet werden. Hierfür können sich Objekte des Interfaces als Listener bei den Objekten des Modells registrieren und auf die SimulationClock und die Engine zugreifen, da beide Komponenten als Singleton realisiert sind.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -87,30 +87,30 @@ Benutzungsschnittstellen können bereit gestellt werden, indem eine Implementier
 Aktionen können allgemein durch folgende Parameter spezifiziert werden:
 \begin{description}
 	\item[priority] Die Priorität einer Aktion als Integer zwischen $0$ und $10$.
-	\item[duration] Die Dauer in Sekunden oder $-1$, falls keine Dauer angegeben wird (z.B. bei \emph{Move}-Aktionen, die dann fertig sind, wenn das Ziel erreicht wurde).
+	\item[duration] Die Dauer in Sekunden oder $-1$, falls keine Dauer angegeben wird (z.B. bei \texttt{Move}-Aktionen, die dann fertig sind, wenn das Ziel erreicht wurde).
 	\item[earliestStartTime] eine Simulationszeit ab dem die Aktion gestartet werden darf oder \texttt{null}, falls die Aktion zu einem beliebigen Zeitpunkt gestartet werden kann.
 	\item[deadline] ein Zeitpunkt, zu dem die Aktion erledigt sein muss oder \texttt{null}, falls keine Headline angegeben wurde.
 	\item[state] der aktuelle Status der Aktion, z.B. \texttt{SCHEDULED}, wenn die Aktion einem Agenten hinzugefügt wurde, dieser sie aber noch nicht ausgeführt hat, \texttt{ONGOING}, wenn die Aktion gerade durchgeführt wird oder \texttt{COMPLETED}, wenn die Aktion erfolgreich durchgeführt wurde.
 \end{description}
-Es gibt \emph{AtomicAction}s und \emph{ComplexAction}s, welche aus einer Liste von atomaren Aktionen bestehen können. Mit diesem Konstrukt lassen sich unter anderem Aktionen wie das aufsuchen und reden mit einer anderen Person (Agent) beschreiben.
+Es gibt \texttt{AtomicAction}s und \texttt{ComplexAction}s, welche aus einer Liste von atomaren Aktionen bestehen können. Mit diesem Konstrukt lassen sich unter anderem Aktionen wie das aufsuchen und reden mit einer anderen Person (Agent) beschreiben.
 
-Um eine neue Aktion zur Verfügung zu stellen, muss eine neue Klasse implementiert wird, die von einer der abstrakten Klassen AtomicAction oder ComplexAction erbt. Die eigentliche Aktion muss in der \emph{internalPerform(AbstractComponent performer)}-Methode beschrieben werden. Sollten vor der ersten Ausführung der Aktion Konfigurationsschritte notwendig sein, können diese in der Methode \emph{preActionTask(AbstractComponent performer)} beschrieben werden. Analog dazu gibt es auch eine Methode \emph{postActionTask(AbstractComponent performer)}, die vom Framework aufgerufen wird, nachdem der Job erledigt wurde.
+Um eine neue Aktion zur Verfügung zu stellen, muss eine neue Klasse implementiert wird, die von einer der abstrakten Klassen AtomicAction oder ComplexAction erbt. Die eigentliche Aktion muss in der \texttt{internalPerform(AbstractComponent performer)}-Methode beschrieben werden. Sollten vor der ersten Ausführung der Aktion Konfigurationsschritte notwendig sein, können diese in der Methode \texttt{preActionTask(AbstractComponent performer)} beschrieben werden. Analog dazu gibt es auch eine Methode \texttt{postActionTask(AbstractComponent performer)}, die vom Framework aufgerufen wird, nachdem der Job erledigt wurde.
 
-Wenn eine Dauer angegeben wurde, kümmert sich dass Simulationsframework um dekrementieren der Zeit, in diesem Fall muss die \emph{internalPerform(AbstractComponent performer)}-Methode immer \texttt{false} zurückgeben. Sobald diese Methode \emph{true} zurückgibt, gilt die Aktion als erledigt und es wird im Falle einer komplexen Aktion mit der nächsten atomaren Aktion fortgefahren.
+Wenn eine Dauer angegeben wurde, kümmert sich dass Simulationsframework um das Dekrementieren der Zeit, in diesem Fall muss die \texttt{internalPerform(AbstractComponent performer)}-Methode immer \texttt{false} zurückgeben. Sobald diese Methode \texttt{true} zurückgibt, gilt die Aktion als erledigt und es wird im Falle einer komplexen Aktion mit der nächsten atomaren Aktion fortgefahren.
 
 Aktionen müssen vom Generator erzeugt werden und einem Agent hinzugefügt werden.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Konzeption der Aktionsverwaltung}\label{subsec:concept_actionhandling}
-Zur Aktionsverwaltung hat jeder Agent einen \emph{IActionScheduler}, der im Konstruktor ausgetauscht werden kann. Die Aufgabe des Schedulers ist es, die Aktions-Sammlungen bereit zu halten. Das Konzept sieht vor, dass es für jeden Agenten drei Listen von Aktionen gibt:
+Zur Aktionsverwaltung hat jeder Agent einen \texttt{IActionScheduler}, der im Konstruktor ausgetauscht werden kann. Die Aufgabe des Schedulers ist es, die Aktions-Sammlungen bereit zu halten. Das Konzept sieht vor, dass es für jeden Agenten drei Listen von Aktionen gibt:
 \begin{description}
 	\item[todoList] Diese Liste beinhaltet Aufgaben, die in jedem Fall während der Simulation entsprechend ihrer oben beschriebenen Parameter ausgeführt werden sollen.
 	\item[actionPool] Diese Menge enthält Aufgaben, die optional ausgeführt werden können, wenn der Agent gerade keine anderen Aufgaben zu erledigen hat.
 	\item[interruptActionList] In diese Liste werden während der Simulation Aktionen eingeordnet, die in jedem Fall unmittelbar als nächste Aktionen ausgeführt werden müssen. Sinnvoll ist dies insbesondere dann, wenn ein Agent darauf angewiesen ist, dass ein anderer Agent mit ihm interagiert. Dem zweiten Agenten kann dann eine Aktion auf die Interuppt-Liste gesetzt werden, damit er unmittelbar bei der nächsten Gelegenheit mit dem ersten Agenten interagiert und keine anderen Aktionen vorzieht.
 \end{description}
 
-Die Kernfunktionalität eines ActionSchedulers ist es, mit geeigneten Algorithmen zu jedem Zeitpunkt eine Aktion auszuwählen. Hierzu ruft der Agent die \emph{getNextAction()}-Methode auf, worauf hin der Scheduler eine Aktion auswählt und diese von der Liste löscht.
+Die Kernfunktionalität eines ActionSchedulers ist es, mit geeigneten Algorithmen zu jedem Zeitpunkt eine Aktion auszuwählen. Hierzu ruft der Agent die \texttt{getNextAction()}-Methode auf, worauf hin der Scheduler eine Aktion auswählt und diese von der Liste löscht.
 
 In unserer Implementierung nutzt der ActionScheduler im Wesentlichen den Scheduling-Algorithmus \emph{Earliest Deadline First}. Darüber hinaus nutzt der Scheduler weitere Möglichkeiten um auch Parameter außer der Deadline zu berücksichtigen, da nicht jede Aufgabe eine Deadline haben muss.  
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -118,14 +118,33 @@ In unserer Implementierung nutzt der ActionScheduler im Wesentlichen den Schedul
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Konzeption von Kommunikationshandlern}\label{subsec:concept_communication}
+Ein Kommunikationshandler muss das \texttt{ICommunicationHandler}-Interface implementieren. Kommunikationshandler sind für die Verwaltung der Kommunikation mit einem beliebigem Gegenpart außerhalb des Simulators zuständig. Ein konkretes Beispiel ist ein Netzwerkhandler, der die Kommunikation über eine Netzwerkschnittstelle verwalten kann. In der aktuellen Implementierung ist der \texttt{MACKNetworkHandler} ein Kommunikationshandler der den Informationsaustausch mit dem MACK Server realisiert.
 
+Innerhalb der Simulation interagiert der Kommunikationshandler mit Sensoren und Aktuatoren, die beide das Interface \texttt{ICommunicationComponent} implementieren.. Die Komponenten registrieren sich in der Initialisierungsphase des Simulators beim Handler, indem die Methode \texttt{register\-(ICommunication\-Component comp)} aufgerufen wird.
+
+Während der Simulation können die Komponenten die \texttt{send(ICommunication\-Component\\
+sender, Object message)}-Methode aufrufen, um eine Nachricht an den Handler zu senden. Umgekehrt kann der Handler bei den Komponenten die Methode \texttt{receive(Object message)} aufrufen, um eine neu eingetroffene Nachricht zu übermitteln.
+
+Zu beachten ist, dass die Nachrichten zunächst vom Typ \texttt{Object} sind, um einen hohen Abstraktionsgrad zu gewährleisten. Von welchem Typ die Nachrichten wirklich sind, muss in Sensoren, Aktuatoren und dem Handler während der Implementierung entschieden werden.
+
+In der spezifischen Simulation und dem \texttt{MACKCommunicationHandler} sind Nachrichten immer vom Typ \texttt{String}, wobei die Nachrichten im XML-Format sind, welches auch das MACK-Framework verwendet. Ausgehende Nachrichten werden von den Sensoren und Aktuatoren unter Verwendung der \texttt{MACKProtocolFactory} erzeugt.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Konzeption von Aktuatoren}\label{subsec:concept_actuators}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Konzeption von Sensoren und Aktuatoren}\label{subsec:concept_actuators_sensors}
+Da Sensoren und Aktuatoren viele Gemeinsamkeiten aufweisen, müssen alle konkreten Sensoren und Aktuatoren von der abstrakten Klasse \texttt{AbstractInteractionComponent} erben, die auch das \texttt{ICommunication\-Component}-Interface implementiert.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Konzeption von Sensoren}\label{subsec:concept_sensors}
+Beide Komponenten haben einen Bereich, in dem sie auf Aktivitäten reagieren oder bei den Agenten Aktivitäten auslösen. Der Bereich kann entweder als Ausrichtung (Blickrichtung), Öffnungswinkel und Radius definiert werden, indem der entsprechende Konstruktor verwendet wird. Werden diese Parameter nicht angegeben, wird der komplette Raum, in dem sich eine Komponente befindet überwacht. Mit der Methode \texttt{setShapeRepresentation(Shape shape)} kann darüber hinaus eine beliebige Shape als Überwachungsbereich festgelegt werden.
+
+Die Komponenten können die Methoden \texttt{boolean checkInterest\-(AbstractAction\\
+action, Agent agent)} und \texttt{boolean checkInterest(Agent agent)} implementieren, um anzugeben ob die jeweilige Komponente an einem Agenten und/oder einer Aktion eines Agentens interessiert ist. Standardmäßig geben beide Methoden \texttt{false} zurück. In der Initialisierungsphase werden alle interessierten Komponenten den Agenten als \texttt{IExtendedAgentListener} hinzugefügt und werden damit automatisch informiert, wenn ein Agent, an dem die Komponente interessiert ist, eine Aktion durchführt.
+
+ Bereits in der Elternklasse \texttt{AbstractInteractionComponent} aller Sensoren und Aktuatoren wird darauf geachtet, dass die eigentliche Methode zum Reagieren auf Agenten und Aktionen (\texttt{boolean handleInternal(AbstractAction action, Agent agent)}) nur dann aufgerufen wird, wenn sich der Agent im Überwachungsbereich der Komponente befindet.
+
+Der einzige Unterschied zwischen Sensoren und Aktuatoren ist, dass der Rückgabewert der \texttt{handle\-Internal}-Methode von Sensoren ignoriert wird. Bei Aktuatoren oder Mischformen von Sensoren und Aktuatoren ist der Rückgabewert als Erlaubnis für eine Aktion zu verstehen. Wenn also ein Agent eine Aktion durchführt und die Methode \texttt{false} zurückgibt, bricht der Agent die Aktion ab.
+
+Der Typ der Komponenten wird angeben, indem die \texttt{type}-Variable gesetzt wird. Sie kann die Werte \texttt{SENSOR}, \texttt{ACTUATOR} und \texttt{MIXED} annehmen. Der Typ \texttt{MIXED} kann unter anderem für Wearables wie z.B. Smartphones sinnvoll sein.
+
+Wearables können mit dem Konzept realisiert werden, indem mit der Methode \texttt{setAgent(Agent agent)} ein Agent gesetzt wird, der der Hauptinhaber der Komponente ist. Darüber hinaus muss mit der Methode \texttt{setWearable(boolean wearable)} festgelegt werden, dass die Komponente ein Wearable ist. Dann wird jedes mal, wenn der Agent seine Position ändert, die Position der Komponente ebenfalls neu gesetzt.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

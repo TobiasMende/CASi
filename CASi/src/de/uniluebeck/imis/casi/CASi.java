@@ -101,7 +101,7 @@ public class CASi {
 			int value = Integer.parseInt(args[0]);
 			VERBOSE = (value > 0);
 		}
-		if(args.length >= 1) {
+		if(args.length > 1) {
 			int value = Integer.parseInt(args[1]);
 			DEV_MODE = (value > 0);
 		}

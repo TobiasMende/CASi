@@ -9,10 +9,12 @@
  *  See the LICENSE.txt file in this projects root folder or visit
  *  <http://www.gnu.org/licenses/lgpl.html> for more details.
  */
-package de.uniluebeck.imis.casi.simulation.model.actions;
+package de.uniluebeck.imis.simulations.mate.simulation.model.actions;
 
 import de.uniluebeck.imis.casi.simulation.model.AbstractComponent;
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.ComplexAction;
+import de.uniluebeck.imis.casi.simulation.model.actions.Move;
+import de.uniluebeck.imis.casi.simulation.model.actions.StayHere;
 
 /**
  * @author Marvin Frick

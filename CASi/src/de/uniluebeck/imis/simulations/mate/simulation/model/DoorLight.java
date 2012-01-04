@@ -9,7 +9,7 @@
  *  See the LICENSE.txt file in this projects root folder or visit
  *  <http://www.gnu.org/licenses/lgpl.html> for more details.
  */
-package de.uniluebeck.imis.casi.simulation.model.mateComponents;
+package de.uniluebeck.imis.simulations.mate.simulation.model;
 
 import java.awt.geom.Point2D;
 import java.util.Iterator;

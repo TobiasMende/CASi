@@ -75,7 +75,7 @@ public class CASi {
 		logHeader();
 		
 		// DO WHAT YOU WANT:
-		final IWorldGenerator generator = new de.uniluebeck.imis.casi.generator.java.mate.WorldGenerator();
+		final IWorldGenerator generator = new de.uniluebeck.imis.simulations.mate.generator.java.WorldGenerator();
 		Locale.setDefault(Locale.GERMAN);
 		final ICommunicationHandler networkHandler = generateCommunicationHandler(args);
 //		((MACKNetworkHandler)networkHandler).serializeSettings();
@@ -97,11 +97,11 @@ public class CASi {
 	 * @param args the command line arguments
 	 */
 	private static void setupFlags(String[] args) {
-		if(args.length < 0) {
+		if(args.length > 0) {
 			int value = Integer.parseInt(args[0]);
 			VERBOSE = (value > 0);
 		}
-		if(args.length < 1) {
+		if(args.length >= 1) {
 			int value = Integer.parseInt(args[1]);
 			DEV_MODE = (value > 0);
 		}

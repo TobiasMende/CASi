@@ -40,6 +40,7 @@ public class MainViewSimpleGui extends JFrame implements IMainView,
 	
 	private IUIController uicontroller;
 	private SimulationPanel simPanel;
+	private ViewMenu viewMenu;
 
 	public static final int WIDTH = 1020;
 	public static final int HEIGHT = 650;
@@ -83,6 +84,10 @@ public class MainViewSimpleGui extends JFrame implements IMainView,
 		/** Add menu to menu bar */
 		menuBar.add(mainMenu);
 
+		/** Add view to menu bar*/
+		viewMenu = new ViewMenu();
+		menuBar.add(viewMenu);
+		
 		/** New SimulationPanel */
 		simPanel = new SimulationPanel();
 		JScrollPane scrollPane = new JScrollPane(simPanel);
@@ -124,6 +129,9 @@ public class MainViewSimpleGui extends JFrame implements IMainView,
 		this.setComponents();
 		
 		this.simPanel.paintSimulationComponents();
+		
+		this.viewMenu.setViewlistener(simPanel.getViewMenuListener());
+		
 		this.setVisible(true);
 		
 		log.info("Show simple GUI");

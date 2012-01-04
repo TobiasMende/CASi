@@ -12,7 +12,9 @@
 package de.uniluebeck.imis.casi.ui.simplegui;
 
 import java.awt.Color;
+import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.geom.AffineTransform;
@@ -20,7 +22,6 @@ import java.util.ArrayList;
 import java.util.logging.Logger;
 
 import javax.swing.BorderFactory;
-import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
 
 import de.uniluebeck.imis.casi.simulation.engine.ISimulationClockListener;
@@ -29,7 +30,10 @@ import de.uniluebeck.imis.casi.simulation.model.Agent;
 import de.uniluebeck.imis.casi.simulation.model.SimulationTime;
 
 /**
- * This class extends JPanel and paints the walls and doors of the simulation.
+ * This class extends JLayeredPanel. It contains a background panel, that
+ * contains all static components of the simulation and views for agents and
+ * sensors. The simulation resizes/scales depending on the size of the main
+ * frame.
  * 
  * @author Moritz Buerger
  * 
@@ -43,10 +47,8 @@ public class SimulationPanel extends JLayeredPane implements
 	private static final Logger log = Logger.getLogger(SimulationPanel.class
 			.getName());
 
-	public static final int WIDTH = 1000;
-	public static final int HEIGHT = 1000;
-
 	private final AffineTransform transform;
+	private BackgroundPanel backgroundPanel;
 
 	private ArrayList<AgentView> agents = new ArrayList<AgentView>();
 
@@ -59,9 +61,6 @@ public class SimulationPanel extends JLayeredPane implements
 
 		this.setLayout(null);
 
-		/* set scale to 0 for debugging TODO */
-		setSimulationToScale(0);
-
 		/* Draw Border */
 		this.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 
@@ -69,11 +68,13 @@ public class SimulationPanel extends JLayeredPane implements
 
 	/**
 	 * This method sets the affine transform and the size of the simulation
-	 * panel to the right scale.
+	 * panel to the right scale, depending on the frame size.
 	 * 
-	 * @param size
 	 */
-	private void setSimulationToScale(double size) {
+	private void setSimulationToScale() {
+
+		Container parent = this.getParent();
+		double size = Math.max(parent.getWidth(), parent.getHeight());
 
 		this.transform.setToScale(size / 1000, size / 1000);
 		this.setPreferredSize(new Dimension((int) size, (int) size));
@@ -85,9 +86,9 @@ public class SimulationPanel extends JLayeredPane implements
 	 */
 	public void paintSimulationComponents() {
 
-		BackroundPanel backroundPanel = new BackroundPanel(transform);
-		backroundPanel.setLocation(0, 0);
-		this.add(backroundPanel, new Integer(1));
+		backgroundPanel = new BackgroundPanel(transform);
+		backgroundPanel.setLocation(0, 0);
+		this.add(backgroundPanel, new Integer(1));
 
 		try {
 
@@ -107,6 +108,18 @@ public class SimulationPanel extends JLayeredPane implements
 
 			log.warning("Exception: " + e.toString());
 		}
+
+		/** Set scale */
+		setSimulationToScale();
+	}
+
+	/**
+	 * Return change listener for the view menu.
+	 * 
+	 * @return the changeListener
+	 */
+	public ActionListener getViewMenuListener() {
+		return backgroundPanel;
 	}
 
 	@Override
@@ -142,13 +155,15 @@ public class SimulationPanel extends JLayeredPane implements
 	}
 
 	@Override
-	public void componentResized(final ComponentEvent arg0) {
+	public void componentResized(ComponentEvent arg0) {
 
-		JFrame mainFrame = (JFrame) arg0.getSource();
-		double size = Math.max(mainFrame.getWidth() - 35,
-				mainFrame.getHeight() - 145);
+		/*
+		 * double size = Math.max(mainFrame.getWidth() - 35,
+		 * mainFrame.getHeight() - 145);
+		 */
 
-		setSimulationToScale(size);
+		/** Set scale relative to the frame size */
+		setSimulationToScale();
 
 		for (AgentView agentView : agents) {
 

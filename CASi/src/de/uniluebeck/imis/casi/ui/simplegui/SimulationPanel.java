@@ -26,6 +26,7 @@ import javax.swing.JLayeredPane;
 
 import de.uniluebeck.imis.casi.simulation.engine.ISimulationClockListener;
 import de.uniluebeck.imis.casi.simulation.engine.SimulationEngine;
+import de.uniluebeck.imis.casi.simulation.model.AbstractInteractionComponent;
 import de.uniluebeck.imis.casi.simulation.model.Agent;
 import de.uniluebeck.imis.casi.simulation.model.SimulationTime;
 
@@ -50,7 +51,7 @@ public class SimulationPanel extends JLayeredPane implements
 	private final AffineTransform transform;
 	private BackgroundPanel backgroundPanel;
 
-	private ArrayList<AgentView> agents = new ArrayList<AgentView>();
+	private ArrayList<ComponentView> simulationCmponents = new ArrayList<ComponentView>();
 
 	/**
 	 * Constructor of the simulation panel sets the preferred size.
@@ -99,9 +100,19 @@ public class SimulationPanel extends JLayeredPane implements
 				AgentView agentView = new AgentView(agent.getCoordinates(),
 						transform);
 				agent.addListener(agentView);
-				agents.add(agentView);
-				this.add(agentView, new Integer(2));
+				simulationCmponents.add(agentView);
+				this.add(agentView, new Integer(3));
 
+			}
+
+			/** Add views for interaction components */
+			for (AbstractInteractionComponent interactionComp : SimulationEngine
+					.getInstance().getWorld().getInteractionComponents()) {
+
+				InteractionComponentView interactionCompView = new InteractionComponentView(
+						interactionComp.getCoordinates(), transform);
+				simulationCmponents.add(interactionCompView);
+				this.add(interactionCompView, new Integer(2));
 			}
 
 		} catch (IllegalAccessException e) {
@@ -165,9 +176,9 @@ public class SimulationPanel extends JLayeredPane implements
 		/** Set scale relative to the frame size */
 		setSimulationToScale();
 
-		for (AgentView agentView : agents) {
+		for (ComponentView componentView : simulationCmponents) {
 
-			agentView.setPos();
+			componentView.setPos();
 		}
 		SimulationPanel.this.invalidate();
 

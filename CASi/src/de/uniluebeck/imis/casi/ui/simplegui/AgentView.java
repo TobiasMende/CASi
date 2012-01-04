@@ -12,17 +12,13 @@
 package de.uniluebeck.imis.casi.ui.simplegui;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Point;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 
-import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
 
-import de.uniluebeck.imis.casi.simulation.factory.GraphicFactory;
 import de.uniluebeck.imis.casi.simulation.model.AbstractComponent.INTERRUPTIBILITY;
 import de.uniluebeck.imis.casi.simulation.model.Agent;
 import de.uniluebeck.imis.casi.simulation.model.Agent.STATE;
@@ -34,40 +30,11 @@ import de.uniluebeck.imis.casi.simulation.model.actionHandling.AbstractAction;
  * 
  */
 @SuppressWarnings("serial")
-public class AgentView extends JComponent implements IAgentListener {
-
-	private Color stateColor;
-	private final AffineTransform transform;
-	private Point2D position;
+public class AgentView extends ComponentView implements IAgentListener {
 
 	public AgentView(Point2D startPosition, AffineTransform transform) {
-		this.transform = transform;
-		position = startPosition;
 		
-		Point startPoint = getOptimizedPosition(startPosition);
-		this.setBounds(GraphicFactory.getPointRepresentation(startPoint).x,
-				GraphicFactory.getPointRepresentation(startPoint).y, 8, 8);
-
-		/* Set state color to yellow for debugging */
-		this.stateColor = Color.YELLOW;
-
-		invalidate();
-	}
-
-	/**
-	 * Gets the real position for the agent
-	 * 
-	 * @param position
-	 *            the new position
-	 * @return the optimized position
-	 */
-	private Point getOptimizedPosition(Point2D position) {
-
-		Dimension dim = getBounds().getSize();
-		Point2D point = new Point2D.Double(position.getX() - dim.width / 2,
-				position.getY() - dim.height / 2);
-		point = transform.deltaTransform(point, point);
-		return GraphicFactory.getPointRepresentation(point);
+		super(startPosition,transform);
 	}
 
 	/**
@@ -81,15 +48,6 @@ public class AgentView extends JComponent implements IAgentListener {
 		g2D.fillOval(0, 0, 8, 8);
 		g2D.setColor(this.stateColor);
 		g2D.fillOval(2, 2, 4, 4);
-	}
-
-	/**
-	 * This method sets the position of the agent depending on affine transform.
-	 */
-	public void setPos() {
-		
-		this.setLocation(getOptimizedPosition(position));
-		super.invalidate();
 	}
 
 	@Override

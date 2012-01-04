@@ -61,22 +61,23 @@ public class CASi {
 	 * The starting point for the entire program, changes can be made here to
 	 * customize the simulator
 	 * 
-	 * @param args optional arguments: NetworkConfig
+	 * @param args optional arguments: 
+	 * <ul>
+	 *  <li> Verbosity Flag (0,1)
+	 *  <li> DevMode Flag (0,1)
+	 * 	<li> NetworkConfig (String path)
+	 * </ul>
 	 */
 	public static void main(String[] args) {
 		// DON'T REMOVE THESE LINES:
+		setupFlags(args);
 		setupLogging();
 		logHeader();
-		// DO WHAT YOU WANT:
 		
+		// DO WHAT YOU WANT:
 		final IWorldGenerator generator = new de.uniluebeck.imis.casi.generator.java.WorldGenerator();
 		Locale.setDefault(Locale.GERMAN);
-		final ICommunicationHandler networkHandler;
-		if(args.length > 0) {
-			networkHandler = new MACKNetworkHandler(args[0]);
-		} else {
-			networkHandler = new MACKNetworkHandler();
-		}
+		final ICommunicationHandler networkHandler = generateCommunicationHandler(args);
 //		((MACKNetworkHandler)networkHandler).serializeSettings();
 		final IMainView mainView = new MainViewSimpleGui();
 		final MainController mc = new MainController(generator, networkHandler,
@@ -89,6 +90,37 @@ public class CASi {
 				mc.start();
 			}
 		});
+	}
+	
+	/**
+	 * Sets the DEV_MODE and VERBOSE flag according to the command line arguments
+	 * @param args the command line arguments
+	 */
+	private static void setupFlags(String[] args) {
+		if(args.length < 0) {
+			int value = Integer.parseInt(args[0]);
+			VERBOSE = (value > 0);
+		}
+		if(args.length < 1) {
+			int value = Integer.parseInt(args[1]);
+			DEV_MODE = (value > 0);
+		}
+	}
+
+	/**
+	 * Generates a new CommunicationHandler depending on the provided arguments
+	 * @param args the command line arguments
+	 * @return a new communication handler
+	 */
+	private static ICommunicationHandler generateCommunicationHandler(
+			String[] args) {
+		final ICommunicationHandler networkHandler;
+		if(args.length > 2) {
+			networkHandler = new MACKNetworkHandler(args[2]);
+		} else {
+			networkHandler = new MACKNetworkHandler();
+		}
+		return networkHandler;
 	}
 	
 	/**

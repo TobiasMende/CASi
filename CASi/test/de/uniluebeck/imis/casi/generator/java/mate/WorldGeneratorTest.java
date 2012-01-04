@@ -9,7 +9,7 @@
  *  See the LICENSE.txt file in this projects root folder or visit
  *  <http://www.gnu.org/licenses/lgpl.html> for more details.
  */
-package de.uniluebeck.imis.casi.generator.java;
+package de.uniluebeck.imis.casi.generator.java.mate;
 
 import static org.junit.Assert.*;
 
@@ -26,7 +26,7 @@ public class WorldGeneratorTest {
 
 	@Test
 	public void testGenerateAllSets() {
-		IWorldGenerator gen = new de.uniluebeck.imis.casi.generator.java.WorldGenerator();
+		IWorldGenerator gen = new de.uniluebeck.imis.casi.generator.java.mate.WorldGenerator();
 
 		World generatedWorld = gen.generateWorld();
 

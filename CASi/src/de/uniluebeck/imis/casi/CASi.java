@@ -75,7 +75,7 @@ public class CASi {
 		logHeader();
 		
 		// DO WHAT YOU WANT:
-		final IWorldGenerator generator = new de.uniluebeck.imis.casi.generator.java.WorldGenerator();
+		final IWorldGenerator generator = new de.uniluebeck.imis.casi.generator.java.mate.WorldGenerator();
 		Locale.setDefault(Locale.GERMAN);
 		final ICommunicationHandler networkHandler = generateCommunicationHandler(args);
 //		((MACKNetworkHandler)networkHandler).serializeSettings();

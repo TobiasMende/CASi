@@ -11,6 +11,7 @@
  */
 package de.uniluebeck.imis.casi.simulation.model.actions;
 
+import de.uniluebeck.imis.casi.simulation.model.AbstractComponent;
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.ComplexAction;
 
 /**
@@ -26,6 +27,11 @@ public class HaveAMeeting extends ComplexAction {
 	private static final long serialVersionUID = 5933636748690158732L;
 
 	
+	public HaveAMeeting(AbstractComponent where, int howLong, int prio){
+		super();
+		addSubAction(new Move(where));
+		addSubAction(new StayHere(howLong, prio));
+	}
 	
 	
 }

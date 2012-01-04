@@ -13,6 +13,7 @@ package de.uniluebeck.imis.casi.simulation.model.actions;
 
 import com.sun.tools.javac.util.List;
 
+import de.uniluebeck.imis.casi.simulation.model.AbstractComponent;
 import de.uniluebeck.imis.casi.simulation.model.Agent;
 import de.uniluebeck.imis.casi.simulation.model.SimulationTime;
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.AbstractAction;
@@ -33,16 +34,20 @@ public class CreateAMeeting extends ComplexAction {
 
 	/**
 	 * 
-	 * @param creator the meeting organizer 
-	 * @param attendees a list of all attending Agents
+	 * @param creator
+	 *            the meeting organizer
+	 * @param attendees
+	 *            a list of all attending Agents
 	 * @param whishedStartTime
 	 * @param expectedDuration
 	 */
-	public CreateAMeeting(Agent creator, List<Agent> attendees, SimulationTime whishedStartTime, int expectedDuration){
-		
+	public CreateAMeeting(Agent creator, List<Agent> attendees,
+			AbstractComponent where, SimulationTime whishedStartTime,
+			int expectedDuration) {
+
 		// for now, create the meeting immediately! No time to explain!
 		attendees.add(creator);
-		AbstractAction meeting = new HaveAMeeting();
+		AbstractAction meeting = new HaveAMeeting(where, expectedDuration, 10);
 		for (Agent agent : attendees) {
 			agent.addActionToList(meeting);
 		}

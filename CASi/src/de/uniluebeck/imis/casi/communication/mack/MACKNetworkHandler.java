@@ -59,6 +59,8 @@ public final class MACKNetworkHandler implements ICommunicationHandler {
 	private int XMPP_PORT;
 	/** The xmpp server to connect to */
 	private String XMPP_SERVER;
+	/** The time in minutes that has to elapse between two jabber id registrations. (XMPP server specific) */
+	private int REGISTRATION_DELAY;
 
 	/** The password for all accounts */
 	private String XMPP_PASSWORD;
@@ -90,6 +92,7 @@ public final class MACKNetworkHandler implements ICommunicationHandler {
 	 */
 	private void setupDefaults() {
 		XMPP_PORT = 5222;
+		REGISTRATION_DELAY = 10;
 		XMPP_SERVER = "macjabber.de";
 		XMPP_PASSWORD = "ao8Thim2iengeehoeyae4aequigaeV";
 		MACK_SERVER_IDENTIFIER = "mate_server_1@macjabber.de";
@@ -109,6 +112,7 @@ public final class MACKNetworkHandler implements ICommunicationHandler {
 		try {
 			dec = new XMLDecoder(new FileInputStream(path));
 			XMPP_SERVER = (String) dec.readObject();
+			REGISTRATION_DELAY = (Integer) dec.readObject();
 			XMPP_PASSWORD = (String) dec.readObject();
 			XMPP_PORT = (Integer) dec.readObject();
 			MACK_SERVER_IDENTIFIER = (String) dec.readObject();
@@ -216,13 +220,12 @@ public final class MACKNetworkHandler implements ICommunicationHandler {
 				XMPP_SERVER, XMPP_PORT);
 		Connection connection = new XMPPConnection(config);
 		try {
-			if (registeredLastTime) {
+			if (registeredLastTime && REGISTRATION_DELAY > 0) {
 				CASi.SIM_LOG
-						.info("Sleeping for 10 minutes. Need to wait for macjabber.de");
+						.info("Sleeping for "+REGISTRATION_DELAY+" minutes. Need to wait for "+XMPP_SERVER);
 				try {
-					// macjabber.de allows new account creation only every
-					// 10 minutes
-					Thread.sleep(600010);
+					// macjabber.de allows new account creation only every x minutes
+					Thread.sleep(REGISTRATION_DELAY*60000+10);
 				} catch (InterruptedException e1) {
 					log.warning("Can't sleep");
 				}
@@ -277,7 +280,10 @@ public final class MACKNetworkHandler implements ICommunicationHandler {
 		PacketListener myListener = new PacketListener() {
 			public void processPacket(Packet packet) {
 				if (packet instanceof Message) {
-					comp.receive(((Message) packet).getBody());
+					Message message = ((Message) packet);
+					if(message.getType().equals(Message.Type.normal)) {
+						comp.receive(message.getBody());
+					}
 				} else {
 					log.warning("The packet isn't a message: " + packet.toXML());
 				}
@@ -321,6 +327,7 @@ public final class MACKNetworkHandler implements ICommunicationHandler {
 		try {
 			enc = new XMLEncoder(new FileOutputStream(filename));
 			enc.writeObject(XMPP_SERVER);
+			enc.writeObject(REGISTRATION_DELAY);
 			enc.writeObject(XMPP_PASSWORD);
 			enc.writeObject(XMPP_PORT);
 			enc.writeObject(MACK_SERVER_IDENTIFIER);

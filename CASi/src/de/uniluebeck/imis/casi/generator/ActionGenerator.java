@@ -34,7 +34,6 @@ public class ActionGenerator {
 	/**
 	 * The List of already created agents.
 	 */
-	// TODO: have we made a general decision on what list type to use?!
 	private HashMap<String,AbstractAction> alreadyCreatedActions = new HashMap<String,AbstractAction>();
 
 	/**

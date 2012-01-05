@@ -34,7 +34,6 @@ public class RoomGenerator {
 	/**
 	 * The List of already created agents.
 	 */
-	// TODO: have we made a general decision on what list type to use?!
 	private Set<Room> alreadyCreatedRooms = new HashSet<Room>();
 
 	/**

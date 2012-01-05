@@ -41,7 +41,6 @@ public class AgentGenerator {
 	/**
 	 * The List of already created agents.
 	 */
-	// TODO: have we made a general decision on what list type to use?!
 	private Set<Agent> alreadyCreatedAgents = new HashSet<Agent>();
 
 	/**
@@ -115,7 +114,6 @@ public class AgentGenerator {
 	 * @return all Agents with this type or an empty Vector if not a single one
 	 *         was found.
 	 */
-	// TODO: have we made a general decision on what list type to use?!
 	public Vector<Agent> findAgentByType(String typeToLookFor) {
 		Vector<Agent> res = new Vector<Agent>();
 		for (Agent agent : alreadyCreatedAgents) {

@@ -86,6 +86,14 @@ public class SimulationPanel extends JLayeredPane implements
 
 		this.setPreferredSize(new Dimension((int) size, (int) size));
 		this.backgroundPanel.setBounds(0, 0, (int) size, (int) size);
+		
+		for (ComponentView componentView : simulationCmponents) {
+
+			componentView.setPos();
+		}
+		SimulationPanel.this.invalidate();
+		backgroundPanel.repaint();
+
 	}
 
 	/**
@@ -135,12 +143,6 @@ public class SimulationPanel extends JLayeredPane implements
 		}
 		/** Set scale */
 		setSimulationToScale();
-		for (ComponentView componentView : simulationCmponents) {
-
-			componentView.setPos();
-		}
-		SimulationPanel.this.invalidate();
-		backgroundPanel.repaint();
 	}
 
 	/**
@@ -188,13 +190,6 @@ public class SimulationPanel extends JLayeredPane implements
 		/** Set scale relative to the frame size */
 		setSimulationToScale();
 
-		for (ComponentView componentView : simulationCmponents) {
-
-			componentView.setPos();
-		}
-		SimulationPanel.this.invalidate();
-		backgroundPanel.repaint();
-
 	}
 
 	@Override
@@ -205,7 +200,7 @@ public class SimulationPanel extends JLayeredPane implements
 
 	@Override
 	public void paint(Graphics g) {
-//		((Graphics2D)g).setTransform(transform);
+		((Graphics2D)g).setTransform(transform);
 		super.paint(g);
 	}
 

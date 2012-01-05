@@ -9,7 +9,7 @@
  *  See the LICENSE.txt file in this projects root folder or visit
  *  <http://www.gnu.org/licenses/lgpl.html> for more details.
  */
-package de.uniluebeck.imis.simulations.mate.generator.java;
+package de.uniluebeck.imis.casi.simulations.mate.generator.java;
 
 import java.awt.Point;
 

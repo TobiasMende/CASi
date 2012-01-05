@@ -9,13 +9,13 @@
  *  See the LICENSE.txt file in this projects root folder or visit
  *  <http://www.gnu.org/licenses/lgpl.html> for more details.
  */
-package de.uniluebeck.imis.simulations.mate.simulation.model.actions;
+package de.uniluebeck.imis.casi.simulations.mate.simulation.model.actions;
 
 import de.uniluebeck.imis.casi.simulation.model.AbstractComponent;
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.AtomicAction;
-import de.uniluebeck.imis.simulations.mate.simulation.model.Desktop;
-import de.uniluebeck.imis.simulations.mate.simulation.model.Desktop.Frequency;
-import de.uniluebeck.imis.simulations.mate.simulation.model.Desktop.Program;
+import de.uniluebeck.imis.casi.simulations.mate.simulation.model.Desktop;
+import de.uniluebeck.imis.casi.simulations.mate.simulation.model.Desktop.Frequency;
+import de.uniluebeck.imis.casi.simulations.mate.simulation.model.Desktop.Program;
 
 /**
  * @author Tobias Mende

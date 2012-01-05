@@ -9,13 +9,13 @@
  *  See the LICENSE.txt file in this projects root folder or visit
  *  <http://www.gnu.org/licenses/lgpl.html> for more details.
  */
-package de.uniluebeck.imis.simulations.mate.simulation.model.actions;
+package de.uniluebeck.imis.casi.simulations.mate.simulation.model.actions;
 
 import java.util.logging.Logger;
 
 import de.uniluebeck.imis.casi.simulation.model.AbstractComponent;
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.AtomicAction;
-import de.uniluebeck.imis.simulations.mate.simulation.model.Cube;
+import de.uniluebeck.imis.casi.simulations.mate.simulation.model.Cube;
 
 /**
  * This action can be used to let an agent turn a cube.

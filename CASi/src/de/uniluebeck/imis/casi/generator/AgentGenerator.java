@@ -21,7 +21,7 @@ import java.util.logging.Logger;
 
 import de.uniluebeck.imis.casi.simulation.model.Agent;
 import de.uniluebeck.imis.casi.simulation.model.Room;
-import de.uniluebeck.imis.simulations.mate.generator.java.WorldGenerator;
+import de.uniluebeck.imis.casi.simulations.mate.generator.java.WorldGenerator;
 
 /**
  * @author Marvin Frick

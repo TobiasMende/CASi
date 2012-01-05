@@ -14,14 +14,20 @@ package de.uniluebeck.imis.casi.simulation.model;
 import java.awt.Point;
 import java.awt.Shape;
 import java.awt.geom.Arc2D;
+import java.awt.geom.Area;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.Collection;
+import java.util.logging.Logger;
+
+import javax.swing.SwingUtilities;
 
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import de.uniluebeck.imis.casi.communication.ICommunicationComponent;
 import de.uniluebeck.imis.casi.simulation.engine.ISimulationClockListener;
 import de.uniluebeck.imis.casi.simulation.engine.SimulationEngine;
+import de.uniluebeck.imis.casi.simulation.factory.GraphicFactory;
+import de.uniluebeck.imis.casi.simulation.factory.WorldFactory;
 import de.uniluebeck.imis.casi.simulation.model.Agent.STATE;
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.AbstractAction;
 
@@ -35,6 +41,7 @@ import de.uniluebeck.imis.casi.simulation.model.actionHandling.AbstractAction;
 public abstract class AbstractInteractionComponent extends AbstractComponent
 		implements ICommunicationComponent, IExtendedAgentListener,
 		ISimulationClockListener {
+	private static final Logger log = Logger.getLogger(AbstractInteractionComponent.class.getName());
 	/** Enumeration for possible directions in which this component looks */
 	public enum Face {
 		NORTH(0), SOUTH(180), EAST(90), WEST(270), NORTH_EAST(45), SOUTH_EAST(
@@ -225,6 +232,13 @@ public abstract class AbstractInteractionComponent extends AbstractComponent
 		double startAngle = currentDirection.radian() - (currentOpening / 2);
 		shapeRepresentation = new Arc2D.Double(calculateCircleBounds(),
 				startAngle, currentOpening, Arc2D.PIE);
+		Point face = new Point((int)Math.cos(currentDirection.radian()), (int)Math.sin(currentDirection.radian()));
+		log.info(face.toString());
+		Point2D pointInRoom = new Point2D.Double(face.x+getCentralPoint().getX(), face.y+getCentralPoint().getY());
+		Room room = WorldFactory.getRoomsWithPoint(pointInRoom).getFirst();
+		Area area = new Area(shapeRepresentation);
+		area.intersect(new Area(room.getShapeRepresentation()));
+		shapeRepresentation = area;
 		return shapeRepresentation;
 	}
 
@@ -260,7 +274,6 @@ public abstract class AbstractInteractionComponent extends AbstractComponent
 		this.direction = direction;
 		this.radius = radius;
 		this.opening = opening;
-
 	}
 
 	/**

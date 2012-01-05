@@ -119,10 +119,13 @@ public class DefaultActionScheduler implements IActionScheduler {
 	 */
 	private AbstractAction searchInTodoList() {
 		AbstractAction action = null;
-		if(todoList.first().getDeadline() != null) {
+		if(todoList.first().getEarliestStartTime() != null && todoList.first().getEarliestStartTime().before(SimulationClock.getInstance().getCurrentTime())) {
 			action = todoList.pollFirst();
 		}
-		if(action == null && todoList.first().getEarliestStartTime() != null && todoList.first().getEarliestStartTime().after(SimulationClock.getInstance().getCurrentTime())){
+//		if(todoList.first().getDeadline() != null) {
+//			action = todoList.pollFirst();
+//		}
+		if(action == null){
 			action = todoList.pollFirst();
 		}
 		return action;

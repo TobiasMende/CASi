@@ -20,6 +20,7 @@ import de.uniluebeck.imis.casi.simulation.model.AbstractInteractionComponent;
 import de.uniluebeck.imis.casi.simulation.model.Agent;
 import de.uniluebeck.imis.casi.simulation.model.Door;
 import de.uniluebeck.imis.casi.simulation.model.Room;
+import de.uniluebeck.imis.casi.simulation.model.AbstractInteractionComponent.Face;
 import de.uniluebeck.imis.casi.simulations.mate.simulation.model.Cube;
 import de.uniluebeck.imis.casi.simulations.mate.simulation.model.Desktop;
 import de.uniluebeck.imis.casi.simulations.mate.simulation.model.DoorLight;
@@ -72,7 +73,9 @@ public class Components {
 
 		// adding door related things to each door
 		for (Door door : room.getDoors()) {
-			res.add(new DoorLight(door, room, owner));
+			DoorLight dl =  new DoorLight(door, room, owner);
+			dl.setMonitoredArea(Face.NORTH, 100, 180);
+			res.add(dl);
 			res.add(new DoorSensor(door, owner));
 		}
 

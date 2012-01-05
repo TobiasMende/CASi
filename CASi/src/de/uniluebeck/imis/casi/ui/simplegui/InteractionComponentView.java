@@ -17,6 +17,8 @@ import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 
+import de.uniluebeck.imis.casi.simulation.model.AbstractInteractionComponent;
+
 /**
  * @author Moritz Bürger
  * 
@@ -24,11 +26,27 @@ import java.awt.geom.Point2D;
 @SuppressWarnings("serial")
 public class InteractionComponentView extends ComponentView {
 
+	private AbstractInteractionComponent interactionComp;
+
 	public InteractionComponentView(Point2D startPosition,
 			AffineTransform transform) {
 
 		super(startPosition, transform);
 
+	}
+
+	/**
+	 * Sets the interaction component to this view.
+	 * 
+	 * @param interactionComp
+	 *            the interaction component
+	 */
+	public void setInteractionComponent(
+			AbstractInteractionComponent interactionComp) {
+
+		this.interactionComp = interactionComp;
+		this.setToolTipText(interactionComp.getIdentifier() + "::"
+				+ interactionComp.getType());
 	}
 
 	/**

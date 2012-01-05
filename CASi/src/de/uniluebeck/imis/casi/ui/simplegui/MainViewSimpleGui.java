@@ -12,6 +12,7 @@
 package de.uniluebeck.imis.casi.ui.simplegui;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.logging.Logger;
@@ -35,71 +36,16 @@ import de.uniluebeck.imis.casi.ui.IMainView;
 public class MainViewSimpleGui extends JFrame implements IMainView,
 		ActionListener {
 
-	private static final Logger log = Logger.getLogger(
-			MainViewSimpleGui.class.getName());
-	
+	private static final Logger log = Logger.getLogger(MainViewSimpleGui.class
+			.getName());
+
 	private IUIController uicontroller;
 	private SimulationPanel simPanel;
 	private ViewMenu viewMenu;
+	private InformationPanel informationPanel;
 
 	public static final int WIDTH = 1020;
 	public static final int HEIGHT = 650;
-
-
-	/**
-	 * Sets up the components of the simple GUI main frame.
-	 */
-	private void setComponents() {
-
-		/** Set menu bar */
-		JMenuBar menuBar = new JMenuBar();
-		JMenu mainMenu = new JMenu("Menu");
-
-		/** Configure save item */
-		JMenuItem stopItem = new JMenuItem("Stop Simulation");
-		stopItem.setActionCommand("stop");
-		stopItem.addActionListener(this);
-		mainMenu.add(stopItem);
-		mainMenu.addSeparator();
-
-		/** Configure save item */
-		JMenuItem saveItem = new JMenuItem("Save...");
-		saveItem.setActionCommand("save");
-		saveItem.addActionListener(this);
-		mainMenu.add(saveItem);
-
-		/** Configure load item */
-		JMenuItem loadItem = new JMenuItem("Load...");
-		loadItem.setActionCommand("load");
-		loadItem.addActionListener(this);
-		mainMenu.add(loadItem);
-		mainMenu.addSeparator();
-
-		/** Configure close item */
-		JMenuItem closeItem = new JMenuItem("Exit");
-		closeItem.setActionCommand("close");
-		closeItem.addActionListener(this);
-		mainMenu.add(closeItem);
-
-		/** Add menu to menu bar */
-		menuBar.add(mainMenu);
-
-		/** Add view to menu bar*/
-		viewMenu = new ViewMenu();
-		menuBar.add(viewMenu);
-		
-		/** New SimulationPanel */
-		simPanel = new SimulationPanel();
-		JScrollPane scrollPane = new JScrollPane(simPanel);
-		this.addComponentListener(simPanel);
-		
-		/** New ClockViewPanel */
-		ClockViewPanel clockViewPanel = new ClockViewPanel();
-		
-		this.add(scrollPane, BorderLayout.CENTER);
-		this.add(menuBar, BorderLayout.NORTH);
-		this.add(clockViewPanel, BorderLayout.SOUTH);
-	}
 
 	@Override
 	public void setUIController(IUIController controller) {
@@ -116,29 +62,101 @@ public class MainViewSimpleGui extends JFrame implements IMainView,
 
 		/** Set size of simple GUI */
 		this.setSize(MainViewSimpleGui.WIDTH, MainViewSimpleGui.HEIGHT);
+		/** Set minimum size */
+		this.setMinimumSize(new Dimension(500, 300));
 		/** Set default close operation to 'exit on close' */
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		/** Set the location of the frame in the center of screen */
 		this.setLocationRelativeTo(null);
 		/** Set layout to 'null' */
-		this.setLayout(new BorderLayout()); // BorderLayout for testing
+		this.setLayout(new BorderLayout());
 		/** Set title of the frame */
 		this.setTitle("CASi (MACK Simulator)");
 
 		/** Set up components */
 		this.setComponents();
-		
-		
-		this.viewMenu.setViewlistener(simPanel.getViewMenuListener());
-		
+
+		/** Set agents, sensor and actuators in the information combo box */
+		this.informationPanel.setInformationComboBox();
+
+		/** Set frame visible, paint components of the simulation */
 		this.setVisible(true);
 		this.simPanel.paintSimulationComponents();
-		
+
+		/**
+		 * Set the listener (background panel of simulation panel) of the view
+		 * menu
+		 */
+		this.viewMenu.setViewlistener(simPanel.getViewMenuListener());
+
 		log.info("Show simple GUI");
+	}
+
+	/**
+	 * Sets up the components of the simple GUI main frame.
+	 */
+	private void setComponents() {
+	
+		/** Set menu bar */
+		JMenuBar menuBar = new JMenuBar();
+		JMenu mainMenu = new JMenu("Menu");
+	
+		/** Configure save item */
+		JMenuItem stopItem = new JMenuItem("Stop Simulation");
+		stopItem.setActionCommand("stop");
+		stopItem.addActionListener(this);
+		mainMenu.add(stopItem);
+		mainMenu.addSeparator();
+	
+		/** Configure save item */
+		JMenuItem saveItem = new JMenuItem("Save...");
+		saveItem.setActionCommand("save");
+		saveItem.addActionListener(this);
+		mainMenu.add(saveItem);
+	
+		/** Configure load item */
+		JMenuItem loadItem = new JMenuItem("Load...");
+		loadItem.setActionCommand("load");
+		loadItem.addActionListener(this);
+		mainMenu.add(loadItem);
+		mainMenu.addSeparator();
+	
+		/** Configure close item */
+		JMenuItem closeItem = new JMenuItem("Exit");
+		closeItem.setActionCommand("close");
+		closeItem.addActionListener(this);
+		mainMenu.add(closeItem);
+	
+		/** Add menu to menu bar */
+		menuBar.add(mainMenu);
+	
+		/** Add view to menu bar */
+		viewMenu = new ViewMenu();
+		menuBar.add(viewMenu);
+	
+		/** New SimulationPanel */
+		simPanel = new SimulationPanel();
+		JScrollPane scrollPane = new JScrollPane(simPanel);
+		this.addComponentListener(simPanel);
+	
+		/** New ClockViewPanel */
+		ClockViewPanel clockViewPanel = new ClockViewPanel();
+	
+		/** New InformationPanel */
+		informationPanel = new InformationPanel();
+	
+		this.add(scrollPane, BorderLayout.CENTER);
+		this.add(menuBar, BorderLayout.NORTH);
+		this.add(clockViewPanel, BorderLayout.SOUTH);
+		this.add(informationPanel, BorderLayout.EAST);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
+		
+		/**
+		 * Set actions of the main menu
+		 */
 
 		if (arg0.getActionCommand().equals("stop")) {
 

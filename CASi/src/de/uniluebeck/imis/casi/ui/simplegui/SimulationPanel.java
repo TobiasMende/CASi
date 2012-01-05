@@ -100,6 +100,7 @@ public class SimulationPanel extends JLayeredPane implements
 						transform);
 				agent.addListener(agentView);
 				simulationCmponents.add(agentView);
+				agentView.setAgent(agent);
 				this.add(agentView, new Integer(3));
 
 			}
@@ -180,6 +181,7 @@ public class SimulationPanel extends JLayeredPane implements
 			componentView.setPos();
 		}
 		SimulationPanel.this.invalidate();
+		backgroundPanel.repaint();
 
 	}
 

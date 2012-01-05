@@ -11,13 +11,22 @@
  */
 package de.uniluebeck.imis.casi.simulation.model;
 
+import java.awt.Dimension;
 import java.awt.Image;
+import java.awt.Point;
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.HashSet;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.logging.Logger;
 
+import de.uniluebeck.imis.casi.CASi;
 import de.uniluebeck.imis.casi.simulation.engine.SimulationClock;
 import de.uniluebeck.imis.casi.simulation.engine.SimulationEngine;
+import de.uniluebeck.imis.casi.simulation.factory.GraphicFactory;
 import de.uniluebeck.imis.casi.simulation.factory.PathFactory;
 import de.uniluebeck.imis.casi.simulation.factory.WorldFactory;
 
@@ -33,12 +42,12 @@ public class World {
 	/** A set containing the rooms */
 	private Set<Room> rooms;
 	/** A set containing the agents */
-	private Set<Agent> agents;
+	private TreeSet<Agent> agents;
 	/** A set containing the actuators */
-	private Set<AbstractInteractionComponent> interactionComponents;
+	private TreeSet<AbstractInteractionComponent> interactionComponents;
 
 	/** Collection of components that are neither agents, actuators nor sensors */
-	private Set<AbstractComponent> components;
+	private TreeSet<AbstractComponent> components;
 	/** The start time in this world */
 	private SimulationTime startTime;
 
@@ -52,12 +61,31 @@ public class World {
 	private double[][] doorGraph;
 	private Path[][] doorPaths;
 
+	/** The size of the world */
+	private Dimension simulationDimension;
+
 	/**
 	 * Flag for saving whether this world is sealed or not. If sealed, no
 	 * changes can be made. Every call to a setter would cause an exception. If
 	 * not sealed, the world can not be simulated.
 	 */
 	private boolean sealed;
+
+	/**
+	 * Default Constructor
+	 */
+	public World() {
+		Comparator<AbstractComponent> idComparator = new Comparator<AbstractComponent>() {
+			@Override
+			public int compare(AbstractComponent one, AbstractComponent two) {
+				return one.getIdentifier().compareTo(two.getIdentifier());
+			}
+		};
+		agents = new TreeSet<Agent>(idComparator);
+		interactionComponents = new TreeSet<AbstractInteractionComponent>(
+				idComparator);
+		components = new TreeSet<AbstractComponent>(idComparator);
+	}
 
 	/**
 	 * Seals the world
@@ -80,10 +108,10 @@ public class World {
 			log.warning("Don't call init yet!");
 			return;
 		}
+		calculateDimension();
 		calculateDoorGraph();
 		printDoorGraph();
 		calculateDoorPaths();
-		
 		connectInteractionComponentsWithAgents();
 	}
 
@@ -92,15 +120,15 @@ public class World {
 	 */
 	private void connectInteractionComponentsWithAgents() {
 		log.fine("Connecting agents with sensors and actuators");
-		for(Agent agent : agents) {
-			for(AbstractInteractionComponent comp : interactionComponents) {
-				if(comp.checkInterest(agent)) {
+		for (Agent agent : agents) {
+			for (AbstractInteractionComponent comp : interactionComponents) {
+				if (comp.checkInterest(agent)) {
 					agent.addVetoableListener(comp);
 				}
 			}
 		}
 		log.fine("All agents are connected");
-		
+
 	}
 
 	/**
@@ -124,7 +152,7 @@ public class World {
 	 * @throws IllegalAccessException
 	 *             if the world isn't sealed
 	 */
-	public Set<Agent> getAgents() throws IllegalAccessException {
+	public TreeSet<Agent> getAgents() throws IllegalAccessException {
 		if (!sealed) {
 			throw new IllegalAccessException("World isn't sealed!");
 		}
@@ -138,13 +166,13 @@ public class World {
 	 * @throws IllegalAccessException
 	 *             if the world isn't sealed
 	 */
-	public Set<AbstractInteractionComponent> getInteractionComponents() throws IllegalAccessException {
+	public Set<AbstractInteractionComponent> getInteractionComponents()
+			throws IllegalAccessException {
 		if (!sealed) {
 			throw new IllegalAccessException("World isn't sealed!");
 		}
 		return interactionComponents;
 	}
-
 
 	/**
 	 * Getter for components that are neither actuators nor sensors.
@@ -263,11 +291,13 @@ public class World {
 	 * @throws IllegalAccessException
 	 *             if the world is sealed.
 	 */
-	public void setAgents(Set<Agent> agents) throws IllegalAccessException {
+	public void setAgents(Collection<Agent> agents)
+			throws IllegalAccessException {
 		if (sealed) {
 			throw new IllegalAccessException("World is sealed!");
 		}
-		this.agents = agents;
+		this.agents.clear();
+		this.agents.addAll(agents);
 		for (Agent a : agents) {
 			SimulationClock.getInstance().addListener(a);
 		}
@@ -281,14 +311,15 @@ public class World {
 	 * @throws IllegalAccessException
 	 *             if the world is sealed.
 	 */
-	public void setInteractionComponents(Set<AbstractInteractionComponent> interactionComponents)
+	public void setInteractionComponents(
+			Collection<AbstractInteractionComponent> interactionComponents)
 			throws IllegalAccessException {
 		if (sealed) {
 			throw new IllegalAccessException("World is sealed!");
 		}
-		this.interactionComponents = interactionComponents;
+		this.interactionComponents.clear();
+		this.interactionComponents.addAll(interactionComponents);
 	}
-
 
 	/**
 	 * Setter for unspecified components
@@ -299,12 +330,13 @@ public class World {
 	 * @throws IllegalAccessException
 	 *             if the world is sealed.
 	 */
-	public void setComponents(Set<AbstractComponent> components)
+	public void setComponents(Collection<AbstractComponent> components)
 			throws IllegalAccessException {
 		if (sealed) {
 			throw new IllegalAccessException("World is sealed!");
 		}
-		this.components = components;
+		this.components.clear();
+		this.components.addAll(components);
 	}
 
 	/**
@@ -434,5 +466,55 @@ public class World {
 			}
 			log.fine(b.toString());
 		}
+	}
+
+	/**
+	 * @return the simulationDimension
+	 */
+	public Dimension getSimulationDimension() {
+		return simulationDimension;
+	}
+
+	/**
+	 * Calculates the dimension of the simulation area-
+	 */
+	private void calculateDimension() {
+		CASi.SIM_LOG.info("Calculating the size of the simulation");
+		Set<Wall> walls = new HashSet<Wall>();
+		for (Room r : rooms) {
+			walls.addAll(r.getWalls());
+		}
+		Point min = new Point(Integer.MAX_VALUE, Integer.MAX_VALUE);
+		Point max = new Point(Integer.MIN_VALUE, Integer.MIN_VALUE);
+		for (Wall w : walls) {
+			Point start = GraphicFactory.getPointRepresentation(w
+					.getStartPoint());
+			Point end = GraphicFactory.getPointRepresentation(w.getEndPoint());
+			if (start.x < min.x) {
+				min.x = start.x;
+			}
+			if (start.y < min.y) {
+				min.y = start.y;
+			}
+			if (start.x > max.x) {
+				max.x = start.x;
+			}
+			if (start.y > max.y) {
+				max.y = start.y;
+			}
+			if (end.x < min.x) {
+				min.x = end.x;
+			}
+			if (end.y < min.y) {
+				min.y = end.y;
+			}
+			if (end.x > max.x) {
+				max.x = end.x;
+			}
+			if (end.y > max.y) {
+				max.y = end.y;
+			}
+		}
+		simulationDimension = new Dimension(max.x - min.x, max.y - min.y);
 	}
 }

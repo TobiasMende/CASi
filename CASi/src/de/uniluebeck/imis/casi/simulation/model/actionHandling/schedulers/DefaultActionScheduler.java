@@ -11,7 +11,6 @@
  */
 package de.uniluebeck.imis.casi.simulation.model.actionHandling.schedulers;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.TreeSet;
@@ -19,7 +18,6 @@ import java.util.logging.Logger;
 
 import de.uniluebeck.imis.casi.simulation.engine.SimulationClock;
 import de.uniluebeck.imis.casi.simulation.model.Agent;
-import de.uniluebeck.imis.casi.simulation.model.SimulationTime;
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.AbstractAction;
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.AbstractAction.STATE;
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.ActionComparator;
@@ -103,29 +101,10 @@ public class DefaultActionScheduler implements IActionScheduler {
 			action = interruptAction.remove();
 		}
 		if (action == null && !todoList.isEmpty()) {
-			action = searchInTodoList();
+			action = searchIn(todoList);
 		}
 		if (action == null && !actionPool.isEmpty()) {
 			action = searchInActionPool();
-		}
-		return action;
-	}
-
-	/**
-	 * Searches and removes a action in the todo list that should be performed
-	 * next.
-	 * 
-	 * @return the action, if one was found or {@code null} if no action was
-	 *         found.
-	 */
-	private AbstractAction searchInTodoList() {
-		AbstractAction action = null;
-		for(AbstractAction a : todoList) {
-			if(a.getEarliestStartTime() != null && a.getEarliestStartTime().before(SimulationClock.getInstance().getCurrentTime())) {
-				action = a;
-				todoList.remove(a);
-				break;
-			}
 		}
 		return action;
 	}
@@ -138,14 +117,9 @@ public class DefaultActionScheduler implements IActionScheduler {
 	 *         found.
 	 */
 	private AbstractAction searchInActionPool() {
-		AbstractAction action = null;
-		for(AbstractAction a : actionPool) {
-			if (a.getEarliestStartTime()
-					.before(SimulationClock.getInstance().getCurrentTime())) {
-				action = a;
-				actionPool.remove(a);
-				break;
-			}
+		AbstractAction action = searchIn(actionPool);
+		if (action == null) {
+			action = actionPool.pollFirst();
 		}
 		return action;
 	}
@@ -159,6 +133,55 @@ public class DefaultActionScheduler implements IActionScheduler {
 	@Override
 	public boolean isInterruptScheduled() {
 		return !interruptAction.isEmpty();
+	}
+
+	/**
+	 * Searches the next action in a provided tree set
+	 * 
+	 * @param actionSet
+	 *            the set to search in.
+	 * @return the action or {@code null}, if no action was found.
+	 */
+	private AbstractAction searchIn(TreeSet<AbstractAction> actionSet) {
+		AbstractAction action = null;
+		AbstractAction tempAction = null;
+		// Search the action with the earliest deadline:
+		for (AbstractAction a : actionSet) {
+			if (a.getDeadline() != null
+					&& (tempAction == null || tempAction.getDeadline().after(
+							a.getDeadline()))) {
+				tempAction = a;
+			}
+		}
+		if (tempAction != null
+				&& tempAction.getEarliestStartTime().before(
+						SimulationClock.getInstance().getCurrentTime())) {
+			action = pollAction(actionSet, tempAction);
+		}
+		for (AbstractAction a : actionSet) {
+			if (a.getEarliestStartTime() != null
+					&& a.getEarliestStartTime().before(
+							SimulationClock.getInstance().getCurrentTime())) {
+				action = pollAction(actionSet, a);
+				break;
+			}
+		}
+		return action;
+	}
+
+	/**
+	 * Removes the provided action from the set
+	 * 
+	 * @param actionSet
+	 *            the set to remove the action from
+	 * @param action
+	 *            the action to remove
+	 * @return the action again
+	 */
+	private AbstractAction pollAction(TreeSet<AbstractAction> actionSet,
+			AbstractAction action) {
+		actionSet.remove(action);
+		return action;
 	}
 
 }

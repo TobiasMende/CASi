@@ -19,11 +19,9 @@ import java.awt.geom.Rectangle2D;
 import java.util.Collection;
 
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
 import de.uniluebeck.imis.casi.communication.ICommunicationComponent;
 import de.uniluebeck.imis.casi.simulation.engine.ISimulationClockListener;
 import de.uniluebeck.imis.casi.simulation.engine.SimulationEngine;
-import de.uniluebeck.imis.casi.simulation.model.AbstractComponent.INTERRUPTIBILITY;
 import de.uniluebeck.imis.casi.simulation.model.Agent.STATE;
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.AbstractAction;
 

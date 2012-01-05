@@ -38,7 +38,7 @@ public class DoorSensor extends AbstractInteractionComponent implements
 	 * @param agent the agent  which should be object of the push messages
 	 */
 	public DoorSensor(Door door, Agent agent) {
-		super(door.getCentralPoint());
+		super("DoorSensor-"+door.getIntIdentifier(), door.getCentralPoint());
 		setShapeRepresentation(door.getShapeRepresentation());
 		this.door = door;
 		this.agent = agent;

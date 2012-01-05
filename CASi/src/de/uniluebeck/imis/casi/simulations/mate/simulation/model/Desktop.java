@@ -50,7 +50,7 @@ public class Desktop extends AbstractInteractionComponent {
 	 *            the exact position of this daa.
 	 */
 	public Desktop(Point2D coordinates, Agent agent) {
-		super("daa-"+idCounter, coordinates);
+		super("Desktop-"+idCounter, coordinates);
 		type = Type.SENSOR;
 		this.agent = agent;
 		

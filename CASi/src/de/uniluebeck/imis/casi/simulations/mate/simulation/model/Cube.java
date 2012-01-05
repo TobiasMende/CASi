@@ -68,6 +68,8 @@ public class Cube extends AbstractInteractionComponent {
 	 * serialization id
 	 */
 	private static final long serialVersionUID = -3061958723193321546L;
+	/** Counter for the cube instances */
+	private static int idCounter;
 	/** The current state of this cube */
 	private State currentState;
 	/** The message which is send as pull request */
@@ -78,7 +80,7 @@ public class Cube extends AbstractInteractionComponent {
 	 *            the position of this cube
 	 */
 	public Cube(Point2D coordinates, Agent owner) {
-		super(coordinates);
+		super("Cube-"+idCounter++, coordinates);
 		pullEnabled = true;
 		SimulationClock.getInstance().addListener(this);
 		currentState = State.unknown;

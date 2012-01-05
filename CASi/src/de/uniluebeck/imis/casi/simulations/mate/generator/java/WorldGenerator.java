@@ -11,18 +11,11 @@
  */
 package de.uniluebeck.imis.casi.simulations.mate.generator.java;
 
-import java.awt.Point;
-import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
-import java.util.Random;
 import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
@@ -31,22 +24,13 @@ import de.uniluebeck.imis.casi.CASi;
 import de.uniluebeck.imis.casi.generator.AgentGenerator;
 import de.uniluebeck.imis.casi.generator.IWorldGenerator;
 import de.uniluebeck.imis.casi.generator.RoomGenerator;
-import de.uniluebeck.imis.casi.simulation.factory.WallFactory;
 import de.uniluebeck.imis.casi.simulation.model.AbstractComponent;
 import de.uniluebeck.imis.casi.simulation.model.AbstractInteractionComponent;
 import de.uniluebeck.imis.casi.simulation.model.Agent;
 import de.uniluebeck.imis.casi.simulation.model.Door;
 import de.uniluebeck.imis.casi.simulation.model.Room;
 import de.uniluebeck.imis.casi.simulation.model.SimulationTime;
-import de.uniluebeck.imis.casi.simulation.model.Wall;
 import de.uniluebeck.imis.casi.simulation.model.World;
-import de.uniluebeck.imis.casi.simulation.model.actionHandling.AbstractAction;
-import de.uniluebeck.imis.casi.simulation.model.actionHandling.AbstractAction.TYPE;
-import de.uniluebeck.imis.casi.simulation.model.actionHandling.AtomicAction;
-import de.uniluebeck.imis.casi.simulation.model.actionHandling.ComplexAction;
-import de.uniluebeck.imis.casi.simulation.model.actions.GoAndSpeakTo;
-import de.uniluebeck.imis.casi.simulation.model.actions.Move;
-import de.uniluebeck.imis.casi.simulation.model.actions.SpeakTo;
 import de.uniluebeck.imis.casi.simulations.mate.simulation.model.Cube;
 import de.uniluebeck.imis.casi.simulations.mate.simulation.model.Desktop;
 import de.uniluebeck.imis.casi.simulations.mate.simulation.model.DoorLight;
@@ -143,7 +127,7 @@ public class WorldGenerator implements IWorldGenerator {
 			log.severe("Unknown Exception: " + e.fillInStackTrace());
 		}
 
-		finalize();
+		finalizeWorld();
 		return tempWorld;
 	}
 
@@ -194,7 +178,7 @@ public class WorldGenerator implements IWorldGenerator {
 	/**
 	 * Finalizes this world.
 	 */
-	public void finalize() {
+	private void finalizeWorld() {
 		// assure: no null defaultRooms
 		AgentGenerator.getInstance().fillAllAgentsWithDefaultRoom();
 

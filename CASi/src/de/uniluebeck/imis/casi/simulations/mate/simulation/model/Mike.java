@@ -32,6 +32,8 @@ import de.uniluebeck.imis.casi.simulation.model.actions.SpeakTo;
  */
 public class Mike extends AbstractInteractionComponent {
 	private static final long serialVersionUID = -2951196032563233461L;
+	/** Counter for the mike instances */
+	private static int idCounter;
 	/** The last speakers that where detected by this component */
 	private HashMap<String, String> values = new HashMap<String, String>();
 
@@ -70,7 +72,7 @@ public class Mike extends AbstractInteractionComponent {
 	 * @param agent the agent to which this component belongs
 	 */
 	private Mike(Room room, Point2D position, Agent agent) {
-		super(position);
+		super("Mike-"+idCounter++, position);
 		setShapeRepresentation(room.getShapeRepresentation());
 		type = Type.SENSOR;
 		this.agent = agent;

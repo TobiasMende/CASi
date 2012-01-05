@@ -20,13 +20,10 @@ import java.awt.geom.Rectangle2D;
 import java.util.Collection;
 import java.util.logging.Logger;
 
-import javax.swing.SwingUtilities;
-
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import de.uniluebeck.imis.casi.communication.ICommunicationComponent;
 import de.uniluebeck.imis.casi.simulation.engine.ISimulationClockListener;
 import de.uniluebeck.imis.casi.simulation.engine.SimulationEngine;
-import de.uniluebeck.imis.casi.simulation.factory.GraphicFactory;
 import de.uniluebeck.imis.casi.simulation.factory.WorldFactory;
 import de.uniluebeck.imis.casi.simulation.model.Agent.STATE;
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.AbstractAction;
@@ -41,17 +38,28 @@ import de.uniluebeck.imis.casi.simulation.model.actionHandling.AbstractAction;
 public abstract class AbstractInteractionComponent extends AbstractComponent
 		implements ICommunicationComponent, IExtendedAgentListener,
 		ISimulationClockListener {
-	private static final Logger log = Logger.getLogger(AbstractInteractionComponent.class.getName());
+	private static final Logger log = Logger
+			.getLogger(AbstractInteractionComponent.class.getName());
+
 	/** Enumeration for possible directions in which this component looks */
 	public enum Face {
-		NORTH(0), SOUTH(180), EAST(90), WEST(270), NORTH_EAST(45), SOUTH_EAST(
-				135), NORTH_WEST(315), SOUTH_WEST(225);
-		/** The radian representation of this face */
-		private double radian;
+		NORTH(90), SOUTH(270), EAST(0), WEST(180), NORTH_EAST(45), SOUTH_EAST(
+				315), NORTH_WEST(135), SOUTH_WEST(225);
+		/** The degree representation of this face */
+		private double degree;
 
 		/** Private Constructor */
-		private Face(double radian) {
-			this.radian = radian;
+		private Face(double degree) {
+			this.degree = degree;
+		}
+
+		/**
+		 * Getter for the degree value.
+		 * 
+		 * @return the degree representation
+		 */
+		private double degree() {
+			return degree;
 		}
 
 		/**
@@ -60,7 +68,19 @@ public abstract class AbstractInteractionComponent extends AbstractComponent
 		 * @return the radian representation
 		 */
 		private double radian() {
-			return radian;
+			return Math.toRadians(degree);
+		}
+
+		/**
+		 * Getter for a normalized direction vector
+		 * 
+		 * @return the direction vector
+		 */
+		private Point2D direction() {
+			log.info(radian()+"");
+			Point2D direction = new Point2D.Double(Math.cos(radian()), Math.sin(radian()));
+			log.info(direction.toString());
+			return direction;
 		}
 	}
 
@@ -229,12 +249,12 @@ public abstract class AbstractInteractionComponent extends AbstractComponent
 		// Calculate the new shape:
 		double currentOpening = opening < 0 ? 360 : opening;
 		Face currentDirection = direction == null ? Face.NORTH : direction;
-		double startAngle = currentDirection.radian() - (currentOpening / 2);
+		double startAngle = currentDirection.degree() - ((double)currentOpening / 2.0);
 		shapeRepresentation = new Arc2D.Double(calculateCircleBounds(),
 				startAngle, currentOpening, Arc2D.PIE);
-		Point face = new Point((int)Math.cos(currentDirection.radian()), (int)Math.sin(currentDirection.radian()));
-		log.info(face.toString());
-		Point2D pointInRoom = new Point2D.Double(face.x+getCentralPoint().getX(), face.y+getCentralPoint().getY());
+		Point2D pointInRoom = new Point2D.Double(currentDirection.direction()
+				.getX() + getCentralPoint().getX(), currentDirection
+				.direction().getY() + getCentralPoint().getY());
 		Room room = WorldFactory.getRoomsWithPoint(pointInRoom).getFirst();
 		Area area = new Area(shapeRepresentation);
 		area.intersect(new Area(room.getShapeRepresentation()));
@@ -335,8 +355,11 @@ public abstract class AbstractInteractionComponent extends AbstractComponent
 			makePullRequest(newTime);
 		}
 	}
-	
-	/** Overwrite to let the component periodically pull informations from the communication handler */
+
+	/**
+	 * Overwrite to let the component periodically pull informations from the
+	 * communication handler
+	 */
 	protected void makePullRequest(SimulationTime newTime) {
 		// nothing to doo here.
 	}
@@ -363,17 +386,20 @@ public abstract class AbstractInteractionComponent extends AbstractComponent
 	public final boolean hasVetoRight() {
 		return !type.equals(Type.SENSOR);
 	}
-	
+
 	/**
 	 * Sets a new shape representation of the monitored area
-	 * @param shape the shape do monitor
+	 * 
+	 * @param shape
+	 *            the shape do monitor
 	 */
 	public void setShapeRepresentation(Shape shape) {
 		this.shapeRepresentation = shape;
 	}
-	
+
 	/**
-	 * Checks whether this cube is interested in a given action and agent. (default: interested in nothing)
+	 * Checks whether this cube is interested in a given action and agent.
+	 * (default: interested in nothing)
 	 * 
 	 * @param action
 	 *            the action
@@ -385,9 +411,10 @@ public abstract class AbstractInteractionComponent extends AbstractComponent
 	protected boolean checkInterest(AbstractAction action, Agent agent) {
 		return false;
 	}
-	
+
 	/**
-	 * Checks whether this cube is interested in a given agent (default: interested in nothing)
+	 * Checks whether this cube is interested in a given agent (default:
+	 * interested in nothing)
 	 * 
 	 * @param agent
 	 *            the agent
@@ -397,7 +424,6 @@ public abstract class AbstractInteractionComponent extends AbstractComponent
 	protected boolean checkInterest(Agent agent) {
 		return false;
 	}
-	
 
 	@Override
 	public void stateChanged(STATE newState, Agent agent) {
@@ -423,15 +449,17 @@ public abstract class AbstractInteractionComponent extends AbstractComponent
 		// nothing to do here
 
 	}
-	
+
 	@Override
 	public void receive(Object message) {
-		/* Should be implemented by components that want to receive messages from the communication handler. 
-		 * On other components, this call should fail because it's an unexpected behavior.
-		 * */
+		/*
+		 * Should be implemented by components that want to receive messages
+		 * from the communication handler. On other components, this call should
+		 * fail because it's an unexpected behavior.
+		 */
 		throw new NotImplementedException();
 	}
-	
+
 	@Override
 	public void init() {
 		SimulationEngine.getInstance().getCommunicationHandler().register(this);

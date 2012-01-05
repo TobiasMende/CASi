@@ -26,17 +26,8 @@ import de.uniluebeck.imis.casi.generator.ComponentCollector;
 import de.uniluebeck.imis.casi.generator.IWorldGenerator;
 import de.uniluebeck.imis.casi.generator.RoomCollector;
 import de.uniluebeck.imis.casi.simulation.model.AbstractComponent;
-import de.uniluebeck.imis.casi.simulation.model.AbstractInteractionComponent;
-import de.uniluebeck.imis.casi.simulation.model.Agent;
-import de.uniluebeck.imis.casi.simulation.model.Door;
-import de.uniluebeck.imis.casi.simulation.model.Room;
 import de.uniluebeck.imis.casi.simulation.model.SimulationTime;
 import de.uniluebeck.imis.casi.simulation.model.World;
-import de.uniluebeck.imis.casi.simulations.mate.simulation.model.Cube;
-import de.uniluebeck.imis.casi.simulations.mate.simulation.model.Desktop;
-import de.uniluebeck.imis.casi.simulations.mate.simulation.model.DoorLight;
-import de.uniluebeck.imis.casi.simulations.mate.simulation.model.DoorSensor;
-import de.uniluebeck.imis.casi.simulations.mate.simulation.model.Mike;
 
 public class WorldGenerator implements IWorldGenerator {
 

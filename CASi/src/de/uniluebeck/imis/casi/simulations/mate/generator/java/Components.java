@@ -74,7 +74,7 @@ public class Components {
 		// adding door related things to each door
 		for (Door door : room.getDoors()) {
 			DoorLight dl =  new DoorLight(door, room, owner);
-			dl.setMonitoredArea(Face.NORTH, 100, 180);
+			dl.setMonitoredArea(Face.EAST, 100, 180);
 			res.add(dl);
 			res.add(new DoorSensor(door, owner));
 		}

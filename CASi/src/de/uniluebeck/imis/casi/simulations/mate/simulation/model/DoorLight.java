@@ -213,7 +213,12 @@ public class DoorLight extends AbstractInteractionComponent {
 	 *         <code>false</code> otherwise.
 	 */
 	private boolean agentWantsInRoom(Iterator<Point2D> iter) {
-		return iter.hasNext() && room.contains(iter.next());
+		while(iter.hasNext()) {
+			if(room.contains(iter.next())) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**

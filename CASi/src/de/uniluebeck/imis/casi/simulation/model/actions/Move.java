@@ -23,7 +23,6 @@ import de.uniluebeck.imis.casi.simulation.model.Door;
 import de.uniluebeck.imis.casi.simulation.model.IPosition;
 import de.uniluebeck.imis.casi.simulation.model.Path;
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.AtomicAction;
-import de.uniluebeck.imis.casi.utils.Tools;
 
 /**
  * This class is the representation of a move action.
@@ -228,11 +227,17 @@ public class Move extends AtomicAction {
 	 * 
 	 * @return the pathIterator
 	 */
-	@SuppressWarnings("unchecked")
 	public Iterator<Point2D> getPathIterator() {
 		try {
-			return pathIterator != null ? (Iterator<Point2D>) Tools
-					.deepCopy(pathIterator) : null;
+			Iterator<Point2D> iter = path.iterator();
+			if(pathIterator == null) {
+				return iter;
+			}
+			while(iter.hasNext()) {
+				if(iter.next().equals(lastPoint)) {
+					return iter;
+				}
+			}
 		} catch (Exception e) {
 			log.severe("Can't clone path iterator: " + e.fillInStackTrace());
 		}

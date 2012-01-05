@@ -11,7 +11,6 @@
  */
 package de.uniluebeck.imis.casi.simulations.mate.simulation.model;
 
-import java.awt.Point;
 import java.awt.geom.Point2D;
 import java.util.HashMap;
 

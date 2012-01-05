@@ -114,9 +114,7 @@ public class Wall implements IPosition {
 		if (areIdentical || areInversed || hashCodeEquals) {
 			return true;
 		}
-		/*
-		 * TODO add further cases where walls are really equal
-		 * 
+		/* 
 		 * ATTENTION: They are not equal, if they have different lengths!
 		 */
 		return false;

@@ -17,7 +17,7 @@ import de.uniluebeck.imis.casi.simulation.model.actionHandling.AtomicAction;
 /**
  * @author Marvin Frick
  * 
- *         The Angent stays at his current position and does _nothing_ for the given time.
+ *         The Agent stays at his current position and does _nothing_ for the given time.
  */
 public class StayHere extends AtomicAction {
 
@@ -31,9 +31,6 @@ public class StayHere extends AtomicAction {
 		this.setDuration(duration);
 	}
 
-	/* (non-Javadoc)
-	 * @see de.uniluebeck.imis.casi.simulation.model.actionHandling.AbstractAction#internalPerform(de.uniluebeck.imis.casi.simulation.model.AbstractComponent)
-	 */
 	@Override
 	protected boolean internalPerform(AbstractComponent performer) {
 		// TODO Auto-generated method stub

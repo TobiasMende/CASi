@@ -36,7 +36,8 @@ public abstract class AbstractAction implements Listenable<IActionListener>,
 	/** the id for serialization */
 	private static final long serialVersionUID = -4600404747026813557L;
 	/** the development logger */
-	private static final Logger log = Logger.getLogger(AbstractAction.class.getName());
+	private static final Logger log = Logger.getLogger(AbstractAction.class
+			.getName());
 	protected boolean initialized;
 
 	/**
@@ -50,8 +51,7 @@ public abstract class AbstractAction implements Listenable<IActionListener>,
 		/** the action was completed */
 		COMPLETED,
 		/** The action can't be performed at the moment */
-		INTERRUPTED,
-		UNKNOWN,
+		INTERRUPTED, UNKNOWN,
 		/** The action is not used in any list at the moment */
 		RAW
 	}
@@ -377,6 +377,10 @@ public abstract class AbstractAction implements Listenable<IActionListener>,
 		return null;
 	}
 
+	/**
+	 * This isn't a complete equals method... further additions should be made
+	 * in the concrete actions.
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (super.equals(obj)) {
@@ -408,8 +412,6 @@ public abstract class AbstractAction implements Listenable<IActionListener>,
 				|| (earliestStartTime == null && other.getEarliestStartTime() != null)) {
 			return false;
 		}
-		// TODO this isn't a complete equals method... further additions should
-		// be made in the concrete actions.
 		return true;
 	}
 
@@ -437,30 +439,32 @@ public abstract class AbstractAction implements Listenable<IActionListener>,
 	 */
 	protected void postActionTask(AbstractComponent performer) {
 	}
+
 	/**
 	 * Sets the state of the action to {@link STATE}.SCHEDULED
 	 */
 	public void reset() {
 		initialized = false;
 	}
-	
+
 	@Override
 	public String toString() {
 		StringBuffer b = new StringBuffer();
 		b.append(this.getClass().getSimpleName());
 		b.append("[");
-		b.append(type.toString()+", ");
-		b.append(state.toString()+", ");
-		b.append("Dur: "+duration+",");
-		b.append("S: "+earliestStartTime+",");
-		b.append("D: "+deadline+",");
-		b.append("P: "+priority);
+		b.append(type.toString() + ", ");
+		b.append(state.toString() + ", ");
+		b.append("Dur: " + duration + ",");
+		b.append("S: " + earliestStartTime + ",");
+		b.append("D: " + deadline + ",");
+		b.append("P: " + priority);
 		b.append("]");
 		return b.toString();
 	}
-	
+
 	/**
 	 * Getter for the name of the action
+	 * 
 	 * @return the simple name of the action
 	 */
 	public String getName() {

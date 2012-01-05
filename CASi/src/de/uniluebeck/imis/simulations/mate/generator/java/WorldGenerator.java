@@ -126,6 +126,10 @@ public class WorldGenerator implements IWorldGenerator {
 			Actions.generateActions(tempWorld.getStartTime());
 			Actions.generateActionsPools(tempWorld.getStartTime());
 
+			log.info("linking new world");
+			Linker linker = new Linker();
+			linker.linkAll();
+			
 			// actuators & sensors
 			HashSet<AbstractInteractionComponent> interactionComps = generateActuators();
 			tempWorld.setInteractionComponents(interactionComps);

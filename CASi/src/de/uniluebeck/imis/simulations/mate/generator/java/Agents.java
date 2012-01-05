@@ -81,7 +81,7 @@ public class Agents {
 		for (int i = 0; i < 3; i++) {
 
 			agents.newAgent(new Agent("casi_tendlady_" + i, "Tentlady" + i,
-					"tendladies"));
+					"tentLady"));
 			AgentGenerator
 					.getInstance()
 					.findAgentByIdentifier("casi_tendlady_" + i)

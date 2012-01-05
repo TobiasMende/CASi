@@ -64,6 +64,10 @@ public final class Actions {
 		}
 		ActionGenerator.getInstance().newAction("casi_crazy_guy_01", runCrazy);
 
+		for (Agent a : AgentGenerator.getInstance().findAgentByType("tentLady")) {
+			generateActionsForTentLady(a, simulationStartTime);	
+		}
+		
 	}
 
 	/**
@@ -77,18 +81,18 @@ public final class Actions {
 
 		ActionGenerator actions = ActionGenerator.getInstance();
 		Agent tim = AgentGenerator.getInstance().findAgentByName("Tim");
-		Room timsRoom = RoomGenerator.getInstance().findRoomByIdentifier(
-				"tim'sRoom");
+		Room womensRoom = RoomGenerator.getInstance().findRoomByIdentifier(
+				"womensRestroom");
 
-		AbstractAction tempAction = new Move(timsRoom);
+		AbstractAction tempAction = new Move(womensRoom);
 		AbstractAction move2 = tempAction.clone();
+		
 		tempAction.setType(TYPE.NORMAL);
 		tempAction.setPriority(5);
 		tempAction.setEarliestStartTime(simulationStartTime
 				.plus(1 + new Random().nextInt(10)));
 		
 		actions.newAction(tentLady.getIdentifier()+"_01", tempAction);
-
 		
 		AbstractAction speak = new GoAndSpeakTo(tim, 10);
 
@@ -97,17 +101,14 @@ public final class Actions {
 		
 		actions.newAction(tentLady.getIdentifier()+"_02", speak);
 		
-		ComplexAction speakInTimsRoom = new ComplexAction();
-		speakInTimsRoom.addSubAction((AtomicAction) move2);
-		speakInTimsRoom.addSubAction(new SpeakTo(tim, 10));
-		speakInTimsRoom.setEarliestStartTime(simulationStartTime.plus(30));
-		AbstractAction testMove = new Move(RoomGenerator.getInstance()
+		
+		AbstractAction goBackToMainFloor = new Move(RoomGenerator.getInstance()
 				.findRoomByIdentifier("mainFloor"));
-		testMove.setEarliestStartTime(speakInTimsRoom.getEarliestStartTime()
+		goBackToMainFloor.setEarliestStartTime(speak.getEarliestStartTime()
 				.plus(10));
 
-		actions.newAction(tentLady.getIdentifier()+"_03", speakInTimsRoom);
-		actions.newAction(tentLady.getIdentifier()+"_04", testMove);
+		
+		actions.newAction(tentLady.getIdentifier()+"_04", goBackToMainFloor);
 	}
 
 	/**

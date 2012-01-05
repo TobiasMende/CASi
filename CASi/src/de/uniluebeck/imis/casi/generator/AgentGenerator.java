@@ -123,6 +123,9 @@ public class AgentGenerator {
 				res.add(agent);
 			}
 		}
+		if(res.isEmpty()){
+			log.warning(String.format("couldn't find any agent with type %s, mispelled it?", typeToLookFor));	
+		}
 		return res;
 	}
 

@@ -68,7 +68,7 @@ public class Agent extends AbstractComponent implements
 	 */
 	public Agent(String identifier, String type) {
 		this(identifier);
-		this.type = type;
+		this.setType(type);
 	}
 
 	/**
@@ -85,12 +85,15 @@ public class Agent extends AbstractComponent implements
 			IPosition defaultPosition) {
 		this(identifier);
 		this.name = name;
-		this.type = type;
+		this.setType(type);
 		this.defaultPosition = defaultPosition;
 	}
 
 	/**
 	 * Constructor for an agent
+	 * 
+	 * @param identifier
+	 *            the intern (still human readable) identifier of this agent
 	 * 
 	 * @param name
 	 *            the name of the agent
@@ -103,7 +106,7 @@ public class Agent extends AbstractComponent implements
 
 	public void setState(STATE state) {
 		informListenersAboutStateChange(state);
-		CASi.SIM_LOG.config("State of "+this+" changed to "+state);
+		CASi.SIM_LOG.config("State of " + this + " changed to " + state);
 		this.state = state;
 	}
 
@@ -148,7 +151,7 @@ public class Agent extends AbstractComponent implements
 		if (isInterruptible()) {
 			actionScheduler.addInterruptAction(action);
 			setInterruptibility(INTERRUPTIBILITY.INTERRUPT_SCHEDULED);
-			CASi.SIM_LOG.info(action+" was scheduled for interrupt");
+			CASi.SIM_LOG.info(action + " was scheduled for interrupt");
 			return true;
 		}
 		return false;
@@ -245,7 +248,6 @@ public class Agent extends AbstractComponent implements
 		performAction();
 	}
 
-
 	/**
 	 * Asks the actuators whether the currentAction should be performed or not.
 	 * 
@@ -255,7 +257,7 @@ public class Agent extends AbstractComponent implements
 	private boolean askInteractionComponents() {
 		for (IExtendedAgentListener listener : extendedListeners) {
 			if (!listener.handle(currentAction, this)) {
-				if(listener.hasVetoRight()) {
+				if (listener.hasVetoRight()) {
 					CASi.SIM_LOG.info(this + ": " + listener
 							+ " doesn't allow to perform " + currentAction);
 					return false;
@@ -373,7 +375,7 @@ public class Agent extends AbstractComponent implements
 	 */
 	private void informListenersAboutPositionChange(Point2D oldPoint,
 			Point2D newPoint) {
-		if(CASi.VERBOSE && CASi.DEV_MODE) {
+		if (CASi.VERBOSE && CASi.DEV_MODE) {
 			log.fine("Position of " + toString() + " changed from " + oldPoint
 					+ " to " + newPoint);
 		}
@@ -468,6 +470,29 @@ public class Agent extends AbstractComponent implements
 		for (IAgentListener listener : agentListeners) {
 			listener.startPerformingAction(action, this);
 		}
+	}
+
+	/**
+	 * @return the type
+	 */
+	public String getType() {
+		return type;
+	}
+
+	/**
+	 * @param type
+	 *            the type to set
+	 */
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 }

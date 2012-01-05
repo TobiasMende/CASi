@@ -34,7 +34,7 @@ public class Room implements IPosition {
 	private static final long serialVersionUID = 112593179870431369L;
 	/** the collection of walls this room consists of */
 	private List<Wall> walls = new LinkedList<Wall>();
-	/** A polygon that representates the shape of this room */
+	/** A polygon that represents the shape of this room */
 	private Polygon polygonRepresentation;
 	
 	private Set<Door> doorsInRoom;
@@ -194,6 +194,13 @@ public class Room implements IPosition {
 
 	@Override
 	public String toString() {
+		return identifier;
+	}
+	
+	/**
+	 * Alias for toString().
+	 */
+	public String getIdentifier() {
 		return identifier;
 	}
 

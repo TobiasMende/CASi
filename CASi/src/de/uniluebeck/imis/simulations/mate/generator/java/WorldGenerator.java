@@ -28,7 +28,9 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 
 import de.uniluebeck.imis.casi.CASi;
+import de.uniluebeck.imis.casi.generator.AgentGenerator;
 import de.uniluebeck.imis.casi.generator.IWorldGenerator;
+import de.uniluebeck.imis.casi.generator.RoomGenerator;
 import de.uniluebeck.imis.casi.simulation.factory.WallFactory;
 import de.uniluebeck.imis.casi.simulation.model.AbstractComponent;
 import de.uniluebeck.imis.casi.simulation.model.AbstractInteractionComponent;
@@ -57,10 +59,8 @@ public class WorldGenerator implements IWorldGenerator {
 			.getName());
 
 	World tempWorld = new World();
-	Room timsRoom, mainFloor, crazyRoom, randomRoom, womensRoom, kitchen;
-	HashSet<Room> rooms = new HashSet<Room>();
-	HashSet<Agent> agents;
-	Agent tim, crazyGuy;
+	RoomGenerator rooms = RoomGenerator.getInstance();
+	AgentGenerator agents = AgentGenerator.getInstance();
 
 	/**
 	 * This generator creates an basic, pre coded World object
@@ -116,20 +116,21 @@ public class WorldGenerator implements IWorldGenerator {
 			tempWorld.setStartTime(new SimulationTime("12/24/2011 02:03:42"));
 			tempWorld.setBackgroundImage(image);
 
-			// rooms
-			rooms = generateRooms();
-			tempWorld.setRooms(rooms);
+			log.info("generating rooms");
+			Rooms.generateRooms();
 
-			// generate the agents
-			agents = generateAgents();
-			tempWorld.setAgents(agents);
+			log.info("generating agents");
+			Agents.generateAgents();
+
+			log.info("generating actions");
+			Actions.generateActions(tempWorld.getStartTime());
+			Actions.generateActionsPools(tempWorld.getStartTime());
 
 			// actuators & sensors
 			HashSet<AbstractInteractionComponent> interactionComps = generateActuators();
 			tempWorld.setInteractionComponents(interactionComps);
 
 			tempWorld.setComponents(new HashSet<AbstractComponent>());
-			tempWorld.seal();
 		} catch (IllegalAccessException e) {
 			log.severe("Illegal Access:" + e.fillInStackTrace());
 		} catch (ParseException e) {
@@ -138,6 +139,7 @@ public class WorldGenerator implements IWorldGenerator {
 			log.severe("Unknown Exception: " + e.fillInStackTrace());
 		}
 
+		finalize();
 		return tempWorld;
 	}
 
@@ -147,120 +149,36 @@ public class WorldGenerator implements IWorldGenerator {
 	private HashSet<AbstractInteractionComponent> generateActuators() {
 		HashSet<AbstractInteractionComponent> res = new HashSet<AbstractInteractionComponent>();
 		// TODO generate more actuators!
-		
-		res.addAll(addThingsToRoomWithOwner(timsRoom, tim));
-		res.addAll(addThingsToRoomWithOwner(crazyRoom, crazyGuy));
-		
+
+		res.addAll(addThingsToRoomWithOwner(rooms.findRoomByIdentifier("tim'sRoom"),
+				agents.findAgentByName("Tim")));
+		res.addAll(addThingsToRoomWithOwner(rooms.findRoomByIdentifier("crazyRoom"),
+				agents.findAgentByName("Crazy Guy")));
+
 		return res;
 	}
 
-	/**
-	 * Only creates some agents. Testing stuff
-	 * 
-	 * @return {@link HashSet} of {@link Agent}
-	 */
-	private HashSet<Agent> generateAgents() {
-		log.info("generating agents");
-
-		HashSet<Agent> agents = new HashSet<Agent>();
-		Agent tempAgent = null;
-
-		// if we need a lot of agents...
-		for (int i = 0; i < 0; i++) {
-			tempAgent = new Agent("agent_" + i + "_smith", "A. Smith the " + i,
-					"crowd");
-			agents.add(tempAgent);
-		}
-
-		//##########
-		// Father Moneymaker
-		//##########
-		tempAgent = new Agent("casi_father_moneymaker", "Father Moneymaker",
-				"candidates");
-		agents.add(tempAgent);
-		
-		//##########
-		// Tim
-		//##########
-		tim = new Agent("casi_tim", "Tim", "candidates");
-		tim.setCurrentPosition(timsRoom);
-		tim.setDefaultPosition(timsRoom);
-		agents.add(tim);
-		
-		//##########
-		// And I
-		//##########
-		tempAgent = new Agent("casi_and_i", "And I", "candidates");
-		tempAgent.setDefaultPosition(crazyRoom);
-		tempAgent.setCurrentPosition(timsRoom);
-		Agent andI = tempAgent;
-		AbstractAction goHome = new Move(crazyRoom);
-		goHome.setEarliestStartTime(tempWorld.getStartTime().plus(50));
-		tempAgent.addActionToList(goHome);
-		agents.add(tempAgent);
-
-		//##########
-		// Tentladies
-		//##########
-		for (int i = 0; i < 3; i++) {
-			tempAgent = new Agent("casi_tendlady_" + i, "Tentlady" + i,
-					"tendladies");
-			tempAgent.setDefaultPosition(mainFloor);
-			tempAgent = generateActionsForTentLady(andI, tempAgent);
-
-			agents.add(tempAgent);
-		}
-		
-		//##########
-		// Crazy-Guy
-		//##########
-		crazyGuy = new Agent("casi_crazy_guy", "Crazy Guy", "randomGuy");
-		ComplexAction runCrazy = new ComplexAction();
-		runCrazy.addSubAction(new Move(crazyRoom));
-		runCrazy.addSubAction(new Move(randomRoom));
-		runCrazy.addSubAction(new Move(womensRoom));
-		runCrazy.addSubAction(new Move(kitchen));
-		runCrazy.setEarliestStartTime(tempWorld.getStartTime().plus(15));
-		for (Room r : rooms) {
-			runCrazy.addSubAction(new Move(r));
-		}
-		List<Room> temp = new ArrayList<Room>(rooms);
-		Collections.shuffle(temp);
-		for (Room r : temp) {
-			runCrazy.addSubAction(new Move(r));
-		}
-		tempAgent.addActionToList(runCrazy);
-		agents.add(crazyGuy);
-
-		// If agents have no default positions: choose a random one
-		for (Agent a : agents) {
-			if (a.getDefaultPosition() == null) {
-				List<Room> r = new ArrayList<Room>(rooms);
-				Collections.shuffle(r);
-				a.setDefaultPosition(r.get(0));
-			}
-		}
-		return agents;
-
-	}
-
 
 	/**
-	 * Adds things to given room with a given owner. Used for doorSensors and DoorPlates...
+	 * Adds things to given room with a given owner. Used for doorSensors and
+	 * DoorPlates...
 	 * 
-	 * @param room TODO
-	 * @param owner TODO
+	 * @param room
+	 *            TODO
+	 * @param owner
+	 *            TODO
 	 * 
 	 */
-	private HashSet<AbstractInteractionComponent> addThingsToRoomWithOwner(Room room, Agent owner) {
+	private HashSet<AbstractInteractionComponent> addThingsToRoomWithOwner(
+			Room room, Agent owner) {
 		HashSet<AbstractInteractionComponent> res = new HashSet<AbstractInteractionComponent>();
-		
+
 		// adding door related things to each door
 		for (Door door : room.getDoors()) {
 			res.add(new DoorLight(door, room, owner));
 			res.add(new DoorSensor(door, owner));
 		}
-		
+
 		// adding desk related things
 		res.add(new Desktop(room.getCentralPoint(), owner));
 		res.add(new Cube(room.getCentralPoint(), owner));
@@ -269,291 +187,20 @@ public class WorldGenerator implements IWorldGenerator {
 
 	}
 
-	private Agent generateActionsForAgentSmith(Agent smith, Point2D center) {
-
-		return smith;
-	}
-
-	private Agent generateActionsForTentLady(Agent tim, Agent tentLady) {
-
-		AbstractAction tempAction = new Move(timsRoom);
-		AbstractAction move2 = tempAction.clone();
-		tempAction.setType(TYPE.NORMAL);
-		tempAction.setPriority(5);
-		tempAction.setEarliestStartTime(tempWorld.getStartTime().plus(
-				1 + new Random().nextInt(10)));
-		tentLady.addActionToList(tempAction);
-
-		AbstractAction speak = new GoAndSpeakTo(tim, 10);
-		speak.setType(TYPE.NORMAL);
-		speak.setEarliestStartTime(tempWorld.getStartTime().plus(20));
-		tentLady.addActionToList(speak);
-		ComplexAction speakInTimsRoom = new ComplexAction();
-		speakInTimsRoom.addSubAction((AtomicAction) move2);
-		speakInTimsRoom.addSubAction(new SpeakTo(tim, 10));
-		speakInTimsRoom.setEarliestStartTime(tempWorld.getStartTime().plus(30));
-		AbstractAction testMove = new Move(mainFloor);
-		testMove.setEarliestStartTime(speakInTimsRoom.getEarliestStartTime()
-				.plus(10));
-		tentLady.addActionToList(speakInTimsRoom);
-		tentLady.addActionToList(testMove);
-		return tentLady;
-	}
-
 	/**
-	 * Creates some rooms. Testing stuff.
-	 * 
-	 * @return {@link HashSet} of {@link Room}
+	 * Finalizes this world.
 	 */
-	private HashSet<Room> generateRooms() {
+	public void finalize() {
+		// assure: no null defaultRooms
+		AgentGenerator.getInstance().fillAllAgentsWithDefaultRoom();
 
-		log.info("generating rooms");
-
-		Wall theNewWall;
-		Door theNewDoor;
-		Room theNewRoom = new Room();
-
-		// main floor
-		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(100, 20),
-				new Point(100, 100)));
-		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(100, 100),
-				new Point(100, 160)));
-		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(100, 160),
-				new Point(100, 220)));
-		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(100, 220),
-				new Point(100, 260)));
-		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(100, 260),
-				new Point(120, 260)));
-		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(120, 260),
-				new Point(150, 260)));
-		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(180, 260),
-				new Point(150, 260)));
-		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(180, 260),
-				new Point(180, 310)));
-		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(180, 310),
-				new Point(210, 340)));
-		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(210, 340),
-				new Point(240, 340)));
-		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(240, 340),
-				new Point(270, 310)));
-		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(270, 310),
-				new Point(270, 280)));
-		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(270, 210),
-				new Point(270, 280)));
-		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(270, 210),
-				new Point(270, 150)));
-		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(270, 150),
-				new Point(270, 120)));
-		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(270, 120),
-				new Point(270, 100)));
-		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(270, 100),
-				new Point(270, 20)));
-		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(270, 20),
-				new Point(100, 20)));
-		mainFloor = theNewRoom;
-		mainFloor.setIdentifier("Main Floor");
-		rooms.add(theNewRoom);
-
-		// Room #1 timsRoom (top left)
-		theNewRoom = new Room();
-		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(20, 20),
-				new Point(20, 100)));
-		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(20, 100),
-				new Point(100, 100)));
-		theNewDoor = new Door(20, 5);
-		theNewWall = WallFactory.getWallWithPoints(new Point(100, 100),
-				new Point(100, 20));
-		theNewWall.addDoor(theNewDoor);
-		theNewRoom.addWall(theNewWall);
-		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(100, 20),
-				new Point(20, 20)));
-		timsRoom = theNewRoom;
-		timsRoom.setIdentifier("Tim's Room");
-		rooms.add(theNewRoom);
-
-		// Room #2 (second top left)
-		theNewRoom = new Room();
-		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(20, 100),
-				new Point(20, 160)));
-		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(20, 160),
-				new Point(100, 160)));
-		theNewDoor = new Door(20, 5);
-		theNewWall = WallFactory.getWallWithPoints(new Point(100, 160),
-				new Point(100, 100));
-		theNewWall.addDoor(theNewDoor);
-		theNewRoom.addWall(theNewWall);
-		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(100, 100),
-				new Point(20, 100)));
-		rooms.add(theNewRoom);
-
-		// Room #3 (third top left)
-		theNewRoom = new Room();
-		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(20, 160),
-				new Point(20, 220)));
-		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(20, 220),
-				new Point(100, 220)));
-		theNewDoor = new Door(20, 5);
-		theNewWall = WallFactory.getWallWithPoints(new Point(100, 220),
-				new Point(100, 160));
-		theNewWall.addDoor(theNewDoor);
-		theNewRoom.addWall(theNewWall);
-		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(100, 160),
-				new Point(20, 160)));
-		rooms.add(theNewRoom);
-
-		// Room #4 small kitchen
-		theNewRoom = new Room();
-		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(20, 220),
-				new Point(20, 260)));
-		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(20, 260),
-				new Point(100, 260)));
-		theNewDoor = new Door();
-		theNewWall = WallFactory.getWallWithPoints(new Point(100, 260),
-				new Point(100, 220));
-		theNewWall.addDoor(theNewDoor);
-		theNewRoom.addWall(theNewWall);
-		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(100, 220),
-				new Point(20, 220)));
-		kitchen = theNewRoom;
-		rooms.add(theNewRoom);
-		theNewRoom.setIdentifier("Kitchen");
-
-		// Room #5 womens restroom
-		theNewRoom = new Room();
-		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(120, 260),
-				new Point(120, 310)));
-		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(120, 310),
-				new Point(150, 310)));
-		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(150, 310),
-				new Point(150, 260)));
-		theNewDoor = new Door();
-		theNewWall = WallFactory.getWallWithPoints(new Point(150, 260),
-				new Point(120, 260));
-		theNewWall.addDoor(theNewDoor);
-		theNewRoom.addWall(theNewWall);
-		rooms.add(theNewRoom);
-		womensRoom = theNewRoom;
-		theNewRoom.setIdentifier("Womens restroom");
-
-		// Room #6 mens restroom
-		theNewRoom = new Room();
-		theNewWall = WallFactory.getWallWithPoints(new Point(180, 260),
-				new Point(150, 260));
-		theNewDoor = new Door();
-		theNewWall.addDoor(theNewDoor);
-		theNewRoom.addWall(theNewWall);
-		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(150, 260),
-				new Point(150, 310)));
-		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(150, 310),
-				new Point(180, 310)));
-		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(180, 310),
-				new Point(180, 260)));
-
-		rooms.add(theNewRoom);
-		theNewRoom.setIdentifier("Mens restroom");
-
-		// Room #7 secret room
-		theNewRoom = new Room();
-		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(270, 310),
-				new Point(360, 310)));
-		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(360, 310),
-				new Point(360, 280)));
-		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(270, 280),
-				new Point(360, 280)));
-		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(270, 280),
-				new Point(270, 310)));
-		rooms.add(theNewRoom);
-		theNewRoom.setIdentifier("Secret Room");
-
-		// crazy rooms
-		theNewRoom = new Room();
-		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(360, 280),
-				new Point(270, 280)));
-		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(360, 210),
-				new Point(360, 280)));
-		theNewWall = WallFactory.getWallWithPoints(new Point(270, 210),
-				new Point(360, 210));
-		theNewWall.addDoor(new Door());
-		theNewRoom.addWall(theNewWall);
-		theNewWall = WallFactory.getWallWithPoints(new Point(270, 280),
-				new Point(270, 210));
-		rooms.add(theNewRoom);
-		crazyRoom = theNewRoom;
-		theNewRoom.setIdentifier("Crazy Room");
-
-		theNewRoom = new Room();
-		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(360, 210),
-				new Point(270, 210)));
-		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(360, 210),
-				new Point(360, 150)));
-		theNewWall = WallFactory.getWallWithPoints(new Point(360, 150),
-				new Point(270, 150));
-		theNewWall.addDoor(new Door(80, 5));
-		theNewRoom.addWall(theNewWall);
-		theNewWall = WallFactory.getWallWithPoints(new Point(270, 150),
-				new Point(270, 210));
-		theNewWall.addDoor(new Door());
-		theNewRoom.addWall(theNewWall);
-		rooms.add(theNewRoom);
-
-		theNewRoom = new Room();
-		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(360, 150),
-				new Point(360, 120)));
-		theNewWall = WallFactory.getWallWithPoints(new Point(360, 120),
-				new Point(270, 120));
-		theNewWall.addDoor(new Door(10, 5));
-		theNewRoom.addWall(theNewWall);
-		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(270, 150),
-				new Point(270, 120)));
-		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(270, 150),
-				new Point(360, 150)));
-		rooms.add(theNewRoom);
-
-		theNewRoom = new Room();
-		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(360, 120),
-				new Point(360, 100)));
-		theNewWall = WallFactory.getWallWithPoints(new Point(360, 100),
-				new Point(270, 100));
-		theNewWall.addDoor(new Door(80, 5));
-		theNewRoom.addWall(theNewWall);
-		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(270, 120),
-				new Point(270, 100)));
-		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(270, 120),
-				new Point(360, 120)));
-		rooms.add(theNewRoom);
-
-		theNewRoom = new Room();
-		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(360, 100),
-				new Point(360, 20)));
-		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(360, 20),
-				new Point(270, 20)));
-		theNewWall = WallFactory.getWallWithPoints(new Point(270, 20),
-				new Point(270, 100));
-		theNewWall.addDoor(new Door(10, 5));
-		theNewRoom.addWall(theNewWall);
-		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(270, 100),
-				new Point(360, 100)));
-		randomRoom = theNewRoom;
-
-		// this is the pillar like walls in the center of the room, seems we
-		// need a better idea for that
-		// theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(310, 50),
-		// new Point(310, 70)));
-		// theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(310, 70),
-		// new Point(330, 70)));
-		// theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(330, 70),
-		// new Point(330, 50)));
-		// theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(330, 50),
-		// new Point(310, 50)));
-		rooms.add(theNewRoom);
-
-		return rooms;
+		try {
+			tempWorld.setRooms(RoomGenerator.getInstance().getAll());
+			tempWorld.setAgents(AgentGenerator.getInstance().getAll());
+		} catch (IllegalAccessException e) {
+			// World seems to be already sealed!
+			log.severe("could not set the world. It is already sealed!");
+		}
 
 	}
-
-	private HashSet<AbstractAction> generateActionPools() {
-
-		return null;
-	}
-
 }

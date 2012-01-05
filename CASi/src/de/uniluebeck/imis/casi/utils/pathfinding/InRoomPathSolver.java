@@ -34,8 +34,7 @@ public class InRoomPathSolver extends AStar<Point2D> {
 	 * 
 	 * @param room
 	 *            the room to search path in
-	 * @param this.destination
-	 *            the destination point
+	 * @param end the goal point
 	 * @throws IllegalArgumentException
 	 *             if the destination is not in the room.
 	 */

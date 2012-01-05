@@ -53,8 +53,8 @@ public class Mike extends AbstractInteractionComponent {
 	 * Constructor for a mike which observes a given room and is positioned at
 	 * an explicit point.
 	 * 
-	 * @param room the room which is observed by the myke
-	 * @param the position where this mike stands
+	 * @param room the room which is observed by the mike
+	 * @param position the position where this mike stands
 	 * @param agent the agent to which this component belongs
 	 */
 	public Mike(Room room, Point position, Agent agent) {

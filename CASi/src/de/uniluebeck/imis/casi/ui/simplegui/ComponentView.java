@@ -36,17 +36,14 @@ public abstract class ComponentView extends JComponent {
 	 * 
 	 */
 	public ComponentView(Point2D startPosition, AffineTransform transform) {
-
 		this.transform = transform;
 		position = startPosition;
 
 		Point startPoint = getOptimizedPosition(startPosition);
-		this.setBounds(GraphicFactory.getPointRepresentation(startPoint).x,
-				GraphicFactory.getPointRepresentation(startPoint).y, 8, 8);
+		this.setBounds(startPoint.x,startPoint.y, (int)(8*transform.getScaleX()), (int)(8*transform.getScaleY()));
 
 		/* Set state color to yellow for debugging */
 		this.stateColor = Color.YELLOW;
-
 		invalidate();
 	}
 
@@ -73,7 +70,7 @@ public abstract class ComponentView extends JComponent {
 	public void setPos() {
 
 		this.setLocation(getOptimizedPosition(position));
-		super.invalidate();
+		invalidate();
 	}
 
 }

@@ -225,7 +225,7 @@ public class WorldFactory {
 	 */
 	public static Door getDoorWithPoint(Point2D point) {
 		for (Door d : doors.values()) {
-			if (d.getShapeRepresentation().ptSegDist(point) == 0) {
+			if (d.getCentralPoint().equals(point)) {
 				return d;
 			}
 		}

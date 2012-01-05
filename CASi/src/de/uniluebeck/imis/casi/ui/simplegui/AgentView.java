@@ -38,22 +38,12 @@ public class AgentView extends ComponentView implements IAgentListener,
 	private Agent agent;
 	private InformationPanel infoPanel;
 
-	public AgentView(Point2D startPosition, AffineTransform transform) {
-
-		super(startPosition, transform);
-	}
-
-	/**
-	 * Sets agent to this agent view.
-	 * 
-	 * @param agent
-	 *            the agent
-	 */
-	public void setAgent(Agent agent) {
-
+	public AgentView(Agent agent, AffineTransform transform) {
+		super(agent.getCentralPoint(), transform);
 		this.agent = agent;
-		this.setToolTipText(agent.getName() + " (" + agent.getIdentifier() + ")");
+		setToolTipText(agent.getName() + " (" + agent.getIdentifier() + ")");
 	}
+
 
 	/**
 	 * This method sets the information panel to the agent view and adds itself

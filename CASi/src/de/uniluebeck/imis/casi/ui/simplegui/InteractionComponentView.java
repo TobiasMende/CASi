@@ -15,7 +15,6 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
-import java.awt.geom.Point2D;
 
 import de.uniluebeck.imis.casi.simulation.model.AbstractInteractionComponent;
 
@@ -28,26 +27,15 @@ public class InteractionComponentView extends ComponentView {
 
 	private AbstractInteractionComponent interactionComp;
 
-	public InteractionComponentView(Point2D startPosition,
+	public InteractionComponentView(AbstractInteractionComponent comp,
 			AffineTransform transform) {
-
-		super(startPosition, transform);
-
-	}
-
-	/**
-	 * Sets the interaction component to this view.
-	 * 
-	 * @param interactionComp
-	 *            the interaction component
-	 */
-	public void setInteractionComponent(
-			AbstractInteractionComponent interactionComp) {
-
-		this.interactionComp = interactionComp;
-		this.setToolTipText(interactionComp.getIdentifier() + "::"
+		super(comp.getCentralPoint(), transform);
+		interactionComp = comp;
+		setToolTipText(interactionComp.getIdentifier() + "::"
 				+ interactionComp.getType());
+
 	}
+
 
 	/**
 	 * Overrides the paint-method to paint the interaction component as a 6x6

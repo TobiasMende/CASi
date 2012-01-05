@@ -132,7 +132,7 @@ public class Move extends AtomicAction {
 			return false;
 		}
 		doorToOpen = WorldFactory.getDoorWithPoint(lastPoint);
-		return !(doorToOpen == null);
+		return doorToOpen != null;
 	}
 
 	/**

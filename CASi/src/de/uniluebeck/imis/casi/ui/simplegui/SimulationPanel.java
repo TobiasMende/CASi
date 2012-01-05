@@ -14,6 +14,8 @@ package de.uniluebeck.imis.casi.ui.simplegui;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
@@ -108,11 +110,10 @@ public class SimulationPanel extends JLayeredPane implements
 			for (Agent agent : SimulationEngine.getInstance().getWorld()
 					.getAgents()) {
 
-				AgentView agentView = new AgentView(agent.getCoordinates(),
+				AgentView agentView = new AgentView(agent,
 						transform);
 				agent.addListener(agentView);
 				simulationCmponents.add(agentView);
-				agentView.setAgent(agent);
 				agentView.setInformationPanel(infoPanel);
 				this.add(agentView, new Integer(3));
 
@@ -123,9 +124,8 @@ public class SimulationPanel extends JLayeredPane implements
 					.getInstance().getWorld().getInteractionComponents()) {
 
 				InteractionComponentView interactionCompView = new InteractionComponentView(
-						interactionComp.getCoordinates(), transform);
+						interactionComp, transform);
 				simulationCmponents.add(interactionCompView);
-				interactionCompView.setInteractionComponent(interactionComp);
 				this.add(interactionCompView, new Integer(2));
 			}
 
@@ -133,9 +133,14 @@ public class SimulationPanel extends JLayeredPane implements
 
 			log.warning("Exception: " + e.toString());
 		}
-
 		/** Set scale */
 		setSimulationToScale();
+		for (ComponentView componentView : simulationCmponents) {
+
+			componentView.setPos();
+		}
+		SimulationPanel.this.invalidate();
+		backgroundPanel.repaint();
 	}
 
 	/**
@@ -195,6 +200,13 @@ public class SimulationPanel extends JLayeredPane implements
 	@Override
 	public void componentShown(ComponentEvent arg0) {
 
+	}
+	
+
+	@Override
+	public void paint(Graphics g) {
+//		((Graphics2D)g).setTransform(transform);
+		super.paint(g);
 	}
 
 }

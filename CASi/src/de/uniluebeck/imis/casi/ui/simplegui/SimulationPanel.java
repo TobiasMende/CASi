@@ -77,12 +77,13 @@ public class SimulationPanel extends JLayeredPane implements
 	private void setSimulationToScale() {
 
 		Container parent = this.getParent();
-		double size = Math.max(parent.getWidth(), parent.getHeight());
+		double size = Math.min(parent.getWidth(), parent.getHeight());
 
 		this.transform.setToScale((size - 25) / worldSizeX, (size - 25)
 				/ worldSizeY);
 
 		this.setPreferredSize(new Dimension((int) size, (int) size));
+		this.backgroundPanel.setBounds(0, 0, (int) size, (int) size);
 	}
 
 	/**

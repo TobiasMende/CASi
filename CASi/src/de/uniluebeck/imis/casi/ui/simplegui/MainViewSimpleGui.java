@@ -81,7 +81,7 @@ public class MainViewSimpleGui extends JFrame implements IMainView,
 
 		/** Set frame visible, paint components of the simulation */
 		this.setVisible(true);
-		this.simPanel.paintSimulationComponents();
+		this.simPanel.paintSimulationComponents(this.informationPanel);
 
 		/**
 		 * Set the listener (background panel of simulation panel) of the view

@@ -15,6 +15,7 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -22,6 +23,7 @@ import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
+import javax.swing.JSeparator;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 
@@ -46,8 +48,8 @@ public class InformationPanel extends JPanel implements ActionListener,
 	private JComboBox selectComponentBox;
 	private JTextArea informationTextArea;
 
-	private Map<Integer, Agent> agentMap;
-	private Map<Integer, AbstractInteractionComponent> interactionCompMap;
+	private ArrayList<Agent> agentMap;
+	private ArrayList<AbstractInteractionComponent> interactionCompMap;
 
 	public InformationPanel() {
 
@@ -75,10 +77,7 @@ public class InformationPanel extends JPanel implements ActionListener,
 	}
 
 	/**
-	 * Sets the component list.
-	 * 
-	 * @param componentList
-	 *            the componentList to set
+	 * Sets the combo box list.
 	 */
 	public void setInformationComboBox() {
 
@@ -94,25 +93,25 @@ public class InformationPanel extends JPanel implements ActionListener,
 			names = new String[count];
 			int index = 0;
 
-			agentMap = new HashMap<Integer, Agent>();
+			agentMap = new ArrayList<Agent>();
 
 			for (Agent agent : SimulationEngine.getInstance().getWorld()
 					.getAgents()) {
 
 				names[index] = agent.getName();
-				agentMap.put(index, agent);
+				agentMap.add(agent);
 				index++;
 
 			}
 
-			interactionCompMap = new HashMap<Integer, AbstractInteractionComponent>();
+			interactionCompMap = new ArrayList<AbstractInteractionComponent>();
 
 			for (AbstractInteractionComponent interactionComp : SimulationEngine
 					.getInstance().getWorld().getInteractionComponents()) {
 
 				names[index] = interactionComp.getIdentifier() + "::"
 						+ interactionComp.getType();
-				interactionCompMap.put(index, interactionComp);
+				interactionCompMap.add(interactionComp);
 				index++;
 
 			}
@@ -127,6 +126,12 @@ public class InformationPanel extends JPanel implements ActionListener,
 		selectComponentBox.setBorder(BorderFactory
 				.createTitledBorder("Select component:"));
 		selectComponentBox.addActionListener(this);
+		
+		/*
+		 * see here: 
+		 * http://www.java2s.com/Code/Java/Swing-Components/BlockComboBoxExample.htm
+		 */
+		
 		add(selectComponentBox, BorderLayout.NORTH);
 
 		/** Add the information panel as listener on the simulation clock */
@@ -153,17 +158,20 @@ public class InformationPanel extends JPanel implements ActionListener,
 	 */
 	private void setInformation() {
 
-		int selectedIndex = this.selectComponentBox.getSelectedIndex();
+		int selectedIndex_A = this.selectComponentBox.getSelectedIndex();
+		int selectedIndex_I = selectedIndex_A - agentMap.size();
 
-		if (agentMap.containsKey(selectedIndex)) {
+		// if the selected index is an agent
+		if (selectedIndex_I < 0) {
 
 			informationTextArea.setText(getAgentInformation(agentMap
-					.get(selectedIndex)));
-		} else if (interactionCompMap.containsKey(selectedIndex)) {
+					.get(selectedIndex_A)));
+			
+		} else {
 
 			informationTextArea
 					.setText(getInteractionComponentInformation(interactionCompMap
-							.get(selectedIndex)));
+							.get(selectedIndex_I)));
 		}
 
 	}
@@ -190,7 +198,7 @@ public class InformationPanel extends JPanel implements ActionListener,
 					+ "\n" + "   - State: "
 					+ agent.getCurrentAction().getState() + "\n"
 					+ "   - Duration: "
-					+ agent.getCurrentAction().getDuration() + "\n"
+					+ agent.getCurrentAction().getDuration() + " minutes\n"
 					+ "Current position: " + agent.getCurrentPosition();
 		} else {
 
@@ -227,6 +235,14 @@ public class InformationPanel extends JPanel implements ActionListener,
 		return info;
 	}
 
+	public void setSelectedAgent(Agent agent) {
+		
+		int index = agentMap.indexOf(agent);
+		selectComponentBox.setSelectedIndex(index);
+		
+		
+	}
+
 	@Override
 	public void timeChanged(SimulationTime newTime) {
 
@@ -243,19 +259,16 @@ public class InformationPanel extends JPanel implements ActionListener,
 
 	@Override
 	public void simulationPaused(boolean pause) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void simulationStopped() {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void simulationStarted() {
-		// TODO Auto-generated method stub
 
 	}
 }

@@ -51,6 +51,9 @@ public class SimulationPanel extends JLayeredPane implements
 	private final AffineTransform transform;
 	private BackgroundPanel backgroundPanel;
 
+	private double worldSizeX;
+	private double worldSizeY;
+
 	private ArrayList<ComponentView> simulationCmponents = new ArrayList<ComponentView>();
 
 	/**
@@ -76,7 +79,9 @@ public class SimulationPanel extends JLayeredPane implements
 		Container parent = this.getParent();
 		double size = Math.max(parent.getWidth(), parent.getHeight());
 
-		this.transform.setToScale(size / 1000, size / 1000);
+		this.transform.setToScale((size - 25) / worldSizeX, (size - 25)
+				/ worldSizeY);
+
 		this.setPreferredSize(new Dimension((int) size, (int) size));
 	}
 
@@ -84,7 +89,13 @@ public class SimulationPanel extends JLayeredPane implements
 	 * This method adds views for all components in the simulation. The views
 	 * are listeners of the particular components.
 	 */
-	public void paintSimulationComponents() {
+	public void paintSimulationComponents(InformationPanel infoPanel) {
+
+		worldSizeX = SimulationEngine.getInstance().getWorld()
+				.getSimulationDimension().getWidth();
+
+		worldSizeY = SimulationEngine.getInstance().getWorld()
+				.getSimulationDimension().getHeight();
 
 		backgroundPanel = new BackgroundPanel(transform);
 		backgroundPanel.setLocation(0, 0);
@@ -101,6 +112,7 @@ public class SimulationPanel extends JLayeredPane implements
 				agent.addListener(agentView);
 				simulationCmponents.add(agentView);
 				agentView.setAgent(agent);
+				agentView.setInformationPanel(infoPanel);
 				this.add(agentView, new Integer(3));
 
 			}
@@ -112,6 +124,7 @@ public class SimulationPanel extends JLayeredPane implements
 				InteractionComponentView interactionCompView = new InteractionComponentView(
 						interactionComp.getCoordinates(), transform);
 				simulationCmponents.add(interactionCompView);
+				interactionCompView.setInteractionComponent(interactionComp);
 				this.add(interactionCompView, new Integer(2));
 			}
 
@@ -155,23 +168,16 @@ public class SimulationPanel extends JLayeredPane implements
 
 	@Override
 	public void componentHidden(ComponentEvent arg0) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void componentMoved(ComponentEvent arg0) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void componentResized(ComponentEvent arg0) {
-
-		/*
-		 * double size = Math.max(mainFrame.getWidth() - 35,
-		 * mainFrame.getHeight() - 145);
-		 */
 
 		/** Set scale relative to the frame size */
 		setSimulationToScale();
@@ -187,9 +193,7 @@ public class SimulationPanel extends JLayeredPane implements
 
 	@Override
 	public void componentShown(ComponentEvent arg0) {
-		// TODO Auto-generated method stub
 
 	}
-	
 
 }

@@ -17,6 +17,9 @@ import javax.swing.JMenu;
 import javax.swing.JRadioButtonMenuItem;
 
 /**
+ * This class extends JMenu. This menu contains options to show or hide several
+ * components of the simulation.
+ * 
  * @author Moritz B&uuml;rger
  * 
  */

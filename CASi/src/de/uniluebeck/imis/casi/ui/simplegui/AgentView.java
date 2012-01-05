@@ -14,6 +14,8 @@ package de.uniluebeck.imis.casi.ui.simplegui;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 
@@ -30,9 +32,11 @@ import de.uniluebeck.imis.casi.simulation.model.actionHandling.AbstractAction;
  * 
  */
 @SuppressWarnings("serial")
-public class AgentView extends ComponentView implements IAgentListener {
+public class AgentView extends ComponentView implements IAgentListener,
+		MouseListener {
 
 	private Agent agent;
+	private InformationPanel infoPanel;
 
 	public AgentView(Point2D startPosition, AffineTransform transform) {
 
@@ -48,7 +52,21 @@ public class AgentView extends ComponentView implements IAgentListener {
 	public void setAgent(Agent agent) {
 
 		this.agent = agent;
-		this.setToolTipText(agent.getName()+"("+agent.getIdentifier()+")");
+		this.setToolTipText(agent.getName() + " (" + agent.getIdentifier() + ")");
+	}
+
+	/**
+	 * This method sets the information panel to the agent view and adds itself
+	 * as mouse listener. So the information panel can react, when mouse clicks on
+	 * the agent view.
+	 * 
+	 * @param infoPanel the information panel
+	 */
+	public void setInformationPanel(InformationPanel infoPanel) {
+
+		this.infoPanel = infoPanel;
+		this.addMouseListener(this);
+
 	}
 
 	/**
@@ -150,6 +168,39 @@ public class AgentView extends ComponentView implements IAgentListener {
 
 			}
 		});
+
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent arg0) {
+		
+		infoPanel.setSelectedAgent(agent);
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent arg0) {
+
+	}
+
+	@Override
+	public void mouseExited(MouseEvent arg0) {
+
+	}
+
+	@Override
+	public void mousePressed(MouseEvent arg0) {
+
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * java.awt.event.MouseListener#mouseReleased(java.awt.event.MouseEvent)
+	 */
+	@Override
+	public void mouseReleased(MouseEvent arg0) {
+		// TODO Auto-generated method stub
 
 	}
 

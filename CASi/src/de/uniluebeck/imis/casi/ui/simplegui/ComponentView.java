@@ -23,7 +23,7 @@ import de.uniluebeck.imis.casi.simulation.factory.GraphicFactory;
 
 /**
  * @author Moritz Buerger
- *
+ * 
  */
 @SuppressWarnings("serial")
 public abstract class ComponentView extends JComponent {
@@ -36,10 +36,10 @@ public abstract class ComponentView extends JComponent {
 	 * 
 	 */
 	public ComponentView(Point2D startPosition, AffineTransform transform) {
-		
+
 		this.transform = transform;
 		position = startPosition;
-		
+
 		Point startPoint = getOptimizedPosition(startPosition);
 		this.setBounds(GraphicFactory.getPointRepresentation(startPoint).x,
 				GraphicFactory.getPointRepresentation(startPoint).y, 8, 8);
@@ -58,11 +58,12 @@ public abstract class ComponentView extends JComponent {
 	 * @return the optimized position
 	 */
 	protected Point getOptimizedPosition(Point2D position) {
-	
+
 		Dimension dim = getBounds().getSize();
-		Point2D point = new Point2D.Double(position.getX() - dim.width / 2,
-				position.getY() - dim.height / 2);
-		point = transform.deltaTransform(point, point);
+		Point2D point = new Point2D.Double(transform.getScaleX()
+				* position.getX() - dim.width / 2, transform.getScaleY()
+				* position.getY() - dim.height / 2);
+
 		return GraphicFactory.getPointRepresentation(point);
 	}
 
@@ -70,7 +71,7 @@ public abstract class ComponentView extends JComponent {
 	 * This method sets the position of the agent depending on affine transform.
 	 */
 	public void setPos() {
-		
+
 		this.setLocation(getOptimizedPosition(position));
 		super.invalidate();
 	}

@@ -200,7 +200,6 @@ public class SimulationPanel extends JLayeredPane implements
 
 	@Override
 	public void paint(Graphics g) {
-		((Graphics2D)g).setTransform(transform);
 		super.paint(g);
 	}
 

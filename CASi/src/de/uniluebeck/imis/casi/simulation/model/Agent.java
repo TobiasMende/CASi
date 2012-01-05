@@ -494,5 +494,19 @@ public class Agent extends AbstractComponent implements
 	public void setName(String name) {
 		this.name = name;
 	}
+	
+	/**
+	 * @return the currentAction
+	 */
+	public AbstractAction getCurrentAction() {
+		return currentAction;
+	}
+	
+	/**
+	 * @return the state
+	 */
+	public Agent.STATE getState() {
+		return state;
+	}
 
 }

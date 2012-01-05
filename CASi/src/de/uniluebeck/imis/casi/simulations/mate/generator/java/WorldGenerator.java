@@ -21,10 +21,10 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 
 import de.uniluebeck.imis.casi.CASi;
-import de.uniluebeck.imis.casi.generator.AgentGenerator;
+import de.uniluebeck.imis.casi.generator.AgentCollector;
 import de.uniluebeck.imis.casi.generator.ComponentCollector;
 import de.uniluebeck.imis.casi.generator.IWorldGenerator;
-import de.uniluebeck.imis.casi.generator.RoomGenerator;
+import de.uniluebeck.imis.casi.generator.RoomCollector;
 import de.uniluebeck.imis.casi.simulation.model.AbstractComponent;
 import de.uniluebeck.imis.casi.simulation.model.AbstractInteractionComponent;
 import de.uniluebeck.imis.casi.simulation.model.Agent;
@@ -44,8 +44,8 @@ public class WorldGenerator implements IWorldGenerator {
 			.getName());
 
 	World tempWorld = new World();
-	RoomGenerator rooms = RoomGenerator.getInstance();
-	AgentGenerator agents = AgentGenerator.getInstance();
+	RoomCollector rooms = RoomCollector.getInstance();
+	AgentCollector agents = AgentCollector.getInstance();
 
 	/**
 	 * This generator creates an basic, pre coded World object
@@ -138,11 +138,11 @@ public class WorldGenerator implements IWorldGenerator {
 	 */
 	private void finalizeWorld() {
 		// assure: no null defaultRooms
-		AgentGenerator.getInstance().fillAllAgentsWithDefaultRoom();
+		AgentCollector.getInstance().fillAllAgentsWithDefaultRoom();
 
 		try {
-			tempWorld.setRooms(RoomGenerator.getInstance().getAll());
-			tempWorld.setAgents(AgentGenerator.getInstance().getAll());
+			tempWorld.setRooms(RoomCollector.getInstance().getAll());
+			tempWorld.setAgents(AgentCollector.getInstance().getAll());
 			tempWorld.setInteractionComponents(ComponentCollector.getInstance().getAll());
 		} catch (IllegalAccessException e) {
 			// World seems to be already sealed!

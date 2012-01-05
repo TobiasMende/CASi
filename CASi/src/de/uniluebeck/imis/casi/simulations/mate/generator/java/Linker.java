@@ -14,8 +14,8 @@ package de.uniluebeck.imis.casi.simulations.mate.generator.java;
 import java.lang.reflect.Method;
 import java.util.logging.Logger;
 
-import de.uniluebeck.imis.casi.generator.ActionGenerator;
-import de.uniluebeck.imis.casi.generator.AgentGenerator;
+import de.uniluebeck.imis.casi.generator.ActionCollector;
+import de.uniluebeck.imis.casi.generator.AgentCollector;
 import de.uniluebeck.imis.casi.simulation.model.Agent;
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.AbstractAction;
 
@@ -61,9 +61,9 @@ public class Linker {
 	 * ASSERT: both Agents and Actions are all set
 	 */
 	public void linkAgentsToActions() {
-		ActionGenerator as = ActionGenerator.getInstance();
+		ActionCollector as = ActionCollector.getInstance();
 		
-		for (Agent a : AgentGenerator.getInstance().getAll()) {
+		for (Agent a : AgentCollector.getInstance().getAll()) {
 			for (String actionKey : as.getAlreadyCreatedActions().keySet()) {
 				if (actionKey.startsWith(a.getIdentifier())) {
 					// This Action needs to be added to this agent.

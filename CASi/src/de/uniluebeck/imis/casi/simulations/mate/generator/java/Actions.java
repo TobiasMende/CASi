@@ -16,9 +16,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-import de.uniluebeck.imis.casi.generator.ActionGenerator;
-import de.uniluebeck.imis.casi.generator.AgentGenerator;
-import de.uniluebeck.imis.casi.generator.RoomGenerator;
+import de.uniluebeck.imis.casi.generator.ActionCollector;
+import de.uniluebeck.imis.casi.generator.AgentCollector;
+import de.uniluebeck.imis.casi.generator.RoomCollector;
 import de.uniluebeck.imis.casi.simulation.model.Agent;
 import de.uniluebeck.imis.casi.simulation.model.Room;
 import de.uniluebeck.imis.casi.simulation.model.SimulationTime;
@@ -40,22 +40,22 @@ public final class Actions {
 	 * Put all your actions here!
 	 */
 	public static void generateActions(SimulationTime simulationStartTime) {
-		ActionGenerator ag = ActionGenerator.getInstance();
+		ActionCollector ag = ActionCollector.getInstance();
 		
 		ComplexAction runCrazy = new ComplexAction();
-		runCrazy.addSubAction(new Move(RoomGenerator.getInstance()
+		runCrazy.addSubAction(new Move(RoomCollector.getInstance()
 				.findRoomByIdentifier("crazyRoom")));
-		runCrazy.addSubAction(new Move(RoomGenerator.getInstance()
+		runCrazy.addSubAction(new Move(RoomCollector.getInstance()
 				.findRoomByIdentifier("theRandomRoom")));
-		runCrazy.addSubAction(new Move(RoomGenerator.getInstance()
+		runCrazy.addSubAction(new Move(RoomCollector.getInstance()
 				.findRoomByIdentifier("womensRestroom")));
-		runCrazy.addSubAction(new Move(RoomGenerator.getInstance()
+		runCrazy.addSubAction(new Move(RoomCollector.getInstance()
 				.findRoomByIdentifier("kitchen")));
 		runCrazy.setEarliestStartTime(simulationStartTime.plus(15));
-		for (Room r : RoomGenerator.getInstance().getAll()) {
+		for (Room r : RoomCollector.getInstance().getAll()) {
 			runCrazy.addSubAction(new Move(r));
 		}
-		List<Room> temp = new ArrayList<Room>(RoomGenerator.getInstance()
+		List<Room> temp = new ArrayList<Room>(RoomCollector.getInstance()
 				.getAll());
 		Collections.shuffle(temp);
 		for (Room r : temp) {
@@ -67,13 +67,13 @@ public final class Actions {
 		// ##########
 		// And I Actions
 		// ##########
-		AbstractAction goHome = new Move(RoomGenerator.getInstance().findRoomByIdentifier("crazyRoom"));
+		AbstractAction goHome = new Move(RoomCollector.getInstance().findRoomByIdentifier("crazyRoom"));
 		goHome.setEarliestStartTime(simulationStartTime.plus(42+23));
-		ag.newAction(AgentGenerator.getInstance().findAgentByName("And I").getIdentifier()+"_goHome", goHome);
+		ag.newAction(AgentCollector.getInstance().findAgentByName("And I").getIdentifier()+"_goHome", goHome);
 		
 		// ##########
 		// For all tentLadys actions
-		for (Agent a : AgentGenerator.getInstance().findAgentByType("tentLady")) {
+		for (Agent a : AgentCollector.getInstance().findAgentByType("tentLady")) {
 			generateActionsForTentLady(a, simulationStartTime);	
 		}
 		
@@ -88,9 +88,9 @@ public final class Actions {
 	public static void generateActionsForTentLady(Agent tentLady,
 			SimulationTime simulationStartTime) {
 
-		ActionGenerator actions = ActionGenerator.getInstance();
-		Agent tim = AgentGenerator.getInstance().findAgentByName("Tim");
-		Room womensRoom = RoomGenerator.getInstance().findRoomByIdentifier(
+		ActionCollector actions = ActionCollector.getInstance();
+		Agent tim = AgentCollector.getInstance().findAgentByName("Tim");
+		Room womensRoom = RoomCollector.getInstance().findRoomByIdentifier(
 				"womensRestroom");
 
 		AbstractAction tempAction = new Move(womensRoom);
@@ -111,7 +111,7 @@ public final class Actions {
 		actions.newAction(tentLady.getIdentifier()+"_02", speak);
 		
 		
-		AbstractAction goBackToMainFloor = new Move(RoomGenerator.getInstance()
+		AbstractAction goBackToMainFloor = new Move(RoomCollector.getInstance()
 				.findRoomByIdentifier("mainFloor"));
 		goBackToMainFloor.setEarliestStartTime(speak.getEarliestStartTime()
 				.plus(10));

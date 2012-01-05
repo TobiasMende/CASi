@@ -27,9 +27,9 @@ import de.uniluebeck.imis.casi.simulation.model.actionHandling.AbstractAction;
  *         to them through either name or id or whatever.
  * 
  */
-public class ActionGenerator {
+public class ActionCollector {
 	/** The instance of this singleton */
-	private static ActionGenerator instance;
+	private static ActionCollector instance;
 
 	/**
 	 * The List of already created agents.
@@ -39,7 +39,7 @@ public class ActionGenerator {
 	/**
 	 * The private constructor of this singleton
 	 */
-	private ActionGenerator() {
+	private ActionCollector() {
 		// just here for prohibiting external access
 	}
 
@@ -48,9 +48,9 @@ public class ActionGenerator {
 	 * 
 	 * @return the instance
 	 */
-	public static ActionGenerator getInstance() {
+	public static ActionCollector getInstance() {
 		if (instance == null) {
-			instance = new ActionGenerator();
+			instance = new ActionCollector();
 		}
 		return instance;
 	}

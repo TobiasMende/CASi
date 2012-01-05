@@ -13,8 +13,8 @@ package de.uniluebeck.imis.casi.simulations.mate.generator.java;
 
 import java.awt.Point;
 
-import de.uniluebeck.imis.casi.generator.AgentGenerator;
-import de.uniluebeck.imis.casi.generator.RoomGenerator;
+import de.uniluebeck.imis.casi.generator.AgentCollector;
+import de.uniluebeck.imis.casi.generator.RoomCollector;
 import de.uniluebeck.imis.casi.simulation.factory.WallFactory;
 import de.uniluebeck.imis.casi.simulation.model.Agent;
 import de.uniluebeck.imis.casi.simulation.model.Door;
@@ -34,8 +34,8 @@ public class Agents {
 	 */
 	public static void generateAgents(){
 		
-		AgentGenerator agents = AgentGenerator.getInstance();
-		RoomGenerator rooms = RoomGenerator.getInstance();
+		AgentCollector agents = AgentCollector.getInstance();
+		RoomCollector rooms = RoomCollector.getInstance();
 		Agent tempAgent = null;
 
 		// if we need a lot of agents...
@@ -65,8 +65,8 @@ public class Agents {
 		// ##########
 		tempAgent = new Agent("casi_and_i", "And I", "candidates");
 		agents.newAgent(tempAgent);
-		tempAgent.setDefaultPosition(RoomGenerator.getInstance().findRoomByIdentifier("crazyRoom"));
-		tempAgent.setCurrentPosition(RoomGenerator.getInstance().findRoomByIdentifier("tim'sRoom"));
+		tempAgent.setDefaultPosition(RoomCollector.getInstance().findRoomByIdentifier("crazyRoom"));
+		tempAgent.setCurrentPosition(RoomCollector.getInstance().findRoomByIdentifier("tim'sRoom"));
 
 		// ##########
 		// Tentladies
@@ -75,11 +75,11 @@ public class Agents {
 
 			agents.newAgent(new Agent("casi_tendlady_" + i, "Tentlady" + i,
 					"tentLady"));
-			AgentGenerator
+			AgentCollector
 					.getInstance()
 					.findAgentByIdentifier("casi_tendlady_" + i)
 					.setDefaultPosition(
-							RoomGenerator.getInstance().findRoomByIdentifier(
+							RoomCollector.getInstance().findRoomByIdentifier(
 									"mainFloor"));
 		}
 

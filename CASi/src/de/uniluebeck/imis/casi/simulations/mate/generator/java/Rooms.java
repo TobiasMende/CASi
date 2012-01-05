@@ -13,7 +13,7 @@ package de.uniluebeck.imis.casi.simulations.mate.generator.java;
 
 import java.awt.Point;
 
-import de.uniluebeck.imis.casi.generator.RoomGenerator;
+import de.uniluebeck.imis.casi.generator.RoomCollector;
 import de.uniluebeck.imis.casi.simulation.factory.WallFactory;
 import de.uniluebeck.imis.casi.simulation.model.Door;
 import de.uniluebeck.imis.casi.simulation.model.Room;
@@ -74,7 +74,7 @@ public class Rooms {
 		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(250, 0),
 				new Point(80, 0)));
 		theNewRoom.setIdentifier("mainFloor");
-		RoomGenerator.getInstance().newRoom(theNewRoom);
+		RoomCollector.getInstance().newRoom(theNewRoom);
 
 		// Room #1 timsRoom (top left)
 		theNewRoom = new Room();
@@ -90,7 +90,7 @@ public class Rooms {
 		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(80, 0),
 				new Point(0, 0)));
 		theNewRoom.setIdentifier("tim'sRoom");
-		RoomGenerator.getInstance().newRoom(theNewRoom);
+		RoomCollector.getInstance().newRoom(theNewRoom);
 
 		// Room #2 (second top left)
 		theNewRoom = new Room();
@@ -105,7 +105,7 @@ public class Rooms {
 		theNewRoom.addWall(theNewWall);
 		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(80, 80),
 				new Point(0, 80)));
-		RoomGenerator.getInstance().newRoom(theNewRoom);
+		RoomCollector.getInstance().newRoom(theNewRoom);
 
 		// Room #3 (third top left)
 		theNewRoom = new Room();
@@ -120,7 +120,7 @@ public class Rooms {
 		theNewRoom.addWall(theNewWall);
 		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(80, 140),
 				new Point(0, 140)));
-		RoomGenerator.getInstance().newRoom(theNewRoom);
+		RoomCollector.getInstance().newRoom(theNewRoom);
 
 		// Room #4 small kitchen
 		theNewRoom = new Room();
@@ -136,7 +136,7 @@ public class Rooms {
 		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(80, 200),
 				new Point(0, 200)));
 		theNewRoom.setIdentifier("kitchen");
-		RoomGenerator.getInstance().newRoom(theNewRoom);
+		RoomCollector.getInstance().newRoom(theNewRoom);
 
 		// Room #5 womens restroom
 		theNewRoom = new Room();
@@ -152,7 +152,7 @@ public class Rooms {
 		theNewWall.addDoor(theNewDoor);
 		theNewRoom.addWall(theNewWall);
 		theNewRoom.setIdentifier("womensRestroom");
-		RoomGenerator.getInstance().newRoom(theNewRoom);
+		RoomCollector.getInstance().newRoom(theNewRoom);
 		
 		// Room #6 mens restroom
 		theNewRoom = new Room();
@@ -168,7 +168,7 @@ public class Rooms {
 		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(160, 290),
 				new Point(160, 240)));
 		theNewRoom.setIdentifier("mensRestroom");
-		RoomGenerator.getInstance().newRoom(theNewRoom);
+		RoomCollector.getInstance().newRoom(theNewRoom);
 		
 		// Room #7 secret room
 		theNewRoom = new Room();
@@ -181,7 +181,7 @@ public class Rooms {
 		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(250, 260),
 				new Point(250, 290)));
 		theNewRoom.setIdentifier("secretRoom");
-		RoomGenerator.getInstance().newRoom(theNewRoom);
+		RoomCollector.getInstance().newRoom(theNewRoom);
 
 		// crazy rooms
 		theNewRoom = new Room();
@@ -196,7 +196,7 @@ public class Rooms {
 		theNewWall = WallFactory.getWallWithPoints(new Point(250, 260),
 				new Point(250, 190));
 		theNewRoom.setIdentifier("crazyRoom");
-		RoomGenerator.getInstance().newRoom(theNewRoom);
+		RoomCollector.getInstance().newRoom(theNewRoom);
 
 		theNewRoom = new Room();
 		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(340, 190),
@@ -212,7 +212,7 @@ public class Rooms {
 		theNewWall.addDoor(new Door());
 		theNewRoom.addWall(theNewWall);
 		theNewRoom.setIdentifier("roomAfterCrazyRoom");
-		RoomGenerator.getInstance().newRoom(theNewRoom);
+		RoomCollector.getInstance().newRoom(theNewRoom);
 
 		theNewRoom = new Room();
 		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(340, 130),
@@ -225,7 +225,7 @@ public class Rooms {
 				new Point(250, 100)));
 		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(250, 130),
 				new Point(340, 130)));
-		RoomGenerator.getInstance().newRoom(theNewRoom);
+		RoomCollector.getInstance().newRoom(theNewRoom);
 
 		theNewRoom = new Room();
 		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(340, 100),
@@ -238,7 +238,7 @@ public class Rooms {
 				new Point(250, 80)));
 		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(250, 100),
 				new Point(340, 100)));
-		RoomGenerator.getInstance().newRoom(theNewRoom);
+		RoomCollector.getInstance().newRoom(theNewRoom);
 
 		theNewRoom = new Room();
 		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(340, 80),
@@ -263,7 +263,7 @@ public class Rooms {
 		// new Point(310, 30)));
 		// theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(310, 30),
 		// new Point(200, 30)));
-		RoomGenerator.getInstance().newRoom(theNewRoom);
+		RoomCollector.getInstance().newRoom(theNewRoom);
 
 	}
 }

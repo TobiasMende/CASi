@@ -25,11 +25,11 @@ import de.uniluebeck.imis.casi.simulation.model.Room;
  *         to them through either name or id or whatever.
  * 
  */
-public class RoomGenerator {
-	private static final Logger log = Logger.getLogger(RoomGenerator.class
+public class RoomCollector {
+	private static final Logger log = Logger.getLogger(RoomCollector.class
 			.getName());
 	/** The instance of this singleton */
-	private static RoomGenerator instance;
+	private static RoomCollector instance;
 
 	/**
 	 * The List of already created agents.
@@ -39,7 +39,7 @@ public class RoomGenerator {
 	/**
 	 * The private constructor of this singleton
 	 */
-	private RoomGenerator() {
+	private RoomCollector() {
 		// just here for prohibiting external access
 	}
 
@@ -48,9 +48,9 @@ public class RoomGenerator {
 	 * 
 	 * @return the instance
 	 */
-	public static RoomGenerator getInstance() {
+	public static RoomCollector getInstance() {
 		if (instance == null) {
-			instance = new RoomGenerator();
+			instance = new RoomCollector();
 		}
 		return instance;
 	}

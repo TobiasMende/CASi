@@ -13,9 +13,9 @@ package de.uniluebeck.imis.casi.simulations.mate.generator.java;
 
 import java.util.HashSet;
 
-import de.uniluebeck.imis.casi.generator.AgentGenerator;
+import de.uniluebeck.imis.casi.generator.AgentCollector;
 import de.uniluebeck.imis.casi.generator.ComponentCollector;
-import de.uniluebeck.imis.casi.generator.RoomGenerator;
+import de.uniluebeck.imis.casi.generator.RoomCollector;
 import de.uniluebeck.imis.casi.simulation.model.AbstractInteractionComponent;
 import de.uniluebeck.imis.casi.simulation.model.Agent;
 import de.uniluebeck.imis.casi.simulation.model.Door;
@@ -43,8 +43,8 @@ public class Components {
 	 */
 	public static void generateActuators() {
 		ComponentCollector ac = ComponentCollector.getInstance();
-		RoomGenerator rooms = RoomGenerator.getInstance();
-		AgentGenerator agents = AgentGenerator.getInstance();
+		RoomCollector rooms = RoomCollector.getInstance();
+		AgentCollector agents = AgentCollector.getInstance();
 
 		ac.manyNewComponents(thigsToAddToRoomWithOwner(
 				rooms.findRoomByIdentifier("tim'sRoom"),

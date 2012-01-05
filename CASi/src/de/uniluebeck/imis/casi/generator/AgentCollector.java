@@ -31,12 +31,12 @@ import de.uniluebeck.imis.casi.simulations.mate.generator.java.WorldGenerator;
  *         to them through either name or id or whatever.
  * 
  */
-public class AgentGenerator {
-	private static final Logger log = Logger.getLogger(AgentGenerator.class
+public class AgentCollector {
+	private static final Logger log = Logger.getLogger(AgentCollector.class
 			.getName());
 	
 	/** The instance of this singleton */
-	private static AgentGenerator instance;
+	private static AgentCollector instance;
 
 	/**
 	 * The List of already created agents.
@@ -46,7 +46,7 @@ public class AgentGenerator {
 	/**
 	 * The private constructor of this singleton
 	 */
-	private AgentGenerator() {
+	private AgentCollector() {
 		// just here for prohibiting external access
 	}
 
@@ -55,9 +55,9 @@ public class AgentGenerator {
 	 * 
 	 * @return the instance
 	 */
-	public static AgentGenerator getInstance() {
+	public static AgentCollector getInstance() {
 		if (instance == null) {
-			instance = new AgentGenerator();
+			instance = new AgentCollector();
 		}
 		return instance;
 	}
@@ -133,9 +133,9 @@ public class AgentGenerator {
 	 */
 	public void fillAllAgentsWithDefaultRoom() {
 		// If agents have no default positions: choose a random one for
-		for (Agent a : AgentGenerator.getInstance().getAll()) {
+		for (Agent a : AgentCollector.getInstance().getAll()) {
 			if (a.getDefaultPosition() == null) {
-				List<Room> r = new ArrayList<Room>(RoomGenerator.getInstance()
+				List<Room> r = new ArrayList<Room>(RoomCollector.getInstance()
 						.getAll());
 				Collections.shuffle(r);
 				a.setDefaultPosition(r.get(0));

@@ -11,6 +11,7 @@
  */
 package de.uniluebeck.imis.casi.simulation.model.actionHandling.schedulers;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.TreeSet;
@@ -119,14 +120,12 @@ public class DefaultActionScheduler implements IActionScheduler {
 	 */
 	private AbstractAction searchInTodoList() {
 		AbstractAction action = null;
-		if(todoList.first().getEarliestStartTime() != null && todoList.first().getEarliestStartTime().before(SimulationClock.getInstance().getCurrentTime())) {
-			action = todoList.pollFirst();
-		}
-//		if(todoList.first().getDeadline() != null) {
-//			action = todoList.pollFirst();
-//		}
-		if(action == null){
-			action = todoList.pollFirst();
+		for(AbstractAction a : todoList) {
+			if(a.getEarliestStartTime() != null && a.getEarliestStartTime().before(SimulationClock.getInstance().getCurrentTime())) {
+				action = a;
+				todoList.remove(a);
+				break;
+			}
 		}
 		return action;
 	}
@@ -140,9 +139,13 @@ public class DefaultActionScheduler implements IActionScheduler {
 	 */
 	private AbstractAction searchInActionPool() {
 		AbstractAction action = null;
-		if (actionPool.first().getEarliestStartTime()
-				.before(SimulationClock.getInstance().getCurrentTime())) {
-			action = actionPool.pollFirst();
+		for(AbstractAction a : actionPool) {
+			if (a.getEarliestStartTime()
+					.before(SimulationClock.getInstance().getCurrentTime())) {
+				action = a;
+				actionPool.remove(a);
+				break;
+			}
 		}
 		return action;
 	}

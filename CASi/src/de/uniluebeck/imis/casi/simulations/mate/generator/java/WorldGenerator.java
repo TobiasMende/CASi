@@ -22,6 +22,7 @@ import javax.imageio.ImageIO;
 
 import de.uniluebeck.imis.casi.CASi;
 import de.uniluebeck.imis.casi.generator.AgentGenerator;
+import de.uniluebeck.imis.casi.generator.ComponentCollector;
 import de.uniluebeck.imis.casi.generator.IWorldGenerator;
 import de.uniluebeck.imis.casi.generator.RoomGenerator;
 import de.uniluebeck.imis.casi.simulation.model.AbstractComponent;
@@ -110,13 +111,13 @@ public class WorldGenerator implements IWorldGenerator {
 			Actions.generateActions(tempWorld.getStartTime());
 			Actions.generateActionsPools(tempWorld.getStartTime());
 
+			log.info("generating components");
+			Components.generateActuators();
+			Components.generateSensors();
+			
 			log.info("linking new world");
 			Linker linker = new Linker();
 			linker.linkAll();
-			
-			// actuators & sensors
-			HashSet<AbstractInteractionComponent> interactionComps = generateActuators();
-			tempWorld.setInteractionComponents(interactionComps);
 
 			tempWorld.setComponents(new HashSet<AbstractComponent>());
 		} catch (IllegalAccessException e) {
@@ -131,49 +132,6 @@ public class WorldGenerator implements IWorldGenerator {
 		return tempWorld;
 	}
 
-	/**
-	 * @return
-	 */
-	private HashSet<AbstractInteractionComponent> generateActuators() {
-		HashSet<AbstractInteractionComponent> res = new HashSet<AbstractInteractionComponent>();
-		// TODO generate more actuators!
-
-		res.addAll(addThingsToRoomWithOwner(rooms.findRoomByIdentifier("tim'sRoom"),
-				agents.findAgentByName("Tim")));
-		res.addAll(addThingsToRoomWithOwner(rooms.findRoomByIdentifier("crazyRoom"),
-				agents.findAgentByName("Crazy Guy")));
-
-		return res;
-	}
-
-
-	/**
-	 * Adds things to given room with a given owner. Used for doorSensors and
-	 * DoorPlates...
-	 * 
-	 * @param room
-	 *            TODO
-	 * @param owner
-	 *            TODO
-	 * 
-	 */
-	private HashSet<AbstractInteractionComponent> addThingsToRoomWithOwner(
-			Room room, Agent owner) {
-		HashSet<AbstractInteractionComponent> res = new HashSet<AbstractInteractionComponent>();
-
-		// adding door related things to each door
-		for (Door door : room.getDoors()) {
-			res.add(new DoorLight(door, room, owner));
-			res.add(new DoorSensor(door, owner));
-		}
-
-		// adding desk related things
-		res.add(new Desktop(room.getCentralPoint(), owner));
-		res.add(new Cube(room.getCentralPoint(), owner));
-		res.add(new Mike(room, owner));
-		return res;
-
-	}
 
 	/**
 	 * Finalizes this world.
@@ -185,6 +143,7 @@ public class WorldGenerator implements IWorldGenerator {
 		try {
 			tempWorld.setRooms(RoomGenerator.getInstance().getAll());
 			tempWorld.setAgents(AgentGenerator.getInstance().getAll());
+			tempWorld.setInteractionComponents(ComponentCollector.getInstance().getAll());
 		} catch (IllegalAccessException e) {
 			// World seems to be already sealed!
 			log.severe("could not set the world. It is already sealed!");

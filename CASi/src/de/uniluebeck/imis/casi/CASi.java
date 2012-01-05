@@ -22,6 +22,7 @@ import java.util.logging.Logger;
 import javax.swing.SwingUtilities;
 
 import de.uniluebeck.imis.casi.communication.ICommunicationHandler;
+import de.uniluebeck.imis.casi.communication.comLogger.CommunicationLogger;
 import de.uniluebeck.imis.casi.communication.mack.MACKNetworkHandler;
 import de.uniluebeck.imis.casi.controller.MainController;
 import de.uniluebeck.imis.casi.generator.IWorldGenerator;
@@ -77,7 +78,8 @@ public class CASi {
 		// DO WHAT YOU WANT:
 		final IWorldGenerator generator = new de.uniluebeck.imis.simulations.mate.generator.java.WorldGenerator();
 		Locale.setDefault(Locale.GERMAN);
-		final ICommunicationHandler networkHandler = generateCommunicationHandler(args);
+//		final ICommunicationHandler networkHandler = generateCommunicationHandler(args);
+		final ICommunicationHandler networkHandler = new CommunicationLogger();
 //		((MACKNetworkHandler)networkHandler).serializeSettings();
 		final IMainView mainView = new MainViewSimpleGui();
 		final MainController mc = new MainController(generator, networkHandler,

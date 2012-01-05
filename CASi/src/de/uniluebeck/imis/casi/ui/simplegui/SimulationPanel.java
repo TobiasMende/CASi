@@ -64,7 +64,6 @@ public class SimulationPanel extends JLayeredPane implements
 
 		/* Draw Border */
 		this.setBorder(BorderFactory.createLineBorder(Color.GRAY));
-
 	}
 
 	/**
@@ -189,5 +188,6 @@ public class SimulationPanel extends JLayeredPane implements
 		// TODO Auto-generated method stub
 
 	}
+	
 
 }

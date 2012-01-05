@@ -250,9 +250,11 @@ public final class MACKNetworkHandler implements ICommunicationHandler {
 						new MessageListener() {
 							public void processMessage(Chat chat,
 									Message message) {
-								CASi.SIM_LOG.info("Receiving: "
-										+ message.getBody());
-								comp.receive(message.getBody());
+								if(message.getType().equals(Message.Type.normal)) {
+									CASi.SIM_LOG.info("Receiving: "
+											+ message.getBody());
+									comp.receive(message.getBody());
+								}
 							}
 						});
 				components.put(comp, chat);

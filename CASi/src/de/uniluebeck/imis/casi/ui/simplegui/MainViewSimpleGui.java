@@ -128,11 +128,11 @@ public class MainViewSimpleGui extends JFrame implements IMainView,
 		/** Set up components */
 		this.setComponents();
 		
-		this.simPanel.paintSimulationComponents();
 		
 		this.viewMenu.setViewlistener(simPanel.getViewMenuListener());
 		
 		this.setVisible(true);
+		this.simPanel.paintSimulationComponents();
 		
 		log.info("Show simple GUI");
 	}

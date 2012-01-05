@@ -68,13 +68,6 @@ public class Agents {
 		tempAgent.setDefaultPosition(RoomGenerator.getInstance().findRoomByIdentifier("crazyRoom"));
 		tempAgent.setCurrentPosition(RoomGenerator.getInstance().findRoomByIdentifier("tim'sRoom"));
 
-		// XXX: do this in ActionGenerator
-		// AbstractAction goHome = new Move(crazyRoom);
-		// goHome.setEarliestStartTime(tempWorld.getStartTime().plus(50));
-
-		// XXX: fill in a constraint
-		// tempAgent.addActionToList(goHome);
-
 		// ##########
 		// Tentladies
 		// ##########

@@ -42,7 +42,8 @@ public final class Actions {
 	 * Put all your actions here!
 	 */
 	public static void generateActions(SimulationTime simulationStartTime) {
-
+		ActionGenerator ag = ActionGenerator.getInstance();
+		
 		ComplexAction runCrazy = new ComplexAction();
 		runCrazy.addSubAction(new Move(RoomGenerator.getInstance()
 				.findRoomByIdentifier("crazyRoom")));
@@ -62,8 +63,18 @@ public final class Actions {
 		for (Room r : temp) {
 			runCrazy.addSubAction(new Move(r));
 		}
-		ActionGenerator.getInstance().newAction("casi_crazy_guy_01", runCrazy);
+		ag.newAction("casi_crazy_guy_01", runCrazy);
 
+
+		// ##########
+		// And I Actions
+		// ##########
+		AbstractAction goHome = new Move(RoomGenerator.getInstance().findRoomByIdentifier("crazyRoom"));
+		goHome.setEarliestStartTime(simulationStartTime.plus(42+23));
+		ag.newAction(AgentGenerator.getInstance().findAgentByName("And I").getIdentifier()+"_goHome", goHome);
+		
+		// ##########
+		// For all tentLadys actions
 		for (Agent a : AgentGenerator.getInstance().findAgentByType("tentLady")) {
 			generateActionsForTentLady(a, simulationStartTime);	
 		}
@@ -94,7 +105,7 @@ public final class Actions {
 		
 		actions.newAction(tentLady.getIdentifier()+"_01", tempAction);
 		
-		AbstractAction speak = new GoAndSpeakTo(tim, 10);
+		AbstractAction speak = new GoAndSpeakTo(tim, 1);
 
 		speak.setType(TYPE.NORMAL);
 		speak.setEarliestStartTime(simulationStartTime.plus(20));

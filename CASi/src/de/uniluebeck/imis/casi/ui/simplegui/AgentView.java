@@ -32,9 +32,23 @@ import de.uniluebeck.imis.casi.simulation.model.actionHandling.AbstractAction;
 @SuppressWarnings("serial")
 public class AgentView extends ComponentView implements IAgentListener {
 
+	private Agent agent;
+
 	public AgentView(Point2D startPosition, AffineTransform transform) {
-		
-		super(startPosition,transform);
+
+		super(startPosition, transform);
+	}
+
+	/**
+	 * Sets agent to this agent view.
+	 * 
+	 * @param agent
+	 *            the agent
+	 */
+	public void setAgent(Agent agent) {
+
+		this.agent = agent;
+		this.setToolTipText(agent.getName()+"("+agent.getIdentifier()+")");
 	}
 
 	/**
@@ -86,10 +100,10 @@ public class AgentView extends ComponentView implements IAgentListener {
 
 			@Override
 			public void run() {
-				
+
 				/* Simply set the new location to the new position */
 				position = newPosition;
-				
+
 				AgentView.this.setPos();
 
 			}

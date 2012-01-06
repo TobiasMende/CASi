@@ -1,5 +1,5 @@
 /*  	CASi Context Awareness Simulation Software
- *   Copyright (C) 2011 2012  Moritz B�rger, Marvin Frick, Tobias Mende
+ *   Copyright (C) 2011 2012  Moritz Bï¿½rger, Marvin Frick, Tobias Mende
  *
  *  This program is free software. It is licensed under the
  *  GNU Lesser General Public License with one clarification.
@@ -14,7 +14,6 @@ package de.uniluebeck.imis.casi.ui.simplegui;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.util.logging.Logger;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
@@ -29,21 +28,24 @@ import de.uniluebeck.imis.casi.simulation.engine.SimulationClock;
 import de.uniluebeck.imis.casi.simulation.model.SimulationTime;
 
 /**
- * This class extends JPanel and shows the simulation time in the simple GUI.
+ * This class extends JPanel and shows the simulation time in the simple GUI. It
+ * allows also to scale the simulation time with a slider. In addition is
+ * contains a control panel to pause and resume the simulation.
  * 
- * @author Moritz Buerger
+ * @author Moritz Bürger
  * 
  */
 @SuppressWarnings("serial")
 public class ClockViewPanel extends JPanel implements ISimulationClockListener,
 		ChangeListener {
 
-	private static final Logger log = Logger.getLogger(ClockViewPanel.class
-			.getName());
-
 	private JLabel timeLabel;
 	private JSlider slider;
 
+	/**
+	 * The constructor adds the ClockViewPanel as itself as a listener of the
+	 * simulation clock.
+	 */
 	public ClockViewPanel() {
 
 		/** Add the clock panel as listener on the simulation clock */

@@ -13,7 +13,6 @@ package de.uniluebeck.imis.casi.ui.simplegui;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -35,7 +34,11 @@ import de.uniluebeck.imis.casi.simulation.model.Room;
 import de.uniluebeck.imis.casi.simulation.model.Wall;
 
 /**
- * @author Moritz Buerger
+ * The BackgroundPanel is a JPanel that paints all static components of the
+ * simulation. It is also a ActionListener (of the ViewMenu) to make it possible
+ * to paint only selected components.
+ * 
+ * @author Moritz Bürger
  * 
  */
 @SuppressWarnings("serial")
@@ -44,9 +47,6 @@ public class BackgroundPanel extends JPanel implements ActionListener {
 	private static final Logger log = Logger.getLogger(BackgroundPanel.class
 			.getName());
 
-	public static final int WIDTH = 1000;
-	public static final int HEIGHT = 1000;
-
 	/** booleans to adjust the information showed in the gui */
 	private boolean paintDoorLabels = true, paintSensorLabels = true,
 			paintRoomLabels = true, paintSensorMonitoringArea = true,
@@ -54,18 +54,24 @@ public class BackgroundPanel extends JPanel implements ActionListener {
 
 	private final AffineTransform transform;
 
+	/**
+	 * The BackgroundPanel needs the affine transform to scale the painted
+	 * components.
+	 * 
+	 * @param transform
+	 *            the affine transform
+	 */
 	public BackgroundPanel(AffineTransform transform) {
+
 		this.transform = transform;
-		/** Set preferred size */
-		this.setSize(new Dimension(BackgroundPanel.WIDTH, BackgroundPanel.HEIGHT));
 
 		this.repaint();
 	}
 
-	/**
-	 * Overrides the paint-method to paint walls and doors of the simulation.
-	 */
+	@Override
 	public void paint(Graphics g) {
+
+		super.paint(g);
 
 		/** Cast graphics into 2DGraphics */
 		Graphics2D g2D = (Graphics2D) g;
@@ -96,17 +102,6 @@ public class BackgroundPanel extends JPanel implements ActionListener {
 					g2D.fillOval(centralPoint2.x, centralPoint2.y, 5, 5);
 				}
 
-				// Show room name:
-				g.setColor(Color.BLACK);
-				g.setFont(new Font(Font.MONOSPACED, Font.PLAIN,
-						(int) (8 * transform.getScaleX())));
-
-				// paint, if it is selected
-				if (paintRoomLabels) {
-					g2D.drawString(room.toString(), centralPoint2.x - 10,
-							centralPoint2.y - 5);
-				}
-
 				/** Get the walls of this room */
 				for (Wall wall : room.getWalls()) {
 
@@ -134,12 +129,6 @@ public class BackgroundPanel extends JPanel implements ActionListener {
 							internalDoorPoint.getX() - 1.5,
 							internalDoorPoint.getY() - 1.5);
 
-					// paint door name
-					if (paintDoorLabels) {
-						g2D.drawString(door.toString(), doorPoint.x,
-								doorPoint.y);
-					}
-
 					g.setColor(Color.YELLOW);
 					// paint door
 					g2D.draw(transform.createTransformedShape(door
@@ -155,6 +144,7 @@ public class BackgroundPanel extends JPanel implements ActionListener {
 
 			}
 
+			/** Get the interaction components */
 			for (AbstractInteractionComponent interactionComp : SimulationEngine
 					.getInstance().getWorld().getInteractionComponents()) {
 
@@ -166,25 +156,9 @@ public class BackgroundPanel extends JPanel implements ActionListener {
 							.getShapeRepresentation()));
 				}
 
-				Point2D internalSensorPoint = null;
-				internalSensorPoint = transform.deltaTransform(
-						interactionComp.getCentralPoint(), internalSensorPoint);
-				Point sensorPoint = GraphicFactory.getPoint(
-						internalSensorPoint.getX(),
-						internalSensorPoint.getY() - 1.5);
-
-				g.setColor(Color.BLACK);
-				g.setFont(new Font(Font.MONOSPACED, Font.PLAIN,
-						(int) (6 * transform.getScaleX())));
-
-				// paint sensor labels
-				if (paintSensorLabels) {
-					g2D.drawString(interactionComp.getHumanReadableValue(),
-							sensorPoint.x,
-							sensorPoint.y + (int) (5 * transform.getScaleX()));
-				}
-
 			}
+
+			paintLabels(g2D);
 
 		} catch (IllegalAccessException e) {
 
@@ -192,42 +166,118 @@ public class BackgroundPanel extends JPanel implements ActionListener {
 		}
 	}
 
+	/**
+	 * This method paints only the labels of the simulation components.
+	 * 
+	 * @param g2D
+	 *            - the graphics object
+	 * @throws IllegalAccessException
+	 */
+	private void paintLabels(Graphics2D g2D) throws IllegalAccessException {
+
+		for (Room room : SimulationEngine.getInstance().getWorld().getRooms()) {
+
+			// Show central point of room:
+			Point2D centralPoint = null;
+			centralPoint = transform.deltaTransform(room.getCentralPoint(),
+					centralPoint);
+			Point centralPoint2 = GraphicFactory.getPoint(
+					centralPoint.getX() - 2.5, centralPoint.getY() - 2.5);
+
+			// Show room name:
+			g2D.setColor(Color.BLACK); /**/
+			g2D.setFont(new Font(Font.MONOSPACED, Font.PLAIN,
+					(int) (8 * transform.getScaleX()))); /**/
+
+			int nameLength = room.toString().length();
+
+			// paint, if it is selected
+			if (paintRoomLabels) {
+				g2D.drawString(
+						room.toString(),
+						(int) (centralPoint2.x - nameLength
+								* transform.getDeterminant()),
+						centralPoint2.y - 5);
+			}
+
+			// paint door names, if selected
+			if (paintDoorLabels) {
+
+				/** Get the doors of this room */
+				for (Door door : room.getDoors()) {
+
+					g2D.setColor(Color.BLUE); /**/
+					g2D.setFont(new Font(Font.MONOSPACED, Font.PLAIN,
+							(int) (8 * transform.getScaleX()))); /**/
+					Point2D internalDoorPoint = null;
+					internalDoorPoint = transform.deltaTransform(
+							door.getCentralPoint(), internalDoorPoint);
+					Point doorPoint = GraphicFactory.getPoint(
+							internalDoorPoint.getX() - 1.5,
+							internalDoorPoint.getY() - 1.5);
+
+					g2D.drawString(door.toString(), doorPoint.x, doorPoint.y);
+				}
+			}
+		}
+
+		// paint sensor labels, if selected
+		if (paintSensorLabels) {
+
+			/** Get the interaction components */
+			for (AbstractInteractionComponent interactionComp : SimulationEngine
+					.getInstance().getWorld().getInteractionComponents()) {
+
+				g2D.setColor(Color.BLACK); /**/
+				g2D.setFont(new Font(Font.MONOSPACED, Font.PLAIN,
+						(int) (6 * transform.getScaleX()))); /**/
+
+				Point2D internalSensorPoint = null;
+				internalSensorPoint = transform.deltaTransform(
+						interactionComp.getCentralPoint(), internalSensorPoint);
+				Point sensorPoint = GraphicFactory.getPoint(
+						internalSensorPoint.getX(),
+						internalSensorPoint.getY() - 1.5);
+
+				g2D.drawString(interactionComp.getHumanReadableValue(),
+						sensorPoint.x,
+						sensorPoint.y + (int) (5 * transform.getScaleX()));
+			}
+		}
+	}
+
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		
-		JRadioButtonMenuItem clickedItem = (JRadioButtonMenuItem) arg0.getSource();
-		
-		if(arg0.getActionCommand().equals("paintDoorLabels")) {
-			
+
+		JRadioButtonMenuItem clickedItem = (JRadioButtonMenuItem) arg0
+				.getSource();
+
+		if (arg0.getActionCommand().equals("paintDoorLabels")) {
+
 			paintDoorLabels = clickedItem.isSelected();
-			
-		} else
-		if(arg0.getActionCommand().equals("paintSensorLabels")) {
-			
+
+		} else if (arg0.getActionCommand().equals("paintSensorLabels")) {
+
 			paintSensorLabels = clickedItem.isSelected();
-			
-		} else
-		if(arg0.getActionCommand().equals("paintRoomLabels")) {
-			
+
+		} else if (arg0.getActionCommand().equals("paintRoomLabels")) {
+
 			paintRoomLabels = clickedItem.isSelected();
-			
-		} else
-		if(arg0.getActionCommand().equals("paintSensorMonitoringArea")) {
-			
+
+		} else if (arg0.getActionCommand().equals("paintSensorMonitoringArea")) {
+
 			paintSensorMonitoringArea = clickedItem.isSelected();
-			
-		} else
-		if(arg0.getActionCommand().equals("paintDoorCentralPoints")) {
-			
+
+		} else if (arg0.getActionCommand().equals("paintDoorCentralPoints")) {
+
 			paintDoorCentralPoints = clickedItem.isSelected();
-			
-		} else
-		if(arg0.getActionCommand().equals("paintRoomCentralPoints")) {
-			
+
+		} else if (arg0.getActionCommand().equals("paintRoomCentralPoints")) {
+
 			paintRoomCentralPoints = clickedItem.isSelected();
-			
+
 		}
-		
+
 		this.repaint();
 	}
 

@@ -28,7 +28,10 @@ import de.uniluebeck.imis.casi.simulation.model.IAgentListener;
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.AbstractAction;
 
 /**
- * @author Moritz Buerger
+ * This class represents an agent in the CASi simulator. Agents are painted as
+ * circles, their state can be noticed by the filling color.
+ * 
+ * @author Moritz Bürger
  * 
  */
 @SuppressWarnings("serial")
@@ -38,19 +41,28 @@ public class AgentView extends ComponentView implements IAgentListener,
 	private Agent agent;
 	private InformationPanel infoPanel;
 
+	/**
+	 * The AgentView needs the represented agent and the affine transform to
+	 * scale the size and position.
+	 * 
+	 * @param agent
+	 *            the agent
+	 * @param transform
+	 *            the affine transform
+	 */
 	public AgentView(Agent agent, AffineTransform transform) {
 		super(agent.getCentralPoint(), transform);
 		this.agent = agent;
 		setToolTipText(agent.getName() + " (" + agent.getIdentifier() + ")");
 	}
 
-
 	/**
 	 * This method sets the information panel to the agent view and adds itself
-	 * as mouse listener. So the information panel can react, when mouse clicks on
-	 * the agent view.
+	 * as mouse listener. So the information panel can react, when mouse clicks
+	 * on the agent view.
 	 * 
-	 * @param infoPanel the information panel
+	 * @param infoPanel
+	 *            the information panel
 	 */
 	public void setInformationPanel(InformationPanel infoPanel) {
 
@@ -60,8 +72,9 @@ public class AgentView extends ComponentView implements IAgentListener,
 	}
 
 	/**
-	 * Overrides the paint-method to paint the agent as a 8x8 filled oval.
+	 * This method paints the agent as an 8x8 filled circle.
 	 */
+	@Override
 	public void paint(Graphics g) {
 
 		Graphics2D g2D = (Graphics2D) g;
@@ -112,7 +125,7 @@ public class AgentView extends ComponentView implements IAgentListener,
 				/* Simply set the new location to the new position */
 				position = newPosition;
 
-				AgentView.this.setPos();
+				AgentView.this.setTransformed();
 
 			}
 		});
@@ -163,7 +176,7 @@ public class AgentView extends ComponentView implements IAgentListener,
 
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
-		
+
 		infoPanel.setSelectedAgent(agent);
 	}
 
@@ -182,15 +195,8 @@ public class AgentView extends ComponentView implements IAgentListener,
 
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * java.awt.event.MouseListener#mouseReleased(java.awt.event.MouseEvent)
-	 */
 	@Override
 	public void mouseReleased(MouseEvent arg0) {
-		// TODO Auto-generated method stub
 
 	}
 

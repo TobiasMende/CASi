@@ -22,7 +22,11 @@ import javax.swing.JComponent;
 import de.uniluebeck.imis.casi.simulation.factory.GraphicFactory;
 
 /**
- * @author Moritz Buerger
+ * This abstract class represents a component of the simulation. All simulation
+ * components that are moving and changing their state are represented as
+ * extended ComponentViews.
+ * 
+ * @author Moritz Bürger
  * 
  */
 @SuppressWarnings("serial")
@@ -33,14 +37,22 @@ public abstract class ComponentView extends JComponent {
 	protected Point2D position;
 
 	/**
+	 * The ComponentView needs a start position to set the start location and
+	 * the affine transform to scale the position and size.
 	 * 
+	 * @param startPosition
+	 *            - start position
+	 * @param transform
+	 *            - the affine transform
 	 */
 	public ComponentView(Point2D startPosition, AffineTransform transform) {
 		this.transform = transform;
 		position = startPosition;
 
 		Point startPoint = getOptimizedPosition(startPosition);
-		this.setBounds(startPoint.x,startPoint.y, (int)(8*transform.getScaleX()), (int)(8*transform.getScaleY()));
+		this.setBounds(startPoint.x, startPoint.y,
+				(int) (8 * transform.getScaleX()),
+				(int) (8 * transform.getScaleY()));
 
 		/* Set state color to yellow for debugging */
 		this.stateColor = Color.YELLOW;
@@ -67,7 +79,7 @@ public abstract class ComponentView extends JComponent {
 	/**
 	 * This method sets the position of the agent depending on affine transform.
 	 */
-	public void setPos() {
+	public void setTransformed() {
 
 		this.setLocation(getOptimizedPosition(position));
 		invalidate();

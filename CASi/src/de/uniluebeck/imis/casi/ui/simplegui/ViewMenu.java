@@ -20,7 +20,7 @@ import javax.swing.JRadioButtonMenuItem;
  * This class extends JMenu. This menu contains options to show or hide several
  * components of the simulation.
  * 
- * @author Moritz B&uuml;rger
+ * @author Moritz Bürger
  * 
  */
 @SuppressWarnings("serial")
@@ -30,6 +30,10 @@ public class ViewMenu extends JMenu {
 			paintRoomLabelsItem, paintSensorMonitoringAreaItem,
 			paintDoorCentralPointsItem, paintRoomCentralPointsItem;
 
+	/**
+	 * The constructor calls the super contructor and set up the components of
+	 * the view menu.
+	 */
 	public ViewMenu() {
 
 		super("View");
@@ -71,6 +75,8 @@ public class ViewMenu extends JMenu {
 	}
 
 	/**
+	 * Sets the action listener, the background panel of the simulation panel.
+	 * 
 	 * @param actionlistener
 	 *            the action listener to set
 	 */

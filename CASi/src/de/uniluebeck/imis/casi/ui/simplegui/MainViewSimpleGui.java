@@ -17,19 +17,20 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.logging.Logger;
 
+import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JScrollPane;
+import javax.swing.JPanel;
 
 import de.uniluebeck.imis.casi.controller.IUIController;
 import de.uniluebeck.imis.casi.ui.IMainView;
 
 /**
- * This class extends JFrame and shows the main window of the simple GUI.
+ * This class is a JFrame and shows the main window of the simple GUI.
  * 
- * @author Moritz Buerger
+ * @author Moritz Bürger
  * 
  */
 @SuppressWarnings("serial")
@@ -138,7 +139,12 @@ public class MainViewSimpleGui extends JFrame implements IMainView,
 	
 		/** New SimulationPanel */
 		simPanel = new SimulationPanel();
-		JScrollPane scrollPane = new JScrollPane(simPanel);
+		//JScrollPane scrollPane = new JScrollPane(simPanel);
+		JPanel centerPanel = new JPanel();
+		centerPanel.setLayout(null);
+		centerPanel.add(simPanel);
+		centerPanel.setBorder(BorderFactory.createTitledBorder("Simulation"));
+		
 		this.addComponentListener(simPanel);
 	
 		/** New ClockViewPanel */
@@ -147,7 +153,7 @@ public class MainViewSimpleGui extends JFrame implements IMainView,
 		/** New InformationPanel */
 		informationPanel = new InformationPanel();
 	
-		this.add(scrollPane, BorderLayout.CENTER);
+		this.add(centerPanel, BorderLayout.CENTER);
 		this.add(menuBar, BorderLayout.NORTH);
 		this.add(clockViewPanel, BorderLayout.SOUTH);
 		this.add(informationPanel, BorderLayout.EAST);

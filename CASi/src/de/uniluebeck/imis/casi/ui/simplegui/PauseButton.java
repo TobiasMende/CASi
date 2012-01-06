@@ -19,6 +19,7 @@ import java.awt.event.ActionListener;
 import java.util.logging.Logger;
 
 import javax.swing.JButton;
+import javax.swing.SwingUtilities;
 
 import de.uniluebeck.imis.casi.simulation.engine.SimulationClock;
 
@@ -27,7 +28,7 @@ import de.uniluebeck.imis.casi.simulation.engine.SimulationClock;
  * clock. It handles the ActionEvent and pause or resume the simulation depending
  * on the state of the simulation clock.
  * 
- * @author Moritz Buerger
+ * @author Moritz Bürger
  *
  */
 @SuppressWarnings("serial")
@@ -78,25 +79,32 @@ public class PauseButton extends JButton implements ActionListener {
 	
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		/** If simulation is running */
-		if(!SimulationClock.getInstance().isPaused()) {
-			
-			log.info("Pause simulation");
-			
-			/** Set simulation clock paused */
-			SimulationClock.getInstance().setPaused(true);
-			
-			/** If simulation is paused */
-		} else if(SimulationClock.getInstance().isPaused()) {
-			
-			log.info("Resume simulation");
-			
-			/** Set simulation clock resumed */
-			SimulationClock.getInstance().setPaused(false);
 		
-		}			
-		this.repaint();
+		SwingUtilities.invokeLater(new Runnable() {
+
+			@Override
+			public void run() {
 		
+				/** If simulation is running */
+				if(!SimulationClock.getInstance().isPaused()) {
+					
+					log.info("Pause simulation");
+					
+					/** Set simulation clock paused */
+					SimulationClock.getInstance().setPaused(true);
+					
+					/** If simulation is paused */
+				} else if(SimulationClock.getInstance().isPaused()) {
+					
+					log.info("Resume simulation");
+					
+					/** Set simulation clock resumed */
+					SimulationClock.getInstance().setPaused(false);
+				
+				}			
+				PauseButton.this.repaint();
+			}
+		});
 		
 	}
 

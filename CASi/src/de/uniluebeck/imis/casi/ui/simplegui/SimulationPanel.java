@@ -38,7 +38,7 @@ import de.uniluebeck.imis.casi.simulation.model.SimulationTime;
  * sensors. The simulation resizes/scales depending on the size of the main
  * frame.
  * 
- * @author Moritz Buerger
+ * @author Moritz Bürger
  * 
  */
 
@@ -81,15 +81,16 @@ public class SimulationPanel extends JLayeredPane implements
 		Container parent = this.getParent();
 		double size = Math.min(parent.getWidth(), parent.getHeight());
 
-		this.transform.setToScale((size - 25) / worldSizeX, (size - 25)
+		this.transform.setToScale((size - 40) / worldSizeX, (size - 40)
 				/ worldSizeY);
 
-		this.setPreferredSize(new Dimension((int) size, (int) size));
+		// this.setPreferredSize(new Dimension((int) size, (int) size));
+		this.setBounds(20, 20, (int) size, (int) size);
 		this.backgroundPanel.setBounds(0, 0, (int) size, (int) size);
-		
+
 		for (ComponentView componentView : simulationCmponents) {
 
-			componentView.setPos();
+			componentView.setTransformed();
 		}
 		SimulationPanel.this.invalidate();
 		backgroundPanel.repaint();
@@ -99,6 +100,9 @@ public class SimulationPanel extends JLayeredPane implements
 	/**
 	 * This method adds views for all components in the simulation. The views
 	 * are listeners of the particular components.
+	 * 
+	 * @param infoPanel
+	 *            the InformationPanel
 	 */
 	public void paintSimulationComponents(InformationPanel infoPanel) {
 
@@ -118,8 +122,7 @@ public class SimulationPanel extends JLayeredPane implements
 			for (Agent agent : SimulationEngine.getInstance().getWorld()
 					.getAgents()) {
 
-				AgentView agentView = new AgentView(agent,
-						transform);
+				AgentView agentView = new AgentView(agent, transform);
 				agent.addListener(agentView);
 				simulationCmponents.add(agentView);
 				agentView.setInformationPanel(infoPanel);
@@ -196,7 +199,6 @@ public class SimulationPanel extends JLayeredPane implements
 	public void componentShown(ComponentEvent arg0) {
 
 	}
-	
 
 	@Override
 	public void paint(Graphics g) {

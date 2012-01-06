@@ -16,14 +16,11 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.logging.Logger;
 
 import javax.swing.BorderFactory;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
-import javax.swing.JSeparator;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 
@@ -35,7 +32,10 @@ import de.uniluebeck.imis.casi.simulation.model.Agent;
 import de.uniluebeck.imis.casi.simulation.model.SimulationTime;
 
 /**
- * @author Moritz Buerger
+ * The InformationPanel is a JPanel. It allows to select an agent or interaction
+ * component of the simulation and shows further information of it.
+ * 
+ * @author Moritz Bürger
  * 
  */
 @SuppressWarnings("serial")
@@ -51,6 +51,9 @@ public class InformationPanel extends JPanel implements ActionListener,
 	private ArrayList<Agent> agentMap;
 	private ArrayList<AbstractInteractionComponent> interactionCompMap;
 
+	/**
+	 * The constructor sets layout and components.
+	 */
 	public InformationPanel() {
 
 		/** Set layout to FlowLayout */
@@ -77,7 +80,7 @@ public class InformationPanel extends JPanel implements ActionListener,
 	}
 
 	/**
-	 * Sets the combo box list.
+	 * This method sets the entries of the JComboBox.
 	 */
 	public void setInformationComboBox() {
 
@@ -126,12 +129,13 @@ public class InformationPanel extends JPanel implements ActionListener,
 		selectComponentBox.setBorder(BorderFactory
 				.createTitledBorder("Select component:"));
 		selectComponentBox.addActionListener(this);
-		
+
 		/*
-		 * see here: 
-		 * http://www.java2s.com/Code/Java/Swing-Components/BlockComboBoxExample.htm
+		 * see here:
+		 * http://www.java2s.com/Code/Java/Swing-Components/BlockComboBoxExample
+		 * .htm
 		 */
-		
+
 		add(selectComponentBox, BorderLayout.NORTH);
 
 		/** Add the information panel as listener on the simulation clock */
@@ -166,7 +170,7 @@ public class InformationPanel extends JPanel implements ActionListener,
 
 			informationTextArea.setText(getAgentInformation(agentMap
 					.get(selectedIndex_A)));
-			
+
 		} else {
 
 			informationTextArea
@@ -235,12 +239,20 @@ public class InformationPanel extends JPanel implements ActionListener,
 		return info;
 	}
 
+	/**
+	 * This method sets the given agent as selected if it is in the list.
+	 * 
+	 * @param agent
+	 *            the agent
+	 */
 	public void setSelectedAgent(Agent agent) {
-		
+
 		int index = agentMap.indexOf(agent);
-		selectComponentBox.setSelectedIndex(index);
-		
-		
+
+		if (index != -1) {
+			selectComponentBox.setSelectedIndex(index);
+		}
+
 	}
 
 	@Override

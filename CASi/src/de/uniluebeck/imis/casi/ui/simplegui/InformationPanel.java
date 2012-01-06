@@ -313,7 +313,7 @@ public class InformationPanel extends JPanel implements ActionListener,
 			info = "Name: " + agent.getName() + "\n" + "Indentifier: "
 					+ agent.getIdentifier() + "\n" + "Status: "
 					+ agent.getState() + "\n" + "Current action: ---\n"
-					+ "Current position: " + agent.getCurrentPosition();
+					+ "Current position: " + agent.getCurrentPosition() + "\n";
 
 			info = info + "Action pool:\n";
 			

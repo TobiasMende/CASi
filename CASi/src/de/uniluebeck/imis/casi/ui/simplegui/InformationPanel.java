@@ -16,6 +16,7 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Vector;
 import java.util.logging.Logger;
 
 import javax.swing.BorderFactory;
@@ -84,26 +85,14 @@ public class InformationPanel extends JPanel implements ActionListener,
 	 */
 	public void setInformationComboBox() {
 
-		String[] names;
-
 		try {
-
-			int count = SimulationEngine.getInstance().getWorld().getAgents()
-					.size()
-					+ SimulationEngine.getInstance().getWorld()
-							.getInteractionComponents().size();
-
-			names = new String[count];
-			int index = 0;
 
 			agentMap = new ArrayList<Agent>();
 
 			for (Agent agent : SimulationEngine.getInstance().getWorld()
 					.getAgents()) {
 
-				names[index] = agent.getName();
 				agentMap.add(agent);
-				index++;
 
 			}
 
@@ -112,23 +101,20 @@ public class InformationPanel extends JPanel implements ActionListener,
 			for (AbstractInteractionComponent interactionComp : SimulationEngine
 					.getInstance().getWorld().getInteractionComponents()) {
 
-				names[index] = interactionComp.getIdentifier() + "::"
-						+ interactionComp.getType();
 				interactionCompMap.add(interactionComp);
-				index++;
 
 			}
 
 		} catch (IllegalAccessException e) {
 
 			log.warning("Exception: " + e.toString());
-			names = new String[0];
 		}
 
-		selectComponentBox = new JComboBox(names);
+		selectComponentBox = new JComboBox(getVectorData());
 		selectComponentBox.setBorder(BorderFactory
 				.createTitledBorder("Select component:"));
 		selectComponentBox.addActionListener(this);
+		selectComponentBox.setRenderer(new ComboBoxRenderer());
 
 		/*
 		 * see here:
@@ -141,6 +127,29 @@ public class InformationPanel extends JPanel implements ActionListener,
 		/** Add the information panel as listener on the simulation clock */
 		SimulationClock.getInstance().addListener(this);
 
+	}
+
+	private Vector<String> getVectorData() {
+
+		Vector<String> data = new Vector<String>();
+
+		/** Add agent to vector */
+		for (Agent agent : agentMap) {
+
+			data.addElement(agent.getName());
+		}
+
+		/** Add separator to vector */
+		data.addElement(ComboBoxRenderer.SEPERATOR);
+
+		/** Add interaction components to vector */
+		for (AbstractInteractionComponent interactionComp : interactionCompMap) {
+
+			data.addElement(interactionComp.getIdentifier() + "::"
+					+ interactionComp.getType());
+		}
+
+		return data;
 	}
 
 	@Override
@@ -163,19 +172,25 @@ public class InformationPanel extends JPanel implements ActionListener,
 	private void setInformation() {
 
 		int selectedIndex_A = this.selectComponentBox.getSelectedIndex();
-		int selectedIndex_I = selectedIndex_A - agentMap.size();
+		int selectedIndex_I = selectedIndex_A - agentMap.size() - 1;
 
 		// if the selected index is an agent
-		if (selectedIndex_I < 0) {
+		if (selectedIndex_I < -1) {
 
 			informationTextArea.setText(getAgentInformation(agentMap
 					.get(selectedIndex_A)));
 
-		} else {
+			// if the selected index is an interaction component
+		} else if (selectedIndex_I > -1) {
 
 			informationTextArea
 					.setText(getInteractionComponentInformation(interactionCompMap
 							.get(selectedIndex_I)));
+
+			// if the separator is selected
+		} else {
+
+			// do nothing
 		}
 
 	}
@@ -240,21 +255,45 @@ public class InformationPanel extends JPanel implements ActionListener,
 	}
 
 	/**
-	 * This method sets the given agent as selected if it is in the list.
+	 * This method sets the given agent as selected, if it is in the list.
 	 * 
 	 * @param agent
 	 *            the agent
 	 */
 	public void setSelectedAgent(Agent agent) {
 
+		/* get index of agent in list */
 		int index = agentMap.indexOf(agent);
 
+		/* set index of combobox */
 		if (index != -1) {
 			selectComponentBox.setSelectedIndex(index);
 		}
 
 	}
 
+	/**
+	 * This method sets the given interaction component as selected, if it is in
+	 * the list.
+	 * 
+	 * @param interactionComp
+	 *            the interaction component
+	 */
+	public void setSelectedInteractionComponent(
+			AbstractInteractionComponent interactionComp) {
+
+		/* get index of interaction component in list */
+		int index = interactionCompMap.indexOf(interactionComp);
+
+		/* set index of combobox */
+		if (index != -1) {
+			selectComponentBox.setSelectedIndex(agentMap.size() + 1 + index);
+		}
+	}
+
+	/**
+	 * Sets information new, if time changed.
+	 */
 	@Override
 	public void timeChanged(SimulationTime newTime) {
 

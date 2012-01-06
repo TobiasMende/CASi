@@ -153,6 +153,7 @@ public abstract class AbstractInteractionComponent extends AbstractComponent
 	public AbstractInteractionComponent(Agent agent) {
 		this(agent.getCoordinates());
 		this.agent = agent;
+		wearable = true;
 
 	}
 

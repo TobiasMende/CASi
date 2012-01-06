@@ -34,7 +34,7 @@ public class ActionCollector {
 	/**
 	 * The List of already created agents.
 	 */
-	private HashMap<String,AbstractAction> alreadyCreatedActions = new HashMap<String,AbstractAction>();
+	private HashMap<String, AbstractAction> alreadyCreatedActions = new HashMap<String, AbstractAction>();
 
 	/**
 	 * The private constructor of this singleton
@@ -58,8 +58,10 @@ public class ActionCollector {
 	/**
 	 * Add a new action to this HashMap at a given key
 	 * 
-	 * @param newAgent
-	 *            the new Agent
+	 * @param newAction
+	 *            the new Action
+	 * @param identifier
+	 *            the identifier under which this action should be stored
 	 */
 	public void newAction(String identifier, AbstractAction newAction) {
 		alreadyCreatedActions.put(identifier, newAction);
@@ -67,6 +69,7 @@ public class ActionCollector {
 
 	/**
 	 * Simple getter that returns the HashMap of all Actions
+	 * 
 	 * @return all the Actions
 	 */
 	public HashMap<String, AbstractAction> getAlreadyCreatedActions() {

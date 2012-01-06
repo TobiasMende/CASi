@@ -584,5 +584,35 @@ public class Agent extends AbstractComponent implements
 	public Agent.STATE getState() {
 		return state;
 	}
+	
+	/**
+	 * Getter for a copy of the todo list. Changes in this list don't effect the
+	 * scheduler
+	 * 
+	 * @return a copy of the todo list
+	 */
+	public List<AbstractAction> getTodoListCopy() {
+		return actionScheduler.getTodoListCopy();
+	}
+
+	/**
+	 * Getter for a copy of the action pool. Changes in this list don't effect
+	 * the scheduler
+	 * 
+	 * @return a copy of the action pool
+	 */
+	public List<AbstractAction> getActionPoolCopy() {
+		return actionScheduler.getActionPoolCopy();
+	}
+
+	/**
+	 * Getter for a copy of the interrupt list. Changes in this list don't
+	 * effect the scheduler
+	 * 
+	 * @return a copy of the interrupt list
+	 */
+	public List<AbstractAction> getInterruptListCopy() {
+		return actionScheduler.getInterruptListCopy();
+	}
 
 }

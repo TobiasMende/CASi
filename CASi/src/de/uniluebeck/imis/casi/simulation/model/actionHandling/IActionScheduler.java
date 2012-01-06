@@ -13,6 +13,7 @@ package de.uniluebeck.imis.casi.simulation.model.actionHandling;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * This interface declares schedulers that are able to select an actions that
@@ -21,7 +22,7 @@ import java.util.Collection;
  * @author Tobias Mende
  * 
  */
-public interface IActionScheduler extends Serializable{
+public interface IActionScheduler extends Serializable {
 
 	/**
 	 * Sets the list of actions that should be performed in every case
@@ -55,16 +56,20 @@ public interface IActionScheduler extends Serializable{
 	 *            the action to add.
 	 */
 	public void addPoolAction(AbstractAction action);
-	
+
 	/**
 	 * Adds an action that should be performed next.
-	 * @param action the action to set
+	 * 
+	 * @param action
+	 *            the action to set
 	 */
 	public void addInterruptAction(AbstractAction action);
-	
+
 	/**
 	 * Checks whether there is an interrupt action or not
-	 * @return <code>true</code> if there is an interrupt action, <code>false</code> otherwise.
+	 * 
+	 * @return <code>true</code> if there is an interrupt action,
+	 *         <code>false</code> otherwise.
 	 */
 	public boolean isInterruptScheduled();
 
@@ -74,8 +79,30 @@ public interface IActionScheduler extends Serializable{
 	 * 
 	 * @return the action that should be performed next.
 	 */
-	
 	public AbstractAction getNextAction();
-	
-	
+
+	/**
+	 * Getter for a copy of the todo list. Changes in this list don't effect the
+	 * scheduler
+	 * 
+	 * @return a copy of the todo list
+	 */
+	public List<AbstractAction> getTodoListCopy();
+
+	/**
+	 * Getter for a copy of the action pool. Changes in this list don't effect
+	 * the scheduler
+	 * 
+	 * @return a copy of the action pool
+	 */
+	public List<AbstractAction> getActionPoolCopy();
+
+	/**
+	 * Getter for a copy of the interrupt list. Changes in this list don't
+	 * effect the scheduler
+	 * 
+	 * @return a copy of the interrupt list
+	 */
+	public List<AbstractAction> getInterruptListCopy();
+
 }

@@ -11,8 +11,10 @@
  */
 package de.uniluebeck.imis.casi.simulation.model.actionHandling.schedulers;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.TreeSet;
 import java.util.logging.Logger;
 
@@ -182,6 +184,21 @@ public class DefaultActionScheduler implements IActionScheduler {
 			AbstractAction action) {
 		actionSet.remove(action);
 		return action;
+	}
+
+	@Override
+	public List<AbstractAction> getTodoListCopy() {
+		return new ArrayList<AbstractAction>(todoList);
+	}
+
+	@Override
+	public List<AbstractAction> getActionPoolCopy() {
+		return new ArrayList<AbstractAction>(actionPool);
+	}
+
+	@Override
+	public List<AbstractAction> getInterruptListCopy() {
+		return new ArrayList<AbstractAction>(interruptAction);
 	}
 
 }

@@ -35,6 +35,7 @@ import de.uniluebeck.imis.casi.simulation.model.Agent;
 import de.uniluebeck.imis.casi.simulation.model.Door;
 import de.uniluebeck.imis.casi.simulation.model.Room;
 import de.uniluebeck.imis.casi.simulation.model.SimulationTime;
+import de.uniluebeck.imis.casi.simulation.model.actionHandling.AbstractAction;
 
 /**
  * The InformationPanel is a JPanel. It allows to select an agent or interaction
@@ -89,15 +90,17 @@ public class InformationPanel extends JPanel implements ActionListener,
 				.createTitledBorder("Information:"));
 		informationTextArea.setEditable(false);
 
+		JScrollPane scrollPane = new JScrollPane(informationTextArea);
+
 		informationTextAreaRoom = new JTextArea();
 		informationTextAreaRoom.setBorder(BorderFactory
 				.createTitledBorder("Room information:"));
 		informationTextAreaRoom.setEditable(false);
-		
-		JScrollPane scrollPane = new JScrollPane(informationTextAreaRoom);
 
-		infoPanel.add(informationTextArea);
+		JScrollPane scrollPaneRoom = new JScrollPane(informationTextAreaRoom);
+
 		infoPanel.add(scrollPane);
+		infoPanel.add(scrollPaneRoom);
 
 		add(infoPanel, BorderLayout.CENTER);
 	}
@@ -228,15 +231,21 @@ public class InformationPanel extends JPanel implements ActionListener,
 		// if the selected index is an agent
 		if (selectedIndex_I < -1) {
 
-			informationTextArea.setText(getAgentInformation(agentList
-					.get(selectedIndex_A)));
+			String newInfo = getAgentInformation(agentList.get(selectedIndex_A));
+
+			if (!informationTextArea.getText().equals(newInfo)) {
+				informationTextArea.setText(newInfo);
+			}
 
 			// if the selected index is an interaction component
 		} else if (selectedIndex_I > -1) {
 
-			informationTextArea
-					.setText(getInteractionComponentInformation(interactionCompList
-							.get(selectedIndex_I)));
+			String newInfo = getInteractionComponentInformation(interactionCompList
+					.get(selectedIndex_I));
+
+			if (!informationTextArea.getText().equals(newInfo)) {
+				informationTextArea.setText(newInfo);
+			}
 
 			// if the separator is selected
 		} else {
@@ -247,10 +256,11 @@ public class InformationPanel extends JPanel implements ActionListener,
 		if (shownRoom != null) {
 
 			String newInfo = getRoomInformation(shownRoom);
-			if(!informationTextAreaRoom.getText().equals(newInfo)) {
+
+			if (!informationTextAreaRoom.getText().equals(newInfo)) {
 				informationTextAreaRoom.setText(newInfo);
 			}
-			
+
 		}
 
 	}
@@ -278,7 +288,16 @@ public class InformationPanel extends JPanel implements ActionListener,
 					+ agent.getCurrentAction().getState() + "\n"
 					+ "   - Duration: "
 					+ agent.getCurrentAction().getDuration() + " minutes\n"
-					+ "Current position: " + agent.getCurrentPosition();
+					+ "Current position: " + agent.getCurrentPosition() + "\n"
+					+ "Action pool:\n";
+
+			for (AbstractAction abstractAction : agent.getTodoListCopy()) {
+
+				info = info + "  " + abstractAction.getInformationDescription()
+						+ "\n";
+				System.out.println("Hallo");
+			}
+
 		} else {
 
 			info = "Name: " + agent.getName() + "\n" + "Indentifier: "

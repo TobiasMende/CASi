@@ -9,7 +9,7 @@
  *  See the LICENSE.txt file in this projects root folder or visit
  *  <http://www.gnu.org/licenses/lgpl.html> for more details.
  */
-package de.uniluebeck.imis.casi.simulations.mate.simulation.model.actions;
+package de.uniluebeck.imis.casi.simulations.simpleDevTest.simulation.model.actions;
 
 import com.sun.tools.javac.util.List;
 

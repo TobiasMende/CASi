@@ -9,7 +9,7 @@
  *  See the LICENSE.txt file in this projects root folder or visit
  *  <http://www.gnu.org/licenses/lgpl.html> for more details.
  */
-package de.uniluebeck.imis.casi.simulations.mate.generator.java;
+package de.uniluebeck.imis.casi.simulations.simpleDevTest.generator.java;
 
 import de.uniluebeck.imis.casi.generator.AgentCollector;
 import de.uniluebeck.imis.casi.generator.RoomCollector;

@@ -9,7 +9,7 @@
  *  See the LICENSE.txt file in this projects root folder or visit
  *  <http://www.gnu.org/licenses/lgpl.html> for more details.
  */
-package de.uniluebeck.imis.casi.simulations.mate.generator.java;
+package de.uniluebeck.imis.casi.simulations.simpleDevTest.generator.java;
 
 import java.util.HashSet;
 
@@ -21,11 +21,11 @@ import de.uniluebeck.imis.casi.simulation.model.Agent;
 import de.uniluebeck.imis.casi.simulation.model.Door;
 import de.uniluebeck.imis.casi.simulation.model.Room;
 import de.uniluebeck.imis.casi.simulation.model.AbstractInteractionComponent.Face;
-import de.uniluebeck.imis.casi.simulations.mate.simulation.model.Cube;
-import de.uniluebeck.imis.casi.simulations.mate.simulation.model.Desktop;
-import de.uniluebeck.imis.casi.simulations.mate.simulation.model.DoorLight;
-import de.uniluebeck.imis.casi.simulations.mate.simulation.model.DoorSensor;
-import de.uniluebeck.imis.casi.simulations.mate.simulation.model.Mike;
+import de.uniluebeck.imis.casi.simulations.simpleDevTest.simulation.model.Cube;
+import de.uniluebeck.imis.casi.simulations.simpleDevTest.simulation.model.Desktop;
+import de.uniluebeck.imis.casi.simulations.simpleDevTest.simulation.model.DoorLight;
+import de.uniluebeck.imis.casi.simulations.simpleDevTest.simulation.model.DoorSensor;
+import de.uniluebeck.imis.casi.simulations.simpleDevTest.simulation.model.Mike;
 
 /**
  * Fills the ComponentCollector with Components. Both Actuators and Sensors.

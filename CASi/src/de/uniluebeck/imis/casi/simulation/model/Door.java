@@ -19,7 +19,6 @@ import java.util.logging.Logger;
 
 import de.uniluebeck.imis.casi.CASi;
 import de.uniluebeck.imis.casi.simulation.factory.WorldFactory;
-import de.uniluebeck.imis.casi.simulations.mate.simulation.model.DoorSensor;
 
 /**
  * The representation for a door that can be added to a wall

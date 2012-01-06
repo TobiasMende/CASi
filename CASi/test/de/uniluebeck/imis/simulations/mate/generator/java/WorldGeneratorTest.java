@@ -26,7 +26,7 @@ public class WorldGeneratorTest {
 
 	@Test
 	public void testGenerateAllSets() {
-		IWorldGenerator gen = new de.uniluebeck.imis.casi.simulations.mate.generator.java.WorldGenerator();
+		IWorldGenerator gen = new de.uniluebeck.imis.casi.simulations.simpleDevTest.generator.java.WorldGenerator();
 
 		World generatedWorld = gen.generateWorld();
 

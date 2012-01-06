@@ -15,6 +15,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Logger;
 
+import de.uniluebeck.imis.casi.simulation.model.Door;
 import de.uniluebeck.imis.casi.simulation.model.Room;
 
 /**
@@ -81,6 +82,26 @@ public class RoomCollector {
 		log.warning(String.format("couldn't find room %s, mispelled it?", identifierToLookFor));
 		return null;
 	}
+	
+	/**
+	 * Returns an Door with a given identifier
+	 * 
+	 * @param identifierToLookFor
+	 * @return the Door with this name or (CAUTION) null if this door cannot be
+	 *         found!
+	 */
+	public Door findDoorByIdentifier(String identifierToLookFor) {
+		for (Room room : alreadyCreatedRooms) {
+			for (Door d : room.getDoors()) {
+				if (d.getIdentifier().equals(identifierToLookFor)) {
+					return d;
+				}
+			}
+		}
+		log.warning(String.format("couldn't find a door %s, mispelled it?", identifierToLookFor));
+		return null;
+	}
+	
 
 
 	/**

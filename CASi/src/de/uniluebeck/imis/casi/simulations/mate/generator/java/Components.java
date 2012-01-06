@@ -55,7 +55,8 @@ public class Components {
 		ComponentCollector c = ComponentCollector.getInstance();
 
 		for (Agent ag : AgentCollector.getInstance().getAll()) {
-			IPosition r = ag.getDefaultPosition();
+			Room r = (Room) ag.getDefaultPosition();
+			
 			c.newComponent(new Desktop(r.getCentralPoint(), ag));
 			c.newComponent(new Cube(r.getCentralPoint(), ag));
 			c.newComponent(new Mike((Room) r, ag));

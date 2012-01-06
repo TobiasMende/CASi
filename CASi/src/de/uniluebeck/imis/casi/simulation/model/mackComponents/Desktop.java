@@ -49,15 +49,11 @@ public class Desktop extends AbstractInteractionComponent {
 	 *            the exact position of this daa.
 	 */
 	public Desktop(Point2D coordinates, Agent agent) {
-		super("Desktop-"+idCounter, coordinates);
+		super("Desktop-"+agent.getIdentifier()+"-"+idCounter++, coordinates);
 		type = Type.SENSOR;
 		this.agent = agent;
-		
 	}
-
-	/**
-	 * 
-	 */
+	
 	private static final long serialVersionUID = 8750391465421352206L;
 
 

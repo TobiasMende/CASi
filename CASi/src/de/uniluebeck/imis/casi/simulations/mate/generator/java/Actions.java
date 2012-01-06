@@ -18,7 +18,9 @@ import java.util.Random;
 
 import de.uniluebeck.imis.casi.generator.ActionCollector;
 import de.uniluebeck.imis.casi.generator.AgentCollector;
+import de.uniluebeck.imis.casi.generator.ComponentCollector;
 import de.uniluebeck.imis.casi.generator.RoomCollector;
+import de.uniluebeck.imis.casi.simulation.model.AbstractComponent;
 import de.uniluebeck.imis.casi.simulation.model.Agent;
 import de.uniluebeck.imis.casi.simulation.model.Room;
 import de.uniluebeck.imis.casi.simulation.model.SimulationTime;
@@ -27,6 +29,8 @@ import de.uniluebeck.imis.casi.simulation.model.actionHandling.AbstractAction.TY
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.ComplexAction;
 import de.uniluebeck.imis.casi.simulation.model.actions.GoAndSpeakTo;
 import de.uniluebeck.imis.casi.simulation.model.actions.Move;
+import de.uniluebeck.imis.casi.simulation.model.mackActions.WorkOnDesktop;
+import de.uniluebeck.imis.casi.simulation.model.mackComponents.Desktop;
 
 /**
  * Action generator file with static methods that generate all the actions for
@@ -46,9 +50,24 @@ public final class Actions {
 	 */
 	public static void generateActions(SimulationTime simulationStartTime) {
 		ActionCollector ag = ActionCollector.getInstance();
+		ComponentCollector cc = ComponentCollector.getInstance();
+		
+		
+		for (Agent a : AgentCollector.getInstance().getAll()) {
+			AbstractComponent ac;
+			String ident = "Desktop-"+a.getIdentifier();
+			
+			ac = cc.findComponentByIdentifier(ident);
+			Desktop.Program randomProgramm = Desktop.Program.values()[(int)(Math.random()*Desktop.Program.values().length)];
+			Desktop.Frequency randomFrequency = Desktop.Frequency.values()[(int)(Math.random()*Desktop.Frequency.values().length)];
+			AbstractAction workOnDesktop = new WorkOnDesktop((Desktop) ac, randomProgramm, randomFrequency, 60);
+			
+			// the actionCollector key has to start with the Agents identifier!
+			// Otherwise is would not be added to his todoList automatically!
+			ag.newAction(a.getIdentifier()+"action_"+ident+"_1",workOnDesktop);
+		}
 
 	}
-
 
 	/**
 	 * Generate all
@@ -58,5 +77,19 @@ public final class Actions {
 	public static void generateActionsPools(SimulationTime startTime) {
 		// TODO FILL ME!
 
+	}
+
+	/**
+	 * Adds a given action to every already created agent. Clones the action so
+	 * that everyone has its own.
+	 * 
+	 * @param action
+	 *            the action that everyone should do
+	 */
+	private static void forAllAgentsDoThis(AbstractAction action) {
+		for (Agent a : AgentCollector.getInstance().getAll()) {
+			AbstractAction clonedAction = action.clone();
+			a.addActionToList(clonedAction);
+		}
 	}
 }

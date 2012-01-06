@@ -72,7 +72,7 @@ public class Mike extends AbstractInteractionComponent {
 	 * @param agent the agent to which this component belongs
 	 */
 	private Mike(Room room, Point2D position, Agent agent) {
-		super("Mike-"+idCounter++, position);
+		super("Mike-"+agent.getIdentifier()+idCounter++, position);
 		setShapeRepresentation(room.getShapeRepresentation());
 		type = Type.SENSOR;
 		this.agent = agent;

@@ -73,9 +73,9 @@ public class ComponentCollector {
 	 * @return the Component with this name or (CAUTION) null if this component cannot
 	 *         be found!
 	 */
-	public AbstractInteractionComponent findAgentByIdentifier(String identifierToLookFor) {
+	public AbstractInteractionComponent findComponentByIdentifier(String identifierToLookFor) {
 		for (AbstractInteractionComponent comp : alreadyCreatedComponents) {
-			if (comp.getIdentifier().equals(identifierToLookFor)) {
+			if (comp.getIdentifier().startsWith(identifierToLookFor)) {
 				return comp;
 			}
 		}

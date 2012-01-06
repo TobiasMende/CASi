@@ -86,15 +86,15 @@ public class WorldGenerator implements IWorldGenerator {
 			log.info(SIMULATION_NAME+": generating agents");
 			Agents.generateAgents();
 
-			log.info(SIMULATION_NAME+": generating actions");
-			Actions.generateActions(tempWorld.getStartTime());
-			Actions.generateActionsPools(tempWorld.getStartTime());
-
 			log.info(SIMULATION_NAME+": generating components");
 			Components.fillOfficesWithDesktopThings();
 			Components.addLightsAndSensorsToDoors();
 			Components.generateActuators();
 			Components.generateSensors();
+			
+			log.info(SIMULATION_NAME+": generating actions");
+			Actions.generateActions(tempWorld.getStartTime());
+			Actions.generateActionsPools(tempWorld.getStartTime());
 
 			log.info(SIMULATION_NAME+": linking new world");
 			Linker linker = new Linker();

@@ -76,11 +76,13 @@ public class Cube extends AbstractInteractionComponent {
 	private String pullMessage;
 
 	/**
+	 * constructs a Cube.
+	 * 
 	 * @param coordinates
 	 *            the position of this cube
 	 */
 	public Cube(Point2D coordinates, Agent owner) {
-		super("Cube-"+idCounter++, coordinates);
+		super("Cube-"+owner.getIdentifier()+"-"+idCounter++, coordinates);
 		pullEnabled = true;
 		SimulationClock.getInstance().addListener(this);
 		currentState = State.unknown;

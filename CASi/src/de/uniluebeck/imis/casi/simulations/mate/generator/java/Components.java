@@ -14,6 +14,7 @@ package de.uniluebeck.imis.casi.simulations.mate.generator.java;
 import de.uniluebeck.imis.casi.generator.AgentCollector;
 import de.uniluebeck.imis.casi.generator.ComponentCollector;
 import de.uniluebeck.imis.casi.generator.RoomCollector;
+import de.uniluebeck.imis.casi.simulation.model.AbstractInteractionComponent.Face;
 import de.uniluebeck.imis.casi.simulation.model.Agent;
 import de.uniluebeck.imis.casi.simulation.model.Door;
 import de.uniluebeck.imis.casi.simulation.model.IPosition;
@@ -21,6 +22,7 @@ import de.uniluebeck.imis.casi.simulation.model.Room;
 import de.uniluebeck.imis.casi.simulation.model.mackComponents.Cube;
 import de.uniluebeck.imis.casi.simulation.model.mackComponents.Desktop;
 import de.uniluebeck.imis.casi.simulation.model.mackComponents.DoorLight;
+import de.uniluebeck.imis.casi.simulation.model.mackComponents.DoorSensor;
 import de.uniluebeck.imis.casi.simulation.model.mackComponents.Mike;
 
 /**
@@ -39,9 +41,9 @@ public class Components {
 	 * Put all your actuators here!
 	 */
 	public static void generateActuators() {
-		ComponentCollector ac = ComponentCollector.getInstance();
-		RoomCollector rooms = RoomCollector.getInstance();
-		AgentCollector agents = AgentCollector.getInstance();
+//		ComponentCollector ac = ComponentCollector.getInstance();
+//		RoomCollector rooms = RoomCollector.getInstance();
+//		AgentCollector agents = AgentCollector.getInstance();
 
 	}
 
@@ -70,33 +72,70 @@ public class Components {
 		ComponentCollector cc = ComponentCollector.getInstance();
 		AgentCollector ac = AgentCollector.getInstance();
 		Agent a;
-		
+
 		// Hermann Matsumbishi
 		a = ac.findAgentByName("Hermann Matsumbishi");
 		for (Door d : ((Room) a.getDefaultPosition()).getDoors()) {
-			cc.newComponent(new DoorLight(d, (Room) a.getDefaultPosition(), a));
-			
+			DoorLight dl = new DoorLight(d, (Room) a.getDefaultPosition(), a);
+			dl.setMonitoredArea(Face.EAST, 20, 180);
+			cc.newComponent(dl);
+			cc.newComponent(new DoorSensor(d, a));
 		}
 
 		// ##########
 		// Zwotah Zwiebel
 		// ##########
-	
+		a = ac.findAgentByName("Zwotah Zwiebel");
+		for (Door d : ((Room) a.getDefaultPosition()).getDoors()) {
+			DoorLight dl = new DoorLight(d, (Room) a.getDefaultPosition(), a);
+			dl.setMonitoredArea(Face.EAST, 20, 180);
+			cc.newComponent(dl);
+			cc.newComponent(new DoorSensor(d, a));
+		}
+
 		// ##########
 		// Dagobert Dreieck
 		// ##########
-	
+		a = ac.findAgentByName("Dagobert Dreieck");
+		for (Door d : ((Room) a.getDefaultPosition()).getDoors()) {
+			DoorLight dl = new DoorLight(d, (Room) a.getDefaultPosition(), a);
+			dl.setMonitoredArea(Face.EAST, 20, 180);
+			cc.newComponent(dl);
+			cc.newComponent(new DoorSensor(d, a));
+		}
+
 		// ##########
 		// Felix Freudentanz
 		// ##########
-
-		// ##########
-		// Susi Sekretärin
-		// ##########
+		a = ac.findAgentByName("Felix Freudentanz");
+		for (Door d : ((Room) a.getDefaultPosition()).getDoors()) {
+			DoorLight dl = new DoorLight(d, (Room) a.getDefaultPosition(), a);
+			dl.setMonitoredArea(Face.NORTH, 20, 180);
+			cc.newComponent(dl);
+			cc.newComponent(new DoorSensor(d, a));
+		}
 
 		// ##########
 		// Rudi Random
 		// ##########
+		a = ac.findAgentByName("Rudi Random");
+		for (Door d : ((Room) a.getDefaultPosition()).getDoors()) {
+			DoorLight dl = new DoorLight(d, (Room) a.getDefaultPosition(), a);
+			dl.setMonitoredArea(Face.WEST, 20, 180);
+			cc.newComponent(dl);
+			cc.newComponent(new DoorSensor(d, a));
+		}
+		
+		// ##########
+		// Susi Sekretärin
+		// ##########
+		Door door = RoomCollector.getInstance().findDoorByIdentifier(
+				"susis-outer-door");
+		a = ac.findAgentByName("Susi Sekretärin");
+		DoorLight dl = new DoorLight(door, (Room) a.getDefaultPosition(), a);
+		dl.setMonitoredArea(Face.WEST, 20, 180);
+		cc.newComponent(dl);
+		cc.newComponent(new DoorSensor(door, a));
 
 	}
 

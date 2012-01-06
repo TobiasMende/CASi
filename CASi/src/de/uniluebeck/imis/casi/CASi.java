@@ -77,7 +77,7 @@ public class CASi {
 		logHeader();
 
 		// DO WHAT YOU WANT:
-		final IWorldGenerator generator = new de.uniluebeck.imis.casi.simulations.simpleDevTest.generator.java.WorldGenerator();
+		final IWorldGenerator generator = new de.uniluebeck.imis.casi.simulations.mate.generator.java.WorldGenerator();
 		Locale.setDefault(Locale.GERMAN);
 		// final ICommunicationHandler networkHandler =
 		// generateCommunicationHandler(args);

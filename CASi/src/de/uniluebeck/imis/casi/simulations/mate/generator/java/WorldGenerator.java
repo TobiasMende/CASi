@@ -92,6 +92,7 @@ public class WorldGenerator implements IWorldGenerator {
 
 			log.info(SIMULATION_NAME+": generating components");
 			Components.fillOfficesWithDesktopThings();
+			Components.addLightsAndSensorsToDoors();
 			Components.generateActuators();
 			Components.generateSensors();
 

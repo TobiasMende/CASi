@@ -47,83 +47,8 @@ public final class Actions {
 	public static void generateActions(SimulationTime simulationStartTime) {
 		ActionCollector ag = ActionCollector.getInstance();
 
-		ComplexAction runCrazy = new ComplexAction();
-		runCrazy.addSubAction(new Move(RoomCollector.getInstance()
-				.findRoomByIdentifier("crazyRoom")));
-		runCrazy.addSubAction(new Move(RoomCollector.getInstance()
-				.findRoomByIdentifier("theRandomRoom")));
-		runCrazy.addSubAction(new Move(RoomCollector.getInstance()
-				.findRoomByIdentifier("womensRestroom")));
-		runCrazy.addSubAction(new Move(RoomCollector.getInstance()
-				.findRoomByIdentifier("kitchen")));
-		runCrazy.setEarliestStartTime(simulationStartTime.plus(15));
-		for (Room r : RoomCollector.getInstance().getAll()) {
-			runCrazy.addSubAction(new Move(r));
-		}
-		List<Room> temp = new ArrayList<Room>(RoomCollector.getInstance()
-				.getAll());
-		Collections.shuffle(temp);
-		for (Room r : temp) {
-			runCrazy.addSubAction(new Move(r));
-		}
-		ag.newAction("casi_crazy_guy_01", runCrazy);
-
-		// ##########
-		// And I Actions
-		// ##########
-		AbstractAction goHome = new Move(RoomCollector.getInstance()
-				.findRoomByIdentifier("crazyRoom"));
-		goHome.setEarliestStartTime(simulationStartTime.plus(42 + 23));
-		ag.newAction(AgentCollector.getInstance().findAgentByName("And I")
-				.getIdentifier()
-				+ "_goHome", goHome);
-
-		// ##########
-		// For all tentLadys actions
-		for (Agent a : AgentCollector.getInstance().findAgentByType("tentLady")) {
-			generateActionsForTentLady(a, simulationStartTime);
-		}
-
 	}
 
-	/**
-	 * Generates the action the supplied tentLady is supposed to do
-	 * 
-	 * @param tentLady
-	 * @param simulationStartTime
-	 */
-	public static void generateActionsForTentLady(Agent tentLady,
-			SimulationTime simulationStartTime) {
-
-		ActionCollector actions = ActionCollector.getInstance();
-		Agent tim = AgentCollector.getInstance().findAgentByName("Tim");
-		Room womensRoom = RoomCollector.getInstance().findRoomByIdentifier(
-				"womensRestroom");
-
-		AbstractAction tempAction = new Move(womensRoom);
-		AbstractAction move2 = tempAction.clone();
-
-		tempAction.setType(TYPE.NORMAL);
-		tempAction.setPriority(5);
-		tempAction.setEarliestStartTime(simulationStartTime
-				.plus(1 + new Random().nextInt(10)));
-
-		actions.newAction(tentLady.getIdentifier() + "_01", tempAction);
-
-		AbstractAction speak = new GoAndSpeakTo(tim, 1);
-
-		speak.setType(TYPE.NORMAL);
-		speak.setEarliestStartTime(simulationStartTime.plus(20));
-
-		actions.newAction(tentLady.getIdentifier() + "_02", speak);
-
-		AbstractAction goBackToMainFloor = new Move(RoomCollector.getInstance()
-				.findRoomByIdentifier("mainFloor"));
-		goBackToMainFloor.setEarliestStartTime(speak.getEarliestStartTime()
-				.plus(10));
-
-		actions.newAction(tentLady.getIdentifier() + "_04", goBackToMainFloor);
-	}
 
 	/**
 	 * Generate all

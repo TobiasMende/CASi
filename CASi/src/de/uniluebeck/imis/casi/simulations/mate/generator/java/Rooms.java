@@ -213,13 +213,13 @@ public class Rooms {
 				new Point(340, 130)));
 		theNewWall = WallFactory.getWallWithPoints(new Point(340, 130),
 				new Point(250, 130));
-		theNewWall.addDoor(new Door("susis-outer-door",80,5));
+		theNewWall.addDoor(new Door(80,5));
 		theNewRoom.addWall(theNewWall);
 		theNewWall = WallFactory.getWallWithPoints(new Point(250, 130),
 				new Point(250, 190));
-		theNewWall.addDoor(new Door());
+		theNewWall.addDoor(new Door("susis-outer-door"));
 		theNewRoom.addWall(theNewWall);
-		theNewRoom.setIdentifier("susiOffice");
+		theNewRoom.setIdentifier("officeSusi");
 		RoomCollector.getInstance().newRoom(theNewRoom);
 
 		// Room #10

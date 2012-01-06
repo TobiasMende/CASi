@@ -11,7 +11,6 @@
  */
 package de.uniluebeck.imis.casi.simulation.model;
 
-import java.awt.Point;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
@@ -89,8 +88,18 @@ public class Wall implements IPosition {
 		return Wall.calculateHashCode(start, end);
 	}
 
-	
-	public static int calculateHashCode(Point2D start, Point2D end){
+	/**
+	 * Method for calculating the hash code for a provided start and end point.
+	 * This method is useful for external hash code calculations to find a wall
+	 * with start and end point.
+	 * 
+	 * @param start
+	 *            the start point
+	 * @param end
+	 *            the end point
+	 * @return the hash code
+	 */
+	public static int calculateHashCode(Point2D start, Point2D end) {
 		final int prime = 31;
 		int result = 1;
 		// result = prime * result + ((doors == null) ? 0 : doors.hashCode());
@@ -98,7 +107,7 @@ public class Wall implements IPosition {
 		result = prime * result + ((start == null) ? 0 : start.hashCode());
 		return result;
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
 		if (!(obj instanceof Wall)) {
@@ -114,7 +123,7 @@ public class Wall implements IPosition {
 		if (areIdentical || areInversed || hashCodeEquals) {
 			return true;
 		}
-		/* 
+		/*
 		 * ATTENTION: They are not equal, if they have different lengths!
 		 */
 		return false;

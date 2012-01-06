@@ -17,29 +17,37 @@ import de.uniluebeck.imis.casi.simulation.model.Agent;
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.ComplexAction;
 
 /**
- * This action could be used to go and speak to a given agent. It's just a simple example which has to be enhanced
+ * This action could be used to go and speak to a given agent. It's just a
+ * simple example which has to be enhanced
+ * 
  * @author Tobias Mende
- *
+ * 
  */
 public class GoAndSpeakTo extends ComplexAction {
 
-	private static final long serialVersionUID = 1L;
-	
+	/**
+	 * the serialization id
+	 */
+	private static final long serialVersionUID = 3772950403378040656L;
+
 	/**
 	 * Creates a new speak action for a meeting with the given agent
-	 * @param agent the agent to speak with
-	 * @param duration the duration
+	 * 
+	 * @param agent
+	 *            the agent to speak with
+	 * @param duration
+	 *            the duration
 	 */
 	public GoAndSpeakTo(Agent agent, int duration) {
 		super();
 		addSubAction(new Move(agent.getDefaultPosition()));
 		addSubAction(new SpeakTo(agent, duration));
-		
+
 	}
-	
+
 	@Override
 	protected void postActionTask(AbstractComponent performer) {
-		CASi.SIM_LOG.info(performer +" completes go and speak to action!");
+		CASi.SIM_LOG.info(performer + " completes go and speak to action!");
 		super.postActionTask(performer);
 	}
 

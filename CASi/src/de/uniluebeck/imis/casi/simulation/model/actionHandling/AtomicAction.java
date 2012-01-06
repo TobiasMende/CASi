@@ -11,7 +11,6 @@
  */
 package de.uniluebeck.imis.casi.simulation.model.actionHandling;
 
-import de.uniluebeck.imis.casi.CASi;
 import de.uniluebeck.imis.casi.simulation.model.AbstractComponent;
 
 /**
@@ -22,7 +21,7 @@ import de.uniluebeck.imis.casi.simulation.model.AbstractComponent;
  * 
  */
 public abstract class AtomicAction extends AbstractAction {
-
+	/** serialization identifier */
 	private static final long serialVersionUID = -2572027179785943085L;
 
 	@Override
@@ -35,8 +34,8 @@ public abstract class AtomicAction extends AbstractAction {
 			// stop performing if completed
 			return true;
 		}
-		if(!initialized) {
-			if(!preActionTask(performer)) {
+		if (!initialized) {
+			if (!preActionTask(performer)) {
 				setState(STATE.INTERRUPTED);
 				return false;
 			}
@@ -77,7 +76,7 @@ public abstract class AtomicAction extends AbstractAction {
 		throw new IllegalAccessException(
 				"Don't decrement the duration! It's decremented automatically");
 	}
-	
+
 	@Override
 	public void reset() {
 		setState(STATE.SCHEDULED);

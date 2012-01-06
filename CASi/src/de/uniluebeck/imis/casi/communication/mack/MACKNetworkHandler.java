@@ -44,12 +44,13 @@ import de.uniluebeck.imis.casi.simulation.model.AbstractInteractionComponent;
 
 /**
  * The MACKNetworkHandler handles the communication with the MACK Framework (the
- * jabber server)
+ * jabber server).
  * 
  * @author Tobias Mende
  * 
  */
 public final class MACKNetworkHandler implements ICommunicationHandler {
+	/** the development logger */
 	private static final Logger log = Logger.getLogger(MACKNetworkHandler.class
 			.getName());
 	/** The jabber identifier of the mack server */
@@ -59,7 +60,10 @@ public final class MACKNetworkHandler implements ICommunicationHandler {
 	private int XMPP_PORT;
 	/** The xmpp server to connect to */
 	private String XMPP_SERVER;
-	/** The time in minutes that has to elapse between two jabber id registrations. (XMPP server specific) */
+	/**
+	 * The time in minutes that has to elapse between two jabber id
+	 * registrations. (XMPP server specific)
+	 */
 	private int REGISTRATION_DELAY;
 
 	/** The password for all accounts */
@@ -70,8 +74,7 @@ public final class MACKNetworkHandler implements ICommunicationHandler {
 
 	/**
 	 * the component map holds all components with their identifier which should
-	 * also be used in the MACK framework TODO: if not so: change getIdentifier
-	 * of the components to work as expected.
+	 * also be used in the MACK framework.
 	 */
 	private Map<ICommunicationComponent, Chat> components = new HashMap<ICommunicationComponent, Chat>();
 
@@ -221,11 +224,12 @@ public final class MACKNetworkHandler implements ICommunicationHandler {
 		Connection connection = new XMPPConnection(config);
 		try {
 			if (registeredLastTime && REGISTRATION_DELAY > 0) {
-				CASi.SIM_LOG
-						.info("Sleeping for "+REGISTRATION_DELAY+" minutes. Need to wait for "+XMPP_SERVER);
+				CASi.SIM_LOG.info("Sleeping for " + REGISTRATION_DELAY
+						+ " minutes. Need to wait for " + XMPP_SERVER);
 				try {
-					// macjabber.de allows new account creation only every x minutes
-					Thread.sleep(REGISTRATION_DELAY*60000+10);
+					// macjabber.de allows new account creation only every x
+					// minutes
+					Thread.sleep(REGISTRATION_DELAY * 60000 + 10);
 				} catch (InterruptedException e1) {
 					log.warning("Can't sleep");
 				}
@@ -253,7 +257,8 @@ public final class MACKNetworkHandler implements ICommunicationHandler {
 						new MessageListener() {
 							public void processMessage(Chat chat,
 									Message message) {
-								if(message.getType().equals(Message.Type.normal)) {
+								if (message.getType().equals(
+										Message.Type.normal)) {
 									CASi.SIM_LOG.info("Receiving: "
 											+ message.getBody());
 									comp.receive(message.getBody());
@@ -275,13 +280,14 @@ public final class MACKNetworkHandler implements ICommunicationHandler {
 				new PacketTypeFilter(Message.class), new FromContainsFilter(
 						MACK_SERVER_IDENTIFIER));
 
-		//PacketCollector myCollector = connection.createPacketCollector(filter);
+		// PacketCollector myCollector =
+		// connection.createPacketCollector(filter);
 
 		PacketListener myListener = new PacketListener() {
 			public void processPacket(Packet packet) {
 				if (packet instanceof Message) {
 					Message message = ((Message) packet);
-					if(message.getType().equals(Message.Type.normal)) {
+					if (message.getType().equals(Message.Type.normal)) {
 						comp.receive(message.getBody());
 					}
 				} else {
@@ -295,6 +301,8 @@ public final class MACKNetworkHandler implements ICommunicationHandler {
 	}
 
 	/**
+	 * Checks if an account is registered and tries to register, if not.
+	 * 
 	 * @param id
 	 *            the xmpp user identifier
 	 * @param connection
@@ -319,7 +327,11 @@ public final class MACKNetworkHandler implements ICommunicationHandler {
 	/**
 	 * Creates the xml representation of the configuration and stores it in
 	 * {@code sims/dev_office_java/network.conf.xml}
+	 * 
+	 * @deprecated because this method was only for initial generation and
+	 *             debugging. No need to use it in productive mode.
 	 */
+	@Deprecated
 	public void serializeSettings() {
 		log.info("Serializing network handler settings");
 		String filename = "sims/dev_office_java/network.conf.xml";

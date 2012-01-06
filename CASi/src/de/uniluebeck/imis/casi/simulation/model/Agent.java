@@ -36,28 +36,51 @@ import de.uniluebeck.imis.casi.utils.Tools;
  */
 public class Agent extends AbstractComponent implements
 		ISimulationClockListener, Serializable {
+	/** serialization identifier */
 	private static final long serialVersionUID = -1166856593367347255L;
+	/** the development logger */
 	private static final Logger log = Logger.getLogger(Agent.class.getName());
 
+	/** possible states */
 	public enum STATE {
-		IDLE, BUSY, UNKNOWN;
+		/** the agent is idle */
+		IDLE,
+		/** the agent is busy */
+		BUSY,
+		/** the state is unknown */
+		UNKNOWN;
 	}
 
-	// Name of the agent
+	/** The name of the agent */
 	private String name;
+	/** The type of the agent */
 	private String type;
+	/**
+	 * the default position where the agent starts and where other agents are
+	 * looking for it
+	 */
 	private IPosition defaultPosition;
+	/** The current action */
 	private AbstractAction currentAction;
+	/** the scheduler which handles the actions */
 	private IActionScheduler actionScheduler;
 
 	/** Listeners, perhaps already needed in AbstractComponent */
 	private transient List<IAgentListener> agentListeners = new LinkedList<IAgentListener>();
+	/** a list of extended listeners with veto rigts */
 	private transient List<IExtendedAgentListener> extendedListeners = new LinkedList<IExtendedAgentListener>();
+	/** the current state */
 	private Agent.STATE state = STATE.UNKNOWN;
 
+	/**
+	 * The default constructor
+	 * 
+	 * @param identifier
+	 *            the unique identifier
+	 */
 	private Agent(String identifier) {
 		super(identifier);
-		actionScheduler = new DefaultActionScheduler(this);
+		actionScheduler = new DefaultActionScheduler();
 	}
 
 	/**
@@ -104,12 +127,24 @@ public class Agent extends AbstractComponent implements
 		this(identifier, name, type, null);
 	}
 
+	/**
+	 * Setter for the state
+	 * 
+	 * @param state
+	 *            the new state
+	 */
 	public void setState(STATE state) {
 		informListenersAboutStateChange(state);
 		CASi.SIM_LOG.config("State of " + this + " changed to " + state);
 		this.state = state;
 	}
 
+	/**
+	 * Setter for the todo list
+	 * 
+	 * @param todoList
+	 *            the todo list
+	 */
 	public void setTodoList(Collection<AbstractAction> todoList) {
 		actionScheduler.setTodoList(todoList);
 		for (AbstractAction a : todoList) {
@@ -407,6 +442,11 @@ public class Agent extends AbstractComponent implements
 
 	}
 
+	/**
+	 * Getter for the default position
+	 * 
+	 * @return the default position which is a {@link Room} in most cases
+	 */
 	public IPosition getDefaultPosition() {
 		return defaultPosition == null ? getCurrentPosition() : defaultPosition;
 	}
@@ -473,6 +513,8 @@ public class Agent extends AbstractComponent implements
 	}
 
 	/**
+	 * Getter for the type
+	 * 
 	 * @return the type
 	 */
 	public String getType() {
@@ -480,6 +522,8 @@ public class Agent extends AbstractComponent implements
 	}
 
 	/**
+	 * Setter for the type
+	 * 
 	 * @param type
 	 *            the type to set
 	 */
@@ -487,22 +531,38 @@ public class Agent extends AbstractComponent implements
 		this.type = type;
 	}
 
+	/**
+	 * Getter for the name
+	 * 
+	 * @return the name
+	 */
 	public String getName() {
 		return name;
 	}
 
+	/**
+	 * Setter for the name
+	 * 
+	 * @param name
+	 *            the name
+	 */
 	public void setName(String name) {
 		this.name = name;
 	}
-	
+
 	/**
-	 * @return the currentAction
+	 * Getter for the current action
+	 * 
+	 * @return the currently performed action or {@code null} if the agent is
+	 *         {@link STATE#IDLE}.
 	 */
 	public AbstractAction getCurrentAction() {
 		return currentAction;
 	}
-	
+
 	/**
+	 * Getter for the agents state
+	 * 
 	 * @return the state
 	 */
 	public Agent.STATE getState() {

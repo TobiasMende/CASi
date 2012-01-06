@@ -23,7 +23,7 @@ import de.uniluebeck.imis.casi.communication.mack.MACKInformation.MessageType;
 import de.uniluebeck.imis.casi.communication.mack.MACKInformation.RequestType;
 
 /**
- * This content handler handles messages of the MACKFramework wich are recived
+ * This content handler handles messages of the MACKFramework which are received
  * e.g. over the {@link MACKNetworkHandler}. This class is used by the
  * {@link MACKProtocolFactory} and parses {@link MACKInformation} out of a xml
  * message.
@@ -32,11 +32,16 @@ import de.uniluebeck.imis.casi.communication.mack.MACKInformation.RequestType;
  * 
  */
 public class MACKMessageContentHandler implements ContentHandler {
+	/** the development logger */
 	private static final Logger log = Logger
 			.getLogger(MACKMessageContentHandler.class.getName());
+	/** The information object which holds the extracted information */
 	private MACKInformation info;
+	/** The area in which the pointer is */
 	private String currentArea;
+	/** The current attributes to deal with */
 	private Attributes currentAttributes;
+	/** The current value which was extracted */
 	private String currentValue;
 
 	/**
@@ -204,6 +209,7 @@ public class MACKMessageContentHandler implements ContentHandler {
 
 	@Override
 	public void startPrefixMapping(String prefix, String uri)
-			throws SAXException {}
+			throws SAXException {
+	}
 
 }

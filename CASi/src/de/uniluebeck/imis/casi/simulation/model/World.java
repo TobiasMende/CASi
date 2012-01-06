@@ -14,7 +14,6 @@ package de.uniluebeck.imis.casi.simulation.model;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.Point;
-import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
@@ -59,6 +58,9 @@ public class World {
 	 * same room or <code>-1</code> otherwise.
 	 */
 	private double[][] doorGraph;
+	/**
+	 * This matrix holds the paths between adjacent doors.
+	 */
 	private Path[][] doorPaths;
 
 	/** The size of the world */
@@ -469,7 +471,10 @@ public class World {
 	}
 
 	/**
-	 * @return the simulationDimension
+	 * Getter for the dimension of the simulation. The dimension is the size for
+	 * a panel which shows the world.
+	 * 
+	 * @return the dimension
 	 */
 	public Dimension getSimulationDimension() {
 		return simulationDimension;

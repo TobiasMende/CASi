@@ -38,6 +38,7 @@ public abstract class AbstractAction implements Listenable<IActionListener>,
 	/** the development logger */
 	private static final Logger log = Logger.getLogger(AbstractAction.class
 			.getName());
+	/** flag for checking whether the action was initialized or not */
 	protected boolean initialized;
 
 	/**
@@ -280,6 +281,8 @@ public abstract class AbstractAction implements Listenable<IActionListener>,
 	}
 
 	/**
+	 * Checks whether the action is atomic or not.
+	 * 
 	 * @return <code>true</code> if the action hasn't any subactions,
 	 *         <code>false</code> otherwise-
 	 */
@@ -288,6 +291,8 @@ public abstract class AbstractAction implements Listenable<IActionListener>,
 	}
 
 	/**
+	 * Checks whether the action is abstract or not.
+	 * 
 	 * @return <code>true</code> if the type is TYPE.ABSTRACT,
 	 *         <code>false</code> otherwise.
 	 */
@@ -305,6 +310,7 @@ public abstract class AbstractAction implements Listenable<IActionListener>,
 	}
 
 	/**
+	 * Checks whether this action is performable.
 	 * 
 	 * @return <code>true</code> if the action can be performed,
 	 *         <code>false</code> otherwise

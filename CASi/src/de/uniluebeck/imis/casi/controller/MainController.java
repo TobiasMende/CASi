@@ -30,10 +30,11 @@ import de.uniluebeck.imis.casi.ui.IMainView;
  * 
  */
 public class MainController {
-	/** Holds the main view to deal with */
-	private final IMainView mainView;
+	/** The development logger */
 	private static final Logger log = Logger.getLogger(MainController.class
 			.getName());
+	/** Holds the main view to deal with */
+	private final IMainView mainView;
 
 	/**
 	 * The constructor for the main controller
@@ -56,8 +57,8 @@ public class MainController {
 			SimulationEngine.getInstance().setWorld(world);
 			SimulationEngine.getInstance().setCommunicationHandler(
 					communicationHandler);
-
-			SimulationEngine.getInstance().init();
+			// Initialize the engine
+			
 		} catch (IllegalAccessException e) {
 			CASi.SIM_LOG
 					.severe("Can't set components after starting the simulation: "
@@ -70,12 +71,21 @@ public class MainController {
 	 * Must be called to final start the simulation
 	 */
 	public void start() {
-		CASi.SIM_LOG.info("Starting the Simulation ...");
+		CASi.SIM_LOG.info("Starting the simulation ...");
 		SimulationEngine.getInstance().start();
 		log.info("Started successfull");
 	}
 
+	/**
+	 * Initialize the simulation and show the ui
+	 */
 	public void init() {
-		mainView.showUi();
+		CASi.SIM_LOG.info("Initializing the simulation ...");
+		SimulationEngine.getInstance().init();
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				mainView.showUi();
+			}
+		});
 	}
 }

@@ -11,16 +11,17 @@
  */
 package de.uniluebeck.imis.casi.simulation.factory;
 
-import java.awt.Point;
 import java.awt.geom.Point2D;
 import java.util.Hashtable;
 
 import de.uniluebeck.imis.casi.simulation.model.Wall;
 
 /**
- * @author Marvin Frick This caching factorys purpose is mainly to cache already
- *         created walls during Room creation to make it easier to handle doors.
- *         If some wall has a door set and
+ * This caching factory's purpose is mainly to cache already created walls during
+ * Room creation to make it easier to handle doors. If some wall has a door set
+ * and another wall is equal to this wall, it has to get the same door.
+ * 
+ * @author Marvin Frick
  */
 public final class WallFactory {
 

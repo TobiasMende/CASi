@@ -28,6 +28,7 @@ public class ComplexAction extends AbstractAction {
 	private static final long serialVersionUID = 7868816596381779417L;
 	/** a collection of actions this action consists of */
 	private Collection<AtomicAction> subActions = new Vector<AtomicAction>();
+	/** the current action */
 	private AbstractAction currentAction;
 
 	@Override

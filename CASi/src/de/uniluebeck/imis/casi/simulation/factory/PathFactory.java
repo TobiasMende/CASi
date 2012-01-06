@@ -84,6 +84,8 @@ public class PathFactory {
 
 		Path startPath = findPathInRoom(startPoint, startDoorPoint, startRoom);
 		Path endPath = findPathInRoom(endDoorPoint, endPoint, endRoom);
+		startPath.removeLast();
+		endPath.removeFirst();
 		Path totalPath = new Path(startPoint, endPoint);
 		totalPath.addAll(startPath);
 		totalPath.addAll(doorToDoor);

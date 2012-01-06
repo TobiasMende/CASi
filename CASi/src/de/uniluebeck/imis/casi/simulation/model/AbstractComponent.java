@@ -18,36 +18,73 @@ import java.io.Serializable;
 import de.uniluebeck.imis.casi.simulation.factory.WorldFactory;
 
 /**
+ * This class represents general components in the framework.
  * 
  * @author Marvin Frick, Moritz Bürger, Tobias Mende
  * 
  */
 public abstract class AbstractComponent implements IPosition, Serializable {
+	/** serialization identifier */
+	private static final long serialVersionUID = 7951474356106618134L;
+
+	/** possible interruptibility states */
 	public enum INTERRUPTIBILITY {
-		INTERRUPTIBLE, UNINTERRUPTIBLE, INTERRUPT_SCHEDULED, INTERRUPTED
+		/** The component is interruptible */
+		INTERRUPTIBLE,
+		/** The component is uninterruptible */
+		UNINTERRUPTIBLE,
+		/** An interrupt is scheduled for this component */
+		INTERRUPT_SCHEDULED,
+		/** The component is currently interrupted */
+		INTERRUPTED
 	}
 
-	private static final long serialVersionUID = 7951474356106618134L;
+	/** An image which provides a graphical representation of this component */
 	private Image representation;
+	/** The current position of this component */
 	private IPosition position;
+	/** The exact coordinates of this component */
 	protected Point2D coordinates = new Point2D.Double();
+	/** An unique identifier */
 	protected final String identifier;
+	/** The current interruptibility */
 	protected INTERRUPTIBILITY interruptibility = INTERRUPTIBILITY.INTERRUPTIBLE;
 
+	/**
+	 * Constructor for a new component
+	 * 
+	 * @param identifier
+	 *            the identifier
+	 */
 	public AbstractComponent(String identifier) {
 		this.identifier = identifier;
 	}
 
+	/**
+	 * Getter for the current position
+	 * 
+	 * @return the position
+	 */
 	public IPosition getCurrentPosition() {
 		return position;
 	}
 
-	public boolean setCurrentPosition(IPosition currentPosition) {
+	/**
+	 * Setter for the current position
+	 * 
+	 * @param currentPosition
+	 *            the position
+	 */
+	public void setCurrentPosition(IPosition currentPosition) {
 		this.position = currentPosition;
 		this.coordinates = currentPosition.getCentralPoint();
-		return true;
 	}
 
+	/**
+	 * Getter for the coordinates
+	 * 
+	 * @return the coordinates
+	 */
 	public Point2D getCoordinates() {
 		return coordinates;
 	}
@@ -73,6 +110,8 @@ public abstract class AbstractComponent implements IPosition, Serializable {
 	}
 
 	/**
+	 * Setter for the interruptibility
+	 * 
 	 * @param interruptibility
 	 *            the interruptibility to set
 	 */
@@ -81,6 +120,8 @@ public abstract class AbstractComponent implements IPosition, Serializable {
 	}
 
 	/**
+	 * Getter for the interuptibility
+	 * 
 	 * @return the interruptibility
 	 */
 	public INTERRUPTIBILITY getInterruptibility() {

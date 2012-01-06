@@ -62,48 +62,49 @@ public class CASi {
 	 * The starting point for the entire program, changes can be made here to
 	 * customize the simulator
 	 * 
-	 * @param args optional arguments: 
-	 * <ul>
-	 *  <li> Verbosity Flag (0,1)
-	 *  <li> DevMode Flag (0,1)
-	 * 	<li> NetworkConfig (String path)
-	 * </ul>
+	 * @param args
+	 *            optional arguments:
+	 *            <ul>
+	 *            <li>Verbosity Flag (0,1)
+	 *            <li>DevMode Flag (0,1)
+	 *            <li>NetworkConfig (String path)
+	 *            </ul>
 	 */
 	public static void main(String[] args) {
 		// DON'T REMOVE THESE LINES:
 		setupFlags(args);
 		setupLogging();
 		logHeader();
-		
+
 		// DO WHAT YOU WANT:
 		final IWorldGenerator generator = new de.uniluebeck.imis.casi.simulations.simpleDevTest.generator.java.WorldGenerator();
 		Locale.setDefault(Locale.GERMAN);
-//		final ICommunicationHandler networkHandler = generateCommunicationHandler(args);
+		// final ICommunicationHandler networkHandler =
+		// generateCommunicationHandler(args);
 		final ICommunicationHandler networkHandler = new CommunicationLogger();
-//		((MACKNetworkHandler)networkHandler).serializeSettings();
+		// ((MACKNetworkHandler)networkHandler).serializeSettings();
 		final IMainView mainView = new MainViewSimpleGui();
 		final MainController mc = new MainController(generator, networkHandler,
 				mainView);
-		
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				// Call the main controller and let it work:
-				mc.init();
-				mc.start();
-			}
-		});
+
+		// Call the main controller and let it work:
+		mc.init();
+		mc.start();
 	}
-	
+
 	/**
-	 * Sets the DEV_MODE and VERBOSE flag according to the command line arguments
-	 * @param args the command line arguments
+	 * Sets the DEV_MODE and VERBOSE flag according to the command line
+	 * arguments
+	 * 
+	 * @param args
+	 *            the command line arguments
 	 */
 	private static void setupFlags(String[] args) {
-		if(args.length > 0) {
+		if (args.length > 0) {
 			int value = Integer.parseInt(args[0]);
 			VERBOSE = (value > 0);
 		}
-		if(args.length > 1) {
+		if (args.length > 1) {
 			int value = Integer.parseInt(args[1]);
 			DEV_MODE = (value > 0);
 		}
@@ -111,20 +112,22 @@ public class CASi {
 
 	/**
 	 * Generates a new CommunicationHandler depending on the provided arguments
-	 * @param args the command line arguments
+	 * 
+	 * @param args
+	 *            the command line arguments
 	 * @return a new communication handler
 	 */
 	private static ICommunicationHandler generateCommunicationHandler(
 			String[] args) {
 		final ICommunicationHandler networkHandler;
-		if(args.length > 2) {
+		if (args.length > 2) {
 			networkHandler = new MACKNetworkHandler(args[2]);
 		} else {
 			networkHandler = new MACKNetworkHandler();
 		}
 		return networkHandler;
 	}
-	
+
 	/**
 	 * Writes the header to the simulation logger
 	 */
@@ -202,12 +205,13 @@ public class CASi {
 				devFileHandler.setLevel(Level.CONFIG);
 			}
 		} catch (Exception e) {
-			System.out.println("Es wird keine Protokolldatei erzeugt: " + e.getMessage());
+			System.out.println("Es wird keine Protokolldatei erzeugt: "
+					+ e.getMessage());
 		}
 
 		if (DEV_MODE) {
 			// log more information on the console
-			if(VERBOSE) {
+			if (VERBOSE) {
 				devConsoleHandler.setLevel(Level.ALL);
 			} else {
 				devConsoleHandler.setLevel(Level.INFO);
@@ -243,7 +247,8 @@ public class CASi {
 																// HTMLFormatter
 			simFileHandler.setLevel(Level.ALL);
 		} catch (Exception e) {
-			System.out.println("Es wird keine Protokolldatei erzeugt: " + e.getMessage());
+			System.out.println("Es wird keine Protokolldatei erzeugt: "
+					+ e.getMessage());
 		}
 		// for fancy output
 		simConsoleHandler.setLevel(Level.INFO);

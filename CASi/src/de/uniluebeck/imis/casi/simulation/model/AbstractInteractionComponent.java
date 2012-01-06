@@ -38,6 +38,7 @@ import de.uniluebeck.imis.casi.simulation.model.actionHandling.AbstractAction;
 public abstract class AbstractInteractionComponent extends AbstractComponent
 		implements ICommunicationComponent, IExtendedAgentListener,
 		ISimulationClockListener {
+	/** The development logger */
 	private static final Logger log = Logger
 			.getLogger(AbstractInteractionComponent.class.getName());
 
@@ -77,8 +78,9 @@ public abstract class AbstractInteractionComponent extends AbstractComponent
 		 * @return the direction vector
 		 */
 		private Point2D direction() {
-			log.info(radian()+"");
-			Point2D direction = new Point2D.Double(Math.cos(radian()), Math.sin(radian()));
+			log.info(radian() + "");
+			Point2D direction = new Point2D.Double(Math.cos(radian()),
+					Math.sin(radian()));
 			log.info(direction.toString());
 			return direction;
 		}
@@ -168,7 +170,9 @@ public abstract class AbstractInteractionComponent extends AbstractComponent
 	}
 
 	/**
-	 * @return the agent which wears this component
+	 * Getter for the agent which is connected to this component
+	 * 
+	 * @return the agent which may wear this component
 	 */
 	public Agent getAgent() {
 		return agent;
@@ -249,7 +253,8 @@ public abstract class AbstractInteractionComponent extends AbstractComponent
 		// Calculate the new shape:
 		double currentOpening = opening < 0 ? 360 : opening;
 		Face currentDirection = direction == null ? Face.NORTH : direction;
-		double startAngle = currentDirection.degree() - ((double)currentOpening / 2.0);
+		double startAngle = currentDirection.degree()
+				- ((double) currentOpening / 2.0);
 		shapeRepresentation = new Arc2D.Double(calculateCircleBounds(),
 				startAngle, currentOpening, Arc2D.PIE);
 		Point2D pointInRoom = new Point2D.Double(currentDirection.direction()
@@ -332,7 +337,7 @@ public abstract class AbstractInteractionComponent extends AbstractComponent
 
 	@Override
 	public String toString() {
-		return super.toString() + " (" + getType() + ")";
+		return super.toString() + " (" + getType() + ", "+getHumanReadableValue()+")";
 	}
 
 	@Override
@@ -361,19 +366,22 @@ public abstract class AbstractInteractionComponent extends AbstractComponent
 	 * communication handler
 	 */
 	protected void makePullRequest(SimulationTime newTime) {
-		// nothing to doo here.
+		// nothing to do here.
 	}
 
 	@Override
 	public void simulationPaused(boolean pause) {
+		// nothing to do here
 	}
 
 	@Override
 	public void simulationStopped() {
+		// nothing to do here
 	}
 
 	@Override
 	public void simulationStarted() {
+		// nothing to do here
 	}
 
 	/**

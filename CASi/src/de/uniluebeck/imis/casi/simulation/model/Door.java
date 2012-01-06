@@ -29,8 +29,17 @@ import de.uniluebeck.imis.casi.simulation.factory.WorldFactory;
 public class Door extends AbstractComponent {
 	/** Possible door states which are sensed by attached {@link DoorSensor}s */
 	public enum State {
-		OPEN, CLOSED, LOCKED
+		/** The door is open */
+		OPEN,
+		/** The door is closed */
+		CLOSED,
+		/**
+		 * The door is locked. In this case agents have to perform a special
+		 * action to enter the room behind this door
+		 */
+		LOCKED
 	}
+
 	/** the development logger */
 	private static final Logger log = Logger.getLogger(Door.class.getName());
 	/** A prefix for the identifier of this door */
@@ -57,7 +66,7 @@ public class Door extends AbstractComponent {
 	private Wall secondWall;
 	/** The identifier */
 	private int identifier;
-/** The current state of this door */
+	/** The current state of this door */
 	private State currentState = State.CLOSED;
 
 	/**
@@ -255,12 +264,12 @@ public class Door extends AbstractComponent {
 	 *            the state to set
 	 */
 	public void setState(State state) {
-		if(state.equals(currentState)) {
+		if (state.equals(currentState)) {
 			return;
 		}
 		State oldState = currentState;
 		currentState = state;
-		log.info(this.getIdentifier()+" changed state to "+state);
+		log.info(this.getIdentifier() + " changed state to " + state);
 		informListenersAboutStateChange(oldState, state);
 	}
 

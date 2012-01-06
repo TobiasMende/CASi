@@ -26,7 +26,9 @@ import de.uniluebeck.imis.casi.simulation.model.Room;
  * 
  */
 public class InRoomPathSolver extends AStar<Point2D> {
+	/** The room to search a path in */
 	private Room room;
+	/** The destination of the path */
 	private Point2D destination;
 
 	/**
@@ -34,7 +36,8 @@ public class InRoomPathSolver extends AStar<Point2D> {
 	 * 
 	 * @param room
 	 *            the room to search path in
-	 * @param end the goal point
+	 * @param end
+	 *            the goal point
 	 * @throws IllegalArgumentException
 	 *             if the destination is not in the room.
 	 */

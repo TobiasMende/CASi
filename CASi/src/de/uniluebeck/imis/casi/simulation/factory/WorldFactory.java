@@ -173,6 +173,16 @@ public class WorldFactory {
 		return null;
 	}
 
+	/**
+	 * Getter for a room which contains two provided points
+	 * 
+	 * @param first
+	 *            the first point
+	 * @param second
+	 *            the second point
+	 * @return a room which contains both points or {@code null} if no such room
+	 *         was found.
+	 */
 	public static Room getRoomWithPoints(Point2D first, Point2D second) {
 		Set<Room> allRooms;
 		try {

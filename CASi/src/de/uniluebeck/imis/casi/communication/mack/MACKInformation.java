@@ -31,19 +31,32 @@ public class MACKInformation {
 	 * The types of which messages can be
 	 */
 	public enum MessageType {
-		status, response, undefined;
+		/** Status Message */
+		status,
+		/** Response Message */
+		response, 
+		/** Unknown Type */
+		undefined;
 	}
 
 	/**
 	 * The mode of the message
 	 */
 	public enum MessageMode {
-		pull, push, undefined;
+		/** Pull Mode */
+		pull, 
+		/** Push Mode */
+		push,
+		/** Unknown Mode */
+		undefined;
 	}
 
 	/** Possible request types */
 	public enum RequestType {
-		data, undefined;
+		/** Data Request */
+		data,
+		/** Unknown Request Type */
+		undefined;
 	}
 
 	/** The type of the message */
@@ -78,8 +91,9 @@ public class MACKInformation {
 	 * @param object
 	 *            the object (should be an {@link Agent} identifier)
 	 */
-	public MACKInformation(MessageType messageType, MessageMode messageMode, RequestType requestType,
-			String originalMessage, String subject, String object) {
+	public MACKInformation(MessageType messageType, MessageMode messageMode,
+			RequestType requestType, String originalMessage, String subject,
+			String object) {
 		this.messageType = messageType;
 		this.messageMode = messageMode;
 		this.originalMessage = originalMessage;
@@ -87,10 +101,12 @@ public class MACKInformation {
 		this.subject = subject;
 		this.object = object;
 	}
-	
+
 	/**
 	 * Default Constructor
-	 * @param message the raw xml message
+	 * 
+	 * @param message
+	 *            the raw xml message
 	 */
 	public MACKInformation(String message) {
 		messageMode = MessageMode.undefined;
@@ -101,22 +117,19 @@ public class MACKInformation {
 
 	/**
 	 * Adds an accessible entity with its value to this object
-	 * @param entity the entity
-	 * @param value the value
+	 * 
+	 * @param entity
+	 *            the entity
+	 * @param value
+	 *            the value
 	 */
 	public void addAccessibleEntity(String entity, String value) {
 		accessibleEntities.put(entity, value);
 	}
 
 	/**
-	 * Adds an inaccessible entity to this object
-	 * @param entity the entity
-	 */
-	public void addInaccesibleEntity(String entity) {
-		inaccesibleEntities.add(entity);
-	}
-
-	/**
+	 * Getter for a map of accessible entities an their values
+	 * 
 	 * @return a map of accessible entities with their values
 	 */
 	public Map<String, String> getAccessibleEntities() {
@@ -124,6 +137,18 @@ public class MACKInformation {
 	}
 
 	/**
+	 * Adds an inaccessible entity to this object
+	 * 
+	 * @param entity
+	 *            the entity
+	 */
+	public void addInaccesibleEntity(String entity) {
+		inaccesibleEntities.add(entity);
+	}
+
+	/**
+	 * Getter for a list of inaccessible entities
+	 * 
 	 * @return a list of inaccessible entities
 	 */
 	public List<String> getInaccesibleEntities() {
@@ -131,6 +156,8 @@ public class MACKInformation {
 	}
 
 	/**
+	 * Setter for the subject of the information
+	 * 
 	 * @param subject
 	 *            the subject to set
 	 */
@@ -139,6 +166,8 @@ public class MACKInformation {
 	}
 
 	/**
+	 * Getter for the subject
+	 * 
 	 * @return the subject
 	 */
 	public String getSubject() {
@@ -146,6 +175,18 @@ public class MACKInformation {
 	}
 
 	/**
+	 * Setter for the message mode
+	 * 
+	 * @param messageMode
+	 *            the messageMode to set
+	 */
+	public void setMessageMode(MessageMode messageMode) {
+		this.messageMode = messageMode;
+	}
+
+	/**
+	 * Getter for the message mode
+	 * 
 	 * @return the messageMode
 	 */
 	public MessageMode getMessageMode() {
@@ -153,59 +194,71 @@ public class MACKInformation {
 	}
 
 	/**
-	 * @param messageMode the messageMode to set
-	 */
-	public void setMessageMode(MessageMode messageMode) {
-		this.messageMode = messageMode;
-	}
-	
-	/**
-	 * @param messageType the messageType to set
+	 * Setter for the message type
+	 * 
+	 * @param messageType
+	 *            the messageType to set
 	 */
 	public void setMessageType(MessageType messageType) {
 		this.messageType = messageType;
 	}
-	
+
 	/**
-	 * @param requestType the requestType to set
-	 */
-	public void setRequestType(RequestType requestType) {
-		this.requestType = requestType;
-	}
-	
-	/**
+	 * Getter for the message type
+	 * 
 	 * @return the messageType
 	 */
 	public MessageType getMessageType() {
 		return messageType;
 	}
-	
+
 	/**
+	 * Setter for the request type
+	 * 
+	 * @param requestType
+	 *            the requestType to set
+	 */
+	public void setRequestType(RequestType requestType) {
+		this.requestType = requestType;
+	}
+
+	/**
+	 * Getter for the request type
+	 * 
 	 * @return the requestType
 	 */
 	public RequestType getRequestType() {
 		return requestType;
 	}
-	
-	/**
-	 * @return the originalMessage
-	 */
-	public String getOriginalMessage() {
-		return originalMessage;
-	}
 
 	/**
+	 * Setter for the identifier of an object (in most cases an
+	 * {@link Agent#getIdentifier()})
+	 * 
 	 * @param object
-	 *            the object to set (the identifier should be equal to a ({@link Agent#getIdentifier()}))
+	 *            the object to set (the identifier should be equal to a (
+	 *            {@link Agent#getIdentifier()}))
 	 */
 	public void setObject(String object) {
 		this.object = object;
 	}
 
 	/**
-	 * @return the object (the identifier should be equal to a ({@link Agent#getIdentifier()}))
+	 * Getter for the object of this information
+	 * 
+	 * @return the object (the identifier should be equal to a (
+	 *         {@link Agent#getIdentifier()}))
 	 */
 	public String getObject() {
 		return object;
+	}
+
+	/**
+	 * Getter for the original xml message
+	 * 
+	 * @return the originalMessage
+	 */
+	public String getOriginalMessage() {
+		return originalMessage;
 	}
 }

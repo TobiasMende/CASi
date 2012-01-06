@@ -13,11 +13,8 @@ package de.uniluebeck.imis.casi.simulation.model;
 
 import java.sql.Timestamp;
 import java.text.DateFormat;
-import java.text.FieldPosition;
 import java.text.ParseException;
-import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -30,12 +27,7 @@ import java.util.Locale;
  * 
  */
 public class SimulationTime extends Timestamp {
-	/*
-	 * - We need more abilities to parse localized time strings when
-	 * constructing new time objects.
-	 * 
-	 * - We should provide methods for getting localized time and date string
-	 */
+	/** serialization identifier */
 	private static final long serialVersionUID = -7542294662718264396L;
 
 	/**

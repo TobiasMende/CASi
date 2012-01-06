@@ -15,8 +15,20 @@ import java.awt.Shape;
 import java.awt.geom.Point2D;
 import java.io.Serializable;
 
+/**
+ * This interfaces describes methods which are necessary to deal with different
+ * objects during the simulation. It's needed for positioning purposes.
+ * 
+ * @author Tobias Mende
+ * 
+ */
 public interface IPosition extends Serializable {
 
+	/**
+	 * Getter for the coordinates of this position
+	 * 
+	 * @return the position.
+	 */
 	public Point2D getCoordinates();
 
 	/**

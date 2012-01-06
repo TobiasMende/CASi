@@ -29,6 +29,10 @@ public class GraphPathSolver extends AStar<Integer> {
 	private Set<Integer> destinationIdentifiers;
 	/** The adjacency matrix for the graph */
 	private double[][] adjacency;
+	/**
+	 * a weight function which weights each connection as minimum of all
+	 * possible connections from one node
+	 */
 	private double[] heuristics;
 
 	/**
@@ -62,6 +66,10 @@ public class GraphPathSolver extends AStar<Integer> {
 		preCalculateHeuristics();
 	}
 
+	/**
+	 * Calculates the heuristics. The heuristic is calculated as the minimum
+	 * weight from one node to each adjacent node.
+	 */
 	private void preCalculateHeuristics() {
 		heuristics = new double[adjacency.length];
 		for (int i = 0; i < heuristics.length; i++) {

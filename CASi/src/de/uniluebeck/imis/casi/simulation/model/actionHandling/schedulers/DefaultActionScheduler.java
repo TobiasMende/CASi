@@ -17,7 +17,6 @@ import java.util.TreeSet;
 import java.util.logging.Logger;
 
 import de.uniluebeck.imis.casi.simulation.engine.SimulationClock;
-import de.uniluebeck.imis.casi.simulation.model.Agent;
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.AbstractAction;
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.AbstractAction.STATE;
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.ActionComparator;
@@ -33,13 +32,19 @@ import de.uniluebeck.imis.casi.simulation.model.actionHandling.IActionScheduler;
  * 
  */
 public class DefaultActionScheduler implements IActionScheduler {
-	private static final long serialVersionUID = -234471419299766380L;
-	private TreeSet<AbstractAction> todoList;
-	private TreeSet<AbstractAction> actionPool;
-	private LinkedList<AbstractAction> interruptAction;
-	private Agent performer;
+	/** the development logger */
+	@SuppressWarnings("unused")
 	private static final Logger log = Logger
 			.getLogger(DefaultActionScheduler.class.getName());
+	/** serialization identifier */
+	private static final long serialVersionUID = -234471419299766380L;
+	
+	/** a set of actions that should be performed during the simulation */
+	private TreeSet<AbstractAction> todoList;
+	/** a set of actions that might be performed during the simulation */
+	private TreeSet<AbstractAction> actionPool;
+	/** a list of actions that have to be performed immediately */
+	private LinkedList<AbstractAction> interruptAction;
 
 	/**
 	 * Constructor which uses provided lists of actions for initialization
@@ -50,8 +55,7 @@ public class DefaultActionScheduler implements IActionScheduler {
 	 *            the action pool
 	 */
 	public DefaultActionScheduler(Collection<AbstractAction> todoList,
-			Collection<AbstractAction> actionPool, Agent performer) {
-		this(performer);
+			Collection<AbstractAction> actionPool) {
 		this.todoList.addAll(todoList);
 		this.actionPool.addAll(actionPool);
 	}
@@ -65,10 +69,6 @@ public class DefaultActionScheduler implements IActionScheduler {
 		interruptAction = new LinkedList<AbstractAction>();
 	}
 
-	public DefaultActionScheduler(Agent performer) {
-		this();
-		this.performer = performer;
-	}
 
 	@Override
 	public void setTodoList(Collection<AbstractAction> todoList) {

@@ -13,6 +13,7 @@ package de.uniluebeck.imis.casi.simulation.model.actions;
 
 import de.uniluebeck.imis.casi.CASi;
 import de.uniluebeck.imis.casi.simulation.model.AbstractComponent;
+import de.uniluebeck.imis.casi.simulation.model.Agent;
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.AtomicAction;
 
 /**
@@ -22,7 +23,9 @@ import de.uniluebeck.imis.casi.simulation.model.actionHandling.AtomicAction;
  *
  */
 public class Follow extends AtomicAction {
+	/** The component to follow. In most cases an {@link Agent} */
 	private AbstractComponent obj;
+	/** Flag must be set to complete this action */
 	private boolean completed;
 
 	/**

@@ -29,6 +29,7 @@ import de.uniluebeck.imis.casi.simulation.model.Agent;
  * 
  */
 public class MACKProtocolFactory {
+	/** the development logger */
 	private static final Logger log = Logger
 			.getLogger(MACKProtocolFactory.class.getName());
 

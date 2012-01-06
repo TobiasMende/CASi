@@ -11,7 +11,6 @@
  */
 package de.uniluebeck.imis.casi.simulation.model;
 
-import java.awt.Point;
 import java.awt.Polygon;
 import java.awt.Shape;
 import java.awt.geom.Point2D;
@@ -30,17 +29,24 @@ import java.util.logging.Logger;
  * 
  */
 public class Room implements IPosition {
+	/** the development logger */
 	private static final Logger log = Logger.getLogger(Room.class.getName());
+	/** serialization identifier */
 	private static final long serialVersionUID = 112593179870431369L;
 	/** the collection of walls this room consists of */
 	private List<Wall> walls = new LinkedList<Wall>();
 	/** A polygon that represents the shape of this room */
 	private Polygon polygonRepresentation;
-	
+	/** all doors in this room */
 	private Set<Door> doorsInRoom;
-	
+	/** the unique identifier */
 	private String identifier;
+	/** the instance counter */
 	private static int idCounter;
+	
+	/**
+	 * Default constructor
+	 */
 	public Room() {
 		super();
 		identifier = "room-"+idCounter;
@@ -64,8 +70,6 @@ public class Room implements IPosition {
 			return middleCandidate;
 		}
 		// If middle candidate is wrong, give central point of first door
-		// THINK how can we add a better calculation in this case (e.g. another
-		// point in the room)
 		Door firstDoor = getFirstDoor();
 		if (firstDoor != null) {
 			return firstDoor.getCentralPoint();
@@ -76,7 +80,7 @@ public class Room implements IPosition {
 	/**
 	 * Method for getting the first door in this room
 	 * 
-	 * @return the first door or <code>null</code> if the room has no doors.
+	 * @return the first door or {@code null} if the room has no doors.
 	 */
 	private Door getFirstDoor() {
 		for (Wall w : walls) {
@@ -135,6 +139,10 @@ public class Room implements IPosition {
 
 	}
 
+	/**
+	 * Getter for all walls of this room
+	 * @return a list of walls
+	 */
 	public List<Wall> getWalls() {
 		return walls;
 	}
@@ -198,7 +206,7 @@ public class Room implements IPosition {
 	}
 	
 	/**
-	 * Alias for toString().
+	 * Getter for the room identifier
 	 */
 	public String getIdentifier() {
 		return identifier;

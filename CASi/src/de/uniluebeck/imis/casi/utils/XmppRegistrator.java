@@ -118,7 +118,7 @@ public class XmppRegistrator {
 		System.out.println("----------------------------------------------------------------------");
 		for(XmppIdentifier identifier : identifierToRegister) {
 			if(register(identifier.getId())) {
-				System.out.println(identifier.getId()+" was registrated successful.");
+				System.out.println(identifier.getId()+" was registered successful.");
 				registrationCounter++;
 			} else {
 				System.err.println(identifier.getId()+" can't be registered.");

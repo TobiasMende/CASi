@@ -185,4 +185,9 @@ public class ComplexAction extends AbstractAction {
 		return currentAction;
 	}
 
+	@Override
+	public String getInformationDescription() {
+		return subActions.size()+" sub actions";
+	}
+
 }

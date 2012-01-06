@@ -106,4 +106,9 @@ public class PutKeyInDropZone extends AtomicAction {
 		return true;
 	}
 
+	@Override
+	public String getInformationDescription() {
+		return "put key in "+dropZone;
+	}
+
 }

@@ -70,4 +70,9 @@ public class RemoveKeyFromDropZone extends AtomicAction {
 		return performer.getCurrentPosition().equals(
 				dropZone.getCurrentPosition());
 	}
+
+	@Override
+	public String getInformationDescription() {
+		return "remove key from "+dropZone;
+	}
 }

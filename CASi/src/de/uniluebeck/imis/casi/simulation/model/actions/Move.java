@@ -235,4 +235,9 @@ public class Move extends AtomicAction {
 		return path.listIterator(pathIterator.nextIndex());
 	}
 
+	@Override
+	public String getInformationDescription() {
+		return "from "+startPosition+ "to "+endPosition;
+	}
+
 }

@@ -71,4 +71,9 @@ public class SpeakTo extends AtomicAction {
 		return agent;
 	}
 
+	@Override
+	public String getInformationDescription() {
+		return "to "+agent;
+	}
+
 }

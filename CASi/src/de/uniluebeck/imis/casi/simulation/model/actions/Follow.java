@@ -74,4 +74,9 @@ public class Follow extends AtomicAction {
 	public String toString() {
 		return super.toString()+" - follow "+obj;
 	}
+
+	@Override
+	public String getInformationDescription() {
+		return "follow "+obj;
+	}
 }

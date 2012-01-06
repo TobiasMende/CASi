@@ -476,5 +476,11 @@ public abstract class AbstractAction implements Listenable<IActionListener>,
 	public String getName() {
 		return this.getClass().getSimpleName();
 	}
+	
+	/**
+	 * Getter for extended information about this action
+	 * @return a description of the information
+	 */
+	public abstract String getInformationDescription();
 
 }

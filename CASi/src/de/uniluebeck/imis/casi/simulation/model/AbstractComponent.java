@@ -178,5 +178,7 @@ public abstract class AbstractComponent implements IPosition, Serializable {
 	public String toString() {
 		return identifier;
 	}
+	
+	
 
 }

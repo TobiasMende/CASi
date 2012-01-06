@@ -47,4 +47,9 @@ public class TurnCube extends AtomicAction {
 		return true;
 	}
 
+	@Override
+	public String getInformationDescription() {
+		return "Cube "+cube+", State: "+state;
+	}
+
 }

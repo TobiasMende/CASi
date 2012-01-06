@@ -104,6 +104,9 @@ public class DefaultActionScheduler implements IActionScheduler {
 		}
 		if (action == null && !todoList.isEmpty()) {
 			action = searchIn(todoList);
+			if(action == null) {
+				action = todoList.pollFirst();
+			}
 		}
 		if (action == null && !actionPool.isEmpty()) {
 			action = searchInActionPool();

@@ -54,4 +54,9 @@ public class WorkOnDesktop extends AtomicAction {
 		super.postActionTask(performer);
 	}
 
+	@Override
+	public String getInformationDescription() {
+		return "use "+program+" with "+frequency;
+	}
+
 }

@@ -22,6 +22,11 @@ import de.uniluebeck.imis.casi.simulation.model.actionHandling.AtomicAction;
 public class StayHere extends AtomicAction {
 
 	/**
+	 * serialization identifier
+	 */
+	private static final long serialVersionUID = 8981370022973052710L;
+
+	/**
 	 * Creates a new boring StayHere Action.
 	 * @param duration how long should the agent do nothing
 	 * @param prio at what priority should the agent to nothing
@@ -35,6 +40,11 @@ public class StayHere extends AtomicAction {
 	protected boolean internalPerform(AbstractComponent performer) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public String getInformationDescription() {
+		return "stay here and do nothing";
 	}
 	
 }

@@ -16,6 +16,8 @@ import java.awt.event.ActionListener;
 import javax.swing.JMenu;
 import javax.swing.JRadioButtonMenuItem;
 
+import de.uniluebeck.imis.casi.CASi;
+
 /**
  * This class extends JMenu. This menu contains options to show or hide several
  * components of the simulation.
@@ -39,37 +41,37 @@ public class ViewMenu extends JMenu {
 		super("View");
 
 		paintDoorLabelsItem = new JRadioButtonMenuItem("Show door labels");
-		paintDoorLabelsItem.setSelected(true);
+		paintDoorLabelsItem.setSelected(CASi.DEV_MODE);
 		paintDoorLabelsItem.setActionCommand("paintDoorLabels");
 		add(paintDoorLabelsItem);
 
 		paintSensorLabelsItem = new JRadioButtonMenuItem(
 				"Show sensor/actuator labels");
-		paintSensorLabelsItem.setSelected(true);
+		paintSensorLabelsItem.setSelected(CASi.DEV_MODE);
 		paintSensorLabelsItem.setActionCommand("paintSensorLabels");
 		add(paintSensorLabelsItem);
 
 		paintRoomLabelsItem = new JRadioButtonMenuItem("Show room labels");
-		paintRoomLabelsItem.setSelected(true);
+		paintRoomLabelsItem.setSelected(CASi.DEV_MODE);
 		paintRoomLabelsItem.setActionCommand("paintRoomLabels");
 		add(paintRoomLabelsItem);
 
 		paintSensorMonitoringAreaItem = new JRadioButtonMenuItem(
 				"Show sensor/actuator area");
-		paintSensorMonitoringAreaItem.setSelected(true);
+		paintSensorMonitoringAreaItem.setSelected(CASi.DEV_MODE);
 		paintSensorMonitoringAreaItem
 				.setActionCommand("paintSensorMonitoringArea");
 		add(paintSensorMonitoringAreaItem);
 
 		paintDoorCentralPointsItem = new JRadioButtonMenuItem(
 				"Show door points");
-		paintDoorCentralPointsItem.setSelected(true);
+		paintDoorCentralPointsItem.setSelected(CASi.DEV_MODE);
 		paintDoorCentralPointsItem.setActionCommand("paintDoorCentralPoints");
 		add(paintDoorCentralPointsItem);
 
 		paintRoomCentralPointsItem = new JRadioButtonMenuItem(
 				"Show room points");
-		paintRoomCentralPointsItem.setSelected(true);
+		paintRoomCentralPointsItem.setSelected(CASi.DEV_MODE);
 		paintRoomCentralPointsItem.setActionCommand("paintRoomCentralPoints");
 		add(paintRoomCentralPointsItem);
 	}

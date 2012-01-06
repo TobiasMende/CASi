@@ -26,6 +26,7 @@ import java.util.logging.Logger;
 import javax.swing.JPanel;
 import javax.swing.JRadioButtonMenuItem;
 
+import de.uniluebeck.imis.casi.CASi;
 import de.uniluebeck.imis.casi.simulation.engine.SimulationEngine;
 import de.uniluebeck.imis.casi.simulation.factory.GraphicFactory;
 import de.uniluebeck.imis.casi.simulation.model.AbstractInteractionComponent;
@@ -48,9 +49,9 @@ public class BackgroundPanel extends JPanel implements ActionListener {
 			.getName());
 
 	/** booleans to adjust the information showed in the gui */
-	private boolean paintDoorLabels = true, paintSensorLabels = true,
-			paintRoomLabels = true, paintSensorMonitoringArea = true,
-			paintDoorCentralPoints = true, paintRoomCentralPoints = true;
+	private boolean paintDoorLabels, paintSensorLabels,
+			paintRoomLabels, paintSensorMonitoringArea,
+			paintDoorCentralPoints, paintRoomCentralPoints;
 
 	private final AffineTransform transform;
 
@@ -62,6 +63,13 @@ public class BackgroundPanel extends JPanel implements ActionListener {
 	 *            the affine transform
 	 */
 	public BackgroundPanel(AffineTransform transform) {
+		
+		paintDoorLabels = CASi.DEV_MODE;
+		paintSensorLabels = CASi.DEV_MODE;
+		paintRoomLabels = CASi.DEV_MODE;
+		paintSensorMonitoringArea = CASi.DEV_MODE;
+		paintDoorCentralPoints = CASi.DEV_MODE;
+		paintRoomCentralPoints = CASi.DEV_MODE;
 
 		this.transform = transform;
 

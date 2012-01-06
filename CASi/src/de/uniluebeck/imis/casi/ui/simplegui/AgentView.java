@@ -12,6 +12,7 @@
 package de.uniluebeck.imis.casi.ui.simplegui;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
@@ -53,6 +54,7 @@ public class AgentView extends ComponentView implements IAgentListener,
 	public AgentView(Agent agent, AffineTransform transform) {
 		super(agent.getCentralPoint(), transform);
 		this.agent = agent;
+		stateColor = getStateColor(agent.getState());
 		setToolTipText(agent.getName() + " (" + agent.getIdentifier() + ")");
 	}
 
@@ -72,17 +74,45 @@ public class AgentView extends ComponentView implements IAgentListener,
 	}
 
 	/**
-	 * This method paints the agent as an 8x8 filled circle.
+	 * This method paints the agent as a filled circle.
 	 */
 	@Override
-	public void paint(Graphics g) {
+	public void paint(final Graphics g) {
 
 		Graphics2D g2D = (Graphics2D) g;
 
+		Dimension dim = getSize();
+
 		g2D.setColor(Color.BLACK);
-		g2D.fillOval(0, 0, 8, 8);
-		g2D.setColor(this.stateColor);
-		g2D.fillOval(2, 2, 4, 4);
+		g2D.fillOval(0, 0, (int) dim.getWidth(), (int) dim.getHeight());
+
+		g2D.setColor(stateColor);
+		g2D.fillOval(1, 1, (int) dim.getWidth() - 2, (int) dim.getWidth() - 2);
+
+	}
+
+	/**
+	 * Returns a color depending on the given {@link STATE}.
+	 * 
+	 * @param state
+	 *            the state
+	 * @return the color
+	 */
+	private Color getStateColor(STATE state) {
+
+		/** Set state color depending on the new state */
+		switch (state) {
+
+		case BUSY:
+			return Color.RED;
+		case IDLE:
+			return Color.GREEN;
+		case UNKNOWN:
+			return Color.YELLOW;
+		default:
+			return Color.BLACK;
+		}
+
 	}
 
 	@Override
@@ -92,22 +122,7 @@ public class AgentView extends ComponentView implements IAgentListener,
 			@Override
 			public void run() {
 
-				/** Set state color depending on the new state */
-				switch (newState) {
-
-				case BUSY:
-					AgentView.this.stateColor = Color.RED;
-					break;
-				case IDLE:
-					AgentView.this.stateColor = Color.GREEN;
-					break;
-				case UNKNOWN:
-					AgentView.this.stateColor = Color.YELLOW;
-					break;
-				default:
-					AgentView.this.stateColor = Color.BLACK;
-				}
-
+				stateColor = getStateColor(newState);
 				AgentView.this.invalidate();
 				AgentView.this.repaint();
 			}

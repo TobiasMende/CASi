@@ -137,6 +137,7 @@ public class SimulationPanel extends JLayeredPane implements
 				InteractionComponentView interactionCompView = new InteractionComponentView(
 						interactionComp, transform);
 				simulationCmponents.add(interactionCompView);
+				interactionCompView.setInformationPanel(infoPanel);
 				this.add(interactionCompView, new Integer(2));
 			}
 

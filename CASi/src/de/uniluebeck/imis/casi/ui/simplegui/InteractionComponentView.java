@@ -12,6 +12,7 @@
 package de.uniluebeck.imis.casi.ui.simplegui;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
@@ -33,6 +34,7 @@ public class InteractionComponentView extends ComponentView implements
 		MouseListener {
 
 	private AbstractInteractionComponent interactionComp;
+	private InformationPanel infoPanel;
 
 	/**
 	 * The InteractionComponentView needs the represented interaction components
@@ -44,6 +46,7 @@ public class InteractionComponentView extends ComponentView implements
 	public InteractionComponentView(
 			AbstractInteractionComponent interactionComp,
 			AffineTransform transform) {
+
 		super(interactionComp.getCentralPoint(), transform);
 
 		this.interactionComp = interactionComp;
@@ -54,22 +57,42 @@ public class InteractionComponentView extends ComponentView implements
 	}
 
 	/**
-	 * This method paints the interaction component as a 6x6 filled rectangle.
+	 * This method sets the {@link InformationPanel} to the
+	 * {@link InteractionComponentView} and adds itself as {@link MouseListener}
+	 * . So the InformationPanel can react, when mouse clicks on the
+	 * InteractionComponentView.
+	 * 
+	 * @param infoPanel
+	 *            the information panel
+	 */
+	public void setInformationPanel(InformationPanel infoPanel) {
+
+		this.infoPanel = infoPanel;
+		this.addMouseListener(this);
+
+	}
+
+	/**
+	 * This method paints the interaction component as a filled rectangle.
 	 */
 	@Override
 	public void paint(Graphics g) {
 
 		Graphics2D g2D = (Graphics2D) g;
 
+		Dimension dim = getSize();
+
 		g2D.setColor(Color.BLACK);
-		g2D.fillRect(1, 1, 6, 6);
+		g2D.fillRect(1, 1, (int) dim.getWidth() - 2, (int) dim.getHeight() - 2);
+
 		g2D.setColor(this.stateColor);
-		g2D.fillRect(2, 2, 4, 4);
+		g2D.fillRect(2, 2, (int) dim.getWidth() - 4, (int) dim.getWidth() - 4);
 	}
 
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
 
+		infoPanel.setSelectedInteractionComponent(interactionComp);
 	}
 
 	@Override

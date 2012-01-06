@@ -55,7 +55,7 @@ public abstract class ComponentView extends JComponent {
 				(int) (8 * transform.getScaleY()));
 
 		/* Set state color to yellow for debugging */
-		this.stateColor = Color.YELLOW;
+		this.stateColor = Color.WHITE;
 		invalidate();
 	}
 
@@ -81,8 +81,12 @@ public abstract class ComponentView extends JComponent {
 	 */
 	public void setTransformed() {
 
-		this.setLocation(getOptimizedPosition(position));
+		// this.setLocation(getOptimizedPosition(position));
+		Point point = getOptimizedPosition(position);
+		this.setBounds(point.x, point.y, (int) (8 * transform.getScaleX()),
+				(int) (8 * transform.getScaleY()));
 		invalidate();
+		repaint();
 	}
 
 }

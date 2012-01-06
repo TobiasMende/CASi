@@ -19,7 +19,7 @@ import java.util.logging.Logger;
 
 import de.uniluebeck.imis.casi.CASi;
 import de.uniluebeck.imis.casi.simulation.factory.WorldFactory;
-import de.uniluebeck.imis.casi.simulations.simpleDevTest.simulation.model.DoorSensor;
+import de.uniluebeck.imis.casi.simulation.model.mackComponents.DoorSensor;
 
 /**
  * The representation for a door that can be added to a wall
@@ -114,6 +114,8 @@ public class Door extends AbstractComponent {
 	 */
 	public Door(String identifier, int offset, int size) {
 		super(identifier);
+		this.offset = offset;
+		this.size = Math.abs(size);
 		this.identifier = idCounter++;
 		if (WorldFactory.findDoorForIdentifier(identifier) != null) {
 			throw new InvalidParameterException(

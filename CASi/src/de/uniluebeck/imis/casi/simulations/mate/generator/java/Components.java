@@ -11,22 +11,17 @@
  */
 package de.uniluebeck.imis.casi.simulations.mate.generator.java;
 
-import java.util.HashSet;
-
 import de.uniluebeck.imis.casi.generator.AgentCollector;
 import de.uniluebeck.imis.casi.generator.ComponentCollector;
 import de.uniluebeck.imis.casi.generator.RoomCollector;
-import de.uniluebeck.imis.casi.simulation.model.AbstractInteractionComponent;
 import de.uniluebeck.imis.casi.simulation.model.Agent;
 import de.uniluebeck.imis.casi.simulation.model.Door;
 import de.uniluebeck.imis.casi.simulation.model.IPosition;
 import de.uniluebeck.imis.casi.simulation.model.Room;
-import de.uniluebeck.imis.casi.simulation.model.AbstractInteractionComponent.Face;
-import de.uniluebeck.imis.casi.simulations.mate.simulation.model.Cube;
-import de.uniluebeck.imis.casi.simulations.mate.simulation.model.Desktop;
-import de.uniluebeck.imis.casi.simulations.mate.simulation.model.DoorLight;
-import de.uniluebeck.imis.casi.simulations.mate.simulation.model.DoorSensor;
-import de.uniluebeck.imis.casi.simulations.mate.simulation.model.Mike;
+import de.uniluebeck.imis.casi.simulation.model.mackComponents.Cube;
+import de.uniluebeck.imis.casi.simulation.model.mackComponents.Desktop;
+import de.uniluebeck.imis.casi.simulation.model.mackComponents.DoorLight;
+import de.uniluebeck.imis.casi.simulation.model.mackComponents.Mike;
 
 /**
  * Fills the ComponentCollector with Components. Both Actuators and Sensors.

@@ -9,7 +9,7 @@
  *  See the LICENSE.txt file in this projects root folder or visit
  *  <http://www.gnu.org/licenses/lgpl.html> for more details.
  */
-package de.uniluebeck.imis.casi.simulations.mate.simulation.model;
+package de.uniluebeck.imis.casi.simulation.model.mackComponents;
 
 import java.awt.geom.Point2D;
 import java.util.Iterator;
@@ -140,7 +140,7 @@ public class DoorLight extends AbstractInteractionComponent {
 		boolean allowAccess = true;
 		Iterator<Point2D> iter = move.getPathIterator();
 		if (iter == null) {
-			log.severe("No path iterator. Wrong??? Allowing acces now.");
+			log.info("No path iterator. Allowing acces now.");
 			return true;
 		}
 		switch (currentState) {
@@ -175,14 +175,18 @@ public class DoorLight extends AbstractInteractionComponent {
 	private boolean handleYellow(AbstractAction action, Agent agent,
 			Iterator<Point2D> iter) {
 		if (!agentWantsInRoom(iter)) {
+			// don't affect agents that don't want in the room
 			return true;
 		}
 		if (action.getPriority() < 3) {
+			// agents with a very low priority arn't allowed to pass
 			return false;
 		}
 		Random random = new Random(System.currentTimeMillis());
 		double value = random.nextDouble() + 0.25;
-		return value >= 0.5;
+		boolean accessAllowed = (value >= 0.5);
+//		log.info("Random value = "+value+", accessAllowed: "+accessAllowed);
+		return accessAllowed;
 	}
 
 	/**

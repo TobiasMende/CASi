@@ -20,8 +20,13 @@ import de.uniluebeck.imis.casi.simulation.model.Room;
 import de.uniluebeck.imis.casi.simulation.model.Wall;
 
 /**
+ * Room generator file with static methods that generate all the rooms for the
+ * MATe simulation environment World.
+ * 
+ * Put all your rooms in here!
+ * 
  * @author Marvin Frick
- *
+ * 
  */
 public class Rooms {
 
@@ -30,7 +35,7 @@ public class Rooms {
 	 * 
 	 * Put all your rooms here!
 	 */
-	public static void generateRooms(){
+	public static void generateRooms() {
 
 		Wall theNewWall;
 		Door theNewDoor;
@@ -153,7 +158,7 @@ public class Rooms {
 		theNewRoom.addWall(theNewWall);
 		theNewRoom.setIdentifier("womensRestroom");
 		RoomCollector.getInstance().newRoom(theNewRoom);
-		
+
 		// Room #6 mens restroom
 		theNewRoom = new Room();
 		theNewWall = WallFactory.getWallWithPoints(new Point(160, 240),
@@ -169,7 +174,7 @@ public class Rooms {
 				new Point(160, 240)));
 		theNewRoom.setIdentifier("mensRestroom");
 		RoomCollector.getInstance().newRoom(theNewRoom);
-		
+
 		// Room #7 secret room
 		theNewRoom = new Room();
 		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(250, 290),

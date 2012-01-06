@@ -29,6 +29,16 @@ import de.uniluebeck.imis.casi.simulation.model.AbstractComponent;
 import de.uniluebeck.imis.casi.simulation.model.SimulationTime;
 import de.uniluebeck.imis.casi.simulation.model.World;
 
+/**
+ * Generates the specific MATe simulation environment World. All sub actions are
+ * delegated to their Generators. I should be not necessary to change this class
+ * for adding new aspects of this world. Put your changes in the specific
+ * Classes! Do not remove the implementation of {@link IWorldGenerator}, this is
+ * needed. The simulator expects {@link IWorldGenerator#generateWorld()}.
+ * 
+ * @author Marvin Frick
+ * 
+ */
 public class WorldGenerator implements IWorldGenerator {
 
 	private static final Logger log = Logger.getLogger(WorldGenerator.class
@@ -105,7 +115,7 @@ public class WorldGenerator implements IWorldGenerator {
 			log.info("generating components");
 			Components.generateActuators();
 			Components.generateSensors();
-			
+
 			log.info("linking new world");
 			Linker linker = new Linker();
 			linker.linkAll();
@@ -123,7 +133,6 @@ public class WorldGenerator implements IWorldGenerator {
 		return tempWorld;
 	}
 
-
 	/**
 	 * Finalizes this world.
 	 */
@@ -134,7 +143,8 @@ public class WorldGenerator implements IWorldGenerator {
 		try {
 			tempWorld.setRooms(RoomCollector.getInstance().getAll());
 			tempWorld.setAgents(AgentCollector.getInstance().getAll());
-			tempWorld.setInteractionComponents(ComponentCollector.getInstance().getAll());
+			tempWorld.setInteractionComponents(ComponentCollector.getInstance()
+					.getAll());
 		} catch (IllegalAccessException e) {
 			// World seems to be already sealed!
 			log.severe("could not set the world. It is already sealed!");

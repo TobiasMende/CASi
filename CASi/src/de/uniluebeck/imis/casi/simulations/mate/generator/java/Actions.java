@@ -29,6 +29,11 @@ import de.uniluebeck.imis.casi.simulation.model.actions.GoAndSpeakTo;
 import de.uniluebeck.imis.casi.simulation.model.actions.Move;
 
 /**
+ * Action generator file with static methods that generate all the actions for
+ * the MATe simulation environment World.
+ * 
+ * Put all your actions in here!
+ * 
  * @author Marvin Frick
  * 
  */
@@ -41,7 +46,7 @@ public final class Actions {
 	 */
 	public static void generateActions(SimulationTime simulationStartTime) {
 		ActionCollector ag = ActionCollector.getInstance();
-		
+
 		ComplexAction runCrazy = new ComplexAction();
 		runCrazy.addSubAction(new Move(RoomCollector.getInstance()
 				.findRoomByIdentifier("crazyRoom")));
@@ -63,20 +68,22 @@ public final class Actions {
 		}
 		ag.newAction("casi_crazy_guy_01", runCrazy);
 
-
 		// ##########
 		// And I Actions
 		// ##########
-		AbstractAction goHome = new Move(RoomCollector.getInstance().findRoomByIdentifier("crazyRoom"));
-		goHome.setEarliestStartTime(simulationStartTime.plus(42+23));
-		ag.newAction(AgentCollector.getInstance().findAgentByName("And I").getIdentifier()+"_goHome", goHome);
-		
+		AbstractAction goHome = new Move(RoomCollector.getInstance()
+				.findRoomByIdentifier("crazyRoom"));
+		goHome.setEarliestStartTime(simulationStartTime.plus(42 + 23));
+		ag.newAction(AgentCollector.getInstance().findAgentByName("And I")
+				.getIdentifier()
+				+ "_goHome", goHome);
+
 		// ##########
 		// For all tentLadys actions
 		for (Agent a : AgentCollector.getInstance().findAgentByType("tentLady")) {
-			generateActionsForTentLady(a, simulationStartTime);	
+			generateActionsForTentLady(a, simulationStartTime);
 		}
-		
+
 	}
 
 	/**
@@ -95,33 +102,32 @@ public final class Actions {
 
 		AbstractAction tempAction = new Move(womensRoom);
 		AbstractAction move2 = tempAction.clone();
-		
+
 		tempAction.setType(TYPE.NORMAL);
 		tempAction.setPriority(5);
 		tempAction.setEarliestStartTime(simulationStartTime
 				.plus(1 + new Random().nextInt(10)));
-		
-		actions.newAction(tentLady.getIdentifier()+"_01", tempAction);
-		
+
+		actions.newAction(tentLady.getIdentifier() + "_01", tempAction);
+
 		AbstractAction speak = new GoAndSpeakTo(tim, 1);
 
 		speak.setType(TYPE.NORMAL);
 		speak.setEarliestStartTime(simulationStartTime.plus(20));
-		
-		actions.newAction(tentLady.getIdentifier()+"_02", speak);
-		
-		
+
+		actions.newAction(tentLady.getIdentifier() + "_02", speak);
+
 		AbstractAction goBackToMainFloor = new Move(RoomCollector.getInstance()
 				.findRoomByIdentifier("mainFloor"));
 		goBackToMainFloor.setEarliestStartTime(speak.getEarliestStartTime()
 				.plus(10));
 
-		
-		actions.newAction(tentLady.getIdentifier()+"_04", goBackToMainFloor);
+		actions.newAction(tentLady.getIdentifier() + "_04", goBackToMainFloor);
 	}
 
 	/**
 	 * Generate all
+	 * 
 	 * @param startTime
 	 */
 	public static void generateActionsPools(SimulationTime startTime) {

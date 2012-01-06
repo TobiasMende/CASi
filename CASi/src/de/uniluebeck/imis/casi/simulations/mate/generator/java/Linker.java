@@ -19,8 +19,11 @@ import de.uniluebeck.imis.casi.generator.AgentCollector;
 import de.uniluebeck.imis.casi.simulation.model.Agent;
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.AbstractAction;
 
-
 /**
+ * A simulation Linker links all previously created rooms, agents, actions and
+ * components together.
+ * 
+ * 
  * @author Marvin Frick
  * 
  */
@@ -62,17 +65,19 @@ public class Linker {
 	 */
 	public void linkAgentsToActions() {
 		ActionCollector as = ActionCollector.getInstance();
-		
+
 		for (Agent a : AgentCollector.getInstance().getAll()) {
 			for (String actionKey : as.getAlreadyCreatedActions().keySet()) {
 				if (actionKey.startsWith(a.getIdentifier())) {
 					// This Action needs to be added to this agent.
 					// Either to his action pool...
-					if(actionKey.endsWith("_pool")){
-						a.addActionToPool(as.getAlreadyCreatedActions().get(actionKey));
+					if (actionKey.endsWith("_pool")) {
+						a.addActionToPool(as.getAlreadyCreatedActions().get(
+								actionKey));
 					} else {
 						// or to his action list.
-						a.addActionToList(as.getAlreadyCreatedActions().get(actionKey));
+						a.addActionToList(as.getAlreadyCreatedActions().get(
+								actionKey));
 					}
 				}
 			}

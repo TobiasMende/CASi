@@ -11,17 +11,16 @@
  */
 package de.uniluebeck.imis.casi.simulations.mate.generator.java;
 
-import java.awt.Point;
-
 import de.uniluebeck.imis.casi.generator.AgentCollector;
 import de.uniluebeck.imis.casi.generator.RoomCollector;
-import de.uniluebeck.imis.casi.simulation.factory.WallFactory;
 import de.uniluebeck.imis.casi.simulation.model.Agent;
-import de.uniluebeck.imis.casi.simulation.model.Door;
-import de.uniluebeck.imis.casi.simulation.model.Room;
-import de.uniluebeck.imis.casi.simulation.model.Wall;
 
 /**
+ * Agent generator file with static methods that generate all the agents for MATe
+ * simulation environment World.
+ * 
+ * Put all your agents in here!
+
  * @author Marvin Frick
  *
  */

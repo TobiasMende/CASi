@@ -11,7 +11,7 @@
  */
 package de.uniluebeck.imis.casi.simulation.model.mackActions;
 
-import com.sun.tools.javac.util.List;
+import java.util.List;
 
 import de.uniluebeck.imis.casi.simulation.model.AbstractComponent;
 import de.uniluebeck.imis.casi.simulation.model.Agent;

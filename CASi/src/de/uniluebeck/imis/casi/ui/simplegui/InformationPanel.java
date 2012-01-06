@@ -286,16 +286,26 @@ public class InformationPanel extends JPanel implements ActionListener,
 					+ "\n" + "   - Type: " + agent.getCurrentAction().getType()
 					+ "\n" + "   - State: "
 					+ agent.getCurrentAction().getState() + "\n"
-					+ "   - Duration: "
+					+ "   - Description: "
+					+ agent.getCurrentAction().getInformationDescription()
+					+ "\n" + "   - Duration: "
 					+ agent.getCurrentAction().getDuration() + " minutes\n"
-					+ "Current position: " + agent.getCurrentPosition() + "\n"
-					+ "Action pool:\n";
+					+ "Current position: " + agent.getCurrentPosition() + "\n";
+
+			info = info + "Action pool:\n";
+			
+			for (AbstractAction abstractAction : agent.getActionPoolCopy()) {
+
+				info = info + "  " + abstractAction.getInformationDescription()
+						+ "\n";
+			}
+
+			info = info + "Todo list:\n";
 
 			for (AbstractAction abstractAction : agent.getTodoListCopy()) {
 
 				info = info + "  " + abstractAction.getInformationDescription()
 						+ "\n";
-				System.out.println("Hallo");
 			}
 
 		} else {
@@ -305,6 +315,21 @@ public class InformationPanel extends JPanel implements ActionListener,
 					+ agent.getState() + "\n" + "Current action: ---\n"
 					+ "Current position: " + agent.getCurrentPosition();
 
+			info = info + "Action pool:\n";
+			
+			for (AbstractAction abstractAction : agent.getActionPoolCopy()) {
+
+				info = info + "  " + abstractAction.getInformationDescription()
+						+ "\n";
+			}
+
+			info = info + "Todo list:\n";
+
+			for (AbstractAction abstractAction : agent.getTodoListCopy()) {
+
+				info = info + "  " + abstractAction.getInformationDescription()
+						+ "\n";
+			}
 		}
 
 		return info;

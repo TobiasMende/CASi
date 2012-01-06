@@ -56,7 +56,7 @@ public class Agents {
 		// ##########
 		// Zwotah Zwiebel
 		// ##########
-		agents.newAgent(new Agent("casi_zwota_zwiebel", "Zwotah Zwiebel",
+		agents.newAgent(new Agent("casi_zwotah_zwiebel", "Zwotah Zwiebel",
 				"coworker"));
 		Agent zwotah = agents.findAgentByName("Zwotah Zwiebel");
 		zwotah.setDefaultPosition(rooms.findRoomByIdentifier("officeZwotah"));

@@ -84,7 +84,7 @@
 
 	<!-- Basic targets -->
 	<target name="doc" depends="compile" description="Creates the JavaDoc in the doc directory">
-		<javadoc packagenames="src" sourcepath="${src.dir}" destdir="${docs.dir}" access="private" encoding="UTF-8" charset="UTF-8" stylesheetfile="${files.dir}/javadoc-stylesheet.css">
+		<javadoc packagenames="src" sourcepath="${src.dir}" destdir="${docs.dir}" access="private" encoding="UTF-8" charset="UTF-8" stylesheetfile="${files.dir}/javadoc-stylesheet.css" verbose="${TALK}">
 			<!-- Define which files / directory should get included, we include all -->
 			<link href="http://docs.oracle.com/javase/1.5.0/docs/api/" />
 			<fileset dir="${src.dir}">

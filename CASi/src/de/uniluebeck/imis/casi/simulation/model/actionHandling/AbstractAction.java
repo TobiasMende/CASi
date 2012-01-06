@@ -479,7 +479,7 @@ public abstract class AbstractAction implements Listenable<IActionListener>,
 	
 	/**
 	 * Getter for extended information about this action
-	 * @return a description of the information
+	 * @return a description of the action
 	 */
 	public abstract String getInformationDescription();
 

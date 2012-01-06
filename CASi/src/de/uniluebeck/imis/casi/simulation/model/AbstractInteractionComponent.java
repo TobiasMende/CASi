@@ -255,8 +255,9 @@ public abstract class AbstractInteractionComponent extends AbstractComponent
 				- ((double) currentOpening / 2.0);
 		shapeRepresentation = new Arc2D.Double(calculateCircleBounds(),
 				startAngle, currentOpening, Arc2D.PIE);
-		Point2D pointInRoom = new Point2D.Double(currentDirection.direction()
-				.getX() + getCentralPoint().getX(), currentDirection
+		int scale = 3;
+		Point2D pointInRoom = new Point2D.Double(scale*currentDirection.direction()
+				.getX() + getCentralPoint().getX(), scale*currentDirection
 				.direction().getY() + getCentralPoint().getY());
 		Room room = WorldFactory.getRoomsWithPoint(pointInRoom).getFirst();
 		Area area = new Area(shapeRepresentation);

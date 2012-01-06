@@ -13,6 +13,7 @@ package de.uniluebeck.imis.casi.simulation.model.actions;
 
 import java.awt.geom.Point2D;
 import java.util.Iterator;
+import java.util.ListIterator;
 import java.util.logging.Logger;
 
 import de.uniluebeck.imis.casi.CASi;
@@ -55,10 +56,10 @@ public class Move extends AtomicAction {
 	/** A door which has to be closed while going on */
 	private Door doorToClose;
 	/** The last state of the door (to rescue after entering the room) */
-	
+
 	private Door.State doorsLastState;
 	/** The iterator used for traveling along the path */
-	private Iterator<Point2D> pathIterator;
+	private ListIterator<Point2D> pathIterator;
 
 	/**
 	 * Creates a new move action with a given destination
@@ -87,19 +88,20 @@ public class Move extends AtomicAction {
 						.warning("No path was found. Can't execute this action. Completing ...");
 				return true;
 			}
-			pathIterator = path.iterator();
+			pathIterator = path.listIterator();
 			log.fine("Path calculated succesful, starting move action");
 			// Path calculation in the first second completed:
 			return false;
 		}
 		for (int i = 0; i < POINTS_PER_SECOND; i++) {
-			if(doorToClose != null) {
+			if (doorToClose != null) {
 				doorToClose.setState(doorsLastState);
 				doorToClose = null;
 			}
 			if (affectingDoor()) {
-				if(doorToOpen.getState().equals(Door.State.LOCKED)) {
-					CASi.SIM_LOG.warning("Door "+doorToOpen+" is locked. Aborting move");
+				if (doorToOpen.getState().equals(Door.State.LOCKED)) {
+					CASi.SIM_LOG.warning("Door " + doorToOpen
+							+ " is locked. Aborting move");
 					return true;
 				}
 				doorsLastState = doorToOpen.getState();
@@ -218,7 +220,6 @@ public class Move extends AtomicAction {
 
 	@Override
 	public String toString() {
-
 		return super.toString() + " - Dest: " + endPosition;
 	}
 
@@ -228,20 +229,10 @@ public class Move extends AtomicAction {
 	 * @return the pathIterator
 	 */
 	public Iterator<Point2D> getPathIterator() {
-		try {
-			Iterator<Point2D> iter = path.iterator();
-			if(pathIterator == null) {
-				return iter;
-			}
-			while(iter.hasNext()) {
-				if(iter.next().equals(lastPoint)) {
-					return iter;
-				}
-			}
-		} catch (Exception e) {
-			log.severe("Can't clone path iterator: " + e.fillInStackTrace());
+		if (path == null) {
+			return null;
 		}
-		return null;
+		return path.listIterator(pathIterator.nextIndex());
 	}
 
 }

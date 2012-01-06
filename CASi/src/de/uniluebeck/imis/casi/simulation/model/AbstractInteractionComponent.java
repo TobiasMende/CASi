@@ -78,11 +78,8 @@ public abstract class AbstractInteractionComponent extends AbstractComponent
 		 * @return the direction vector
 		 */
 		private Point2D direction() {
-			log.info(radian() + "");
-			Point2D direction = new Point2D.Double(Math.cos(radian()),
+			return new Point2D.Double(Math.cos(radian()),
 					Math.sin(radian()));
-			log.info(direction.toString());
-			return direction;
 		}
 	}
 

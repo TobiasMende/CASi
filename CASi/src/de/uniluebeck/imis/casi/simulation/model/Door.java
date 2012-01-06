@@ -52,7 +52,7 @@ public class Door extends AbstractComponent {
 	/** The default door offset, if <code>-1</code> the door will be centered */
 	public static final int DEFAULT_DOOR_OFFSET = -1;
 	/** The id counter */
-	private static int id;
+	private static int idCounter;
 	/** The offset from the startpoint of the containing wall */
 	private int offset;
 	/** The size of the door */
@@ -79,7 +79,7 @@ public class Door extends AbstractComponent {
 	private Door(int identifier) throws InvalidParameterException {
 		super(ID_PREFIX + identifier);
 		this.identifier = identifier;
-		id++;
+		idCounter++;
 		if (WorldFactory.findDoorForIdentifier(ID_PREFIX + identifier) != null) {
 			throw new InvalidParameterException(
 					"There is a door with this identifier yet.");
@@ -96,10 +96,41 @@ public class Door extends AbstractComponent {
 	 *            the size of the wall (must be positive)
 	 */
 	public Door(int offset, int size) {
-		this(id);
+		this(idCounter);
 
 		this.offset = offset;
 		this.size = Math.abs(size);
+	}
+
+	/**
+	 * Constructor for a door with an explicit identifier
+	 * 
+	 * @param identifier
+	 *            the identifier
+	 * @param offset
+	 *            the door offset
+	 * @param size
+	 *            the size
+	 */
+	public Door(String identifier, int offset, int size) {
+		super(identifier);
+		this.identifier = idCounter++;
+		if (WorldFactory.findDoorForIdentifier(identifier) != null) {
+			throw new InvalidParameterException(
+					"There is a door with this identifier yet.");
+		}
+		WorldFactory.addDoor(this);
+	}
+
+	/**
+	 * Constructor for a door with an explicit identifier
+	 * 
+	 * @param identifier
+	 *            the identifier
+	 * 
+	 */
+	public Door(String identifier) {
+		this(identifier, DEFAULT_DOOR_OFFSET, DEFAULT_DOOR_SIZE);
 	}
 
 	/**
@@ -214,7 +245,7 @@ public class Door extends AbstractComponent {
 	 * @return The static identifier counter
 	 */
 	public static int getNumberOfDoors() {
-		return id;
+		return idCounter;
 	}
 
 	@Override

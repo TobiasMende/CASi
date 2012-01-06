@@ -253,14 +253,7 @@ public class Agent extends AbstractComponent implements
 				&& interruptibility
 						.equals(INTERRUPTIBILITY.INTERRUPT_SCHEDULED)) {
 			// store current action as next action and perform interrupt action
-			AbstractAction tmp = currentAction;
-			informListenersAboutFinishingAction(tmp);
-			currentAction = actionScheduler.getNextAction();
-			informListenersAboutStartingAction(currentAction);
-			if (tmp != null) {
-				tmp.setState(AbstractAction.STATE.INTERRUPTED);
-				actionScheduler.addInterruptAction(tmp);
-			}
+			switchActions(true);
 			setInterruptibility(INTERRUPTIBILITY.INTERRUPTED);
 		} else if (currentAction == null || currentAction.isCompleted()) {
 			informListenersAboutFinishingAction(currentAction);
@@ -277,10 +270,33 @@ public class Agent extends AbstractComponent implements
 		}
 
 		if (!askInteractionComponents()) {
+			switchActions(false);
 			return;
 		}
 
 		performAction();
+	}
+
+	/**
+	 * Switch from the current action to another action
+	 * 
+	 * @param interrupt
+	 *            if {@code true} the action is stored to the interrupt list,
+	 *            else it is stored to the todo list.
+	 */
+	private void switchActions(boolean interrupt) {
+		AbstractAction tmp = currentAction;
+		informListenersAboutFinishingAction(tmp);
+		currentAction = actionScheduler.getNextAction();
+		informListenersAboutStartingAction(currentAction);
+		if (tmp != null) {
+			tmp.setState(AbstractAction.STATE.INTERRUPTED);
+			if (interrupt) {
+				actionScheduler.addInterruptAction(tmp);
+			} else {
+				actionScheduler.schedule(tmp);
+			}
+		}
 	}
 
 	/**

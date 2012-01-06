@@ -13,6 +13,7 @@ package de.uniluebeck.imis.casi.ui.simplegui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 
@@ -30,6 +32,8 @@ import de.uniluebeck.imis.casi.simulation.engine.SimulationClock;
 import de.uniluebeck.imis.casi.simulation.engine.SimulationEngine;
 import de.uniluebeck.imis.casi.simulation.model.AbstractInteractionComponent;
 import de.uniluebeck.imis.casi.simulation.model.Agent;
+import de.uniluebeck.imis.casi.simulation.model.Door;
+import de.uniluebeck.imis.casi.simulation.model.Room;
 import de.uniluebeck.imis.casi.simulation.model.SimulationTime;
 
 /**
@@ -48,9 +52,14 @@ public class InformationPanel extends JPanel implements ActionListener,
 
 	private JComboBox selectComponentBox;
 	private JTextArea informationTextArea;
+	private JTextArea informationTextAreaRoom;
 
-	private ArrayList<Agent> agentMap;
-	private ArrayList<AbstractInteractionComponent> interactionCompMap;
+	private ArrayList<Agent> agentList;
+	private ArrayList<AbstractInteractionComponent> interactionCompList;
+
+	private Room shownRoom;
+
+	// private ArrayList<Room> roomList;
 
 	/**
 	 * The constructor sets layout and components.
@@ -72,12 +81,25 @@ public class InformationPanel extends JPanel implements ActionListener,
 	 */
 	private void setComponents() {
 
+		JPanel infoPanel = new JPanel();
+		infoPanel.setLayout(new GridLayout(0, 1));
+
 		informationTextArea = new JTextArea();
 		informationTextArea.setBorder(BorderFactory
 				.createTitledBorder("Information:"));
-		// informationTextArea.setEnabled(false);
 		informationTextArea.setEditable(false);
-		add(informationTextArea, BorderLayout.CENTER);
+
+		informationTextAreaRoom = new JTextArea();
+		informationTextAreaRoom.setBorder(BorderFactory
+				.createTitledBorder("Room information:"));
+		informationTextAreaRoom.setEditable(false);
+		
+		JScrollPane scrollPane = new JScrollPane(informationTextAreaRoom);
+
+		infoPanel.add(informationTextArea);
+		infoPanel.add(scrollPane);
+
+		add(infoPanel, BorderLayout.CENTER);
 	}
 
 	/**
@@ -87,23 +109,31 @@ public class InformationPanel extends JPanel implements ActionListener,
 
 		try {
 
-			agentMap = new ArrayList<Agent>();
+			agentList = new ArrayList<Agent>();
 
 			for (Agent agent : SimulationEngine.getInstance().getWorld()
 					.getAgents()) {
 
-				agentMap.add(agent);
+				agentList.add(agent);
 
 			}
 
-			interactionCompMap = new ArrayList<AbstractInteractionComponent>();
+			interactionCompList = new ArrayList<AbstractInteractionComponent>();
 
 			for (AbstractInteractionComponent interactionComp : SimulationEngine
 					.getInstance().getWorld().getInteractionComponents()) {
 
-				interactionCompMap.add(interactionComp);
+				interactionCompList.add(interactionComp);
 
 			}
+
+			// roomList = new ArrayList<Room>();
+			//
+			// for(Room room : SimulationEngine
+			// .getInstance().getWorld().getRooms()) {
+			//
+			// roomList.add(room);
+			// }
 
 		} catch (IllegalAccessException e) {
 
@@ -134,7 +164,7 @@ public class InformationPanel extends JPanel implements ActionListener,
 		Vector<String> data = new Vector<String>();
 
 		/** Add agent to vector */
-		for (Agent agent : agentMap) {
+		for (Agent agent : agentList) {
 
 			data.addElement(agent.getName());
 		}
@@ -143,13 +173,34 @@ public class InformationPanel extends JPanel implements ActionListener,
 		data.addElement(ComboBoxRenderer.SEPERATOR);
 
 		/** Add interaction components to vector */
-		for (AbstractInteractionComponent interactionComp : interactionCompMap) {
+		for (AbstractInteractionComponent interactionComp : interactionCompList) {
 
 			data.addElement(interactionComp.getIdentifier() + "::"
 					+ interactionComp.getType());
 		}
 
+		// /** Add separator to vector */
+		// data.addElement(ComboBoxRenderer.SEPERATOR);
+		//
+		// /** Add rooms to vector */
+		// for (Room room : roomList) {
+		//
+		// data.addElement(room.toString());
+		// }
+
 		return data;
+	}
+
+	/**
+	 * Sets the room, that is shown.
+	 * 
+	 * @param room
+	 *            thr room
+	 */
+	public void showRoomInformationOf(Room room) {
+
+		this.shownRoom = room;
+		setInformation();
 	}
 
 	@Override
@@ -172,25 +223,34 @@ public class InformationPanel extends JPanel implements ActionListener,
 	private void setInformation() {
 
 		int selectedIndex_A = this.selectComponentBox.getSelectedIndex();
-		int selectedIndex_I = selectedIndex_A - agentMap.size() - 1;
+		int selectedIndex_I = selectedIndex_A - agentList.size() - 1;
 
 		// if the selected index is an agent
 		if (selectedIndex_I < -1) {
 
-			informationTextArea.setText(getAgentInformation(agentMap
+			informationTextArea.setText(getAgentInformation(agentList
 					.get(selectedIndex_A)));
 
 			// if the selected index is an interaction component
 		} else if (selectedIndex_I > -1) {
 
 			informationTextArea
-					.setText(getInteractionComponentInformation(interactionCompMap
+					.setText(getInteractionComponentInformation(interactionCompList
 							.get(selectedIndex_I)));
 
 			// if the separator is selected
 		} else {
 
 			// do nothing
+		}
+
+		if (shownRoom != null) {
+
+			String newInfo = getRoomInformation(shownRoom);
+			if(!informationTextAreaRoom.getText().equals(newInfo)) {
+				informationTextAreaRoom.setText(newInfo);
+			}
+			
 		}
 
 	}
@@ -254,6 +314,26 @@ public class InformationPanel extends JPanel implements ActionListener,
 		return info;
 	}
 
+	private String getRoomInformation(Room room) {
+
+		String info;
+
+		info = "Identifier: " + room.getIdentifier() + "\n"
+				+ "Number of doors: " + room.getDoors().size() + "\n";
+
+		int index = 1;
+		for (Door door : room.getDoors()) {
+
+			info = info + "   " + index + ". Door: \n" + "   Identifier: "
+					+ door.getIdentifier() + "\n" + "   State: "
+					+ door.getState() + "\n";
+
+			index++;
+		}
+
+		return info;
+	}
+
 	/**
 	 * This method sets the given agent as selected, if it is in the list.
 	 * 
@@ -263,7 +343,7 @@ public class InformationPanel extends JPanel implements ActionListener,
 	public void setSelectedAgent(Agent agent) {
 
 		/* get index of agent in list */
-		int index = agentMap.indexOf(agent);
+		int index = agentList.indexOf(agent);
 
 		/* set index of combobox */
 		if (index != -1) {
@@ -283,11 +363,11 @@ public class InformationPanel extends JPanel implements ActionListener,
 			AbstractInteractionComponent interactionComp) {
 
 		/* get index of interaction component in list */
-		int index = interactionCompMap.indexOf(interactionComp);
+		int index = interactionCompList.indexOf(interactionComp);
 
 		/* set index of combobox */
 		if (index != -1) {
-			selectComponentBox.setSelectedIndex(agentMap.size() + 1 + index);
+			selectComponentBox.setSelectedIndex(agentList.size() + 1 + index);
 		}
 	}
 

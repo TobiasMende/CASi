@@ -19,7 +19,10 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.NoninvertibleTransformException;
 import java.awt.geom.Point2D;
 import java.util.logging.Logger;
 
@@ -29,6 +32,7 @@ import javax.swing.JRadioButtonMenuItem;
 import de.uniluebeck.imis.casi.CASi;
 import de.uniluebeck.imis.casi.simulation.engine.SimulationEngine;
 import de.uniluebeck.imis.casi.simulation.factory.GraphicFactory;
+import de.uniluebeck.imis.casi.simulation.factory.WorldFactory;
 import de.uniluebeck.imis.casi.simulation.model.AbstractInteractionComponent;
 import de.uniluebeck.imis.casi.simulation.model.Door;
 import de.uniluebeck.imis.casi.simulation.model.Room;
@@ -43,17 +47,20 @@ import de.uniluebeck.imis.casi.simulation.model.Wall;
  * 
  */
 @SuppressWarnings("serial")
-public class BackgroundPanel extends JPanel implements ActionListener {
+public class BackgroundPanel extends JPanel implements ActionListener,
+		MouseListener {
 
 	private static final Logger log = Logger.getLogger(BackgroundPanel.class
 			.getName());
 
 	/** booleans to adjust the information showed in the gui */
-	private boolean paintDoorLabels, paintSensorLabels,
-			paintRoomLabels, paintSensorMonitoringArea,
-			paintDoorCentralPoints, paintRoomCentralPoints;
+	private boolean paintDoorLabels, paintSensorLabels, paintRoomLabels,
+			paintSensorMonitoringArea, paintDoorCentralPoints,
+			paintRoomCentralPoints;
 
 	private final AffineTransform transform;
+
+	private InformationPanel infoPanel;
 
 	/**
 	 * The BackgroundPanel needs the affine transform to scale the painted
@@ -63,7 +70,7 @@ public class BackgroundPanel extends JPanel implements ActionListener {
 	 *            the affine transform
 	 */
 	public BackgroundPanel(AffineTransform transform) {
-		
+
 		paintDoorLabels = CASi.DEV_MODE;
 		paintSensorLabels = CASi.DEV_MODE;
 		paintRoomLabels = CASi.DEV_MODE;
@@ -74,6 +81,23 @@ public class BackgroundPanel extends JPanel implements ActionListener {
 		this.transform = transform;
 
 		this.repaint();
+
+		this.addMouseListener(this);
+	}
+
+	/**
+	 * This method sets the {@link InformationPanel} to the
+	 * {@link BackgroundPanel} and adds itself as mouse listener. So the
+	 * InformationPanel can react, when mouse clicks on the background.
+	 * 
+	 * @param infoPanel
+	 *            the information panel
+	 */
+	public void setInformationPanel(InformationPanel infoPanel) {
+
+		this.infoPanel = infoPanel;
+		this.addMouseListener(this);
+
 	}
 
 	@Override
@@ -287,6 +311,48 @@ public class BackgroundPanel extends JPanel implements ActionListener {
 		}
 
 		this.repaint();
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+
+		try {
+
+			Point2D reTransformedPoint = transform.createInverse()
+					.deltaTransform(e.getPoint(), e.getPoint());
+
+			if (WorldFactory.getRoomsWithPoint(reTransformedPoint).size() > 0) {
+
+				infoPanel.showRoomInformationOf(WorldFactory.getRoomsWithPoint(
+						reTransformedPoint).get(0));
+			}
+
+		} catch (NoninvertibleTransformException e1) {
+
+			log.warning("Exception: " + e1);
+
+		}
+
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+
 	}
 
 }

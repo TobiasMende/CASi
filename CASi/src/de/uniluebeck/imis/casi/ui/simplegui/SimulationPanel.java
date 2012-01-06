@@ -84,8 +84,7 @@ public class SimulationPanel extends JLayeredPane implements
 		this.transform.setToScale((size - 40) / worldSizeX, (size - 40)
 				/ worldSizeY);
 
-		// this.setPreferredSize(new Dimension((int) size, (int) size));
-		this.setBounds(20, 20, (int) size, (int) size);
+		this.setBounds(20, 20, (int) size - 30, (int) size - 30);
 		this.backgroundPanel.setBounds(0, 0, (int) size, (int) size);
 
 		for (ComponentView componentView : simulationCmponents) {
@@ -114,6 +113,7 @@ public class SimulationPanel extends JLayeredPane implements
 
 		backgroundPanel = new BackgroundPanel(transform);
 		backgroundPanel.setLocation(0, 0);
+		backgroundPanel.setInformationPanel(infoPanel);
 		this.add(backgroundPanel, new Integer(1));
 
 		try {

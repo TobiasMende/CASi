@@ -202,6 +202,7 @@ public class Rooms {
 		theNewRoom.addWall(theNewWall);
 		theNewWall = WallFactory.getWallWithPoints(new Point(250, 260),
 				new Point(250, 190));
+		theNewRoom.addWall(theNewWall);
 		theNewRoom.setIdentifier("officeFelix");
 		RoomCollector.getInstance().newRoom(theNewRoom);
 

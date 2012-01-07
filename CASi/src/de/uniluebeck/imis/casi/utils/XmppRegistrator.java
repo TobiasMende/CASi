@@ -22,13 +22,12 @@ import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
 
-import de.uniluebeck.imis.casi.communication.mack.MACKNetworkHandler;
 import de.uniluebeck.imis.casi.communication.mack.XmppIdentifier;
 
 /**
  * This single application can be used to register xmpp identifier which are
  * provided in a network config file that can also be used to configure the
- * {@link MACKNetworkHandler}
+ * MACKNetworkHandler
  * 
  * @author Tobias Mende
  * 
@@ -99,7 +98,7 @@ public class XmppRegistrator {
 	 * Performs the registration process.
 	 */
 	public void perform() {
-		System.out.println("Checking and registering "+usableJabberIdentifiers.size()+" identfiers");
+		System.out.println("Checking and registering "+usableJabberIdentifiers.size()+" identifiers");
 		System.out.println("======================================================================");
 		System.out.println("Checking identifiers:");
 		System.out.println("----------------------------------------------------------------------");
@@ -126,6 +125,10 @@ public class XmppRegistrator {
 		}
 		System.out.println("----------------------------------------------------------------------");
 		System.out.println("Done! "+registrationCounter+" identifiers were registered successful");
+		int unregistered = identifierToRegister.size()-registrationCounter;
+		if(unregistered > 0) {
+			System.out.println("Can't register "+unregistered+" identifiers. Pleas start the tool again in at least "+REGISTRATION_DELAY+" minutes");
+		}
 		System.out.println("Job completed");
 		System.out.println("======================================================================");
 	}
@@ -186,9 +189,11 @@ public class XmppRegistrator {
 				return false;
 			} finally {
 				registeredLastTime = true;
+				connection.disconnect();
 			}
+		} else {
+			connection.disconnect();
 		}
-		connection.disconnect();
 		return true;
 	}
 }

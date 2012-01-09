@@ -35,6 +35,7 @@ public class InteractionComponentView extends ComponentView implements
 
 	private AbstractInteractionComponent interactionComp;
 	private InformationPanel infoPanel;
+	private ViewSettings viewSettings;
 
 	/**
 	 * The InteractionComponentView needs the represented interaction components
@@ -45,11 +46,13 @@ public class InteractionComponentView extends ComponentView implements
 	 */
 	public InteractionComponentView(
 			AbstractInteractionComponent interactionComp,
-			AffineTransform transform) {
+			AffineTransform transform, ViewSettings viewSettings) {
 
 		super(interactionComp.getCentralPoint(), transform);
 
 		this.interactionComp = interactionComp;
+		
+		this.viewSettings = viewSettings;
 
 		setToolTipText(interactionComp.getIdentifier() + "::"
 				+ interactionComp.getType());
@@ -77,6 +80,17 @@ public class InteractionComponentView extends ComponentView implements
 	 */
 	@Override
 	public void paint(Graphics g) {
+		
+		super.paint(g);
+		
+		if(!viewSettings.isPaintSensors()) {
+			
+			return;
+			
+		} else {
+			
+			
+		}
 
 		Graphics2D g2D = (Graphics2D) g;
 

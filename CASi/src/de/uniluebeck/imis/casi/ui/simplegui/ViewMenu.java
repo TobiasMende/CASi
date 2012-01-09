@@ -30,7 +30,7 @@ public class ViewMenu extends JMenu {
 
 	private JRadioButtonMenuItem paintDoorLabelsItem, paintSensorLabelsItem,
 			paintRoomLabelsItem, paintSensorMonitoringAreaItem,
-			paintDoorCentralPointsItem, paintRoomCentralPointsItem;
+			paintDoorCentralPointsItem, paintRoomCentralPointsItem, paintSensorsItem;
 
 	/**
 	 * The constructor calls the super contructor and set up the components of
@@ -74,6 +74,12 @@ public class ViewMenu extends JMenu {
 		paintRoomCentralPointsItem.setSelected(CASi.DEV_MODE);
 		paintRoomCentralPointsItem.setActionCommand("paintRoomCentralPoints");
 		add(paintRoomCentralPointsItem);
+		
+		paintSensorsItem = new JRadioButtonMenuItem(
+				"Show sensors/actuators");
+		paintSensorsItem.setSelected(CASi.DEV_MODE);
+		paintSensorsItem.setActionCommand("paintSensors");
+		add(paintSensorsItem);
 	}
 
 	/**
@@ -90,6 +96,7 @@ public class ViewMenu extends JMenu {
 		paintSensorMonitoringAreaItem.addActionListener(actionlistener);
 		paintDoorCentralPointsItem.addActionListener(actionlistener);
 		paintRoomCentralPointsItem.addActionListener(actionlistener);
+		paintSensorsItem.addActionListener(actionlistener);
 	}
 
 }

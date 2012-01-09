@@ -13,9 +13,7 @@ package de.uniluebeck.imis.casi.ui.simplegui;
 
 import java.awt.Color;
 import java.awt.Container;
-import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
@@ -58,12 +56,16 @@ public class SimulationPanel extends JLayeredPane implements
 
 	private ArrayList<ComponentView> simulationCmponents = new ArrayList<ComponentView>();
 
+	private ViewSettings viewSettings;
+
 	/**
 	 * Constructor of the simulation panel sets the preferred size.
 	 */
 	public SimulationPanel() {
 
 		transform = new AffineTransform();
+		
+		viewSettings = new ViewSettings(this);
 
 		this.setLayout(null);
 
@@ -111,7 +113,7 @@ public class SimulationPanel extends JLayeredPane implements
 		worldSizeY = SimulationEngine.getInstance().getWorld()
 				.getSimulationDimension().getHeight();
 
-		backgroundPanel = new BackgroundPanel(transform);
+		backgroundPanel = new BackgroundPanel(transform,viewSettings);
 		backgroundPanel.setLocation(0, 0);
 		backgroundPanel.setInformationPanel(infoPanel);
 		this.add(backgroundPanel, new Integer(1));
@@ -135,7 +137,7 @@ public class SimulationPanel extends JLayeredPane implements
 					.getInstance().getWorld().getInteractionComponents()) {
 
 				InteractionComponentView interactionCompView = new InteractionComponentView(
-						interactionComp, transform);
+						interactionComp, transform, viewSettings);
 				simulationCmponents.add(interactionCompView);
 				interactionCompView.setInformationPanel(infoPanel);
 				this.add(interactionCompView, new Integer(2));
@@ -150,12 +152,12 @@ public class SimulationPanel extends JLayeredPane implements
 	}
 
 	/**
-	 * Return change listener for the view menu.
+	 * Returns {@link ViewSettings} for the view menu.
 	 * 
-	 * @return the changeListener
+	 * @return the view menu listener
 	 */
 	public ActionListener getViewMenuListener() {
-		return backgroundPanel;
+		return viewSettings;
 	}
 
 	@Override

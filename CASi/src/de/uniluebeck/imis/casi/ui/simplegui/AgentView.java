@@ -78,6 +78,8 @@ public class AgentView extends ComponentView implements IAgentListener,
 	 */
 	@Override
 	public void paint(final Graphics g) {
+		
+		super.paint(g);
 
 		Graphics2D g2D = (Graphics2D) g;
 

@@ -17,7 +17,6 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -27,9 +26,7 @@ import java.awt.geom.Point2D;
 import java.util.logging.Logger;
 
 import javax.swing.JPanel;
-import javax.swing.JRadioButtonMenuItem;
 
-import de.uniluebeck.imis.casi.CASi;
 import de.uniluebeck.imis.casi.simulation.engine.SimulationEngine;
 import de.uniluebeck.imis.casi.simulation.factory.GraphicFactory;
 import de.uniluebeck.imis.casi.simulation.factory.WorldFactory;
@@ -39,50 +36,39 @@ import de.uniluebeck.imis.casi.simulation.model.Room;
 import de.uniluebeck.imis.casi.simulation.model.Wall;
 
 /**
- * The BackgroundPanel is a JPanel that paints all static components of the
- * simulation. It is also a ActionListener (of the ViewMenu) to make it possible
- * to paint only selected components.
+ * The BackgroundPanel is a {@link JPanel} that paints all static components of
+ * the simulation. It is also a {@link MouseListener} of itself to make it
+ * possible to show information of the selescted room.
  * 
  * @author Moritz Bürger
  * 
  */
 @SuppressWarnings("serial")
-public class BackgroundPanel extends JPanel implements ActionListener,
-		MouseListener {
+public class BackgroundPanel extends JPanel implements MouseListener {
 
 	private static final Logger log = Logger.getLogger(BackgroundPanel.class
 			.getName());
-
-	/** booleans to adjust the information showed in the gui */
-	private boolean paintDoorLabels, paintSensorLabels, paintRoomLabels,
-			paintSensorMonitoringArea, paintDoorCentralPoints,
-			paintRoomCentralPoints;
 
 	private final AffineTransform transform;
 
 	private InformationPanel infoPanel;
 
+	private ViewSettings viewSettings;
+
 	/**
-	 * The BackgroundPanel needs the affine transform to scale the painted
-	 * components.
+	 * The {@link BackgroundPanel} needs the affine transform to scale the
+	 * painted components.
 	 * 
 	 * @param transform
 	 *            the affine transform
 	 */
-	public BackgroundPanel(AffineTransform transform) {
-
-		paintDoorLabels = CASi.DEV_MODE;
-		paintSensorLabels = CASi.DEV_MODE;
-		paintRoomLabels = CASi.DEV_MODE;
-		paintSensorMonitoringArea = CASi.DEV_MODE;
-		paintDoorCentralPoints = CASi.DEV_MODE;
-		paintRoomCentralPoints = CASi.DEV_MODE;
+	public BackgroundPanel(AffineTransform transform, ViewSettings viewSettings) {
 
 		this.transform = transform;
 
+		this.viewSettings = viewSettings;
 		this.repaint();
 
-		this.addMouseListener(this);
 	}
 
 	/**
@@ -129,7 +115,7 @@ public class BackgroundPanel extends JPanel implements ActionListener,
 						centralPoint.getX() - 2.5, centralPoint.getY() - 2.5);
 
 				// paint, if it is selected
-				if (paintRoomCentralPoints) {
+				if (viewSettings.isPaintRoomCentralPoints()) {
 					g2D.setColor(Color.GREEN);
 					g2D.fillOval(centralPoint2.x, centralPoint2.y, 5, 5);
 				}
@@ -169,7 +155,7 @@ public class BackgroundPanel extends JPanel implements ActionListener,
 					g.setColor(Color.BLUE);
 
 					// paint door central point
-					if (paintDoorCentralPoints) {
+					if (viewSettings.isPaintDoorCentralPoints()) {
 						g2D.fillOval(doorPoint.x, doorPoint.y, 3, 3);
 					}
 				}
@@ -183,7 +169,7 @@ public class BackgroundPanel extends JPanel implements ActionListener,
 				g.setColor(Color.BLUE);
 
 				// paint sensor monitoring area
-				if (paintSensorMonitoringArea) {
+				if (viewSettings.isPaintSensorMonitoringArea()) {
 					g2D.draw(transform.createTransformedShape(interactionComp
 							.getShapeRepresentation()));
 				}
@@ -224,7 +210,7 @@ public class BackgroundPanel extends JPanel implements ActionListener,
 			int nameLength = room.toString().length();
 
 			// paint, if it is selected
-			if (paintRoomLabels) {
+			if (viewSettings.isPaintRoomLabels()) {
 				g2D.drawString(
 						room.toString(),
 						(int) (centralPoint2.x - nameLength
@@ -233,7 +219,7 @@ public class BackgroundPanel extends JPanel implements ActionListener,
 			}
 
 			// paint door names, if selected
-			if (paintDoorLabels) {
+			if (viewSettings.isPaintDoorLabels()) {
 
 				/** Get the doors of this room */
 				for (Door door : room.getDoors()) {
@@ -254,7 +240,7 @@ public class BackgroundPanel extends JPanel implements ActionListener,
 		}
 
 		// paint sensor labels, if selected
-		if (paintSensorLabels) {
+		if (viewSettings.isPaintSensorLabels()) {
 
 			/** Get the interaction components */
 			for (AbstractInteractionComponent interactionComp : SimulationEngine
@@ -276,41 +262,6 @@ public class BackgroundPanel extends JPanel implements ActionListener,
 						sensorPoint.y + (int) (5 * transform.getScaleX()));
 			}
 		}
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent arg0) {
-
-		JRadioButtonMenuItem clickedItem = (JRadioButtonMenuItem) arg0
-				.getSource();
-
-		if (arg0.getActionCommand().equals("paintDoorLabels")) {
-
-			paintDoorLabels = clickedItem.isSelected();
-
-		} else if (arg0.getActionCommand().equals("paintSensorLabels")) {
-
-			paintSensorLabels = clickedItem.isSelected();
-
-		} else if (arg0.getActionCommand().equals("paintRoomLabels")) {
-
-			paintRoomLabels = clickedItem.isSelected();
-
-		} else if (arg0.getActionCommand().equals("paintSensorMonitoringArea")) {
-
-			paintSensorMonitoringArea = clickedItem.isSelected();
-
-		} else if (arg0.getActionCommand().equals("paintDoorCentralPoints")) {
-
-			paintDoorCentralPoints = clickedItem.isSelected();
-
-		} else if (arg0.getActionCommand().equals("paintRoomCentralPoints")) {
-
-			paintRoomCentralPoints = clickedItem.isSelected();
-
-		}
-
-		this.repaint();
 	}
 
 	@Override

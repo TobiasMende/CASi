@@ -103,6 +103,7 @@ public class DoorLight extends AbstractInteractionComponent {
 			CASi.SIM_LOG.info(this+": No accesible information for the interruptibility of "+agent);
 			return;
 		}
+		CASi.SIM_LOG.fine(this+": Receiving update!");
 		try {
 			int value = Integer.parseInt(interrupt);
 			switch (value) {
@@ -117,7 +118,7 @@ public class DoorLight extends AbstractInteractionComponent {
 				break;
 			}
 		} catch (NumberFormatException e) {
-			CASi.SIM_LOG.info("Invalid Number Format, setting state to "+State.maybeInterruptible);
+			CASi.SIM_LOG.warning("Invalid Number Format, setting state to "+State.maybeInterruptible);
 			setCurrentState(State.maybeInterruptible);
 		}
 	}
@@ -127,7 +128,10 @@ public class DoorLight extends AbstractInteractionComponent {
 	 * @param currentState the currentState to set
 	 */
 	private void setCurrentState(State currentState) {
-		this.currentState = currentState;
+		if(!currentState.equals(this.currentState)) {
+			CASi.SIM_LOG.info(this+": changing state from "+this.currentState+" to "+currentState);
+			this.currentState = currentState;
+		}
 	}
 
 	@Override
@@ -271,6 +275,7 @@ public class DoorLight extends AbstractInteractionComponent {
 
 	@Override
 	protected void sendRecurringMessage(SimulationTime newTime) {
+		super.sendRecurringMessage(newTime);
 		SimulationEngine.getInstance().getCommunicationHandler()
 				.send(this, pullMessage);
 	}

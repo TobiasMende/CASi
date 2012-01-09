@@ -25,6 +25,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
+import de.uniluebeck.imis.casi.CASi;
 import de.uniluebeck.imis.casi.communication.mack.MACKInformation;
 import de.uniluebeck.imis.casi.communication.mack.MACKNetworkHandler;
 import de.uniluebeck.imis.casi.communication.mack.MACKProtocolFactory;
@@ -131,6 +132,7 @@ public class Cube extends AbstractInteractionComponent {
 			log.severe("Message was invalid");
 			return;
 		}
+		CASi.SIM_LOG.fine(this+": Receiving update!");
 		String activity = info.getAccessibleEntities().get("activity");
 		if(activity != null) {
 			for(State s : State.values()) {
@@ -152,7 +154,10 @@ public class Cube extends AbstractInteractionComponent {
 	 *            the currentState to set
 	 */
 	private void setCurrentState(State currentState) {
-		this.currentState = currentState;
+		if(!currentState.equals(this.currentState)) {
+			CASi.SIM_LOG.info(this+": changing state from "+this.currentState+" to "+currentState);
+			this.currentState = currentState;
+		}
 	}
 
 	@Override
@@ -194,6 +199,7 @@ public class Cube extends AbstractInteractionComponent {
 
 	@Override
 	public void sendRecurringMessage(SimulationTime newTime) {
+		super.sendRecurringMessage(newTime);
 		SimulationEngine.getInstance().getCommunicationHandler()
 				.send(this, pullMessage);
 	}

@@ -21,6 +21,7 @@ import java.util.Collection;
 import java.util.logging.Logger;
 
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+import de.uniluebeck.imis.casi.CASi;
 import de.uniluebeck.imis.casi.communication.ICommunicationComponent;
 import de.uniluebeck.imis.casi.simulation.engine.ISimulationClockListener;
 import de.uniluebeck.imis.casi.simulation.engine.SimulationEngine;
@@ -364,7 +365,7 @@ public abstract class AbstractInteractionComponent extends AbstractComponent
 	 * communication handler
 	 */
 	protected void sendRecurringMessage(SimulationTime newTime) {
-		// nothing to do here.
+		CASi.SIM_LOG.fine(this+": Sending Pull Request");
 	}
 
 	@Override

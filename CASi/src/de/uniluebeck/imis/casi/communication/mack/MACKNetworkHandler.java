@@ -205,7 +205,7 @@ public final class MACKNetworkHandler implements ICommunicationHandler {
 				setupXmppConnection(result, comp);
 			} else {
 				log.warning("Can't find a jabber identifier for the component "
-						+ comp + "for " + component.getAgent());
+						+ comp + " for " + component.getAgent());
 			}
 		} else {
 			log.warning("Component isn't an interaction component. Don't know what to do with it. Ignoring...");
@@ -295,31 +295,7 @@ public final class MACKNetworkHandler implements ICommunicationHandler {
 						}
 					});
 			// Only listen to messages from the server:
-			PacketFilter filter = new AndFilter(new PacketTypeFilter(
-					Message.class), new FromContainsFilter(
-					MACK_SERVER_IDENTIFIER));
-
-			PacketCollector myCollector = connection
-					.createPacketCollector(filter);
-			PacketListener myListener = new PacketListener() {
-				public void processPacket(Packet packet) {
-					if (packet instanceof Message) {
-						Message message = ((Message) packet);
-						if (message.getType().equals(Message.Type.normal)) {
-							if (CASi.VERBOSE) {
-								CASi.SIM_LOG.info("Receiving: "
-										+ message.getBody());
-							}
-							comp.receive(message.getBody());
-						}
-					} else {
-						log.warning("The packet isn't a message: "
-								+ packet.toXML());
-					}
-				}
-			};
-
-			connection.addPacketListener(myListener, filter);
+//			createPacketListener(comp, connection);
 			components.put(comp, chat);
 			log.info(identifier.getId()
 					+ ": Component is connected now. Chat with server was initialized");
@@ -327,6 +303,41 @@ public final class MACKNetworkHandler implements ICommunicationHandler {
 			log.warning(comp + "is not authenticated");
 			connection.disconnect();
 		}
+	}
+
+	/**
+	 * Creates and sets a packet listener that observes the connection
+	 * @param comp the component to which packeges should be forwarded
+	 * @param connection the connection to observe
+	 */
+	@SuppressWarnings("unused")
+	private void createPacketListener(final ICommunicationComponent comp,
+			Connection connection) {
+		PacketFilter filter = new AndFilter(new PacketTypeFilter(
+				Message.class), new FromContainsFilter(
+				MACK_SERVER_IDENTIFIER));
+
+		PacketCollector myCollector = connection
+				.createPacketCollector(filter);
+		PacketListener myListener = new PacketListener() {
+			public void processPacket(Packet packet) {
+				if (packet instanceof Message) {
+					Message message = ((Message) packet);
+					if (message.getType().equals(Message.Type.normal)) {
+						if (CASi.VERBOSE) {
+							CASi.SIM_LOG.info("Receiving: "
+									+ message.getBody());
+						}
+						comp.receive(message.getBody());
+					}
+				} else {
+					log.warning("The packet isn't a message: "
+							+ packet.toXML());
+				}
+			}
+		};
+
+		connection.addPacketListener(myListener, filter);
 	}
 
 	/**

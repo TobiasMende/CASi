@@ -23,9 +23,11 @@
 	<target name="clean" description="Cleans the project folder">
 		<delete dir="${build.dir}" />
 		<delete dir="${docs.dir}" />
+		<delete dir="${test.reports}" />
+	</target>
+	<target name="clean-all" depends="clean" description="Cleans the project folder">
 		<delete dir="${dist.dir}" />
 		<delete dir="${log.dir}" />
-		<delete dir="${test.reports}" />
 	</target>
 	<target name="makedir" description="Creates all needed directories">
 		<mkdir dir="${build.dir}" />
@@ -121,7 +123,7 @@
 			</manifest>
 		</jar>
 	</target>
-	<target name="main" depends="compile, jar, doc" description="Main target">
+	<target name="main" depends="compile, jar, xmpp-registrator-jar, doc" description="Main target">
 	</target>
 
 

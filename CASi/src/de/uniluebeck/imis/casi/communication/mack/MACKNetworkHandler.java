@@ -202,8 +202,8 @@ public final class MACKNetworkHandler implements ICommunicationHandler {
 				usableJabberIdentifiers.remove(result);
 				setupXmppConnection(result, comp);
 			} else {
-				log.severe("Can't find a jabber identifier for the component "
-						+ comp + "for "+component.getAgent());
+				log.warning("Can't find a jabber identifier for the component "
+						+ comp + "for " + component.getAgent());
 			}
 		} else {
 			log.warning("Component isn't an interaction component. Don't know what to do with it. Ignoring...");
@@ -251,57 +251,74 @@ public final class MACKNetworkHandler implements ICommunicationHandler {
 					connection.login(identifier.getId(), XMPP_PASSWORD);
 				}
 			}
-			// Creating chat with server:
-			if (connection.isAuthenticated()) {
-				ChatManager chatmanager = connection.getChatManager();
-				Chat chat = chatmanager.createChat(MACK_SERVER_IDENTIFIER,
-						new MessageListener() {
-							public void processMessage(Chat chat,
-									Message message) {
-								if (message.getType().equals(
-										Message.Type.normal)) {
-									CASi.SIM_LOG.info("Receiving: "
-											+ message.getBody());
-									comp.receive(message.getBody());
-								} else {
-									CASi.SIM_LOG.warning("Message of type "+message.getType()+" received. I didn't pass it!");
-								}
-							}
-						});
-				// Only listen to messages from the server:
-				PacketFilter filter = new AndFilter(new PacketTypeFilter(
-						Message.class), new FromContainsFilter(
-						MACK_SERVER_IDENTIFIER));
-
-//				 PacketCollector myCollector = connection.createPacketCollector(filter);
-
-				PacketListener myListener = new PacketListener() {
-					public void processPacket(Packet packet) {
-						if (packet instanceof Message) {
-							Message message = ((Message) packet);
-							if (message.getType().equals(Message.Type.normal)) {
-								comp.receive(message.getBody());
-							}
-						} else {
-							log.warning("The packet isn't a message: "
-									+ packet.toXML());
-						}
-					}
-				};
-
-				connection.addPacketListener(myListener, filter);
-				components.put(comp, chat);
-				log.info(identifier.getId()
-						+ ": Component is connected now. Chat with server was initialized");
-			} else {
-				log.warning(comp + "is not authenticated");
-				connection.disconnect();
-			}
+			createChat(identifier, comp, connection);
 		} catch (XMPPException e1) {
 			log.severe("Can't connect: " + e1.fillInStackTrace());
 			return;
 		}
 
+	}
+
+	/**
+	 * Creates a new chat
+	 * 
+	 * @param identifier
+	 *            the identifier to use
+	 * @param comp
+	 *            the component that should use the chat for communication
+	 * @param connection
+	 *            the connection to use for chat creation
+	 */
+	private void createChat(XmppIdentifier identifier,
+			final ICommunicationComponent comp, Connection connection) {
+		// Creating chat with server:
+		if (connection.isAuthenticated()) {
+			ChatManager chatmanager = connection.getChatManager();
+			Chat chat = chatmanager.createChat(MACK_SERVER_IDENTIFIER,
+					new MessageListener() {
+						public void processMessage(Chat chat, Message message) {
+							if (message.getType().equals(Message.Type.normal)
+									|| message.getType().equals(
+											Message.Type.chat)) {
+								CASi.SIM_LOG.info("Receiving: "
+										+ message.getBody());
+								comp.receive(message.getBody());
+							} else {
+								CASi.SIM_LOG.warning("Message of type "
+										+ message.getType()
+										+ " received. I didn't pass it!");
+							}
+						}
+					});
+			// Only listen to messages from the server:
+			PacketFilter filter = new AndFilter(new PacketTypeFilter(
+					Message.class), new FromContainsFilter(
+					MACK_SERVER_IDENTIFIER));
+
+			PacketCollector myCollector = connection
+					.createPacketCollector(filter);
+			PacketListener myListener = new PacketListener() {
+				public void processPacket(Packet packet) {
+					if (packet instanceof Message) {
+						Message message = ((Message) packet);
+						if (message.getType().equals(Message.Type.normal)) {
+							comp.receive(message.getBody());
+						}
+					} else {
+						log.warning("The packet isn't a message: "
+								+ packet.toXML());
+					}
+				}
+			};
+
+			connection.addPacketListener(myListener, filter);
+			components.put(comp, chat);
+			log.info(identifier.getId()
+					+ ": Component is connected now. Chat with server was initialized");
+		} else {
+			log.warning(comp + "is not authenticated");
+			connection.disconnect();
+		}
 	}
 
 	/**
@@ -355,5 +372,5 @@ public final class MACKNetworkHandler implements ICommunicationHandler {
 				enc.close();
 		}
 	}
-	
+
 }

@@ -19,6 +19,7 @@ import java.util.logging.Logger;
 import de.uniluebeck.imis.casi.CASi;
 import de.uniluebeck.imis.casi.communication.mack.MACKInformation;
 import de.uniluebeck.imis.casi.communication.mack.MACKProtocolFactory;
+import de.uniluebeck.imis.casi.simulation.engine.SimulationClock;
 import de.uniluebeck.imis.casi.simulation.engine.SimulationEngine;
 import de.uniluebeck.imis.casi.simulation.model.AbstractInteractionComponent;
 import de.uniluebeck.imis.casi.simulation.model.Agent;
@@ -76,6 +77,7 @@ public class DoorLight extends AbstractInteractionComponent {
 	 */
 	public DoorLight(Door door, Room room, Agent agent) {
 		super("DoorLight-" + door.getIntIdentifier(), door.getCentralPoint());
+		SimulationClock.getInstance().addListener(this);
 		setShapeRepresentation(door.getShapeRepresentation());
 		type = Type.ACTUATOR;
 		this.door = door;

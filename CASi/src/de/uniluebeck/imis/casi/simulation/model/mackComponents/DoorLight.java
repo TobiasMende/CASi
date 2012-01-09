@@ -270,7 +270,7 @@ public class DoorLight extends AbstractInteractionComponent {
 	}
 
 	@Override
-	protected void makeRecurringRequest(SimulationTime newTime) {
+	protected void sendRecurringMessage(SimulationTime newTime) {
 		SimulationEngine.getInstance().getCommunicationHandler()
 				.send(this, pullMessage);
 	}

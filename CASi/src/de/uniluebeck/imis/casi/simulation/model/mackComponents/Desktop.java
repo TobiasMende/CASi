@@ -68,7 +68,7 @@ public class Desktop extends AbstractInteractionComponent {
 
 	@Override
 	public String getHumanReadableValue() {
-		return identifier+"[P: "+currentProgram+", F: "+currentFrequency+"]";
+		return "[P: "+currentProgram+", F: "+currentFrequency+"]";
 	}
 	
 	/**
@@ -108,7 +108,7 @@ public class Desktop extends AbstractInteractionComponent {
 	}
 	
 	@Override
-	protected void makeRecurringRequest(SimulationTime newTime) {
+	protected void sendRecurringMessage(SimulationTime newTime) {
 		Frequency freq = generateRandomFrequency(currentFrequency);
 		if(!currentFrequency.equals(freq)) {
 			CASi.SIM_LOG.info(this+": freq changed from "+currentFrequency+" to "+freq);

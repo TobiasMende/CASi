@@ -64,8 +64,6 @@ public abstract class AbstractInteractionComponent extends AbstractComponent
 	protected Object lastResponse;
 	/** Time for pulling values from the server in seconds */
 	public static final int PULL_INTERVALL = 10;
-	/** Is pull enabled? */
-	protected boolean pullEnabled = false;
 	/** Counts the ticks of the clock */
 	protected int clockTickCounter = 0;
 	/** The type of this component */
@@ -357,7 +355,7 @@ public abstract class AbstractInteractionComponent extends AbstractComponent
 	@Override
 	public void timeChanged(SimulationTime newTime) {
 		if ((clockTickCounter = (++clockTickCounter) % PULL_INTERVALL) == 0) {
-			makeRecurringRequest(newTime);
+			sendRecurringMessage(newTime);
 		}
 	}
 
@@ -365,7 +363,7 @@ public abstract class AbstractInteractionComponent extends AbstractComponent
 	 * Overwrite to let the component periodically pull informations from the
 	 * communication handler
 	 */
-	protected void makeRecurringRequest(SimulationTime newTime) {
+	protected void sendRecurringMessage(SimulationTime newTime) {
 		// nothing to do here.
 	}
 

@@ -175,8 +175,10 @@ public final class MACKNetworkHandler implements ICommunicationHandler {
 		}
 
 		try {
-			CASi.SIM_LOG.info("Sending: " + message);
-			chat.sendMessage((String) message);
+			if (CASi.VERBOSE) {
+				CASi.SIM_LOG.info("Sending: " + message);
+				chat.sendMessage((String) message);
+			}
 		} catch (XMPPException e) {
 			CASi.SIM_LOG.severe("Can't send to mack server: "
 					+ e.fillInStackTrace());
@@ -280,8 +282,10 @@ public final class MACKNetworkHandler implements ICommunicationHandler {
 							if (message.getType().equals(Message.Type.normal)
 									|| message.getType().equals(
 											Message.Type.chat)) {
-								CASi.SIM_LOG.info("Receiving: "
-										+ message.getBody());
+								if (CASi.VERBOSE) {
+									CASi.SIM_LOG.info("Receiving: "
+											+ message.getBody());
+								}
 								comp.receive(message.getBody());
 							} else {
 								CASi.SIM_LOG.warning("Message of type "
@@ -302,6 +306,10 @@ public final class MACKNetworkHandler implements ICommunicationHandler {
 					if (packet instanceof Message) {
 						Message message = ((Message) packet);
 						if (message.getType().equals(Message.Type.normal)) {
+							if (CASi.VERBOSE) {
+								CASi.SIM_LOG.info("Receiving: "
+										+ message.getBody());
+							}
 							comp.receive(message.getBody());
 						}
 					} else {

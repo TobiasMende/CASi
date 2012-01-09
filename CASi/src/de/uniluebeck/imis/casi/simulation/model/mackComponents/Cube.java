@@ -82,8 +82,7 @@ public class Cube extends AbstractInteractionComponent {
 	 *            the position of this cube
 	 */
 	public Cube(Point2D coordinates, Agent owner) {
-		super("Cube-"+owner.getIdentifier()+"-"+idCounter++, coordinates);
-		pullEnabled = true;
+		super("cube-"+owner.getIdentifier()+"-"+idCounter++, coordinates);
 		SimulationClock.getInstance().addListener(this);
 		currentState = State.unknown;
 		type = Type.MIXED;
@@ -194,7 +193,7 @@ public class Cube extends AbstractInteractionComponent {
 	}
 
 	@Override
-	public void makeRecurringRequest(SimulationTime newTime) {
+	public void sendRecurringMessage(SimulationTime newTime) {
 		SimulationEngine.getInstance().getCommunicationHandler()
 				.send(this, pullMessage);
 	}

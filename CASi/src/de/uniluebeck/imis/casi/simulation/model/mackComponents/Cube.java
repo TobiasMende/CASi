@@ -109,8 +109,7 @@ public class Cube extends AbstractInteractionComponent {
 	 *            the state to set
 	 */
 	public void turnCube(State state) {
-		if (!state.equals(currentState)) {
-			currentState = state;
+		if (setCurrentState(state)) {
 			SimulationEngine.getInstance().getCommunicationHandler()
 					.send(this, "New Cube state: " + state);
 		}
@@ -153,11 +152,13 @@ public class Cube extends AbstractInteractionComponent {
 	 * @param currentState
 	 *            the currentState to set
 	 */
-	private void setCurrentState(State currentState) {
+	private boolean setCurrentState(State currentState) {
 		if(!currentState.equals(this.currentState)) {
 			CASi.SIM_LOG.info(this+": changing state from "+this.currentState+" to "+currentState);
 			this.currentState = currentState;
+			return true;
 		}
+		return false;
 	}
 
 	@Override

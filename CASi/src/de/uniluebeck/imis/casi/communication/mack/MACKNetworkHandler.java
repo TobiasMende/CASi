@@ -27,6 +27,7 @@ import org.jivesoftware.smack.ChatManager;
 import org.jivesoftware.smack.Connection;
 import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.MessageListener;
+import org.jivesoftware.smack.PacketCollector;
 import org.jivesoftware.smack.PacketListener;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
@@ -202,7 +203,7 @@ public final class MACKNetworkHandler implements ICommunicationHandler {
 				setupXmppConnection(result, comp);
 			} else {
 				log.severe("Can't find a jabber identifier for the component "
-						+ comp);
+						+ comp + "for "+component.getAgent());
 			}
 		} else {
 			log.warning("Component isn't an interaction component. Don't know what to do with it. Ignoring...");
@@ -262,6 +263,8 @@ public final class MACKNetworkHandler implements ICommunicationHandler {
 									CASi.SIM_LOG.info("Receiving: "
 											+ message.getBody());
 									comp.receive(message.getBody());
+								} else {
+									CASi.SIM_LOG.warning("Message of type "+message.getType()+" received. I didn't pass it!");
 								}
 							}
 						});
@@ -270,8 +273,7 @@ public final class MACKNetworkHandler implements ICommunicationHandler {
 						Message.class), new FromContainsFilter(
 						MACK_SERVER_IDENTIFIER));
 
-				// PacketCollector myCollector =
-				// connection.createPacketCollector(filter);
+//				 PacketCollector myCollector = connection.createPacketCollector(filter);
 
 				PacketListener myListener = new PacketListener() {
 					public void processPacket(Packet packet) {
@@ -353,4 +355,5 @@ public final class MACKNetworkHandler implements ICommunicationHandler {
 				enc.close();
 		}
 	}
+	
 }

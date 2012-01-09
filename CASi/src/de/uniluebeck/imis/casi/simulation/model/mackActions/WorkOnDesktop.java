@@ -12,10 +12,9 @@
 package de.uniluebeck.imis.casi.simulation.model.mackActions;
 
 import de.uniluebeck.imis.casi.simulation.model.AbstractComponent;
+import de.uniluebeck.imis.casi.simulation.model.Agent;
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.AtomicAction;
 import de.uniluebeck.imis.casi.simulation.model.mackComponents.Desktop;
-import de.uniluebeck.imis.casi.simulation.model.mackComponents.Desktop.Frequency;
-import de.uniluebeck.imis.casi.simulation.model.mackComponents.Desktop.Program;
 
 /**
  * @author Tobias Mende
@@ -50,8 +49,7 @@ public class WorkOnDesktop extends AtomicAction {
 	
 	@Override
 	protected void postActionTask(AbstractComponent performer) {
-		desktop.work(Program.unknown, Frequency.inactive);
-		super.postActionTask(performer);
+		desktop.finishPerformingAction(this, (Agent) performer);
 	}
 
 	@Override

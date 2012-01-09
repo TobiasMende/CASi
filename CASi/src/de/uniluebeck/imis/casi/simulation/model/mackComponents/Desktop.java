@@ -13,11 +13,15 @@ package de.uniluebeck.imis.casi.simulation.model.mackComponents;
 
 import java.awt.geom.Point2D;
 import java.util.HashMap;
+import java.util.Random;
 
+import de.uniluebeck.imis.casi.CASi;
 import de.uniluebeck.imis.casi.communication.mack.MACKProtocolFactory;
+import de.uniluebeck.imis.casi.simulation.engine.SimulationClock;
 import de.uniluebeck.imis.casi.simulation.engine.SimulationEngine;
 import de.uniluebeck.imis.casi.simulation.model.AbstractInteractionComponent;
 import de.uniluebeck.imis.casi.simulation.model.Agent;
+import de.uniluebeck.imis.casi.simulation.model.SimulationTime;
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.AbstractAction;
 
 /**
@@ -69,12 +73,21 @@ public class Desktop extends AbstractInteractionComponent {
 	
 	/**
 	 * Starts working with the provided program and frequency
-	 * @param program
-	 * @param frequency
+	 * @param program the program to work with
+	 * @param frequency the initial frequency
 	 */
 	public void work(Program program, Frequency frequency) {
 		this.currentFrequency = frequency;
 		this.currentProgram = program;
+		send();
+		SimulationClock.getInstance().addListener(this);
+	}
+	
+	@Override
+	public void finishPerformingAction(AbstractAction action, Agent agent) {
+		SimulationClock.getInstance().removeListener(this);
+		currentFrequency = Frequency.inactive;
+		currentProgram = Program.unknown;
 		send();
 	}
 	
@@ -92,6 +105,52 @@ public class Desktop extends AbstractInteractionComponent {
 	@Override
 	public String getType() {
 		return "daa";
+	}
+	
+	@Override
+	protected void makeRecurringRequest(SimulationTime newTime) {
+		Frequency freq = generateRandomFrequency(currentFrequency);
+		if(!currentFrequency.equals(freq)) {
+			CASi.SIM_LOG.info(this+": freq changed from "+currentFrequency+" to "+freq);
+			currentFrequency = freq;
+			send();
+		}
+	}
+	
+	/**
+	 * Generates a random new frequency depending on a given frequency. The current frequncy is more possible than others.
+	 * @param lastFrequency the last frequency
+	 * @return the new frequency
+	 */
+	private Frequency generateRandomFrequency(Frequency lastFrequency) {
+		Frequency[] possibilities = new Frequency[4];
+		switch(lastFrequency) {
+		case very_active:
+			// Very active is more possible than active
+			possibilities[0] = Frequency.very_active;
+			possibilities[1] = Frequency.very_active;
+			possibilities[2] = Frequency.very_active;
+			possibilities[3] = Frequency.active;
+		break;
+		case inactive:
+			possibilities[0] = Frequency.inactive;
+			possibilities[1] = Frequency.inactive;
+			possibilities[2] = Frequency.inactive;
+			possibilities[3] = Frequency.active;
+		break;
+		default:
+			// Everything is possible
+			possibilities[0] = Frequency.active;
+			possibilities[1] = Frequency.active;
+			possibilities[2] = Frequency.very_active;
+			possibilities[3] = Frequency.inactive;
+		break;
+			
+		}
+		
+		Random rand = new Random(System.currentTimeMillis());
+		int index = rand.nextInt(4);
+		return possibilities[index];
 	}
 
 }

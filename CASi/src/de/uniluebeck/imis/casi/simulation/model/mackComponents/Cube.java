@@ -194,7 +194,7 @@ public class Cube extends AbstractInteractionComponent {
 	}
 
 	@Override
-	public void makePullRequest(SimulationTime newTime) {
+	public void makeRecurringRequest(SimulationTime newTime) {
 		SimulationEngine.getInstance().getCommunicationHandler()
 				.send(this, pullMessage);
 	}

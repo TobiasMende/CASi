@@ -41,6 +41,44 @@ public abstract class AbstractInteractionComponent extends AbstractComponent
 	/** The development logger */
 	private static final Logger log = Logger
 			.getLogger(AbstractInteractionComponent.class.getName());
+	
+	/** Counter for created interaction components */
+	private static int idCounter;
+
+	/** The radius of the monitored shape */
+	protected int radius = -1;
+	/** The direction in which this component looks */
+	protected Face direction;
+	/** The extent of the monitored area */
+	protected double opening = -1;
+	/** The action to which this component is connected */
+	protected Agent agent = null;
+	/** is this component a wearable? */
+	protected boolean wearable = false;
+
+	/** List of actions, that can be recognized and vetoed by this component */
+	protected Collection<AbstractAction> interestingActions;
+	/** actual value this sensor has recognized */
+	protected Object lastValue;
+	/** Last message, the actuator has received from the network controller */
+	protected Object lastResponse;
+	/** Time for pulling values from the server in seconds */
+	public static final int PULL_INTERVALL = 10;
+	/** Is pull enabled? */
+	protected boolean pullEnabled = false;
+	/** Counts the ticks of the clock */
+	protected int clockTickCounter = 0;
+	/** The type of this component */
+	protected Type type = Type.SENSOR;
+
+	/** The {@link Arc2D} representation of the monitored area */
+	private Shape shapeRepresentation;
+
+	/**
+	 * id for serialization
+	 */
+	private static final long serialVersionUID = -9016454038144232069L;
+	
 
 	/** Enumeration for possible directions in which this component looks */
 	public enum Face {
@@ -92,43 +130,6 @@ public abstract class AbstractInteractionComponent extends AbstractComponent
 		/** The component is as well a sensor as an actuator. */
 		MIXED;
 	}
-
-	/** Counter for created interaction components */
-	private static int idCounter;
-
-	/** The radius of the monitored shape */
-	protected int radius = -1;
-	/** The direction in which this component looks */
-	protected Face direction;
-	/** The extent of the monitored area */
-	protected double opening = -1;
-	/** The action to which this component is connected */
-	protected Agent agent = null;
-	/** is this component a wearable? */
-	protected boolean wearable = false;
-
-	/** List of actions, that can be recognized and vetoed by this component */
-	protected Collection<AbstractAction> interestingActions;
-	/** actual value this sensor has recognized */
-	protected Object lastValue;
-	/** Last message, the actuator has received from the network controller */
-	protected Object lastResponse;
-	/** Time for pulling values from the server in seconds */
-	public static final int PULL_INTERVALL = 10;
-	/** Is pull enabled? */
-	protected boolean pullEnabled = false;
-	/** Counts the ticks of the clock */
-	protected int clockTickCounter = 0;
-	/** The type of this component */
-	protected Type type = Type.SENSOR;
-
-	/** The {@link Arc2D} representation of the monitored area */
-	private Shape shapeRepresentation;
-
-	/**
-	 * id for serialization
-	 */
-	private static final long serialVersionUID = -9016454038144232069L;
 
 	/**
 	 * Constructor for a new interaction component with a given identifier and
@@ -356,7 +357,7 @@ public abstract class AbstractInteractionComponent extends AbstractComponent
 	@Override
 	public void timeChanged(SimulationTime newTime) {
 		if ((clockTickCounter = (++clockTickCounter) % PULL_INTERVALL) == 0) {
-			makePullRequest(newTime);
+			makeRecurringRequest(newTime);
 		}
 	}
 
@@ -364,7 +365,7 @@ public abstract class AbstractInteractionComponent extends AbstractComponent
 	 * Overwrite to let the component periodically pull informations from the
 	 * communication handler
 	 */
-	protected void makePullRequest(SimulationTime newTime) {
+	protected void makeRecurringRequest(SimulationTime newTime) {
 		// nothing to do here.
 	}
 

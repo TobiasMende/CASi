@@ -55,6 +55,16 @@ public class SimulationClock implements Listenable<ISimulationClockListener> {
 	private boolean invalidateTimer;
 	/** Listeners are informed about every tick of the clock */
 	private ArrayList<ISimulationClockListener> listeners = new ArrayList<ISimulationClockListener>();
+	/**
+	 * A list of listeners which should be add next possible time to avoid
+	 * concurrent modification exceptions
+	 */
+	private ArrayList<ISimulationClockListener> listenersToAdd = new ArrayList<ISimulationClockListener>();
+	/**
+	 * A list of listener which should be removed next possible time to avoid
+	 * concurrent modification exceptions
+	 */
+	private ArrayList<ISimulationClockListener> listenersToRemove = new ArrayList<ISimulationClockListener>();
 
 	/** The application logger */
 	private Logger log = Logger.getLogger(SimulationClock.class.getName());
@@ -226,14 +236,18 @@ public class SimulationClock implements Listenable<ISimulationClockListener> {
 
 	@Override
 	public synchronized void addListener(ISimulationClockListener listener) {
-		if (!listeners.contains(listener)) {
-			listeners.add(listener);
+		if (!listeners.contains(listener) && !listenersToAdd.contains(listener)) {
+			listenersToAdd.add(listener);
+			listenersToRemove.remove(listener);
 		}
 	}
 
 	@Override
 	public synchronized void removeListener(ISimulationClockListener listener) {
-		listeners.remove(listener);
+		if(!listenersToRemove.contains(listener)) {
+			listenersToRemove.add(listener);
+			listenersToAdd.remove(listener);
+		}
 	}
 
 	/**
@@ -285,6 +299,7 @@ public class SimulationClock implements Listenable<ISimulationClockListener> {
 	 * Informs the listeners about the simulation's start
 	 */
 	private synchronized void informListenerAboutSimulationStart() {
+		handleListeners();
 		for (ISimulationClockListener l : listeners) {
 			l.simulationStarted();
 		}
@@ -295,7 +310,8 @@ public class SimulationClock implements Listenable<ISimulationClockListener> {
 	/**
 	 * Informs the listeners about the simulation's stop
 	 */
-	private synchronized void informListenerAboutSimulationStop() {
+	private void informListenerAboutSimulationStop() {
+		handleListeners();
 		for (ISimulationClockListener l : listeners) {
 			l.simulationStopped();
 		}
@@ -307,6 +323,7 @@ public class SimulationClock implements Listenable<ISimulationClockListener> {
 	 * Informs the listeners about a time change
 	 */
 	private synchronized void informListenerAboutTimeChange() {
+		handleListeners();
 		for (ISimulationClockListener l : listeners) {
 			l.timeChanged(currentTime);
 		}
@@ -324,11 +341,21 @@ public class SimulationClock implements Listenable<ISimulationClockListener> {
 	 *            continues.
 	 */
 	private synchronized void informListenerAboutPause(boolean pause) {
+		handleListeners();
 		for (ISimulationClockListener l : listeners) {
 			l.simulationPaused(pause);
 		}
 		log.fine("Informed " + listeners.size()
 				+ " clock listeners about pause was set to " + pause);
+	}
+	/**
+	 * Handles the addition and remove actions from the listeners lists.
+	 */
+	private synchronized void handleListeners() {
+		listeners.addAll(listenersToAdd);
+		listenersToAdd.clear();
+		listeners.removeAll(listenersToRemove);
+		listenersToRemove.clear();
 	}
 
 }

@@ -20,6 +20,7 @@ import java.awt.geom.Point2D;
 import javax.swing.JComponent;
 
 import de.uniluebeck.imis.casi.simulation.factory.GraphicFactory;
+import de.uniluebeck.imis.casi.simulation.model.AbstractComponent;
 
 /**
  * This abstract class represents a component of the simulation. All simulation
@@ -32,6 +33,7 @@ import de.uniluebeck.imis.casi.simulation.factory.GraphicFactory;
 @SuppressWarnings("serial")
 public abstract class ComponentView extends JComponent {
 
+	protected boolean isSelected;
 	protected Color stateColor;
 	protected AffineTransform transform;
 	protected Point2D position;
@@ -58,6 +60,15 @@ public abstract class ComponentView extends JComponent {
 		this.stateColor = Color.WHITE;
 		invalidate();
 	}
+
+	/**
+	 * Sets the {@link ComponentView} as 'selected', if it is representing the
+	 * given {@link AbstractComponent} component.
+	 * 
+	 * @param component
+	 *            the component
+	 */
+	abstract public void setSelected(AbstractComponent component);
 
 	/**
 	 * Gets the real position for the agent

@@ -17,6 +17,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -60,7 +61,7 @@ public class InformationPanel extends JPanel implements ActionListener,
 
 	private Room shownRoom;
 
-	// private ArrayList<Room> roomList;
+	private List<ComponentView> componentViews;
 
 	/**
 	 * The constructor sets layout and components.
@@ -108,8 +109,11 @@ public class InformationPanel extends JPanel implements ActionListener,
 	/**
 	 * This method sets the entries of the JComboBox.
 	 */
-	public void setInformationComboBox() {
+	public void setInformationComboBox(List<ComponentView> componentViews) {
 
+
+		this.componentViews = componentViews;
+		
 		try {
 
 			agentList = new ArrayList<Agent>();
@@ -235,6 +239,12 @@ public class InformationPanel extends JPanel implements ActionListener,
 
 			if (!informationTextArea.getText().equals(newInfo)) {
 				informationTextArea.setText(newInfo);
+
+				for (ComponentView componentView : this.componentViews) {
+
+					componentView.setSelected(agentList.get(selectedIndex_A));
+
+				}
 			}
 
 			// if the selected index is an interaction component
@@ -245,6 +255,13 @@ public class InformationPanel extends JPanel implements ActionListener,
 
 			if (!informationTextArea.getText().equals(newInfo)) {
 				informationTextArea.setText(newInfo);
+
+				for (ComponentView componentView : this.componentViews) {
+
+					componentView.setSelected(interactionCompList
+							.get(selectedIndex_I));
+
+				}
 			}
 
 			// if the separator is selected
@@ -262,7 +279,6 @@ public class InformationPanel extends JPanel implements ActionListener,
 			}
 
 		}
-
 	}
 
 	/**
@@ -293,7 +309,7 @@ public class InformationPanel extends JPanel implements ActionListener,
 					+ "Current position: " + agent.getCurrentPosition() + "\n";
 
 			info = info + "Action pool:\n";
-			
+
 			for (AbstractAction abstractAction : agent.getActionPoolCopy()) {
 
 				info = info + "  " + abstractAction.getInformationDescription()
@@ -316,7 +332,7 @@ public class InformationPanel extends JPanel implements ActionListener,
 					+ "Current position: " + agent.getCurrentPosition() + "\n";
 
 			info = info + "Action pool:\n";
-			
+
 			for (AbstractAction abstractAction : agent.getActionPoolCopy()) {
 
 				info = info + "  " + abstractAction.getInformationDescription()

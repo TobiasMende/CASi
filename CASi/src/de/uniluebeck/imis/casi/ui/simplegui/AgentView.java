@@ -23,6 +23,7 @@ import java.awt.geom.Point2D;
 import javax.swing.SwingUtilities;
 
 import de.uniluebeck.imis.casi.simulation.model.AbstractComponent.INTERRUPTIBILITY;
+import de.uniluebeck.imis.casi.simulation.model.AbstractComponent;
 import de.uniluebeck.imis.casi.simulation.model.Agent;
 import de.uniluebeck.imis.casi.simulation.model.Agent.STATE;
 import de.uniluebeck.imis.casi.simulation.model.IAgentListener;
@@ -58,6 +59,15 @@ public class AgentView extends ComponentView implements IAgentListener,
 		setToolTipText(agent.getName() + " (" + agent.getIdentifier() + ")");
 	}
 
+	@Override
+	public void setSelected(AbstractComponent component) {
+
+		isSelected = component.equals(agent);
+		
+		this.repaint();
+
+	}
+
 	/**
 	 * This method sets the information panel to the agent view and adds itself
 	 * as mouse listener. So the information panel can react, when mouse clicks
@@ -78,19 +88,29 @@ public class AgentView extends ComponentView implements IAgentListener,
 	 */
 	@Override
 	public void paint(final Graphics g) {
-		
+
 		super.paint(g);
 
 		Graphics2D g2D = (Graphics2D) g;
 
 		Dimension dim = getSize();
-
+		
+		if (this.isSelected) {
+			g2D.setColor(Color.YELLOW);
+			g2D.fillOval(0, 0, (int) dim.getWidth(), (int) dim.getHeight());
+		}
+		
 		g2D.setColor(Color.BLACK);
-		g2D.fillOval(0, 0, (int) dim.getWidth(), (int) dim.getHeight());
+		g2D.fillOval(1, 1, (int) dim.getWidth() - 2, (int) dim.getHeight() - 2);
 
 		g2D.setColor(stateColor);
-		g2D.fillOval(1, 1, (int) dim.getWidth() - 2, (int) dim.getWidth() - 2);
+		g2D.fillOval(2, 2, (int) dim.getWidth() - 4, (int) dim.getHeight() - 4);
 
+		if (this.isSelected) {
+			g2D.setColor(Color.GREEN);
+			g2D.fillOval(3, 3, (int) dim.getWidth() - 6,
+					(int) dim.getHeight() - 6);
+		}
 	}
 
 	/**

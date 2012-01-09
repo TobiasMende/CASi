@@ -19,6 +19,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.AffineTransform;
 
+import de.uniluebeck.imis.casi.simulation.model.AbstractComponent;
 import de.uniluebeck.imis.casi.simulation.model.AbstractInteractionComponent;
 
 /**
@@ -58,6 +59,15 @@ public class InteractionComponentView extends ComponentView implements
 				+ interactionComp.getType());
 
 	}
+	
+	@Override
+	public void setSelected(AbstractComponent component) {
+		
+		isSelected = component.equals(interactionComp);
+		
+		this.repaint();
+		
+	}
 
 	/**
 	 * This method sets the {@link InformationPanel} to the
@@ -96,11 +106,22 @@ public class InteractionComponentView extends ComponentView implements
 
 		Dimension dim = getSize();
 
+		if (this.isSelected) {
+			g2D.setColor(Color.YELLOW);
+			g2D.fillRect(0, 0, (int) dim.getWidth(), (int) dim.getHeight());
+		}
+		
 		g2D.setColor(Color.BLACK);
 		g2D.fillRect(1, 1, (int) dim.getWidth() - 2, (int) dim.getHeight() - 2);
 
 		g2D.setColor(this.stateColor);
-		g2D.fillRect(2, 2, (int) dim.getWidth() - 4, (int) dim.getWidth() - 4);
+		g2D.fillRect(2, 2, (int) dim.getWidth() - 4, (int) dim.getHeight() - 4);
+		
+		if (this.isSelected) {
+			g2D.setColor(Color.GREEN);
+			g2D.fillRect(3, 3, (int) dim.getWidth() - 6,
+					(int) dim.getHeight() - 6);
+		}
 	}
 
 	@Override

@@ -77,13 +77,14 @@ public class MainViewSimpleGui extends JFrame implements IMainView,
 		/** Set up components */
 		this.setComponents();
 
-		/** Set agents, sensor and actuators in the information combo box */
-		this.informationPanel.setInformationComboBox();
-
 		/** Set frame visible, paint components of the simulation */
 		this.setVisible(true);
 		simPanel.setVisible(true);
 		this.simPanel.paintSimulationComponents(this.informationPanel);
+
+		/** Set agents, sensor and actuators in the information combo box */
+		this.informationPanel
+				.setInformationComboBox(simPanel.getSimulationComponents());
 
 		/**
 		 * Set the listener (background panel of simulation panel) of the view
@@ -91,7 +92,7 @@ public class MainViewSimpleGui extends JFrame implements IMainView,
 		 */
 		this.viewMenu.setViewlistener(simPanel.getViewMenuListener());
 		simPanel.invalidate();
-		
+
 		log.info("Show simple GUI");
 	}
 
@@ -99,60 +100,60 @@ public class MainViewSimpleGui extends JFrame implements IMainView,
 	 * Sets up the components of the simple GUI main frame.
 	 */
 	private void setComponents() {
-	
+
 		/** Set menu bar */
 		JMenuBar menuBar = new JMenuBar();
 		JMenu mainMenu = new JMenu("Menu");
-	
+
 		/** Configure save item */
 		JMenuItem stopItem = new JMenuItem("Stop Simulation");
 		stopItem.setActionCommand("stop");
 		stopItem.addActionListener(this);
 		mainMenu.add(stopItem);
 		mainMenu.addSeparator();
-	
+
 		/** Configure save item */
 		JMenuItem saveItem = new JMenuItem("Save...");
 		saveItem.setActionCommand("save");
 		saveItem.addActionListener(this);
 		mainMenu.add(saveItem);
-	
+
 		/** Configure load item */
 		JMenuItem loadItem = new JMenuItem("Load...");
 		loadItem.setActionCommand("load");
 		loadItem.addActionListener(this);
 		mainMenu.add(loadItem);
 		mainMenu.addSeparator();
-	
+
 		/** Configure close item */
 		JMenuItem closeItem = new JMenuItem("Exit");
 		closeItem.setActionCommand("close");
 		closeItem.addActionListener(this);
 		mainMenu.add(closeItem);
-	
+
 		/** Add menu to menu bar */
 		menuBar.add(mainMenu);
-	
+
 		/** Add view to menu bar */
 		viewMenu = new ViewMenu();
 		menuBar.add(viewMenu);
-	
+
 		/** New SimulationPanel */
 		simPanel = new SimulationPanel();
-		//JScrollPane scrollPane = new JScrollPane(simPanel);
+		// JScrollPane scrollPane = new JScrollPane(simPanel);
 		JPanel centerPanel = new JPanel();
 		centerPanel.setLayout(null);
 		centerPanel.add(simPanel);
 		centerPanel.setBorder(BorderFactory.createTitledBorder("Simulation"));
-		
+
 		this.addComponentListener(simPanel);
-	
+
 		/** New ClockViewPanel */
 		ClockViewPanel clockViewPanel = new ClockViewPanel();
-	
+
 		/** New InformationPanel */
 		informationPanel = new InformationPanel();
-	
+
 		this.add(centerPanel, BorderLayout.CENTER);
 		this.add(menuBar, BorderLayout.NORTH);
 		this.add(clockViewPanel, BorderLayout.SOUTH);
@@ -161,7 +162,7 @@ public class MainViewSimpleGui extends JFrame implements IMainView,
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		
+
 		/**
 		 * Set actions of the main menu
 		 */

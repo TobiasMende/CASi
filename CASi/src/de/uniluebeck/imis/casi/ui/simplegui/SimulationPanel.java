@@ -19,6 +19,7 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 import javax.swing.BorderFactory;
@@ -54,7 +55,7 @@ public class SimulationPanel extends JLayeredPane implements
 	private double worldSizeX;
 	private double worldSizeY;
 
-	private ArrayList<ComponentView> simulationCmponents = new ArrayList<ComponentView>();
+	private ArrayList<ComponentView> simulationComponents = new ArrayList<ComponentView>();
 
 	private ViewSettings viewSettings;
 
@@ -89,7 +90,7 @@ public class SimulationPanel extends JLayeredPane implements
 		this.setBounds(20, 20, (int) size - 30, (int) size - 30);
 		this.backgroundPanel.setBounds(0, 0, (int) size, (int) size);
 
-		for (ComponentView componentView : simulationCmponents) {
+		for (ComponentView componentView : simulationComponents) {
 
 			componentView.setTransformed();
 		}
@@ -126,7 +127,7 @@ public class SimulationPanel extends JLayeredPane implements
 
 				AgentView agentView = new AgentView(agent, transform);
 				agent.addListener(agentView);
-				simulationCmponents.add(agentView);
+				simulationComponents.add(agentView);
 				agentView.setInformationPanel(infoPanel);
 				this.add(agentView, new Integer(3));
 
@@ -138,7 +139,7 @@ public class SimulationPanel extends JLayeredPane implements
 
 				InteractionComponentView interactionCompView = new InteractionComponentView(
 						interactionComp, transform, viewSettings);
-				simulationCmponents.add(interactionCompView);
+				simulationComponents.add(interactionCompView);
 				interactionCompView.setInformationPanel(infoPanel);
 				this.add(interactionCompView, new Integer(2));
 			}
@@ -206,6 +207,11 @@ public class SimulationPanel extends JLayeredPane implements
 	@Override
 	public void paint(Graphics g) {
 		super.paint(g);
+	}
+	
+	public List<ComponentView> getSimulationComponents() {
+		
+		return simulationComponents;
 	}
 
 }

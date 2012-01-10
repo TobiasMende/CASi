@@ -53,7 +53,7 @@ Die Pfeile in der Abbildung geben den Hauptinformationsfluss zwischen den Kompon
 \end{figure}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Konzeption der Simulationsengine}\label{subsec:concept_engine}
+\subsection{Simulationsengine}\label{subsec:concept_engine}
 
 Der Kern des Simulationsframeworks ist die Simulationsengine, die im wesentlichen aus den Klasse \texttt{SimulationEngine} und \texttt{SimulationClock} besteht. Sowohl die Clock als auch die Engine sind als Singleton realisiert und können deshalb aus jeder Klasse angesprochen werden.
 
@@ -66,7 +66,7 @@ Die Engine hält die Welt (\texttt{World}) bereit, welche die Konfiguration und 
 %\imiscomment{Grobkonzeption eines einzelnen Moduls}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Konzeption von Generatoren}\label{subsec:concept_generators}
+\subsection{Generatoren}\label{subsec:concept_generators}
 Generatoren erzeugen \texttt{World}-Objekte, die von der Simulationsengine simuliert werden können.
 
 Ein Generator muss sich darum kümmern, Räume, Sensoren, Aktuatoren, Agenten und Aktionen zur erzeugen und geeignet zu verknüpfen. In unserer Implementierung gibt es einen Generator, der eine Welt erzeugt, in dem fest einprogrammiert Java-Objekte erzeugt werden.
@@ -78,12 +78,12 @@ Generatoren können in der Main-Klasse des Simulators ausgetauscht werden. Die e
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Konzeption von Benutzungsschnittstellen}\label{subsec:concept_interfaces}
+\subsection{Benutzungsschnittstellen}\label{subsec:concept_interfaces}
 Benutzungsschnittstellen können bereit gestellt werden, indem eine Implementierung des Interfaces \texttt{IMainView} in der Main-Klasse des Simulators an den \texttt{MainController} übergeben wird. Die Benutzungsschnittstellen können sowohl passiv als auch interaktiv gestaltet werden. Hierfür können sich Objekte des Interfaces als Listener bei den Objekten des Modells registrieren und auf die \texttt{SimulationClock} und die Engine zugreifen, da beide Komponenten als Singleton realisiert sind.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Konzeption von Aktionen}\label{subsec:concept_actions}
+\subsection{Aktionen}\label{subsec:concept_actions}
 Aktionen können allgemein durch folgende Parameter spezifiziert werden:
 \begin{description}
 	\item[priority] Die Priorität einer Aktion als Integer zwischen \texttt{0} und \texttt{10}.
@@ -102,7 +102,7 @@ Aktionen müssen vom Generator erzeugt werden und einem oder mehreren Agenten hi
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Konzeption der Aktionsverwaltung}\label{subsec:concept_actionhandling}
+\subsection{Aktionsverwaltung}\label{subsec:concept_actionhandling}
 Zur Aktionsverwaltung hat jeder Agent einen \texttt{IActionScheduler}, der im Konstruktor ausgetauscht werden kann. Die Aufgabe des Schedulers ist es, die Aktions-Sammlungen bereit zu halten. Das Konzept sieht vor, dass es für jeden Agenten drei Listen von Aktionen gibt:
 \begin{description}
 	\item[todoList] Diese Liste beinhaltet Aufgaben, die in jedem Fall während der Simulation entsprechend ihrer oben beschriebenen Parameter ausgeführt werden sollen.
@@ -132,7 +132,7 @@ In der spezifischen Simulation und dem \texttt{MACKCommunicationHandler} sind Na
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Konzeption von Sensoren und Aktuatoren}\label{subsec:concept_actuators_sensors}
+\subsection{Sensoren und Aktuatoren}\label{subsec:concept_actuators_sensors}
 Da Sensoren und Aktuatoren viele Gemeinsamkeiten aufweisen, müssen alle konkreten Sensoren und Aktuatoren von der abstrakten Klasse \texttt{AbstractInteractionComponent} erben, die auch das \texttt{ICommunication\-Component}-Interface implementiert.
 
 Beide Komponenten haben einen Bereich, in dem sie auf Aktivitäten reagieren oder bei den Agenten Aktivitäten auslösen können. Der Bereich kann als Ausrichtung (Blickrichtung), Öffnungswinkel und Radius definiert werden, indem der entsprechende Konstruktor verwendet wird. Werden diese Parameter nicht angegeben, wird der komplette Raum, in dem sich eine Komponente befindet überwacht. Mit der Methode \texttt{setShapeRepresentation(Shape shape)} kann darüber hinaus eine beliebige Shape als Überwachungsbereich festgelegt werden.

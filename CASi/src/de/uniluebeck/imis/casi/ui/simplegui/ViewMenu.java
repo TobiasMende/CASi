@@ -15,6 +15,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JMenu;
 import javax.swing.JRadioButtonMenuItem;
+import javax.swing.JSeparator;
 
 import de.uniluebeck.imis.casi.CASi;
 
@@ -30,7 +31,8 @@ public class ViewMenu extends JMenu {
 
 	private JRadioButtonMenuItem paintDoorLabelsItem, paintSensorLabelsItem,
 			paintRoomLabelsItem, paintSensorMonitoringAreaItem,
-			paintDoorCentralPointsItem, paintRoomCentralPointsItem, paintSensorsItem;
+			paintDoorCentralPointsItem, paintRoomCentralPointsItem,
+			paintSensorsItem;
 
 	/**
 	 * The constructor calls the super contructor and set up the components of
@@ -40,21 +42,10 @@ public class ViewMenu extends JMenu {
 
 		super("View");
 
-		paintDoorLabelsItem = new JRadioButtonMenuItem("Show door labels");
-		paintDoorLabelsItem.setSelected(CASi.DEV_MODE);
-		paintDoorLabelsItem.setActionCommand("paintDoorLabels");
-		add(paintDoorLabelsItem);
-
-		paintSensorLabelsItem = new JRadioButtonMenuItem(
-				"Show sensor/actuator labels");
-		paintSensorLabelsItem.setSelected(CASi.DEV_MODE);
-		paintSensorLabelsItem.setActionCommand("paintSensorLabels");
-		add(paintSensorLabelsItem);
-
-		paintRoomLabelsItem = new JRadioButtonMenuItem("Show room labels");
-		paintRoomLabelsItem.setSelected(CASi.DEV_MODE);
-		paintRoomLabelsItem.setActionCommand("paintRoomLabels");
-		add(paintRoomLabelsItem);
+		paintSensorsItem = new JRadioButtonMenuItem("Show sensors/actuators");
+		paintSensorsItem.setSelected(CASi.DEV_MODE);
+		paintSensorsItem.setActionCommand("paintSensors");
+		add(paintSensorsItem);
 
 		paintSensorMonitoringAreaItem = new JRadioButtonMenuItem(
 				"Show sensor/actuator area");
@@ -63,23 +54,38 @@ public class ViewMenu extends JMenu {
 				.setActionCommand("paintSensorMonitoringArea");
 		add(paintSensorMonitoringAreaItem);
 
+		paintSensorLabelsItem = new JRadioButtonMenuItem(
+				"Show sensor/actuator labels");
+		paintSensorLabelsItem.setSelected(CASi.DEV_MODE);
+		paintSensorLabelsItem.setActionCommand("paintSensorLabels");
+		add(paintSensorLabelsItem);
+		
+		add(new JSeparator());
+
+		paintDoorLabelsItem = new JRadioButtonMenuItem("Show door labels");
+		paintDoorLabelsItem.setSelected(CASi.DEV_MODE);
+		paintDoorLabelsItem.setActionCommand("paintDoorLabels");
+		add(paintDoorLabelsItem);
+
 		paintDoorCentralPointsItem = new JRadioButtonMenuItem(
 				"Show door points");
 		paintDoorCentralPointsItem.setSelected(CASi.DEV_MODE);
 		paintDoorCentralPointsItem.setActionCommand("paintDoorCentralPoints");
 		add(paintDoorCentralPointsItem);
+		
+		add(new JSeparator());
+
+		paintRoomLabelsItem = new JRadioButtonMenuItem("Show room labels");
+		paintRoomLabelsItem.setSelected(CASi.DEV_MODE);
+		paintRoomLabelsItem.setActionCommand("paintRoomLabels");
+		add(paintRoomLabelsItem);
 
 		paintRoomCentralPointsItem = new JRadioButtonMenuItem(
 				"Show room points");
 		paintRoomCentralPointsItem.setSelected(CASi.DEV_MODE);
 		paintRoomCentralPointsItem.setActionCommand("paintRoomCentralPoints");
 		add(paintRoomCentralPointsItem);
-		
-		paintSensorsItem = new JRadioButtonMenuItem(
-				"Show sensors/actuators");
-		paintSensorsItem.setSelected(CASi.DEV_MODE);
-		paintSensorsItem.setActionCommand("paintSensors");
-		add(paintSensorsItem);
+
 	}
 
 	/**

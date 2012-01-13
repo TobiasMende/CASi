@@ -56,11 +56,11 @@ public class DoorLight extends AbstractInteractionComponent {
 
 	/** The current state of this door light */
 	private State currentState = State.maybeInterruptible;
-	/** The door to which this actuator is attached  */
+	/** The door to which this actuator is attached */
 	private Door door;
 	/** The room to which the access is restricted by this light */
 	private Room room;
-	
+
 	/** The message which is send as pull request */
 	private String pullMessage;
 
@@ -83,7 +83,8 @@ public class DoorLight extends AbstractInteractionComponent {
 		this.door = door;
 		this.room = room;
 		this.agent = agent;
-		pullMessage = MACKProtocolFactory.generatePullRequest(agent, "doorlight", "interruptibility");
+		pullMessage = MACKProtocolFactory.generatePullRequest(agent,
+				"doorlight", "interruptibility");
 	}
 
 	@Override
@@ -92,18 +93,21 @@ public class DoorLight extends AbstractInteractionComponent {
 			log.severe("Unknown message format. Can't receive information");
 			return;
 		}
-		
-		MACKInformation info = MACKProtocolFactory.parseMessage((String)message);
-		if(info == null) {
+
+		MACKInformation info = MACKProtocolFactory
+				.parseMessage((String) message);
+		if (info == null) {
 			log.severe("Message was invalid");
 			return;
 		}
 		String interrupt = info.getAccessibleEntities().get("interruptibility");
-		if(interrupt == null) {
-			CASi.SIM_LOG.info(this+": No accesible information for the interruptibility of "+agent);
+		if (interrupt == null) {
+			CASi.SIM_LOG.info(this
+					+ ": No accesible information for the interruptibility of "
+					+ agent);
 			return;
 		}
-		CASi.SIM_LOG.fine(this+": Receiving update!");
+		CASi.SIM_LOG.fine(this + ": Receiving update!");
 		try {
 			int value = Integer.parseInt(interrupt);
 			switch (value) {
@@ -118,18 +122,22 @@ public class DoorLight extends AbstractInteractionComponent {
 				break;
 			}
 		} catch (NumberFormatException e) {
-			CASi.SIM_LOG.warning("Invalid Number Format, setting state to "+State.maybeInterruptible);
+			CASi.SIM_LOG.warning("Invalid Number Format, setting state to "
+					+ State.maybeInterruptible);
 			setCurrentState(State.maybeInterruptible);
 		}
 	}
-	
+
 	/**
 	 * Sets the current state which is represented by this door light
-	 * @param currentState the currentState to set
+	 * 
+	 * @param currentState
+	 *            the currentState to set
 	 */
 	private void setCurrentState(State currentState) {
-		if(!currentState.equals(this.currentState)) {
-			CASi.SIM_LOG.info(this+": changing state from "+this.currentState+" to "+currentState);
+		if (!currentState.equals(this.currentState)) {
+			CASi.SIM_LOG.info(this + ": changing state from "
+					+ this.currentState + " to " + currentState);
 			this.currentState = currentState;
 		}
 	}
@@ -191,7 +199,7 @@ public class DoorLight extends AbstractInteractionComponent {
 		Random random = new Random(System.currentTimeMillis());
 		double value = random.nextDouble() + 0.25;
 		boolean accessAllowed = (value >= 0.5);
-//		log.info("Random value = "+value+", accessAllowed: "+accessAllowed);
+		// log.info("Random value = "+value+", accessAllowed: "+accessAllowed);
 		return accessAllowed;
 	}
 
@@ -223,8 +231,8 @@ public class DoorLight extends AbstractInteractionComponent {
 	 *         <code>false</code> otherwise.
 	 */
 	private boolean agentWantsInRoom(Iterator<Point2D> iter) {
-		while(iter.hasNext()) {
-			if(room.contains(iter.next())) {
+		while (iter.hasNext()) {
+			if (room.contains(iter.next())) {
 				return true;
 			}
 		}
@@ -279,10 +287,10 @@ public class DoorLight extends AbstractInteractionComponent {
 		SimulationEngine.getInstance().getCommunicationHandler()
 				.send(this, pullMessage);
 	}
-	
+
 	@Override
 	public String getType() {
 		return "doorlight";
 	}
-	
+
 }

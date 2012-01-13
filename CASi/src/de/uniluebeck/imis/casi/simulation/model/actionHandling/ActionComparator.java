@@ -11,6 +11,7 @@
  */
 package de.uniluebeck.imis.casi.simulation.model.actionHandling;
 
+import java.io.Serializable;
 import java.util.Comparator;
 import java.util.TreeSet;
 
@@ -44,7 +45,12 @@ import de.uniluebeck.imis.casi.simulation.model.actionHandling.schedulers.Defaul
  * @author Tobias Mende
  * 
  */
-public class ActionComparator implements Comparator<AbstractAction> {
+public class ActionComparator implements Comparator<AbstractAction>, Serializable {
+
+	/**
+	 * Serialization identifier
+	 */
+	private static final long serialVersionUID = -3767832458193826199L;
 
 	@Override
 	public int compare(AbstractAction first, AbstractAction second) {

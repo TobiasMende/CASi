@@ -58,7 +58,11 @@ public class Linker {
 	}
 
 	/**
-	 * Links Agents their Actions. Both scheduled actions and pool actions.
+	 * Links Agents their Actions. Both scheduled actions and pool actions. The
+	 * action and agent get associated by looking at the beginning of the
+	 * actions hashkey, it must not start with anything else than the identifier
+	 * of the agent! All actions that have keys ending in "_pool" will be added
+	 * to the pool rather than the action list.
 	 * 
 	 * ASSERT: both Agents and Actions are all set
 	 */

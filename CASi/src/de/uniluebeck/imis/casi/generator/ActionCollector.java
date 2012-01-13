@@ -61,7 +61,11 @@ public class ActionCollector {
 	 * @param newAction
 	 *            the new Action
 	 * @param identifier
-	 *            the identifier under which this action should be stored
+	 *            the identifier under which this action should be stored. It
+	 *            has to start with an agents identifiert in order to get it
+	 *            added to him automatically. Also, if suffixed with "_pool" it
+	 *            will get automatically added to the agents pool by the linker
+	 *            later on.
 	 */
 	public void newAction(String identifier, AbstractAction newAction) {
 		alreadyCreatedActions.put(identifier, newAction);

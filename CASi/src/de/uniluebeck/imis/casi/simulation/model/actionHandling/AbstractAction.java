@@ -363,8 +363,7 @@ public abstract class AbstractAction implements Listenable<IActionListener>,
 	}
 
 	/**
-	 * Method for cloning an agent and its components to a relay new agent with
-	 * state IDLE.
+	 * Method for cloning an abstract action and its sub-components.
 	 * 
 	 * @return the clone
 	 */

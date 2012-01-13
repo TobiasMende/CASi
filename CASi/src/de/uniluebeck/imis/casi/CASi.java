@@ -13,7 +13,10 @@ package de.uniluebeck.imis.casi;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
@@ -54,38 +57,101 @@ public class CASi {
 	private static FileHandler devFileHandler, simFileHandler;
 	/** Handlers for logging on the console */
 	private static ExtendedConsoleHandler devConsoleHandler, simConsoleHandler;
+	/** The command line options */
+	public static ParameterParser commandLineOptions;
 
 	/**
 	 * The starting point for the entire program, changes can be made here to
 	 * customize the simulator
 	 * 
-	 * @param args
-	 *            optional arguments:
-	 *            <ul>
-	 *            <li>Verbosity Flag (0,1)
-	 *            <li>DevMode Flag (0,1)
-	 *            <li>NetworkConfig (String path)
-	 *            </ul>
+	 * @param args the command line arguments. Use argument {@code --help} to get further information.
 	 */
 	public static void main(String[] args) {
 		// DON'T REMOVE THESE LINES:
-		setupFlags(args);
-		setupLogging();
-		logHeader();
-
+		configureApplication(args);
 		// DO WHAT YOU WANT:
+		configureSimulation(args);
+	}
+
+	/**
+	 * Configures the simulator and the simulation itself. Change this method to provide customized behavior.
+	 * @param args the command line arguments
+	 */
+	private static void configureSimulation(String[] args) {
 		final IWorldGenerator generator = new de.uniluebeck.imis.casi.simulations.mate.generator.java.WorldGenerator();
 		Locale.setDefault(Locale.GERMAN);
-		 final ICommunicationHandler networkHandler =  generateCommunicationHandler(args);
-//		final ICommunicationHandler networkHandler = new CommunicationLogger();
+		final ICommunicationHandler networkHandler = generateCommunicationHandler(args);
+		// final ICommunicationHandler networkHandler = new
+		// CommunicationLogger();
 		// ((MACKNetworkHandler)networkHandler).serializeSettings();
 		final IMainView mainView = new MainViewSimpleGui();
 		final MainController mc = new MainController(generator, networkHandler,
 				mainView);
-
 		// Call the main controller and let it work:
 		mc.init();
 		mc.start();
+	}
+
+	/**
+	 * Configures the applicaton itself. Don't change this method!
+	 * @param args the command line arguments
+	 */
+	private static void configureApplication(String[] args) {
+		try {
+			commandLineOptions = new ParameterParser(args);		
+			
+		} catch (Exception e) {
+			System.err.println(e.getMessage());
+			System.err.println("An error occured while parsing the parameter. Please correct your input.");
+			System.exit(0);
+		}
+		if (commandLineOptions.isHelpRequest()) {
+			showHelp();
+			System.exit(0);
+		}
+		setupFlags();
+		setupLogging();
+		showLogHeader(false);
+	}
+
+	/**
+	 * This methods prints some advises for using the simulator
+	 */
+	private static void showHelp() {
+		System.out.print("Welcome to the help mode");
+		showLogHeader(true);
+		System.out
+				.println("You are allowed to use the following parameter to customize the behaviour:");
+		// Single parameter
+		System.out
+				.println("\tFlags which can be used seperated or combined, e.g. '-vd' is equal to '-v -d' is equal to '-dv'");
+		System.out
+				.println("\t - v\tActivates the verbose mode with much more output (optional)");
+		System.out
+				.println("\t - d\tActivates the development mode. In this mode, all messages are written to the dev-log-file. (optional)");
+		// Complete Commands
+		System.out.println("\tThese commands can be used as described:");
+		System.out.println("\t --help (optional)");
+		System.out
+				.println("\t\tPrints this information. Prevents from starting the simulation.");
+		System.out.println("\t --network-config <path-to-config-file>");
+		System.out
+				.println("\t\tSimulation uses the provided file to configure the network handler");
+		System.out.println("\n");
+		System.out.println("Short Example:");
+		System.out.println("\tjava -jar CASi.jar --network-config network.conf.xml");
+		System.out.println("Further Information:");
+		System.out
+				.println("\tIn normal mode, when the dev and verbose flag arn't set,\n" +
+						"\tthe simulator devides log outputs in two log files in a 'log'-folder in the execution directory.\n" +
+						"\tThe sim-log contains information about the behaviour of agents, actuators, sensors itself.\n" +
+						"\tThe dev-log contains detailed information about the behaviour of the simulator, which can be used for debugging but may be a bit confusing for users.\n" +
+						"\tIn the normal mode only informations, written to the sim-log with level 'info' or higher are written to the console.\n" +
+						"\tIf the dev mode is activated, all log outputs are written to the dev-log. No sim-log is created in this case.\n" +
+						"\tBy default, in dev mode only messages written to dev- or sim-log with level 'info' or higher are printed on the console.");
+		System.out.println("\n");
+		System.out.println("And now: try again and have fun ;-)");
+
 	}
 
 	/**
@@ -95,14 +161,14 @@ public class CASi {
 	 * @param args
 	 *            the command line arguments
 	 */
-	private static void setupFlags(String[] args) {
-		if (args.length > 0) {
-			int value = Integer.parseInt(args[0]);
-			VERBOSE = (value > 0);
+	private static void setupFlags() {
+		VERBOSE = commandLineOptions.isVerboseMode();
+		DEV_MODE = commandLineOptions.isDevMode();
+		if (VERBOSE) {
+			System.out.println("Activating Verbose Mode");
 		}
-		if (args.length > 1) {
-			int value = Integer.parseInt(args[1]);
-			DEV_MODE = (value > 0);
+		if (DEV_MODE) {
+			System.out.println("Activating Development Mode");
 		}
 	}
 
@@ -116,8 +182,9 @@ public class CASi {
 	private static ICommunicationHandler generateCommunicationHandler(
 			String[] args) {
 		final ICommunicationHandler networkHandler;
-		if (args.length > 2) {
-			networkHandler = new MACKNetworkHandler(args[2]);
+		if (commandLineOptions.networkConfigProvided()) {
+			networkHandler = new MACKNetworkHandler(
+					commandLineOptions.getNetworkConfigFile());
 		} else {
 			networkHandler = new MACKNetworkHandler();
 		}
@@ -126,15 +193,25 @@ public class CASi {
 
 	/**
 	 * Writes the header to the simulation logger
+	 * 
+	 * @param logToOut
+	 *            if {@code true}, the output goes to System.out, if
+	 *            {@code false} it goes to the SIM_LOG
 	 */
-	private static void logHeader() {
-		SIM_LOG.info("===================================================");
-		SIM_LOG.info("CASi - Context Awareness Simulator");
-		SIM_LOG.info("Simulation for testing the MACK Framework");
-		SIM_LOG.info("by Moritz Bürger, Marvin Frick and Tobias Mende");
-		SIM_LOG.info("---------------------------------------------------");
-		SIM_LOG.info("\tsettle back and enjoy the simulation :-)");
-		SIM_LOG.info("===================================================");
+	private static void showLogHeader(boolean logToOut) {
+		StringBuffer buf = new StringBuffer();
+		buf.append("\n\t===================================================\n");
+		buf.append("\tCASi - Context Awareness Simulator\n");
+		buf.append("\tSimulation for testing the MACK Framework\n");
+		buf.append("\tby Moritz Buerger, Marvin Frick and Tobias Mende\n");
+		buf.append("\t---------------------------------------------------\n");
+		buf.append("\t\tsettle back and enjoy the simulation :-)\n");
+		buf.append("\t===================================================\n");
+		if (logToOut) {
+			System.out.println(buf.toString());
+		} else {
+			SIM_LOG.info(buf.toString());
+		}
 	}
 
 	/**
@@ -183,10 +260,11 @@ public class CASi {
 		devConsoleHandler.setFormatter(new DevLogFormatter());
 
 		// Configure file logger
-		long time = Calendar.getInstance().getTimeInMillis();
+
 		try {
 			new File("./log").mkdir();
-			devFileHandler = new FileHandler(String.format("log/%d.log", time));
+			devFileHandler = new FileHandler("log/" + getFileName()
+					+ "-dev.log");
 			devFileHandler.setFormatter(new DevLogFormatter()); // Use
 																// HTMLFormatter
 			// for fancy output
@@ -220,6 +298,17 @@ public class CASi {
 	}
 
 	/**
+	 * Creates a file name for log files depending on the current time
+	 * 
+	 * @return a file name
+	 */
+	private static String getFileName() {
+		Date time = Calendar.getInstance().getTime();
+		DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd-hhmmss");
+		return formatter.format(time);
+	}
+
+	/**
 	 * Configuring the simulation logging
 	 * 
 	 * @throws SecurityException
@@ -233,12 +322,11 @@ public class CASi {
 		simConsoleHandler.setFormatter(new SimLogFormatter());
 
 		// Configure file logger
-		long time = Calendar.getInstance().getTimeInMillis();
 
 		try {
 			new File("./log").mkdir();
-			simFileHandler = new FileHandler(String.format("log/sim-%d.log",
-					time));
+			simFileHandler = new FileHandler("log/" + getFileName()
+					+ "-sim.log");
 			simFileHandler.setFormatter(new SimLogFormatter()); // Use
 																// HTMLFormatter
 			simFileHandler.setLevel(Level.ALL);

@@ -124,8 +124,8 @@ public final class MACKNetworkHandler implements ICommunicationHandler {
 					.readObject();
 		} catch (IOException e) {
 			log.severe("Can't deserialize the config: " + e.fillInStackTrace());
-			setupDefaults();
-			setupUsableJabberIdentifiers();
+			log.severe("Terminating execution!");
+			System.exit(0);
 		} finally {
 			if (dec != null)
 				dec.close();

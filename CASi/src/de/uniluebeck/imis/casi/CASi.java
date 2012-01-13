@@ -124,7 +124,7 @@ public class CASi {
 				.println("You are allowed to use the following parameter to customize the behaviour:");
 		// Single parameter
 		System.out
-				.println("\tFlags which can be used seperated or combined, e.g. '-vd' is equal to '-v -d' is equal to '-dv'");
+				.println("\tFlags which can be used seperated or combined, e.g. '-vd' is equal to '-v -d' is equal to '-dv'.");
 		System.out
 				.println("\t - v\tActivates the verbose mode with much more output (optional)");
 		System.out
@@ -136,7 +136,7 @@ public class CASi {
 				.println("\t\tPrints this information. Prevents from starting the simulation.");
 		System.out.println("\t --network-config <path-to-config-file>");
 		System.out
-				.println("\t\tSimulation uses the provided file to configure the network handler");
+				.println("\t\tSimulation uses the provided file to configure the network handler. Should be set. Otherwise network config doesn't match the simulation.");
 		System.out.println("\n");
 		System.out.println("Short Example:");
 		System.out.println("\tjava -jar CASi.jar --network-config network.conf.xml");

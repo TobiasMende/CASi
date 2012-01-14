@@ -3,20 +3,36 @@
 
 %\imiscomment{Einführung und Motivation des Themas}
 
-Die Arbeit beschreibt die Planung und Entwicklung eines Simulators zur realitätsnahen Context Awareness Simulation. Die Motivation für diese Projekt ist vor allem die Entwicklung einer Testumgebung, die die Analyse des MACK Frameworks ohne hohe Hardwarekosten ermöglicht.
+Die Arbeit beschreibt die Planung und Entwicklung eines Simulators zur realitätsnahen Context Awareness Simulation. Die Motivation für dieses Projekt ist vor allem die Entwicklung einer Testumgebung, die die Analyse des MACK Frameworks ohne hohe Hardwarekosten ermöglicht.
+
+MACK ist ein Framework, welches am IMIS entwickelt wurde und das zur Konstruktion von Systemen, die Context Awareness bieten sollen, benutzt werden kann. Es besteht aus verschiedenen, modularen Komponenten, die in unterschiedlichen Kombination implementiert werden können. Beispiele für solche Systeme könnten Folgende sein:
+\begin{itemize}
+
+\item Ein Bürogebäude, in dem die Unterbrechbarkeit der Kollegen erkannt und sichtbar gemacht wird
+\item Ein interaktives Museum, in dem sich die (elektronische) Führung an den Besucher anpasst
+\item Ein ambientes System, in dem sich der Wohnraum an die Bewohner anpasst
+\item Ein Krankenhaus, in dem das Personal über die Verfügbarkeit von anderen Mitarbeitern oder bestimmten Behandlungsräumen informiert wird
+
+\end{itemize}
+
+MACK ist aus dem Projekt MATe, das ebenfalls am IMIS in Leben gerufen wurde, entstanden. MATe ist ein System, das in Büros benutzt werden soll, um die Unterbrechbarkeit der Mitarbeiter zu erkennen und anzuzeigen. Es soll außerdem die Möglichkeit bieten, bestimmte Nachrichten zwischen den Kollegen zu verschicken. Das System sammelt Daten mit Hilfe von Sensoren im Büro und verschiedene Reasoner versuchen anhand dieser Information die Unterbrechbarkeit festzustellen. Diese wird mittels Aktuatoren in der Umgebung erkennbar gemacht.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Ziele der Arbeit}\label{sec:goals}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %\imiscomment{Begründung für die Ziele und die Relevanz des Themas}
-Das Ziel unserer Arbeit war vor allem die Entwicklung eines modularen Simulators, der sowohl flexibel erweitert werden, als auch universell eingesetzt, werden kann.
+Das Ziel unserer Arbeit war vor allem die Entwicklung eines modularen Simulators, der sowohl flexibel erweitert werden, als auch universell eingesetzt, werden kann. Insbesondere soll das Programm so modular sein, dass nicht nur Systeme, die auf MACK basieren, damit getestet werden können.
+
+Da das Programm aber voraussichtlich zunächst nur zur Simulation von MATe Komponenten benutzt werden wird und uns nur der MATe-Server zum Testen zur Verfügung stand, haben wir als Beispielsimulation eine Bürosimulation entwerfen und auch erstmal nur Sensoren und Aktuatoren von MATe implementiert. 
+
+Außerdem war das Ziel eine Beschreibungssprache, mit der man sowohl eine Simulation also auch neue Sensoren und Aktuatoren definieren kann. Allerdings war der Aufwand für die Umsetzung des Simulators so groß, dass wir dieses Ziel vorerst zurückgestellt haben.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Stand der Technik}\label{sec:state_of_art}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\imiscomment{Literaturrecherche und Darstellung anderer wichtiger Arbeiten zum Thema}
+%\imiscomment{Literaturrecherche und Darstellung anderer wichtiger Arbeiten zum Thema}
 
 %\imiscomment{Darstellung des ``State of the Art''}
 Zum Zeitpunkt der Entwicklung gab es bereits einen Context Awareness Simulator, der umfangreiche und konfigurierbare Simulationen ermöglichte. Dieser Simulator besitzt jedoch keinerlei Schnittstellen für die Integration von Sensoren und Aktuatoren. Aus diesem Grund haben wir uns für die Entwicklung eines eigenständigen Simulators entschieden, da die Weiterentwicklung und Anpassung des bestehenden Simulators einen sehr hohen, schwer kalkulierbare Aufwand bedeutet hätte.
@@ -30,15 +46,15 @@ Zum Zeitpunkt der Entwicklung gab es bereits einen Context Awareness Simulator, 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Vorgehensweise}\label{sec:approach}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-Bei der Planung des Projektes haben wir zunächst eine Anforderungsanalyse durchgeführt. Hierfür haben wir Gespräche mit Felix Schmitt und Jörg Cassens, den Hauptinteressenten, geführt, um ein tiefergehendes Verständnis vom MACK Framework, der MATe Implementierung und den Anforderungen an einen Simulator zu erhalten.
+Bei der Planung des Projektes haben wir zunächst eine Anforderungsanalyse durchgeführt. Hierfür haben wir Gespräche mit Felix Schmitt und Jörg Cassens, den Hauptinteressenten, geführt, um ein tiefgehendes Verständnis vom MACK Framework, der MATe Implementierung und den Anforderungen an einen Simulator zu erhalten.
 
-Im Anschluss haben wir noch Gespräche mit Olof-Joachim Frahm und Daniel Wilken geführt um weitere technische Einblicke in das Framework und laufende Arbeiten zu erhalten.
+Im Anschluss haben wir noch Gespräche mit Olof-Joachim Frahm und Daniel Wilken geführt, um weitere technische Einblicke in das Framework und laufende Arbeiten zu erhalten.
 
 Nach den Gesprächen haben wir bestehende Simulatoren getestet und recherchiert, ob bereits Arbeiten zum Thema durchgeführt wurden. Die Recherchen führten zu dem Entschluss, ein Simulationsframework zu entwickeln, dass flexibler als bestehende Simulatoren ist, da diese unter Berücksichtigung der Anforderungen ungeeignet waren.
 
-Im Anschluss an die Recherchen haben wir die Architektur und eine Beschreibungssprachen auf XML Basis geplant und uns unabhängig von der Architektur textuell drei Szenerien (Büro, Krankenhaus, Museum) überlegt, mit denen wir die Vollständigkeit und Flexibilität der Architektur verifizieren konnten.
+Im Anschluss an die Recherchen haben wir die Architektur und eine eigene Beschreibungssprache auf XML Basis geplant und uns unabhängig von der Architektur textuell drei Szenerien (Büro, Krankenhaus, Museum) überlegt, mit denen wir die Vollständigkeit und Flexibilität der Architektur verifizieren konnten. Diese Vorbereitung war die Grundlage, auf der wir die Programmstruktur aufgesetzt haben.
 
-Die eigentliche Entwicklung ist feature-driven und user-centered. Aus diesem Grund haben wir zunächst den Simulationskern und dann die einzelnen Komponenten entwickelt und unserem Betreuer zu den wöchentlichen Treffen eine aktuelle Version als jar-Datei bereitgestellt.
+Die eigentliche Entwicklung ist feature-driven und user-centered. Aus diesem Grund haben wir zunächst den Simulationskern und dann die einzelnen Komponenten entwickelt und unserem Betreuer zu den wöchentlichen Treffen eine aktuelle Version als jar-Datei bereitgestellt. So konnten wir schnell Rückmeldung vom späteren Anwender zu unseren Ansätzen bekommen und auf Wünsche und Anregungen des Benutzers frühzeitig reagieren.
 %\imiscomment{Kurzer Überblick zur Vorgehensweise bei der Bearbeitung des Themas}
 
 

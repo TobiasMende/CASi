@@ -10,7 +10,98 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Realisierung von Modul 1}\label{subsec:real_module_1}02-M-MCI-History-JC-master
+\subsection{Simulationsengine \& Simulationclock}\label{subsec:real_engine}
+\subsubsection{SimulationEngine}
+Die \texttt{SimulationEngine} ist als Singleton realisiert. Dies hat den Vorteil, dass es zur Laufzeit nur eine Instanz von ihr geben kann, die in allen Klassen verfügbar ist. Diese Instanz hält die \texttt{World}, den \texttt{CommunicationHandler} bereit. Beide Objekte können for dem Start der Simulation, d.h. vor dem Start der \texttt{SimulationClock} mit den jeweiligen Setter-Methoden gesetzt werden. Der Aufruf dieser Methoden nach dem Start der Simulation erzeugt einen \texttt{IllegalAccessException}.
+
+Während der Simulation können die Welt und der Kommunikationshandler über die Getter-Methoden abgerufen werden. Auf diesem Weg können unter anderem Sensoren und Aktuatoren den Kommunikationshandler erreichen. Auch die graphische Oberfläche holt sich die zu zeichnenden Objekte über die Simulationsengine.
+
+\subsubsection{SimulationClock}
+Die \texttt{SimulationClock} ist das Herzstück der Simulation. Sie stößt sämtliche Aktionen der Komponenten des Modells an. Die Clock ist wie die Engine ebenfalls mit dem Singleton-Designpatter realisiert. So ist sicher gestellt, dass es nur eine Uhr geben kann, die aus allen Klassen erreichbar ist.
+
+Die \texttt{SimulationClock} verwendet das Listener-Konzept, um Komponenten, die an der Simulationszeit interessiert sind regelmäßig über Änderungen zu informieren. Komponenten die sich als Listener bei der Uhr registrieren möchten müssen dazu das \texttt{ISimulationClockListener}-Interface implementieren und können dann mit \begin{lstlisting}
+SimulationClock.getInstance()
+.addListener(ISimulationClockListener);
+\end{lstlisting}
+hinzugefügt und analog mit
+\begin{lstlisting}
+SimulationClock.getInstance()
+.removeListener(ISimulationClockListener);
+\end{lstlisting}
+wieder entfernt werden.
+
+Über das Listener-Konzept werden in jeder simulierten Sekunden Aktionen bei den Listenern angestoßen. Standardmäßig ist es nicht möglich, eine Java-Collection während des Durchlaufens dieser zu verändern. Somit wäre es unmöglich, dass sich eine Komponente als Listener abmelden kann. Die \texttt{SimulationClock} speichert jedoch alle Hinzufüge- und Entfernanfragen an die Listener-Collection zwischen und führt diese vor dem nächsten Durchlauf aus.
+
+Die Uhr basiert auf einem Timer-Thread, der alle $x$ Millisekunden auslöst. Wenn die Uhrzeit skaliert wird, wird mit dem nächsten Tick ein neuer Timer eingerichtet. Das pausieren der Simulation stoppt nicht den Timer-Thread sondern verhindert lediglich, dass dieser die \texttt{SimulationTime} inkrementiert.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Generatoren}\label{subsec:real_generator}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Benutzungsschnittstellen}\label{subsec:real_interfaces}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Aktionen}\label{subsec:real_actions}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Aktionsverwaltung}\label{subsec:real_actionhandling}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Kommunikationshandler}\label{subsec:real_communication}
+Die abstrahierte Beschreibung der Schnittstellen eines Kommunikationshandlers befindet sich im Paket \texttt{de.uniluebeck.imis.casi.communication}. 
+
+Eine Implementierung für die Zusammenarbeit mit dem MACK Framework befindet sich in \texttt{de.uni\-luebeck.imis.casi\-.com\-munication.mack}. \emph{Bei Änderungen am MACK-Protokoll sind im Wesentlichen die Methoden in diesem Paket anzupassen.}
+Kommunikationshandler können die externe Kommunikation des Simulators ermöglichen. Dies bedeutet, dass sie sehr flexibel sein müssen, um jede erdenkliche Art von Kommunikation zu ermöglichen. Aus diesem Grund sind Kommunikationshandler als Implementierung des \texttt{ICommunication\-Handler}-Interface realisiert und müssen in der Main-Klasse \texttt{CASi} an den \texttt{MainController} übergeben werden. Es ist nur ein Kommunikationshandler zur Zeit vorgesehen. Benötigt man mehrere Handler, sind Subhandler denkbar, denen die Nachrichten weiter gegeben werden.
+
+In der Umsetzung des Simulators zum Testen des MACK Frameworks wurde der Kommunikationshandler \texttt{MACKNetworkHandler} wie folgt realisiert:
+
+Der Handler bekommt zu Beginn eine Konfigurationsdatei in XML Format übergeben, die in diesem Fall Java Beans XML enthält, mit dem die allgemeine Konfiguration der Netzwerkschnittstelle und die zur Verfügung stehenden \texttt{XmppIdentifier} aufgelistet sind. Jeder \texttt{XmppIdentifier} setzt sich aus drei \texttt{String}-Werten zusammen und repräsentiert eine Zeile aus der Tabelle \texttt{mate\_user\-devices} des Servers:\begin{description}
+	\item[componentOwner] Der eindeutige Name des Agents, dem die Komponente zugeordnet ist. Dieser \texttt{String} muss identisch mit dem Feld \texttt{username} in der Tabelle \texttt{mate\_userdevices} sein.
+	\item[componentType] Die Art der Komponente. Dieser \texttt{String} muss identisch mit dem Feld \texttt{channel} in der Tabell sein.
+	\item[id] Der XMPP Benutzername der Komponente ohne \texttt{@server.de}. 
+\end{description}
+
+Die Netzwerkconfigurationsdatei enthält für jeden \texttt{XmppIdentifier} einen Eintrag der Form
+\begin{lstlisting}[language=XML]
+<void method="add">
+	<object class="de.uniluebeck.imis.casi
+			.communication.mack.XmppIdentifier">
+		<void property="componentOwner">
+			<string>casi_hermann_matsumbishi</string>
+		</void>
+		<void property="componentType">
+			<string>doorlight</string>
+		</void>
+		<void property="id">
+			<string>CASi_MATe_doorlight_0</string>
+		</void>
+	</object>
+</void>
+\end{lstlisting}
+ im Bereich der \texttt{ArrayList} \texttt{useableJabberIdentifiers}. In der Initialisierungsphase des Simulators wird jeder Komponente, die sich mit \begin{lstlisting}
+public void register(ICommunicationComponent comp);
+\end{lstlisting}
+am \texttt{MACKNetworkHandler} anmeldet, eine Jabber-ID aus dieser Liste zugewiesen, sofern noch eine zum jeweiligen Typ passende verfügbar ist. Andernfalls wird eine Warnung ausgegeben und die Komponente nicht angemeldet.
+In der Registrierungsphase überprüft der Handler, ob der jeweilige Jabber-Identifier bereits am XMPP-Server registriert ist. Ist dies nicht der Fall, versucht der Simulator automatisch, den Identifier zu registrieren. Wenn mehrere Adressen noch nicht registriert wurden, kann es abhängig vom in der Konfigurationsdatei angegebenen \texttt{REGISTRATION\_DELAY} zum längeren Wartezeiten kommen, bevor der Simulator mit der Simulation beginnt. 
+
+Der \texttt{MACKNetworkHandler} erzeugt nach erfolgreichem Zuordnen der Identifier und dem Login am Jabber-Server für jede Komponente einen Chat mit dem MACK-Server. Über diesen Chat werden Pull- und Push-Requests gesendet und Rückmeldungen empfangen und an die betroffene Komponente weitergeleitet.
+
+Sowohl die \texttt{send}-Methode im \texttt{ICommunicationHandler}-Interface, als auch die \texttt{receive}-Methode im \texttt{ICommunicationComponent}-Interface sehen vor, dass die Nachrichten vom Typ \texttt{Object} sind. Hierdurch ist ein hoher Abstraktionsgrad und somit eine hohe Flexibilität gegeben. Für die richtige Interpretation der Nachrichten ist somit der Entwickler des Handlers und der Sensoren und Aktuatoren verantwortlich.
+
+In der MATe Implementierung sind die Nachrichten immer vom Typ \texttt{String}, da sie die den Body der Chat-Nachrichten, also die eigentliche Nachricht im Format des MACK-Protokolls enthalten.
+
+Zum Erzeugen der Nachrichten in den Aktuatoren und Sensoren kann die \texttt{MACKProtocollFactory} verwendet werden. Hierfür steht für Push- und Pull-Nachrichten je eine Methode zur Verfügung. Nachrichten, die vom MACK-Server empfangen werden, können mit der \texttt{parseMessage} in ein \texttt{MACKInformation}-Objekt zerlegt werden, das die Antwort in einer leicht zugänglichen Form bereit hält.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Sensoren und Aktuatoren}\label{subsec:real_sensors}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \imiscomment{UML-Diagramme}

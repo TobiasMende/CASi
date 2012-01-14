@@ -117,7 +117,7 @@ In unserer Implementierung nutzt der ActionScheduler im Wesentlichen den Schedul
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Konzeption von Kommunikationshandlern}\label{subsec:concept_communication}
+\subsection{Kommunikationshandlern}\label{subsec:concept_communication}
 Ein Kommunikationshandler muss das \texttt{ICommunicationHandler}-Interface implementieren. Kommunikationshandler sind für die Verwaltung der Kommunikation mit einem beliebigem Gegenpart außerhalb des Simulators zuständig. Ein konkretes Beispiel ist ein Netzwerkhandler, der die Kommunikation über eine Netzwerkschnittstelle verwalten kann. In der aktuellen Implementierung ist der \texttt{MACKNetworkHandler} ein Kommunikationshandler der den Informationsaustausch mit dem MACK Server realisiert.
 
 Innerhalb der Simulation interagiert der Kommunikationshandler mit Sensoren und Aktuatoren, die beide das Interface \texttt{ICommunicationComponent} implementieren.. Die Komponenten registrieren sich in der Initialisierungsphase des Simulators beim Handler, indem die Methode \texttt{re\-gister (ICommunication\-Component comp)} aufgerufen wird.

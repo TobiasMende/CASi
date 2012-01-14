@@ -63,7 +63,7 @@ public final class Actions {
 			Desktop.Frequency randomFrequency = Desktop.Frequency.values()[(int) (Math
 					.random() * Desktop.Frequency.values().length)];
 			AbstractAction workOnDesktop = new WorkOnDesktop((Desktop) ac,
-					randomProgramm, randomFrequency, 10);
+					randomProgramm, randomFrequency, 5);
 
 			// the actionCollector key has to start with the Agents identifier!
 			// Otherwise is would not be added to his todoList automatically!

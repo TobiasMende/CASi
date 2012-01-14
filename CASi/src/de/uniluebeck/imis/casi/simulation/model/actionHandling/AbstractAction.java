@@ -86,6 +86,18 @@ public abstract class AbstractAction implements Listenable<IActionListener>,
 	private transient Collection<IActionListener> listeners = new ArrayList<IActionListener>();
 
 	/**
+	 * Sets this objects listeners in a forceful way. You should not use this
+	 * unless its for cloning this object and directly setting its listerners as
+	 * they are transient for the clone.
+	 * 
+	 * @param listeners
+	 *            set this Collection of listerners
+	 */
+	protected void forceSetListeners(Collection<IActionListener> listeners) {
+		this.listeners = listeners;
+	}
+
+	/**
 	 * Method for performing and continuing this action. Should be called in
 	 * every tick in which the action must be performed.
 	 * 
@@ -372,7 +384,7 @@ public abstract class AbstractAction implements Listenable<IActionListener>,
 		try {
 			newAction = (AbstractAction) Tools.deepCopy(this);
 			newAction.setType(TYPE.NORMAL);
-			newAction.listeners = new ArrayList<IActionListener>();
+			newAction.forceSetListeners(new ArrayList<IActionListener>());
 			return newAction;
 		} catch (Exception e) {
 			log.severe("An error occured while cloning the action: "
@@ -475,9 +487,10 @@ public abstract class AbstractAction implements Listenable<IActionListener>,
 	public String getName() {
 		return this.getClass().getSimpleName();
 	}
-	
+
 	/**
 	 * Getter for extended information about this action
+	 * 
 	 * @return a description of the action
 	 */
 	public abstract String getInformationDescription();

@@ -11,6 +11,7 @@
  */
 package de.uniluebeck.imis.casi.simulation.model.actionHandling;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Vector;
 
@@ -171,6 +172,16 @@ public class ComplexAction extends AbstractAction {
 		
 		
 	}
+	
+	@Override
+	public ComplexAction clone(){
+		ComplexAction clone = (ComplexAction) super.clone();
+		for (AbstractAction subaction : clone.subActions) {
+			subaction.forceSetListeners(new ArrayList<IActionListener>());
+		}
+		return clone;
+	}
+	
 	
 	@Override
 	public String toString() {

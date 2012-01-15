@@ -1,13 +1,21 @@
 \chapter{Analyse}\label{chapter:analysis}
+In diesem Kapitel werden die Analyseschritte und die Vorüberlegungen beschrieben, die vor der Konzeption und Implementierung der Anwendung durchgeführt wurden.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\imiscomment{Analyse der Problemstellung, der Zielgruppen sowie des Anwendungskontextes}
+%\imiscomment{Analyse der Problemstellung, der Zielgruppen sowie des Anwendungskontextes}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Problem- oder Aufgabenanalyse}\label{sec:problem_ana}
+\section{Problemanalyse}\label{sec:problem_ana}
+Bei der Entwicklung des MACK Frameworks geht es vor allem darum, geeignete Reasoner zu entwickeln, die auf Basis von Sensordaten Zustände von Personen ermitteln können und diese an Aktuatoren weiterleiten können. Hierbei entstehen komplexe Abhängigkeiten, da die ermittelten Werte der Sensoren vom Verhalten der Personen abhängen, welches wiederum zu einem gewissen Anteil von den Meldungen der Aktuatoren abhängen können.
+
+Um die Effizienz und Vollständigkeit der Reasoner zu verifizieren gibt es bislang nur die Möglichkeit, diese mit Hardware-Impementierungen der Sensoren und Aktuatoren zu verknüpfen und denkbare Szenarien durchzuführen. Dies birgt zum einen das Problem, dass zunächst die Hardware entwickelt werden muss, was mit hohem Zeit- und Kostenaufwand verbunden ist. Zum anderen muss das System von vielen Benutzern eingesetzt werden, um repräsentative Ergebnisse zu erhalten.
+
+Darüber hinaus gibt es bisher unerforschte Einsatzgebiete für das MACK Framework, für die es weder die Reasoner noch die notwendige Hardware gibt. Bevor die teure Hardware entwickelt oder eingekauft wird, soll getestet werden, ob das System für den angefachten Anwendungszweck geeignet ist.
+
+Selbst mit in ausreichendem Umfang vorhandener Hardware ist es nur schwer möglich, die Wechselwirkung zwischen Personen und Framework zu testen, 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\imiscomment{Problemanalyse oder Aufgabenanalyse (Aufgaben, die mit dem System von einem Benutzer gelösten werden können sollen)}
+%\imiscomment{Problemanalyse oder Aufgabenanalyse (Aufgaben, die mit dem System von einem Benutzer gelösten werden können sollen)}
 
 % The following is an example of an IMIS-styled table.
 % You are free to use other styles, in fact, encouraged.
@@ -59,9 +67,10 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Benutzeranalyse}\label{sec:user_ana}
+Bei der Zielgruppe handelt es sich um erfahrene Entwickler, die mit dem Simulator ihre Anwendungen im Bereich Context Awareness testen möchten.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\imiscomment{Zielgruppen}
+%\imiscomment{Zielgruppen}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Kontextanalyse}\label{sec:context_ana}

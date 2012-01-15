@@ -41,11 +41,15 @@ public class Desktop extends AbstractInteractionComponent {
 	public enum Frequency {
 		active, inactive, very_active;
 	}
-
+	/** counter for unique identifiers */
 	private static int idCounter;
 
+	/** The frequency with which the program is used */
 	private Frequency currentFrequency = Frequency.inactive;
+	/** The program currently in foreground */
 	private Program currentProgram = Program.unknown;
+	/** Is this desktop idle? */
+	private boolean isIdle = true;
 
 	/**
 	 * Constructor
@@ -83,6 +87,7 @@ public class Desktop extends AbstractInteractionComponent {
 	public void work(Program program, Frequency frequency) {
 		this.currentFrequency = frequency;
 		this.currentProgram = program;
+		isIdle = false;
 		send();
 		SimulationClock.getInstance().addListener(this);
 	}
@@ -92,6 +97,7 @@ public class Desktop extends AbstractInteractionComponent {
 		SimulationClock.getInstance().removeListener(this);
 		currentFrequency = Frequency.inactive;
 		currentProgram = Program.unknown;
+		isIdle = true;
 		send();
 	}
 
@@ -115,6 +121,9 @@ public class Desktop extends AbstractInteractionComponent {
 
 	@Override
 	protected void sendRecurringMessage(SimulationTime newTime) {
+		if(isIdle) {
+			return;
+		}
 		Frequency freq = generateRandomFrequency(currentFrequency);
 		if (!currentFrequency.equals(freq)) {
 			CASi.SIM_LOG.info(this + ": freq changed from " + currentFrequency

@@ -238,16 +238,16 @@ public class SimulationClock implements Listenable<ISimulationClockListener> {
 	public synchronized void addListener(ISimulationClockListener listener) {
 		if (!listeners.contains(listener) && !listenersToAdd.contains(listener)) {
 			listenersToAdd.add(listener);
-			listenersToRemove.remove(listener);
 		}
+		listenersToRemove.remove(listener);
 	}
 
 	@Override
 	public synchronized void removeListener(ISimulationClockListener listener) {
 		if(!listenersToRemove.contains(listener)) {
 			listenersToRemove.add(listener);
-			listenersToAdd.remove(listener);
 		}
+		listenersToAdd.remove(listener);
 	}
 
 	/**

@@ -9,7 +9,7 @@
  *  See the LICENSE.txt file in this projects root folder or visit
  *  <http://www.gnu.org/licenses/lgpl.html> for more details.
  */
-package de.uniluebeck.imis.casi.simulation.model.mackActions;
+package de.uniluebeck.imis.casi.simulation.model.actions;
 
 import java.util.List;
 

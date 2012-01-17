@@ -47,10 +47,40 @@ Die Uhr basiert auf einem Timer-Thread, der alle $x$ Millisekunden auslöst. Wen
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Aktionen}\label{subsec:real_actions}
+In unserer Implementierung sind verschiedenen Aktionen enthalten. In der Package-Struktur haben wir diese wie folgt aufgeteilt:
+
+In \texttt{.simulation.model.actions} befinden sich Aktionen, die allgemein im Simulator durchgeführt werden können. Diese sind unabhängig vom MACK Framework, Sensoren und Aktuatoren.
+
+Im Package \texttt{.simulation.model.mackActions} befinden sich Aktionen, die bestimmte Sensoren und Aktuatoren benötigen und somit abhängig von der jeweiligen Simulation sind.
+
+\subsubsection{Allgemeine Aktionen}
+Zu den wichtigsten allgemeinen Aktionen in unserer Implementierung zählen unter anderem:
+\begin{description}
+	\item[Move] Die \texttt{Move}-Aktion dient dazu, die Position eines Agentens zu Ändern. Hierbei wird in der Initialisierung der Aktion nur das Ziel angegeben. Zum Zeitpunkt der Ausführung der Aktion wird automatisch der Weg zum Ziel berechnet und pro Iteration die Position um eine bestimmte Anzahl von Wegpunkten verändert. Dieser Aktion kann keine Dauer übergeben werden, da sie automatisch terminiert, wenn das Ziel erreicht wurde. Gibt es keinen Weg zum Ziel. Bricht die Aktion automatisch ab.
+	\item[Follow] Mit der \texttt{Follow}-Aktion kann ein Agent einer  \texttt{AbstractComponent}  folgen. Somit ist es möglich, dass ein Agent einem anderen während eines Gespräches folgt. Die Aktion hat keine spezifische Dauer, sondern wird erst dann beendet, wenn \texttt{Follow.complete()} aufgerufen wird.
+	\item[SpeakTo] Mit dieser Aktion kann ein Agent mit einem anderen Sprechen. Hierbei wird zunächst überprüft, ob beide Agenten im selben Raum sind. Außerdem wird überprüft, ob die Aktion des anderen Agentens eine Unterbrechung zulässt.
+	
+	Wenn der Agent unterbrechbar ist, wird ihm eine Aktion vom Typ \texttt{Follow} in die \texttt{interrupt\-List} gelegt, so dass der Agent für die Dauer des Gespräches dem Sprecher folgt und ebenfalls mit dem Gespräch beschäftigt ist. Dies verhindert, dass der andere Agent im Gespräch wegläuft. In der Methode \texttt{SpeakTo.postActionTask(AbstractComponent)} wird \texttt{Follow.complete()} aufgerufen und somit der Gesprächspartner wieder freigegeben.
+	\item[GoAndSpeakTo] Diese \texttt{ComplexAction} sorgt dafür, dass der ausführende Agent zunächst die Standard-Position des Gesprächspartners aufsucht, welche in der Regel sein Büro ist, und dort versucht, mit ihm zu reden. 
+	
+	In der aktuellen Implementierung bricht der Agent diese Aktion ab, wenn der Partner sich nicht in seinem Büro befindet. Diese Aktion kann aber erweitert werden, wenn es z.B. Aktuatoren wie das \texttt{DoorPlate} gibt, welches Auskunft über die wirkliche Position des Anderen gibt.
+\end{description}
+\subsubsection{Simulationsspezifische Aktionen}
+Die simulationspezifischen Aktionen hängen von Sensoren und Aktuatoren einer Simulationsimplementierung ab. In der aktuellen Implementierung gibt es unter anderem folgende Aktionen:
+\begin{description}
+	\item[WorkOnDesktop] Mit dieser Aktion kann man einen Agenten für eine bestimmte Zeit arbeiten lassen. Hierfür erzeugt man eine neue Instanz dieser Klasse und gibt im Konstruktor den Arbeitsplatz, die Programmklasse, die Frequenz und die Dauer an.
+	
+	Die Programmklasse ist dabei äquivalent zu den Klassen, mit denen auch das MACK Framework umgehen kann. Die Frequenz ändert sich während der Ausführung um einen normalen Arbeitsfluss zu simulieren.
+	\item[TurnCube] Mit der \texttt{TurnCube}-Aktion kann ein \texttt{Cube} (Cubus) auf einen bestimmten Status gedreht werden.
+	\item[PutKeyInDropZone] Diese Aktion fügt eine Referenz auf den Agenten in eine Liste einer Dropzone. Vorher wird überprüft, ob der Agent bereits einer anderen \texttt{DropZone} hinzugefügt wurde, um zu vermeiden, dass der Agent seinen \glqq Schlüssel\grqq\ in mehrere Dropzones legen kann.
+	\item[RemoveKeyFromDropZone] Analog zur \texttt{PutKeyInDropZone}-Aktion kann mit dieser Aktion eine Referenz auf einen Agenten aus einer \texttt{DropZone} entfernt werden.
+\end{description}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Aktionsverwaltung}\label{subsec:real_actionhandling}
+In unserer Implementierung nutzt der ActionScheduler im Wesentlichen den Scheduling-Algorithmus \emph{Earliest Deadline First}. Darüber hinaus nutzt der Scheduler weitere Möglichkeiten um auch Parameter außer der Deadline zu berücksichtigen, da nicht jede Aufgabe eine Deadline haben muss. 
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

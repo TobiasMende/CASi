@@ -111,8 +111,6 @@ Zur Aktionsverwaltung hat jeder Agent einen \texttt{IActionScheduler}, der im Ko
 \end{description}
 
 Die Kernfunktionalität eines Action-Schedulers ist es, mit geeigneten Algorithmen zu jedem Zeitpunkt eine Aktion auszuwählen. Hierzu ruft der Agent die \texttt{getNextAction()}-Methode auf, worauf hin der Scheduler eine Aktion auswählt und diese von der Liste löscht.
-
-In unserer Implementierung nutzt der ActionScheduler im Wesentlichen den Scheduling-Algorithmus \emph{Earliest Deadline First}. Darüber hinaus nutzt der Scheduler weitere Möglichkeiten um auch Parameter außer der Deadline zu berücksichtigen, da nicht jede Aufgabe eine Deadline haben muss.  
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 

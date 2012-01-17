@@ -17,17 +17,36 @@ import de.uniluebeck.imis.casi.simulation.model.actionHandling.AtomicAction;
 import de.uniluebeck.imis.casi.simulation.model.mackComponents.Desktop;
 
 /**
+ * This action lets an agent work on a given desktop.
+ * 
  * @author Tobias Mende
- *
+ * 
  */
 public class WorkOnDesktop extends AtomicAction {
-
+	/** serialization identifier */
 	private static final long serialVersionUID = 551293372023968564L;
+	/** the desktop to work with */
 	private Desktop desktop;
+	/** the programm class */
 	private Desktop.Program program;
+	/** the initial frequency */
 	private Desktop.Frequency frequency;
-	
-	public WorkOnDesktop(Desktop desktop, Desktop.Program program, Desktop.Frequency frequency, int duration) {
+
+	/**
+	 * Constructor for new work action
+	 * 
+	 * @param desktop
+	 *            the desktop (daa) to work with
+	 * @param program
+	 *            the programm class
+	 * @param frequency
+	 *            the initial frequency (may change during performing this
+	 *            action)
+	 * @param duration
+	 *            the duration of this action
+	 */
+	public WorkOnDesktop(Desktop desktop, Desktop.Program program,
+			Desktop.Frequency frequency, int duration) {
 		this.desktop = desktop;
 		this.frequency = frequency;
 		this.program = program;
@@ -40,13 +59,13 @@ public class WorkOnDesktop extends AtomicAction {
 		desktop.work(program, frequency);
 		return super.preActionTask(performer);
 	}
-	
+
 	@Override
 	protected boolean internalPerform(AbstractComponent performer) {
 		// wait only until the time elapsed
 		return false;
 	}
-	
+
 	@Override
 	protected void postActionTask(AbstractComponent performer) {
 		desktop.finishPerformingAction(this, (Agent) performer);
@@ -54,7 +73,7 @@ public class WorkOnDesktop extends AtomicAction {
 
 	@Override
 	public String getInformationDescription() {
-		return "use "+program+" with "+frequency;
+		return "use " + program + " with " + frequency;
 	}
 
 }

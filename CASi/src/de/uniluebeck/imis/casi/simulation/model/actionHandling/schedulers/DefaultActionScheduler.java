@@ -40,7 +40,7 @@ public class DefaultActionScheduler implements IActionScheduler {
 			.getLogger(DefaultActionScheduler.class.getName());
 	/** serialization identifier */
 	private static final long serialVersionUID = -234471419299766380L;
-	
+
 	/** a set of actions that should be performed during the simulation */
 	private TreeSet<AbstractAction> todoList;
 	/** a set of actions that might be performed during the simulation */
@@ -70,7 +70,6 @@ public class DefaultActionScheduler implements IActionScheduler {
 		actionPool = new TreeSet<AbstractAction>(new ActionComparator());
 		interruptAction = new LinkedList<AbstractAction>();
 	}
-
 
 	@Override
 	public void setTodoList(Collection<AbstractAction> todoList) {
@@ -104,9 +103,6 @@ public class DefaultActionScheduler implements IActionScheduler {
 		}
 		if (action == null && !todoList.isEmpty()) {
 			action = searchIn(todoList);
-			if(action == null) {
-				action = todoList.pollFirst();
-			}
 		}
 		if (action == null && !actionPool.isEmpty()) {
 			action = searchInActionPool();
@@ -150,27 +146,41 @@ public class DefaultActionScheduler implements IActionScheduler {
 	private AbstractAction searchIn(TreeSet<AbstractAction> actionSet) {
 		AbstractAction action = null;
 		AbstractAction tempAction = null;
+		// An action without start and end time
+		AbstractAction noLimitAction = null;
 		// Search the action with the earliest deadline:
 		for (AbstractAction a : actionSet) {
+			// Deadline exists and Deadline is lower than previous deadline?
 			if (a.getDeadline() != null
 					&& (tempAction == null || tempAction.getDeadline().after(
 							a.getDeadline()))) {
-				tempAction = a;
+				// If start time exists, start time must be before current time:
+				if (a.getEarliestStartTime() == null
+						|| a.getEarliestStartTime().before(
+								SimulationClock.getInstance().getCurrentTime())) {
+					tempAction = a;
+				}
+			}
+			
+		}
+		action = tempAction;
+		if (action != null) {
+			for (AbstractAction a : actionSet) {
+				if (a.getEarliestStartTime() != null
+						&& a.getEarliestStartTime().before(
+								SimulationClock.getInstance().getCurrentTime())) {
+					action = pollAction(actionSet, a);
+					break;
+				}
+				if(a.getEarliestStartTime() == null && a.getDeadline() == null && noLimitAction == null) {
+					noLimitAction = a;
+				}
 			}
 		}
-		if (tempAction != null && tempAction.getEarliestStartTime() != null
-				&& tempAction.getEarliestStartTime().before(
-						SimulationClock.getInstance().getCurrentTime())) {
-			action = pollAction(actionSet, tempAction);
+		if(action == null && noLimitAction != null) {
+			action = pollAction(actionSet, noLimitAction);
 		}
-		for (AbstractAction a : actionSet) {
-			if (a.getEarliestStartTime() != null
-					&& a.getEarliestStartTime().before(
-							SimulationClock.getInstance().getCurrentTime())) {
-				action = pollAction(actionSet, a);
-				break;
-			}
-		}
+		
 		return action;
 	}
 

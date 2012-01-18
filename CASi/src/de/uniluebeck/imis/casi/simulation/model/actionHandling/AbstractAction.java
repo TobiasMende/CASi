@@ -19,9 +19,6 @@ import java.util.logging.Logger;
 import de.uniluebeck.imis.casi.CASi;
 import de.uniluebeck.imis.casi.simulation.model.AbstractComponent;
 import de.uniluebeck.imis.casi.simulation.model.SimulationTime;
-import de.uniluebeck.imis.casi.simulation.model.actionHandling.AtomicAction;
-import de.uniluebeck.imis.casi.simulation.model.actionHandling.ComplexAction;
-import de.uniluebeck.imis.casi.simulation.model.actionHandling.IActionListener;
 import de.uniluebeck.imis.casi.utils.Listenable;
 import de.uniluebeck.imis.casi.utils.Tools;
 
@@ -313,7 +310,7 @@ public abstract class AbstractAction implements Listenable<IActionListener>,
 	}
 
 	/**
-	 * 
+	 * Checks whether this action is a complex action.
 	 * @return <code>true</code> if this actions consists of a list of
 	 *         subactions, <code>false</code> otherwise.
 	 */

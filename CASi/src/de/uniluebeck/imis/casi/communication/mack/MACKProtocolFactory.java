@@ -19,6 +19,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 
+import de.uniluebeck.imis.casi.simulation.engine.SimulationClock;
 import de.uniluebeck.imis.casi.simulation.model.Agent;
 
 /**
@@ -81,6 +82,8 @@ public class MACKProtocolFactory {
 		buffer.append("\t<subject>" + subject + "</subject>\n");
 		buffer.append("\t<request type=\"data\" object=\"" + dataObject
 				+ "\">\n");
+		buffer.append("\t\t<entity name=\"timestamp\">" + SimulationClock.getInstance().getCurrentTime()
+				+ "</entity>\n");
 		for (String key : values.keySet()) {
 			buffer.append("\t\t<entity name=\"" + key + "\">" + values.get(key)
 					+ "</entity>\n");

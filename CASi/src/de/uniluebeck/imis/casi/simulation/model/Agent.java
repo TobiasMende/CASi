@@ -22,6 +22,7 @@ import java.util.logging.Logger;
 
 import de.uniluebeck.imis.casi.CASi;
 import de.uniluebeck.imis.casi.simulation.engine.ISimulationClockListener;
+import de.uniluebeck.imis.casi.simulation.engine.SimulationClock;
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.AbstractAction;
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.IActionScheduler;
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.schedulers.DefaultActionScheduler;
@@ -327,8 +328,7 @@ public class Agent extends AbstractComponent implements
 			currentAction.perform(this);
 			if (currentAction.getState().equals(
 					AbstractAction.STATE.INTERRUPTED)) {
-				currentAction.setEarliestStartTime(currentAction
-						.getEarliestStartTime().plus(360));
+				currentAction.setEarliestStartTime(SimulationClock.getInstance().getCurrentTime().plus(360));
 				CASi.SIM_LOG
 						.info(this
 								+ ": Current action was interrupted. Schedule for later");
@@ -584,7 +584,7 @@ public class Agent extends AbstractComponent implements
 	public Agent.STATE getState() {
 		return state;
 	}
-	
+
 	/**
 	 * Getter for a copy of the todo list. Changes in this list don't effect the
 	 * scheduler

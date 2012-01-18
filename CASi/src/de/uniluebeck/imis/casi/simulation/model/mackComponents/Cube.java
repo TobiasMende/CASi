@@ -97,8 +97,8 @@ public class Cube extends AbstractInteractionComponent {
 			return true;
 		}
 		AbstractAction tempAction = action;
-		if(action instanceof ComplexAction) {
-			tempAction = ((ComplexAction)action).getCurrentAction();
+		if (action instanceof ComplexAction) {
+			tempAction = ((ComplexAction) action).getCurrentAction();
 		}
 		if (tempAction instanceof WorkOnDesktop) {
 			handleWorkOnDesktopAction((WorkOnDesktop) tempAction, agent);
@@ -108,20 +108,36 @@ public class Cube extends AbstractInteractionComponent {
 	}
 
 	/**
-	 * Tries to establish the correct state of this tube depending on the
-	 * current work action of an agent. With a probability of 30%, this method
-	 * interrupts the agent with a turn cube action if the state seems not to be correct.
+	 * Makes an educated guess about whether this cube should schedule a turn
+	 * cube action for the provided agent or not
 	 * 
-	 * @param action the work on desktop action
-	 * @param agent the performer of this action
+	 * @param agent
+	 *            the agent
+	 * @return the decission
+	 */
+
+	private boolean shouldScheduleTurnCubeAction(Agent agent) {
+		// FIXME get probability from agent config
+		double probability = 0.15;
+		Random rand = new Random(System.currentTimeMillis());
+		double value = rand.nextDouble();
+		return value <= probability;
+	}
+
+	/**
+	 * Tries to establish the correct state of this tube depending on the
+	 * current work action of an agent. With a probability calculated by
+	 * {@link Cube#shouldScheduleTurnCubeAction(Agent)}, this method interrupts
+	 * the agent with a turn cube action if the state seems not to be correct.
+	 * 
+	 * @param action
+	 *            the work on desktop action
+	 * @param agent
+	 *            the performer of this action
 	 */
 	private void handleWorkOnDesktopAction(WorkOnDesktop action, Agent agent) {
 
-		// FIXME get probability from agent config
-		double probability = 0.3;
-		Random rand = new Random(System.currentTimeMillis());
-		double value = rand.nextDouble();
-		if (value > probability) {
+		if (!shouldScheduleTurnCubeAction(agent)) {
 			// don't handle, not in probability range
 			return;
 		}
@@ -158,7 +174,8 @@ public class Cube extends AbstractInteractionComponent {
 		if (turn != null) {
 			CASi.SIM_LOG.info(this + ": I'm telling " + agent
 					+ " to turn me to " + turn.getCubeState());
-			CASi.SIM_LOG.fine(this+": deciding to schedule "+turn+" after looking at "+action);
+			CASi.SIM_LOG.fine(this + ": deciding to schedule " + turn
+					+ " after looking at " + action);
 			agent.interrupt(turn);
 		}
 	}
@@ -186,7 +203,8 @@ public class Cube extends AbstractInteractionComponent {
 		if (setCurrentState(state)) {
 			HashMap<String, String> values = new HashMap<String, String>();
 			values.put("activity", currentState.toString());
-			String message = MACKProtocolFactory.generatePushMessage(agent, this.getType(), values);
+			String message = MACKProtocolFactory.generatePushMessage(agent,
+					this.getType(), values);
 			SimulationEngine.getInstance().getCommunicationHandler()
 					.send(this, message);
 		}
@@ -245,7 +263,20 @@ public class Cube extends AbstractInteractionComponent {
 		if (!checkInterest(agent)) {
 			return;
 		}
-		// TODO perhaps trigger TurnCube Action
+		ArrayList<State> possibleStates = new ArrayList<Cube.State>();
+		possibleStates.add(State.break_long);
+		possibleStates.add(State.break_short);
+		if (shouldScheduleTurnCubeAction(agent)
+				&& newState.equals(STATE.IDLE)
+				&& !possibleStates.contains(currentState)) {
+			TurnCube turn = new TurnCube(this, getRandomState(possibleStates));
+			CASi.SIM_LOG.info(this + ": I'm telling " + agent
+					+ " to turn me to " + turn.getCubeState());
+			CASi.SIM_LOG.fine(this + ": deciding to schedule " + turn
+					+ " after agents state changed to "
+					+ newState);
+			agent.interrupt(turn);
+		}
 	}
 
 	@Override
@@ -254,7 +285,20 @@ public class Cube extends AbstractInteractionComponent {
 		if (!checkInterest(agent)) {
 			return;
 		}
-		// TODO perhaps trigger TurnCube Action
+		ArrayList<State> possibleStates = new ArrayList<Cube.State>();
+		possibleStates.add(State.break_long);
+		possibleStates.add(State.break_short);
+		if (shouldScheduleTurnCubeAction(agent)
+				&& interruptibility.equals(INTERRUPTIBILITY.INTERRUPTIBLE)
+				&& !possibleStates.contains(currentState)) {
+			TurnCube turn = new TurnCube(this, getRandomState(possibleStates));
+			CASi.SIM_LOG.info(this + ": I'm telling " + agent
+					+ " to turn me to " + turn.getCubeState());
+			CASi.SIM_LOG.fine(this + ": deciding to schedule " + turn
+					+ " after agents interruptibility changed to "
+					+ interruptibility);
+			agent.interrupt(turn);
+		}
 	}
 
 	@Override
@@ -262,11 +306,11 @@ public class Cube extends AbstractInteractionComponent {
 		if (!checkInterest(agent)) {
 			return false;
 		}
-		// TODO perhaps care about more actions.
-		if(action instanceof WorkOnDesktop) {
+		if (action instanceof WorkOnDesktop) {
 			return true;
 		}
-		if(action instanceof ComplexAction && ((ComplexAction)action).getCurrentAction() instanceof WorkOnDesktop) {
+		if (action instanceof ComplexAction
+				&& ((ComplexAction) action).getCurrentAction() instanceof WorkOnDesktop) {
 			return true;
 		}
 		return false;
@@ -288,5 +332,5 @@ public class Cube extends AbstractInteractionComponent {
 	public String getType() {
 		return "cubus";
 	}
-	
+
 }

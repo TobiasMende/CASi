@@ -163,20 +163,25 @@ public class DefaultActionScheduler implements IActionScheduler {
 			}
 			
 		}
-		action = tempAction;
-		if (action != null) {
+		if (tempAction == null) {
 			for (AbstractAction a : actionSet) {
 				if (a.getEarliestStartTime() != null
 						&& a.getEarliestStartTime().before(
 								SimulationClock.getInstance().getCurrentTime())) {
-					action = pollAction(actionSet, a);
-					break;
+					if(tempAction == null || tempAction.getEarliestStartTime().after(a.getEarliestStartTime())) {
+						tempAction = a;
+					}
 				}
 				if(a.getEarliestStartTime() == null && a.getDeadline() == null && noLimitAction == null) {
 					noLimitAction = a;
 				}
 			}
 		}
+		// Found a good action, poll:
+		if(tempAction != null) {
+			action = pollAction(actionSet, tempAction);
+		}
+		// Still no action found. Is there an everytime action?
 		if(action == null && noLimitAction != null) {
 			action = pollAction(actionSet, noLimitAction);
 		}

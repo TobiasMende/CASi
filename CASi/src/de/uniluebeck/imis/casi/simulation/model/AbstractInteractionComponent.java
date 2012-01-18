@@ -15,6 +15,7 @@ import java.awt.Point;
 import java.awt.Shape;
 import java.awt.geom.Arc2D;
 import java.awt.geom.Area;
+import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.Collection;
@@ -42,7 +43,7 @@ public abstract class AbstractInteractionComponent extends AbstractComponent
 	/** The development logger */
 	private static final Logger log = Logger
 			.getLogger(AbstractInteractionComponent.class.getName());
-	
+
 	/** Counter for created interaction components */
 	private static int idCounter;
 
@@ -77,7 +78,6 @@ public abstract class AbstractInteractionComponent extends AbstractComponent
 	 * id for serialization
 	 */
 	private static final long serialVersionUID = -9016454038144232069L;
-	
 
 	/** Enumeration for possible directions in which this component looks */
 	public enum Face {
@@ -115,8 +115,7 @@ public abstract class AbstractInteractionComponent extends AbstractComponent
 		 * @return the direction vector
 		 */
 		private Point2D direction() {
-			return new Point2D.Double(Math.cos(radian()),
-					Math.sin(radian()));
+			return new Point2D.Double(Math.cos(radian()), Math.sin(radian()));
 		}
 	}
 
@@ -256,14 +255,46 @@ public abstract class AbstractInteractionComponent extends AbstractComponent
 		shapeRepresentation = new Arc2D.Double(calculateCircleBounds(),
 				startAngle, currentOpening, Arc2D.PIE);
 		int scale = 3;
-		Point2D pointInRoom = new Point2D.Double(scale*currentDirection.direction()
-				.getX() + getCentralPoint().getX(), scale*currentDirection
-				.direction().getY() + getCentralPoint().getY());
+		Point2D pointInRoom = new Point2D.Double(scale
+				* currentDirection.direction().getX()
+				+ getCentralPoint().getX(), scale
+				* currentDirection.direction().getY()
+				+ getCentralPoint().getY());
 		Room room = WorldFactory.getRoomsWithPoint(pointInRoom).getFirst();
 		Area area = new Area(shapeRepresentation);
 		area.intersect(new Area(room.getShapeRepresentation()));
 		shapeRepresentation = area;
 		return shapeRepresentation;
+	}
+
+	/**
+	 * If this component was a circle with a given radius, would it contain the
+	 * given IPosition?!
+	 * 
+	 * @param radius
+	 *            in which radius to look
+	 * @return true if the given position is in this component+radius, false
+	 *         otherwise
+	 */
+	public boolean containsWithRadius(IPosition whatToContain, int radius) {
+		return toFreakingSimpleCirlceSrslyJava(radius).contains(
+				whatToContain.getCentralPoint());
+	}
+
+	/**
+	 * Creates a circle with a given radius around this Component
+	 * 
+	 * @param withWhatRadius
+	 *            the radius of the circle
+	 * @return an Ellipse with this components central point and the given
+	 *         radius
+	 */
+	private Ellipse2D toFreakingSimpleCirlceSrslyJava(int withWhatRadius) {
+		Rectangle2D rect = calculateCircleBounds();
+		double topLeftX = rect.getCenterX() - withWhatRadius;
+		double topLeftY = rect.getCenterY() - withWhatRadius;
+		return new Ellipse2D.Double(topLeftX, topLeftY, 2 * withWhatRadius,
+				2 * withWhatRadius);
 	}
 
 	/**
@@ -336,7 +367,8 @@ public abstract class AbstractInteractionComponent extends AbstractComponent
 
 	@Override
 	public String toString() {
-		return super.toString() + " (" + getType() + ", "+getHumanReadableValue()+")";
+		return super.toString() + " (" + getType() + ", "
+				+ getHumanReadableValue() + ")";
 	}
 
 	@Override
@@ -365,7 +397,7 @@ public abstract class AbstractInteractionComponent extends AbstractComponent
 	 * communication handler
 	 */
 	protected void sendRecurringMessage(SimulationTime newTime) {
-		CASi.SIM_LOG.fine(this+": Sending Pull Request");
+		CASi.SIM_LOG.fine(this + ": Sending Pull Request");
 	}
 
 	@Override

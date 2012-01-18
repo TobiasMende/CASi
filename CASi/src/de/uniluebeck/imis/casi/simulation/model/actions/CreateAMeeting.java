@@ -12,9 +12,12 @@
 package de.uniluebeck.imis.casi.simulation.model.actions;
 
 import java.util.List;
+import java.util.Set;
 
 import de.uniluebeck.imis.casi.simulation.model.AbstractComponent;
 import de.uniluebeck.imis.casi.simulation.model.Agent;
+import de.uniluebeck.imis.casi.simulation.model.IPosition;
+import de.uniluebeck.imis.casi.simulation.model.Room;
 import de.uniluebeck.imis.casi.simulation.model.SimulationTime;
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.AbstractAction;
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.ComplexAction;
@@ -36,20 +39,31 @@ public class CreateAMeeting extends ComplexAction {
 	 * 
 	 * @param creator
 	 *            the meeting organizer
-	 * @param attendees
+	 * @param set
 	 *            a list of all attending Agents
+	 * @param where
+	 *            the IPosition (most likely a Room or an Agent) where this
+	 *            meeting is about to take place
 	 * @param whishedStartTime
+	 *            the time at which this meeting should start
 	 * @param expectedDuration
+	 *            the duration of this meeting
+	 * @param priotiy
+	 *            at what priority this meeting should be added to the agents
 	 */
-	public CreateAMeeting(Agent creator, List<Agent> attendees,
-			AbstractComponent where, SimulationTime whishedStartTime,
-			int expectedDuration) {
+	public CreateAMeeting(Agent creator, Set<Agent> set, IPosition where,
+			SimulationTime whishedStartTime, int expectedDuration, int priotiy) {
 
-		// for now, create the meeting immediately! No time to explain!
-		attendees.add(creator);
-		AbstractAction meeting = new HaveAMeeting(where, expectedDuration, 10);
-		for (Agent agent : attendees) {
-			agent.addActionToList(meeting);
+		// makes sure the creator of the meeting is attending his meeting
+		set.add(creator);
+
+		// create a prototype of this Meeting
+		AbstractAction meeting = new HaveAMeeting(where, expectedDuration,
+				priotiy);
+		
+		// and set its clone to every agent
+		for (Agent agent : set) {
+			agent.addActionToList(meeting.clone());
 		}
 	}
 }

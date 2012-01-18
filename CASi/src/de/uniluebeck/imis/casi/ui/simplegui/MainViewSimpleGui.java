@@ -15,6 +15,8 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.util.logging.Logger;
 
 import javax.swing.BorderFactory;
@@ -23,6 +25,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JSplitPane;
 
 import de.uniluebeck.imis.casi.controller.IUIController;
 import de.uniluebeck.imis.casi.ui.IMainView;
@@ -35,7 +38,7 @@ import de.uniluebeck.imis.casi.ui.IMainView;
  */
 @SuppressWarnings("serial")
 public class MainViewSimpleGui extends JFrame implements IMainView,
-		ActionListener {
+		ActionListener, ComponentListener {
 
 	private static final Logger log = Logger.getLogger(MainViewSimpleGui.class
 			.getName());
@@ -44,6 +47,8 @@ public class MainViewSimpleGui extends JFrame implements IMainView,
 	private SimulationPanel simPanel;
 	private ViewMenu viewMenu;
 	private InformationPanel informationPanel;
+
+	private JSplitPane splitPane;
 
 	public static final int WIDTH = 1020;
 	public static final int HEIGHT = 650;
@@ -146,18 +151,25 @@ public class MainViewSimpleGui extends JFrame implements IMainView,
 		centerPanel.add(simPanel);
 		centerPanel.setBorder(BorderFactory.createTitledBorder("Simulation"));
 
-		this.addComponentListener(simPanel);
+		centerPanel.addComponentListener(simPanel);
 
 		/** New ClockViewPanel */
 		ClockViewPanel clockViewPanel = new ClockViewPanel();
 
 		/** New InformationPanel */
 		informationPanel = new InformationPanel();
+		
+		//Create a split pane with the two panels in it.
+		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
+		                           centerPanel, informationPanel);
+		splitPane.setOneTouchExpandable(true);
+		splitPane.setDividerLocation(this.getWidth() - 317);
 
-		this.add(centerPanel, BorderLayout.CENTER);
+		this.add(splitPane, BorderLayout.CENTER);
 		this.add(menuBar, BorderLayout.NORTH);
 		this.add(clockViewPanel, BorderLayout.SOUTH);
-		this.add(informationPanel, BorderLayout.EAST);
+		
+		this.addComponentListener(this);
 	}
 
 	@Override
@@ -194,6 +206,28 @@ public class MainViewSimpleGui extends JFrame implements IMainView,
 			System.exit(0);
 		}
 
+	}
+
+	@Override
+	public void componentHidden(ComponentEvent e) {
+		
+	}
+	
+	@Override
+	public void componentMoved(ComponentEvent e) {
+		
+	}
+
+	@Override
+	public void componentResized(ComponentEvent e) {
+		
+		splitPane.setDividerLocation(this.getWidth() - 317);
+		
+	}
+
+	@Override
+	public void componentShown(ComponentEvent e) {
+		
 	}
 
 }

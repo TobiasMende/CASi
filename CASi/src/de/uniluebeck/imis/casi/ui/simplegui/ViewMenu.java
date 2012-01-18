@@ -35,7 +35,7 @@ public class ViewMenu extends JMenu {
 			paintSensorsItem;
 
 	/**
-	 * The constructor calls the super contructor and set up the components of
+	 * The constructor calls the super constructor and set up the components of
 	 * the view menu.
 	 */
 	public ViewMenu() {

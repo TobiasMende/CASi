@@ -20,6 +20,7 @@ import de.uniluebeck.imis.casi.simulation.model.IPosition;
 import de.uniluebeck.imis.casi.simulation.model.Room;
 import de.uniluebeck.imis.casi.simulation.model.SimulationTime;
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.AbstractAction;
+import de.uniluebeck.imis.casi.simulation.model.actionHandling.AtomicAction;
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.ComplexAction;
 
 /**
@@ -33,10 +34,23 @@ import de.uniluebeck.imis.casi.simulation.model.actionHandling.ComplexAction;
  *         all agents, this action has exchangeable scheduling methods.
  * 
  */
-public class CreateAMeeting extends ComplexAction {
+public class CreateAMeeting extends AtomicAction {
+
+	private Agent creator;
+	private Set<Agent> set;
+	private IPosition where;
+	private SimulationTime wishedStartTime;
+	private int expectedDuration;
+	private int priotiy;
 
 	/**
+	 * Creates a CreateAMeeting Action which will, whenever this get performed,
+	 * create a new HaveAMeeting Action for all attendees.
 	 * 
+	 * @param timeToCreateTheMeeting
+	 *            the time (tbh. the earliestStartTime of this Action) at which
+	 *            the Meeting will be announced (eg. created on the attending
+	 *            Agents)
 	 * @param creator
 	 *            the meeting organizer
 	 * @param set
@@ -51,19 +65,54 @@ public class CreateAMeeting extends ComplexAction {
 	 * @param priotiy
 	 *            at what priority this meeting should be added to the agents
 	 */
-	public CreateAMeeting(Agent creator, Set<Agent> set, IPosition where,
-			SimulationTime whishedStartTime, int expectedDuration, int priotiy) {
+	public CreateAMeeting(SimulationTime timeToCreateTheMeeting, Agent creator,
+			Set<Agent> set, IPosition where, SimulationTime wishedStartTime,
+			int expectedDuration, int priotiy) {
+		super();
+		this.setEarliestStartTime(timeToCreateTheMeeting);
+		this.creator = creator;
+		this.set = set;
+		this.where = where;
+		this.wishedStartTime = wishedStartTime;
+		this.expectedDuration = expectedDuration;
+		this.priority = priotiy;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * de.uniluebeck.imis.casi.simulation.model.actionHandling.AbstractAction
+	 * #internalPerform
+	 * (de.uniluebeck.imis.casi.simulation.model.AbstractComponent)
+	 */
+	@Override
+	protected boolean internalPerform(AbstractComponent performer) {
 
 		// makes sure the creator of the meeting is attending his meeting
 		set.add(creator);
 
 		// create a prototype of this Meeting
-		AbstractAction meeting = new HaveAMeeting(where, expectedDuration,
-				priotiy);
-		
+		AbstractAction meeting = new HaveAMeeting(where, wishedStartTime,
+				expectedDuration, priotiy);
+
 		// and set its clone to every agent
 		for (Agent agent : set) {
 			agent.addActionToList(meeting.clone());
 		}
+		return true;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * de.uniluebeck.imis.casi.simulation.model.actionHandling.AbstractAction
+	 * #getInformationDescription()
+	 */
+	@Override
+	public String getInformationDescription() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

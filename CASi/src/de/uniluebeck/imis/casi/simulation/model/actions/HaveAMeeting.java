@@ -13,12 +13,18 @@ package de.uniluebeck.imis.casi.simulation.model.actions;
 
 import de.uniluebeck.imis.casi.simulation.model.AbstractComponent;
 import de.uniluebeck.imis.casi.simulation.model.IPosition;
+import de.uniluebeck.imis.casi.simulation.model.SimulationTime;
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.ComplexAction;
 
 /**
+ * Represents a Meeting. This Action is most likely to be created from within a
+ * CreateAMeeting Action during simulation runtime. It is sonsidered a
+ * interrupting action as it is supposed to be injected into an agents ToDoList
+ * at a given time.
+ * 
  * @author Marvin Frick
- *
- *
+ * 
+ * 
  */
 public class HaveAMeeting extends ComplexAction {
 
@@ -28,11 +34,11 @@ public class HaveAMeeting extends ComplexAction {
 	private static final long serialVersionUID = 5933636748690158732L;
 
 	
-	public HaveAMeeting(IPosition where, int howLong, int prio){
+	public HaveAMeeting(IPosition where, SimulationTime supposedStartTime, int howLong, int prio) {
 		super();
+		this.setEarliestStartTime(supposedStartTime);
 		addSubAction(new Move(where));
 		addSubAction(new StayHere(howLong, prio));
 	}
-	
-	
+
 }

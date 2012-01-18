@@ -14,6 +14,8 @@ package de.uniluebeck.imis.casi.simulation.model;
 import java.awt.Image;
 import java.awt.geom.Point2D;
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 import de.uniluebeck.imis.casi.simulation.factory.WorldFactory;
 
@@ -49,6 +51,11 @@ public abstract class AbstractComponent implements IPosition, Serializable {
 	protected final String identifier;
 	/** The current interruptibility */
 	protected INTERRUPTIBILITY interruptibility = INTERRUPTIBILITY.INTERRUPTIBLE;
+
+	/**
+	 * This map may contain configuration options with identifier -> value.
+	 */
+	private Map<String, Object> configurationMap;
 
 	/**
 	 * Constructor for a new component
@@ -178,7 +185,53 @@ public abstract class AbstractComponent implements IPosition, Serializable {
 	public String toString() {
 		return identifier;
 	}
-	
-	
+
+	/**
+	 * Adds an configuration object for an unique identifier
+	 * 
+	 * @param identifier
+	 *            the identifier
+	 * @param value
+	 *            the object value
+	 */
+	public void addConfiguration(String identifier, Object value) {
+		if (configurationMap == null) {
+			configurationMap = new HashMap<String, Object>();
+		}
+		configurationMap.put(identifier, value);
+	}
+
+	/**
+	 * Sets a map as configuration map
+	 * 
+	 * @param config
+	 *            the map
+	 * @throws IllegalAccessException
+	 *             if the configuration map already exists.
+	 */
+	public void setConfigurationMap(Map<String, Object> config)
+			throws IllegalAccessException {
+		if (configurationMap != null) {
+			throw new IllegalAccessException(
+					"Configuration map can't be set more than once");
+		} else {
+			configurationMap = config;
+		}
+	}
+
+	/**
+	 * Getter for the configuration object for a given identifier
+	 * 
+	 * @param identifier
+	 *            the identifier to get the object for
+	 * @return the configuration object or {@code null}, if no object for this
+	 *         identifier exists.
+	 */
+	public Object getConfiguration(String identifier) {
+		if (configurationMap == null) {
+			return null;
+		}
+		return configurationMap.get(identifier);
+	}
 
 }

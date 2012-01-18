@@ -13,15 +13,11 @@ package de.uniluebeck.imis.casi.simulation.model.mackComponents;
 
 import java.awt.geom.Point2D;
 import java.util.HashMap;
-import java.util.Random;
 
-import de.uniluebeck.imis.casi.CASi;
 import de.uniluebeck.imis.casi.communication.mack.MACKProtocolFactory;
-import de.uniluebeck.imis.casi.simulation.engine.SimulationClock;
 import de.uniluebeck.imis.casi.simulation.engine.SimulationEngine;
 import de.uniluebeck.imis.casi.simulation.model.AbstractInteractionComponent;
 import de.uniluebeck.imis.casi.simulation.model.Agent;
-import de.uniluebeck.imis.casi.simulation.model.SimulationTime;
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.AbstractAction;
 
 /**
@@ -41,6 +37,10 @@ public class Desktop extends AbstractInteractionComponent {
 	public enum Frequency {
 		active, inactive, very_active;
 	}
+	
+	/** serialization identifier */
+	private static final long serialVersionUID = 8750391465421352206L;
+
 	/** counter for unique identifiers */
 	private static int idCounter;
 
@@ -48,8 +48,6 @@ public class Desktop extends AbstractInteractionComponent {
 	private Frequency currentFrequency = Frequency.inactive;
 	/** The program currently in foreground */
 	private Program currentProgram = Program.unknown;
-	/** Is this desktop idle? */
-	private boolean isIdle = true;
 
 	/**
 	 * Constructor
@@ -60,11 +58,10 @@ public class Desktop extends AbstractInteractionComponent {
 	public Desktop(Point2D coordinates, Agent agent) {
 		super("Desktop-" + agent.getIdentifier() + "-" + idCounter++,
 				coordinates);
+		radius = 5;
 		type = Type.SENSOR;
 		this.agent = agent;
 	}
-
-	private static final long serialVersionUID = 8750391465421352206L;
 
 	@Override
 	protected boolean handleInternal(AbstractAction action, Agent agent) {
@@ -87,18 +84,13 @@ public class Desktop extends AbstractInteractionComponent {
 	public void work(Program program, Frequency frequency) {
 		this.currentFrequency = frequency;
 		this.currentProgram = program;
-		isIdle = false;
 		send();
-		SimulationClock.getInstance().addListener(this);
 	}
-
+	
+	
 	@Override
 	public void finishPerformingAction(AbstractAction action, Agent agent) {
-		SimulationClock.getInstance().removeListener(this);
-		currentFrequency = Frequency.inactive;
-		currentProgram = Program.unknown;
-		isIdle = true;
-		send();
+		work(Program.unknown, Frequency.inactive);
 	}
 
 	/**
@@ -119,57 +111,5 @@ public class Desktop extends AbstractInteractionComponent {
 		return "daa";
 	}
 
-	@Override
-	protected void sendRecurringMessage(SimulationTime newTime) {
-		if(isIdle) {
-			return;
-		}
-		Frequency freq = generateRandomFrequency(currentFrequency);
-		if (!currentFrequency.equals(freq)) {
-			CASi.SIM_LOG.info(this + ": freq changed from " + currentFrequency
-					+ " to " + freq);
-			currentFrequency = freq;
-			send();
-		}
-	}
-
-	/**
-	 * Generates a random new frequency depending on a given frequency. The
-	 * current frequency is more possible than others.
-	 * 
-	 * @param lastFrequency
-	 *            the last frequency
-	 * @return the new frequency
-	 */
-	private Frequency generateRandomFrequency(Frequency lastFrequency) {
-		Frequency[] possibilities = new Frequency[4];
-		switch (lastFrequency) {
-		case very_active:
-			// Very active is more possible than active
-			possibilities[0] = Frequency.very_active;
-			possibilities[1] = Frequency.very_active;
-			possibilities[2] = Frequency.very_active;
-			possibilities[3] = Frequency.active;
-			break;
-		case inactive:
-			possibilities[0] = Frequency.inactive;
-			possibilities[1] = Frequency.inactive;
-			possibilities[2] = Frequency.inactive;
-			possibilities[3] = Frequency.active;
-			break;
-		default:
-			// Everything is possible
-			possibilities[0] = Frequency.active;
-			possibilities[1] = Frequency.active;
-			possibilities[2] = Frequency.very_active;
-			possibilities[3] = Frequency.inactive;
-			break;
-
-		}
-
-		Random rand = new Random(System.currentTimeMillis());
-		int index = rand.nextInt(4);
-		return possibilities[index];
-	}
 
 }

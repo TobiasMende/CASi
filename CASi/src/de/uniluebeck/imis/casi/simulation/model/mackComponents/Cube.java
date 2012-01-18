@@ -11,19 +11,12 @@
  */
 package de.uniluebeck.imis.casi.simulation.model.mackComponents;
 
-import java.awt.Point;
 import java.awt.geom.Point2D;
-import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Random;
 import java.util.logging.Logger;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
 
 import de.uniluebeck.imis.casi.CASi;
 import de.uniluebeck.imis.casi.communication.mack.MACKInformation;
@@ -36,6 +29,11 @@ import de.uniluebeck.imis.casi.simulation.model.Agent;
 import de.uniluebeck.imis.casi.simulation.model.Agent.STATE;
 import de.uniluebeck.imis.casi.simulation.model.SimulationTime;
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.AbstractAction;
+import de.uniluebeck.imis.casi.simulation.model.actionHandling.ComplexAction;
+import de.uniluebeck.imis.casi.simulation.model.mackActions.TurnCube;
+import de.uniluebeck.imis.casi.simulation.model.mackActions.WorkOnDesktop;
+import de.uniluebeck.imis.casi.simulation.model.mackComponents.Desktop.Frequency;
+import de.uniluebeck.imis.casi.simulation.model.mackComponents.Desktop.Program;
 
 /**
  * This is an implementation of a actuator/ sensor component that represents the
@@ -83,9 +81,10 @@ public class Cube extends AbstractInteractionComponent {
 	 *            the position of this cube
 	 */
 	public Cube(Point2D coordinates, Agent owner) {
-		super("cube-"+owner.getIdentifier()+"-"+idCounter++, coordinates);
+		super("cube-" + owner.getIdentifier() + "-" + idCounter++, coordinates);
 		SimulationClock.getInstance().addListener(this);
 		currentState = State.unknown;
+		radius = 50;
 		type = Type.MIXED;
 		agent = owner;
 		pullMessage = MACKProtocolFactory.generatePullRequest(owner, "cubus",
@@ -97,9 +96,84 @@ public class Cube extends AbstractInteractionComponent {
 		if (!checkInterest(action, agent)) {
 			return true;
 		}
-		// TODO handle here e.g. if an action doesn't fit to current state, let
-		// agent correct the state
-		return false;
+		AbstractAction tempAction = action;
+		if(action instanceof ComplexAction) {
+			tempAction = ((ComplexAction)action).getCurrentAction();
+		}
+		if (tempAction instanceof WorkOnDesktop) {
+			handleWorkOnDesktopAction((WorkOnDesktop) tempAction, agent);
+		}
+
+		return true;
+	}
+
+	/**
+	 * Tries to establish the correct state of this tube depending on the
+	 * current work action of an agent. With a probability of 30%, this method
+	 * interrupts the agent with a turn cube action if the state seems not to be correct.
+	 * 
+	 * @param action the work on desktop action
+	 * @param agent the performer of this action
+	 */
+	private void handleWorkOnDesktopAction(WorkOnDesktop action, Agent agent) {
+
+		// FIXME get probability from agent config
+		double probability = 0.3;
+		Random rand = new Random(System.currentTimeMillis());
+		double value = rand.nextDouble();
+		if (value > probability) {
+			// don't handle, not in probability range
+			return;
+		}
+		Program program = action.getProgram();
+		Frequency freq = action.getFrequency();
+		TurnCube turn = null;
+		ArrayList<State> possibleInactiveStates = new ArrayList<Cube.State>();
+		possibleInactiveStates.add(State.reading);
+		possibleInactiveStates.add(State.break_long);
+		possibleInactiveStates.add(State.break_short);
+		if (freq.equals(Frequency.inactive)) {
+			if (!program.equals(Program.unknown)
+					&& !possibleInactiveStates.contains(currentState)) {
+				turn = new TurnCube(this,
+						getRandomState(possibleInactiveStates));
+			}
+		} else if ((freq.equals(Frequency.active) || freq
+				.equals(Frequency.very_active)) && program.equals(Program.text)) {
+			if (!currentState.equals(State.writing)) {
+				turn = new TurnCube(this, State.writing);
+			}
+		} else if (program.equals(Program.browser)) {
+			possibleInactiveStates.remove(State.reading);
+			if (freq.equals(Frequency.active)
+					&& !possibleInactiveStates.contains(currentState)) {
+				turn = new TurnCube(this,
+						getRandomState(possibleInactiveStates));
+			} else if (freq.equals(Frequency.very_active)
+					&& !currentState.equals(State.writing)) {
+				turn = new TurnCube(this, State.writing);
+			}
+		}
+
+		if (turn != null) {
+			CASi.SIM_LOG.info(this + ": I'm telling " + agent
+					+ " to turn me to " + turn.getCubeState());
+			CASi.SIM_LOG.fine(this+": deciding to schedule "+turn+" after looking at "+action);
+			agent.interrupt(turn);
+		}
+	}
+
+	/**
+	 * Gets a random state from a provided list
+	 * 
+	 * @param states
+	 *            the list of states
+	 * @return the random selection
+	 */
+	private State getRandomState(List<State> states) {
+		Random rand = new Random(System.currentTimeMillis());
+		int index = rand.nextInt(states.size());
+		return states.get(index);
 	}
 
 	/**
@@ -110,8 +184,11 @@ public class Cube extends AbstractInteractionComponent {
 	 */
 	public void turnCube(State state) {
 		if (setCurrentState(state)) {
+			HashMap<String, String> values = new HashMap<String, String>();
+			values.put("activity", currentState.toString());
+			String message = MACKProtocolFactory.generatePushMessage(agent, this.getType(), values);
 			SimulationEngine.getInstance().getCommunicationHandler()
-					.send(this, "New Cube state: " + state);
+					.send(this, message);
 		}
 	}
 
@@ -126,16 +203,17 @@ public class Cube extends AbstractInteractionComponent {
 			log.severe("Unknown message format. Can't receive information");
 			return;
 		}
-		MACKInformation info = MACKProtocolFactory.parseMessage((String)message);
-		if(info == null) {
+		MACKInformation info = MACKProtocolFactory
+				.parseMessage((String) message);
+		if (info == null) {
 			log.severe("Message was invalid");
 			return;
 		}
-		CASi.SIM_LOG.fine(this+": Receiving update!");
+		CASi.SIM_LOG.fine(this + ": Receiving update!");
 		String activity = info.getAccessibleEntities().get("activity");
-		if(activity != null) {
-			for(State s : State.values()) {
-				if(s.toString().equalsIgnoreCase(activity)) {
+		if (activity != null) {
+			for (State s : State.values()) {
+				if (s.toString().equalsIgnoreCase(activity)) {
 					setCurrentState(s);
 					break;
 				}
@@ -153,8 +231,9 @@ public class Cube extends AbstractInteractionComponent {
 	 *            the currentState to set
 	 */
 	private boolean setCurrentState(State currentState) {
-		if(!currentState.equals(this.currentState)) {
-			CASi.SIM_LOG.info(this+": changing state from "+this.currentState+" to "+currentState);
+		if (!currentState.equals(this.currentState)) {
+			CASi.SIM_LOG.info(this + ": changing state from "
+					+ this.currentState + " to " + currentState);
 			this.currentState = currentState;
 			return true;
 		}
@@ -183,19 +262,19 @@ public class Cube extends AbstractInteractionComponent {
 		if (!checkInterest(agent)) {
 			return false;
 		}
-		// nothing to do here
-		return true;
+		// TODO perhaps care about more actions.
+		if(action instanceof WorkOnDesktop) {
+			return true;
+		}
+		if(action instanceof ComplexAction && ((ComplexAction)action).getCurrentAction() instanceof WorkOnDesktop) {
+			return true;
+		}
+		return false;
 	}
 
 	@Override
 	protected boolean checkInterest(Agent agent) {
-		if (!agent.equals(this.agent)) {
-			return false;
-		}
-		if (!this.contains(agent)) {
-			return false;
-		}
-		return true;
+		return agent.equals(this.agent);
 	}
 
 	@Override
@@ -204,9 +283,10 @@ public class Cube extends AbstractInteractionComponent {
 		SimulationEngine.getInstance().getCommunicationHandler()
 				.send(this, pullMessage);
 	}
-	
+
 	@Override
 	public String getType() {
 		return "cubus";
 	}
+	
 }

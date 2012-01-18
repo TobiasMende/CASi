@@ -267,35 +267,6 @@ public abstract class AbstractInteractionComponent extends AbstractComponent
 		return shapeRepresentation;
 	}
 
-	/**
-	 * If this component was a circle with a given radius, would it contain the
-	 * given IPosition?!
-	 * 
-	 * @param radius
-	 *            in which radius to look
-	 * @return true if the given position is in this component+radius, false
-	 *         otherwise
-	 */
-	public boolean containsWithRadius(IPosition whatToContain, int radius) {
-		return toFreakingSimpleCirlceSrslyJava(radius).contains(
-				whatToContain.getCentralPoint());
-	}
-
-	/**
-	 * Creates a circle with a given radius around this Component
-	 * 
-	 * @param withWhatRadius
-	 *            the radius of the circle
-	 * @return an Ellipse with this components central point and the given
-	 *         radius
-	 */
-	private Ellipse2D toFreakingSimpleCirlceSrslyJava(int withWhatRadius) {
-		Rectangle2D rect = calculateCircleBounds();
-		double topLeftX = rect.getCenterX() - withWhatRadius;
-		double topLeftY = rect.getCenterY() - withWhatRadius;
-		return new Ellipse2D.Double(topLeftX, topLeftY, 2 * withWhatRadius,
-				2 * withWhatRadius);
-	}
 
 	/**
 	 * Calculates a quadratic area which is exactly big enough to contain the

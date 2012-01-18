@@ -11,10 +11,13 @@
  */
 package de.uniluebeck.imis.casi.simulation.model.mackActions;
 
+import java.util.Random;
+
 import de.uniluebeck.imis.casi.simulation.model.AbstractComponent;
 import de.uniluebeck.imis.casi.simulation.model.Agent;
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.AtomicAction;
 import de.uniluebeck.imis.casi.simulation.model.mackComponents.Desktop;
+import de.uniluebeck.imis.casi.simulation.model.mackComponents.Desktop.Frequency;
 
 /**
  * This action lets an agent work on a given desktop.
@@ -31,6 +34,8 @@ public class WorkOnDesktop extends AtomicAction {
 	private Desktop.Program program;
 	/** the initial frequency */
 	private Desktop.Frequency frequency;
+	
+	private int iterationCounter;
 
 	/**
 	 * Constructor for new work action
@@ -56,7 +61,7 @@ public class WorkOnDesktop extends AtomicAction {
 	@Override
 	protected boolean preActionTask(AbstractComponent performer) {
 		// Check position
-		if (!desktop.containsWithRadius(performer, 5)) {
+		if (!desktop.contains(performer)) {
 			// cant work on Desktop when not at Desktop!
 			return false;
 		} else {
@@ -69,7 +74,53 @@ public class WorkOnDesktop extends AtomicAction {
 	@Override
 	protected boolean internalPerform(AbstractComponent performer) {
 		// wait only until the time elapsed
+		if((iterationCounter++)%10 == 0) {
+			Frequency newFrequency = generateRandomFrequency(frequency);
+			if(!newFrequency.equals(frequency)) {
+				desktop.work(program, newFrequency);
+				frequency = newFrequency;
+			}
+		}
 		return false;
+	}
+	
+	/**
+	 * Generates a random new frequency depending on a given frequency. The
+	 * current frequency is more possible than others.
+	 * 
+	 * @param lastFrequency
+	 *            the last frequency
+	 * @return the new frequency
+	 */
+	private Frequency generateRandomFrequency(Frequency lastFrequency) {
+		Frequency[] possibilities = new Frequency[4];
+		switch (lastFrequency) {
+		case very_active:
+			// Very active is more possible than active
+			possibilities[0] = Frequency.very_active;
+			possibilities[1] = Frequency.very_active;
+			possibilities[2] = Frequency.very_active;
+			possibilities[3] = Frequency.active;
+			break;
+		case inactive:
+			possibilities[0] = Frequency.inactive;
+			possibilities[1] = Frequency.inactive;
+			possibilities[2] = Frequency.inactive;
+			possibilities[3] = Frequency.active;
+			break;
+		default:
+			// Everything is possible
+			possibilities[0] = Frequency.active;
+			possibilities[1] = Frequency.active;
+			possibilities[2] = Frequency.very_active;
+			possibilities[3] = Frequency.inactive;
+			break;
+
+		}
+
+		Random rand = new Random(System.currentTimeMillis());
+		int index = rand.nextInt(4);
+		return possibilities[index];
 	}
 
 	@Override
@@ -80,6 +131,22 @@ public class WorkOnDesktop extends AtomicAction {
 	@Override
 	public String getInformationDescription() {
 		return "use " + program + " with " + frequency;
+	}
+	
+	/**
+	 * getter for the current program
+	 * @return the program the program class which is in foreground
+	 */
+	public Desktop.Program getProgram() {
+		return program;
+	}
+	
+	/**
+	 * Getter for the current frequency
+	 * @return the frequency the current frequency
+	 */
+	public Desktop.Frequency getFrequency() {
+		return frequency;
 	}
 
 }

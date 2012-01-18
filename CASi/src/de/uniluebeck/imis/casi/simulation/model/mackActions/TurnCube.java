@@ -51,5 +51,13 @@ public class TurnCube extends AtomicAction {
 	public String getInformationDescription() {
 		return "Cube "+cube+", State: "+state;
 	}
+	
+	/**
+	 * Getter for the state to turn the cube to
+	 * @return the state to turn the cube to.
+	 */
+	public Cube.State getCubeState() {
+		return state;
+	}
 
 }

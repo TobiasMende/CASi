@@ -27,6 +27,7 @@ import de.uniluebeck.imis.casi.simulation.model.SimulationTime;
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.AbstractAction;
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.AbstractAction.TYPE;
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.ComplexAction;
+import de.uniluebeck.imis.casi.simulation.model.actions.CreateAMeeting;
 import de.uniluebeck.imis.casi.simulation.model.actions.GoAndSpeakTo;
 import de.uniluebeck.imis.casi.simulation.model.actions.Move;
 import de.uniluebeck.imis.casi.simulation.model.actions.StayHere;
@@ -53,6 +54,7 @@ public final class Actions {
 		ActionCollector ag = ActionCollector.getInstance();
 		ComponentCollector cc = ComponentCollector.getInstance();
 
+		// 09:00 - Agents are working on their desktops
 		for (Agent a : AgentCollector.getInstance().getAll()) {
 			AbstractComponent ac;
 			String ident = "Desktop-" + a.getIdentifier();
@@ -69,12 +71,36 @@ public final class Actions {
 			// Otherwise is would not be added to his todoList automatically!
 			ag.newAction(a.getIdentifier() + "action_" + ident + "_1",
 					workOnDesktop);
-			
+
 			// also add this action to the agents actionPool
 			ag.newAction(a.getIdentifier() + "action_" + ident + "_pool",
 					workOnDesktop.clone());
 		}
 
+		// 10:00 - Felix goes to the kitchen to drink a coffee
+		Agent felix = AgentCollector.getInstance().findAgentByName(
+				"Felix Freudentanz");
+		ComplexAction newAction = new ComplexAction();
+		newAction.setDeadline(simulationStartTime.plus(60 * 60 + 10 * 60));
+		newAction.addSubAction(new Move(RoomCollector.getInstance()
+				.findRoomByIdentifier("kitchen")));
+		newAction.addSubAction(new StayHere(5, 3));
+		newAction.addSubAction(new Move(RoomCollector.getInstance()
+				.findRoomByIdentifier("officeFelix")));
+		ActionCollector.getInstance().newAction(
+				felix.getIdentifier() + "_goesToTheKitchenToDrinkCoffee",
+				newAction);
+
+		// 10:30 - Hermann creates a meeting for 12:00
+		// Meeting: takes 2 hours, every employee attends, is in Hermanns room
+		Agent hermann = AgentCollector.getInstance().findAgentByName(
+				"Hermann Matsumbishi");
+		AbstractAction createMeeting = new CreateAMeeting(simulationStartTime.plus(60*60), hermann,
+				AgentCollector.getInstance().getAll(), RoomCollector
+						.getInstance().findRoomByIdentifier("officeHermann"),
+				simulationStartTime.plus(60*60*3), 120, 10);
+		ActionCollector.getInstance().newAction(hermann.getIdentifier()+"_createsThe12oclockMeeting", createMeeting);
+		
 	}
 
 	/**
@@ -84,16 +110,17 @@ public final class Actions {
 	 */
 	public static void generateActionsPools(SimulationTime startTime) {
 		// all agents have some ActionPool actions
-		
+
 		// they need to go to the restroome sometimes...
 		forAllAgentsActionPoolDoThis(new Move(RoomCollector.getInstance()
 				.findRoomByIdentifier("mensRestroom")));
-		
+
 		// and need some coffee sometimes...
 		ComplexAction makeSomeCoffee = new ComplexAction();
-		makeSomeCoffee.addSubAction(new Move(RoomCollector.getInstance().findRoomByIdentifier("kitchen")));
+		makeSomeCoffee.addSubAction(new Move(RoomCollector.getInstance()
+				.findRoomByIdentifier("kitchen")));
 		makeSomeCoffee.addSubAction(new StayHere(5, 2));
-		
+
 		forAllAgentsActionPoolDoThis(makeSomeCoffee);
 
 	}

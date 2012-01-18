@@ -92,7 +92,6 @@ public abstract class ComponentView extends JComponent {
 	 */
 	public void setTransformed() {
 
-		// this.setLocation(getOptimizedPosition(position));
 		Point point = getOptimizedPosition(position);
 		this.setBounds(point.x, point.y, (int) (8 * transform.getScaleX()),
 				(int) (8 * transform.getScaleY()));

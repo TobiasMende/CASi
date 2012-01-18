@@ -117,11 +117,11 @@ public class InteractionComponentView extends ComponentView implements
 		g2D.setColor(this.stateColor);
 		g2D.fillRect(2, 2, (int) dim.getWidth() - 4, (int) dim.getHeight() - 4);
 		
-		if (this.isSelected) {
-			g2D.setColor(Color.GREEN);
-			g2D.fillRect(3, 3, (int) dim.getWidth() - 6,
-					(int) dim.getHeight() - 6);
-		}
+//		if (this.isSelected) {
+//			g2D.setColor(Color.GREEN);
+//			g2D.fillRect(3, 3, (int) dim.getWidth() - 6,
+//					(int) dim.getHeight() - 6);
+//		}
 	}
 
 	@Override

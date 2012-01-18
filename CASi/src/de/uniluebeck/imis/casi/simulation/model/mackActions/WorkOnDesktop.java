@@ -55,9 +55,15 @@ public class WorkOnDesktop extends AtomicAction {
 
 	@Override
 	protected boolean preActionTask(AbstractComponent performer) {
-		// Check position and set Freq and Prog at Desktop.
-		desktop.work(program, frequency);
-		return super.preActionTask(performer);
+		// Check position
+		if (!desktop.containsWithRadius(performer, 5)) {
+			// cant work on Desktop when not at Desktop!
+			return false;
+		} else {
+			// set Freq and Prog at Desktop.
+			desktop.work(program, frequency);
+			return super.preActionTask(performer);
+		}
 	}
 
 	@Override

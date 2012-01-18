@@ -22,6 +22,10 @@ danach: beide gehen in ihre Büros zurück und machen workOnDesktop
 10:30 Hermann setzt ein Meeting für 12 Uhr an. Alle Mitarbeiter kommen in Hermanns Büro für 2 Stunden. Dabei ändern sich alle fünf Minuten die beiden aktiven Sprechner. Ein Mikrofon kriegt das mit.
 bis 12: Mitarbeiter arbeiten random ihren ActionPool ab
 12:00 Alle Mitarbeiter gehen ins Meeting und gehen danach zurück an ihre ActionPool Abarbeitung
+
+15:00 earliestStartTime für Felix geht auf Toilette und 15:45 latestEndTime für Felix geht auf Toilette und das ganze dauert 30 Minuten
+bis 15:30 muss Dagobert 42 Minuten am Desktop gearbeitet haben
+
 16:00 Felix geht zu Zwotah ins Büro, sie reden über Belangloses. Das Mike hört das. Der Würfel sollte jetzt erkennen, dass die beiden beschäftigt sind. Zwotah dreht seinen WÜrfel auf "nicht beschäftigt".
 
 

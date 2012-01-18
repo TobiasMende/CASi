@@ -13,12 +13,15 @@ package de.uniluebeck.imis.casi.simulation.model.actionHandling.schedulers;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 import java.util.TreeSet;
 import java.util.logging.Logger;
 
 import de.uniluebeck.imis.casi.simulation.engine.SimulationClock;
+import de.uniluebeck.imis.casi.simulation.model.SimulationTime;
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.AbstractAction;
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.AbstractAction.STATE;
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.ActionComparator;
@@ -44,7 +47,7 @@ public class DefaultActionScheduler implements IActionScheduler {
 	/** a set of actions that should be performed during the simulation */
 	private TreeSet<AbstractAction> todoList;
 	/** a set of actions that might be performed during the simulation */
-	private TreeSet<AbstractAction> actionPool;
+	private ArrayList<AbstractAction> actionPool;
 	/** a list of actions that have to be performed immediately */
 	private LinkedList<AbstractAction> interruptAction;
 
@@ -67,7 +70,7 @@ public class DefaultActionScheduler implements IActionScheduler {
 	 */
 	public DefaultActionScheduler() {
 		todoList = new TreeSet<AbstractAction>(new ActionComparator());
-		actionPool = new TreeSet<AbstractAction>(new ActionComparator());
+		actionPool = new ArrayList<AbstractAction>();
 		interruptAction = new LinkedList<AbstractAction>();
 	}
 
@@ -103,6 +106,7 @@ public class DefaultActionScheduler implements IActionScheduler {
 		}
 		if (action == null && !todoList.isEmpty()) {
 			action = searchIn(todoList);
+			action = pollAction(todoList, action);
 		}
 		if (action == null && !actionPool.isEmpty()) {
 			action = searchInActionPool();
@@ -118,11 +122,53 @@ public class DefaultActionScheduler implements IActionScheduler {
 	 *         found.
 	 */
 	private AbstractAction searchInActionPool() {
-		AbstractAction action = searchIn(actionPool);
-		if (action == null) {
-			action = actionPool.pollFirst();
+		// its good to shuffle here to get a random selection:
+		Collections.shuffle(actionPool);
+		AbstractAction tempAction = searchIn(actionPool);
+		AbstractAction action = null;
+		if (tempAction != null) {
+			action = tempAction.clone();
+			updateAction(tempAction);
 		}
 		return action;
+	}
+
+	/**
+	 * Method for updating action parameter to prevent immediate replay of this
+	 * action.
+	 * 
+	 * @param action
+	 *            the action to update
+	 */
+	private void updateAction(AbstractAction action) {
+		SimulationTime start = null;
+		Random rand = new Random(System.currentTimeMillis());
+		if (action.getEarliestStartTime() != null) {
+			// Delay between 0 and 60 minutes
+			int delay = rand.nextInt(60);
+			start = action.getEarliestStartTime();
+			action.setEarliestStartTime(SimulationClock.getInstance()
+					.getCurrentTime().plus(60 * delay));
+		}
+
+		if (action.getDeadline() != null) {
+			long distance = 0;
+			// Save the distance between start and end time:
+			if (start != null) {
+				distance = action.getDeadline().getTime() - start.getTime();
+			}
+			if (distance > 0) {
+				action.setDeadline(SimulationClock.getInstance()
+						.getCurrentTime().plus((int) (distance / 1000)));
+			} else {
+				// No distance -> random delay:
+				// Delay between 0 and 120 minutes
+				int delay = rand.nextInt(120);
+				start = action.getEarliestStartTime();
+				action.setDeadline(SimulationClock.getInstance()
+						.getCurrentTime().plus(60 * delay));
+			}
+		}
 	}
 
 	@Override
@@ -143,7 +189,7 @@ public class DefaultActionScheduler implements IActionScheduler {
 	 *            the set to search in.
 	 * @return the action or {@code null}, if no action was found.
 	 */
-	private AbstractAction searchIn(TreeSet<AbstractAction> actionSet) {
+	private AbstractAction searchIn(Collection<AbstractAction> actionSet) {
 		AbstractAction action = null;
 		AbstractAction tempAction = null;
 		// An action without start and end time
@@ -161,31 +207,32 @@ public class DefaultActionScheduler implements IActionScheduler {
 					tempAction = a;
 				}
 			}
-			
+
 		}
 		if (tempAction == null) {
 			for (AbstractAction a : actionSet) {
 				if (a.getEarliestStartTime() != null
 						&& a.getEarliestStartTime().before(
 								SimulationClock.getInstance().getCurrentTime())) {
-					if(tempAction == null || tempAction.getEarliestStartTime().after(a.getEarliestStartTime())) {
+					if (tempAction == null
+							|| tempAction.getEarliestStartTime().after(
+									a.getEarliestStartTime())) {
 						tempAction = a;
 					}
 				}
-				if(a.getEarliestStartTime() == null && a.getDeadline() == null && noLimitAction == null) {
+				if (a.getEarliestStartTime() == null && a.getDeadline() == null
+						&& noLimitAction == null) {
 					noLimitAction = a;
 				}
 			}
 		}
 		// Found a good action, poll:
-		if(tempAction != null) {
-			action = pollAction(actionSet, tempAction);
-		}
+		action = tempAction;
 		// Still no action found. Is there an everytime action?
-		if(action == null && noLimitAction != null) {
-			action = pollAction(actionSet, noLimitAction);
+		if (action == null) {
+			action = noLimitAction;
 		}
-		
+
 		return action;
 	}
 

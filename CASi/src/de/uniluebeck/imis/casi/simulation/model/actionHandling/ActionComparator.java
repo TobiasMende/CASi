@@ -54,6 +54,13 @@ public class ActionComparator implements Comparator<AbstractAction>, Serializabl
 
 	@Override
 	public int compare(AbstractAction first, AbstractAction second) {
+		if(first == null && second == null) {
+			return 0;
+		} else if(first == null) {
+			return -1;
+		} else if(second == null) {
+			return 1;
+		}
 		int deadlineCompare = compareDeadlines(first, second);
 		if (deadlineCompare != 0) {
 			// Earliest deadline first:

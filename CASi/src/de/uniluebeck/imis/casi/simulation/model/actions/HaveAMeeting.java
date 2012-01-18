@@ -33,12 +33,21 @@ public class HaveAMeeting extends ComplexAction {
 	 */
 	private static final long serialVersionUID = 5933636748690158732L;
 
+	IPosition where;
 	
 	public HaveAMeeting(IPosition where, SimulationTime supposedStartTime, int howLong, int prio) {
 		super();
 		this.setEarliestStartTime(supposedStartTime);
+		this.where = where;
 		addSubAction(new Move(where));
 		addSubAction(new StayHere(howLong, prio));
 	}
-
+	
+	@Override
+	public String getInformationDescription() {
+		String res;
+		res = String.format("%s: at %s @ %s", this.getClass()
+				.getName(), this.getEarliestStartTime().toString(),where.toString());
+		return res;
+	}
 }

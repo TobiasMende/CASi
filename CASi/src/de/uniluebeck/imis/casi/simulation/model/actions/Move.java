@@ -59,7 +59,7 @@ public class Move extends AtomicAction {
 
 	private Door.State doorsLastState;
 	/** The iterator used for traveling along the path */
-	private ListIterator<Point2D> pathIterator;
+	private transient ListIterator<Point2D> pathIterator;
 
 	/**
 	 * Creates a new move action with a given destination

@@ -78,14 +78,6 @@ public class CreateAMeeting extends AtomicAction {
 		this.priority = priotiy;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * de.uniluebeck.imis.casi.simulation.model.actionHandling.AbstractAction
-	 * #internalPerform
-	 * (de.uniluebeck.imis.casi.simulation.model.AbstractComponent)
-	 */
 	@Override
 	protected boolean internalPerform(AbstractComponent performer) {
 
@@ -103,16 +95,10 @@ public class CreateAMeeting extends AtomicAction {
 		return true;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * de.uniluebeck.imis.casi.simulation.model.actionHandling.AbstractAction
-	 * #getInformationDescription()
-	 */
 	@Override
 	public String getInformationDescription() {
-		// TODO Auto-generated method stub
-		return null;
+		String res;
+		res = String.format("%s: creating a meeting at %s", this.getClass().getName(), this.getEarliestStartTime().toString());
+		return res;
 	}
 }

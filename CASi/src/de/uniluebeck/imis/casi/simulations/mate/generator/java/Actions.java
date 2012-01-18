@@ -31,6 +31,7 @@ import de.uniluebeck.imis.casi.simulation.model.actions.CreateAMeeting;
 import de.uniluebeck.imis.casi.simulation.model.actions.GoAndSpeakTo;
 import de.uniluebeck.imis.casi.simulation.model.actions.Move;
 import de.uniluebeck.imis.casi.simulation.model.actions.StayHere;
+import de.uniluebeck.imis.casi.simulation.model.mackActions.GoAndWorkOnDesktop;
 import de.uniluebeck.imis.casi.simulation.model.mackActions.WorkOnDesktop;
 import de.uniluebeck.imis.casi.simulation.model.mackComponents.Desktop;
 
@@ -64,7 +65,7 @@ public final class Actions {
 					.random() * Desktop.Program.values().length)];
 			Desktop.Frequency randomFrequency = Desktop.Frequency.values()[(int) (Math
 					.random() * Desktop.Frequency.values().length)];
-			AbstractAction workOnDesktop = new WorkOnDesktop((Desktop) ac,
+			AbstractAction workOnDesktop = new GoAndWorkOnDesktop((Desktop) ac,
 					randomProgramm, randomFrequency, 5);
 
 			// the actionCollector key has to start with the Agents identifier!

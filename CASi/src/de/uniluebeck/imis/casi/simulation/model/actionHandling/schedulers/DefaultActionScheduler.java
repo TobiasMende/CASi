@@ -158,7 +158,7 @@ public class DefaultActionScheduler implements IActionScheduler {
 				tempAction = a;
 			}
 		}
-		if (tempAction != null
+		if (tempAction != null && tempAction.getEarliestStartTime() != null
 				&& tempAction.getEarliestStartTime().before(
 						SimulationClock.getInstance().getCurrentTime())) {
 			action = pollAction(actionSet, tempAction);

@@ -129,7 +129,6 @@ public class Cube extends AbstractInteractionComponent {
 	 */
 
 	private boolean shouldScheduleTurnCubeAction(Agent agent) {
-		// FIXME get probability from agent config
 		double probability = DEFAULT_TURN_CUBE_PROBABILITY;
 		Object configValue = agent
 				.getConfiguration(ConfigMap.TURN_CUBE_PROBABILITY);

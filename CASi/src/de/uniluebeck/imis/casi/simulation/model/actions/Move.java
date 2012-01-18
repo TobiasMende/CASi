@@ -20,6 +20,7 @@ import de.uniluebeck.imis.casi.CASi;
 import de.uniluebeck.imis.casi.simulation.factory.PathFactory;
 import de.uniluebeck.imis.casi.simulation.factory.WorldFactory;
 import de.uniluebeck.imis.casi.simulation.model.AbstractComponent;
+import de.uniluebeck.imis.casi.simulation.model.ConfigMap;
 import de.uniluebeck.imis.casi.simulation.model.Door;
 import de.uniluebeck.imis.casi.simulation.model.IPosition;
 import de.uniluebeck.imis.casi.simulation.model.Path;
@@ -93,7 +94,12 @@ public class Move extends AtomicAction {
 			// Path calculation in the first second completed:
 			return false;
 		}
-		for (int i = 0; i < POINTS_PER_SECOND; i++) {
+		int pointsPerSecond = POINTS_PER_SECOND;
+		Object configValue = performer.getConfiguration(ConfigMap.MOVE_SPEED);
+		if(configValue != null) {
+			pointsPerSecond = (Integer)configValue;
+		}
+		for (int i = 0; i < pointsPerSecond; i++) {
 			if (doorToClose != null) {
 				doorToClose.setState(doorsLastState);
 				doorToClose = null;

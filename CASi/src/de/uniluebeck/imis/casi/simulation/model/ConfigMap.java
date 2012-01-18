@@ -13,6 +13,7 @@ package de.uniluebeck.imis.casi.simulation.model;
 
 import java.util.HashMap;
 
+import de.uniluebeck.imis.casi.simulation.model.actions.Move;
 import de.uniluebeck.imis.casi.simulation.model.mackActions.TurnCube;
 import de.uniluebeck.imis.casi.simulation.model.mackComponents.Cube;
 
@@ -21,6 +22,11 @@ import de.uniluebeck.imis.casi.simulation.model.mackComponents.Cube;
  * {@link AbstractComponent}s to specify information about these components. It
  * contains some constants for common identifiers which may be used by some
  * components.
+ * 
+ * Feel free to add further identifier. This file is used to collect common
+ * identifier and for documenting their use in the simulation. There are many
+ * further cases where a configuration map is an useful object. E.g.: speed of
+ * agents, additional object, agents may care with them and so on.
  * 
  * @author Tobias Mende
  * 
@@ -31,8 +37,18 @@ public class ConfigMap extends HashMap<String, Object> {
 	 * represents the probability a {@link Cube} would use to trigger a
 	 * {@link TurnCube} action, when it's state doesn't match the state which is
 	 * assumed to be correct.
+	 * 
+	 * This identifier usually makes sense if configuring the behavior or the
+	 * experience of an {@link Agent}
 	 */
 	public static final String TURN_CUBE_PROBABILITY = "TURN_CUBE_PROBABILITY";
+
+	/**
+	 * Under this identifier an {@link Integer}-Object may be saved which
+	 * describes the amount of way points an {@link Agent} should walk during a
+	 * {@link Move} -Action.
+	 */
+	public static final String MOVE_SPEED = "MOVE_SPEED";
 
 	/**
 	 * serialization identifier

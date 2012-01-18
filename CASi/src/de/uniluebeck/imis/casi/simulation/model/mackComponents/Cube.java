@@ -27,6 +27,7 @@ import de.uniluebeck.imis.casi.simulation.engine.SimulationEngine;
 import de.uniluebeck.imis.casi.simulation.model.AbstractInteractionComponent;
 import de.uniluebeck.imis.casi.simulation.model.Agent;
 import de.uniluebeck.imis.casi.simulation.model.Agent.STATE;
+import de.uniluebeck.imis.casi.simulation.model.ConfigMap;
 import de.uniluebeck.imis.casi.simulation.model.SimulationTime;
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.AbstractAction;
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.ComplexAction;
@@ -45,6 +46,10 @@ import de.uniluebeck.imis.casi.simulation.model.mackComponents.Desktop.Program;
 public class Cube extends AbstractInteractionComponent {
 	/** the development logger */
 	private static final Logger log = Logger.getLogger(Cube.class.getName());
+	/**
+	 * serialization id
+	 */
+	private static final long serialVersionUID = -3061958723193321546L;
 
 	/** The states which can be represented by this cube */
 	public enum State {
@@ -64,9 +69,12 @@ public class Cube extends AbstractInteractionComponent {
 	}
 
 	/**
-	 * serialization id
+	 * The default probability for triggering a turn cube action if the current
+	 * state seems not to be correct and the agents configMap doesn't contain a
+	 * value for {@link ConfigMap#TURN_CUBE_PROBABILITY}
 	 */
-	private static final long serialVersionUID = -3061958723193321546L;
+	public static final double DEFAULT_TURN_CUBE_PROBABILITY = 0.15;
+
 	/** Counter for the cube instances */
 	private static int idCounter;
 	/** The current state of this cube */
@@ -109,7 +117,11 @@ public class Cube extends AbstractInteractionComponent {
 
 	/**
 	 * Makes an educated guess about whether this cube should schedule a turn
-	 * cube action for the provided agent or not
+	 * cube action for the provided agent or not.
+	 * 
+	 * This method uses the value for {@link ConfigMap#TURN_CUBE_PROBABILITY} of
+	 * the agent, if it was set, else it uses the
+	 * {@link Cube#DEFAULT_TURN_CUBE_PROBABILITY}.
 	 * 
 	 * @param agent
 	 *            the agent
@@ -118,7 +130,12 @@ public class Cube extends AbstractInteractionComponent {
 
 	private boolean shouldScheduleTurnCubeAction(Agent agent) {
 		// FIXME get probability from agent config
-		double probability = 0.15;
+		double probability = DEFAULT_TURN_CUBE_PROBABILITY;
+		Object configValue = agent
+				.getConfiguration(ConfigMap.TURN_CUBE_PROBABILITY);
+		if (configValue != null) {
+			probability = (Double) configValue;
+		}
 		Random rand = new Random(System.currentTimeMillis());
 		double value = rand.nextDouble();
 		return value <= probability;
@@ -266,15 +283,13 @@ public class Cube extends AbstractInteractionComponent {
 		ArrayList<State> possibleStates = new ArrayList<Cube.State>();
 		possibleStates.add(State.break_long);
 		possibleStates.add(State.break_short);
-		if (shouldScheduleTurnCubeAction(agent)
-				&& newState.equals(STATE.IDLE)
+		if (shouldScheduleTurnCubeAction(agent) && newState.equals(STATE.IDLE)
 				&& !possibleStates.contains(currentState)) {
 			TurnCube turn = new TurnCube(this, getRandomState(possibleStates));
 			CASi.SIM_LOG.info(this + ": I'm telling " + agent
 					+ " to turn me to " + turn.getCubeState());
 			CASi.SIM_LOG.fine(this + ": deciding to schedule " + turn
-					+ " after agents state changed to "
-					+ newState);
+					+ " after agents state changed to " + newState);
 			agent.interrupt(turn);
 		}
 	}

@@ -55,7 +55,7 @@ public abstract class AbstractComponent implements IPosition, Serializable {
 	/**
 	 * This map may contain configuration options with identifier -> value.
 	 */
-	private Map<String, Object> configurationMap;
+	private ConfigMap configurationMap;
 
 	/**
 	 * Constructor for a new component
@@ -196,7 +196,7 @@ public abstract class AbstractComponent implements IPosition, Serializable {
 	 */
 	public void addConfiguration(String identifier, Object value) {
 		if (configurationMap == null) {
-			configurationMap = new HashMap<String, Object>();
+			configurationMap = new ConfigMap();
 		}
 		configurationMap.put(identifier, value);
 	}
@@ -209,7 +209,7 @@ public abstract class AbstractComponent implements IPosition, Serializable {
 	 * @throws IllegalAccessException
 	 *             if the configuration map already exists.
 	 */
-	public void setConfigurationMap(Map<String, Object> config)
+	public void setConfigurationMap(ConfigMap config)
 			throws IllegalAccessException {
 		if (configurationMap != null) {
 			throw new IllegalAccessException(

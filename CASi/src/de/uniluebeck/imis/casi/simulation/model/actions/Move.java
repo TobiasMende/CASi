@@ -90,7 +90,9 @@ public class Move extends AtomicAction {
 				return true;
 			}
 			pathIterator = path.listIterator();
-			log.fine("Path calculated succesful, starting move action");
+			if(CASi.VERBOSE) {
+				log.finest("Path calculated succesful, starting move action");
+			}
 			// Path calculation in the first second completed:
 			return false;
 		}
@@ -106,7 +108,7 @@ public class Move extends AtomicAction {
 			}
 			if (affectingDoor()) {
 				if (doorToOpen.getState().equals(Door.State.LOCKED)) {
-					CASi.SIM_LOG.warning("Door " + doorToOpen
+					CASi.SIM_LOG.info("Door " + doorToOpen
 							+ " is locked. Aborting move");
 					return true;
 				}
@@ -205,16 +207,15 @@ public class Move extends AtomicAction {
 
 	@Override
 	protected boolean preActionTask(AbstractComponent performer) {
-		CASi.SIM_LOG.info(performer + " starting Move from "
+		CASi.SIM_LOG.info(performer + " starts moving from "
 				+ performer.getCurrentPosition() + " to " + endPosition);
-		return super.preActionTask(performer);
+		return true;
 	}
 
 	@Override
 	protected void postActionTask(AbstractComponent performer) {
-		CASi.SIM_LOG.info(performer + " completes Move. Destination: "
+		CASi.SIM_LOG.info(performer + " arrived at "
 				+ performer.getCurrentPosition());
-		super.postActionTask(performer);
 	}
 
 	@Override

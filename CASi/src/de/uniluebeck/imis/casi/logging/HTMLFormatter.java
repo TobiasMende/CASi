@@ -24,6 +24,16 @@ import java.util.logging.LogRecord;
  * 
  */
 public class HTMLFormatter extends java.util.logging.Formatter {
+	/** the silent flag */
+	private boolean silent;
+	
+	/**
+	 * Constructor 
+	 * @param silent if silent, no information about class paths and method names is printed
+	 */
+	public HTMLFormatter(boolean silent) {
+		this.silent = silent;
+	}
 	@Override
 	public String format(LogRecord rec) {
 		StringBuffer r = new StringBuffer();
@@ -34,8 +44,10 @@ public class HTMLFormatter extends java.util.logging.Formatter {
 		String className = rec.getSourceClassName();
 		String methodName = rec.getSourceMethodName();
 		r.append("<div class='log_entry'>");
-		r.append("<span class='log_class'>" + className + "</span> ");
-		r.append("<span class='log_method'>(" + methodName + ")</span>:<br />");
+		if(!silent) {
+			r.append("<span class='log_class'>" + className + "</span> ");
+			r.append("<span class='log_method'>(" + methodName + ")</span>:<br />");
+		}
 		r.append("<span class='log_date'>" + dateStr + "</span><br />");
 		r.append("<span class='log_entry");
 		if (rec.getLevel().intValue() <= Level.FINE.intValue())
@@ -44,7 +56,7 @@ public class HTMLFormatter extends java.util.logging.Formatter {
 			r.append(" log_default");
 		else
 			r.append(" log_error");
-		r.append("'>" + rec.getMessage() + "</span>");
+		r.append("'>" + rec.getMessage().replaceAll("(\r\n|\r|\n|\n\r)", "<br>") + "</span>");
 		r.append("</div>");
 		return r.toString();
 	}
@@ -57,7 +69,13 @@ public class HTMLFormatter extends java.util.logging.Formatter {
 		r.append("<html lang='en' xml:lang='en'"
 				+ "xmlns='http://www.w3.org/1999/xhtml'>");
 		r.append("<head>");
-		r.append("<title>JRummikub 06: Log</title>");
+		r.append("<title>CASi: ");
+		if(silent) {
+			r.append("Simulation Log");
+		} else {
+			r.append("Development Log");
+		}
+		r.append("</title>");
 		r.append("<style type='text/css'>");
 		r.append("body,html {font-family:Verdana,Helvetica, sans-serif; font-size:10pt;}");
 		r.append(".log_error {color:#822618;}");

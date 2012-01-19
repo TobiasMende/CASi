@@ -20,6 +20,15 @@ import java.security.InvalidParameterException;
  * 
  */
 public class ParameterParser {
+	/** possible log file formats */
+	public enum LOG_FORMAT {
+		/** logfiles are text only */
+		TEXT,
+		/** logfiles are in xml format */
+		XML,
+		/** logfiles are in html format */
+		HTML;
+	}
 	/** Was development mode detected? */
 	private boolean devMode;
 	/** Was verbose mode detected? */
@@ -30,6 +39,8 @@ public class ParameterParser {
 	private boolean disableGui;
 	/** The configuration file for the network if one was connected */
 	private String networkConfigFile;
+	/** The format for log files */
+	private LOG_FORMAT logFormat = LOG_FORMAT.TEXT;
 
 	/**
 	 * Creates a new parser
@@ -65,15 +76,29 @@ public class ParameterParser {
 	private boolean parseFlags(String parameter) {
 		boolean success = false;
 		if (parameter.matches("-[^-]*v[^-]*")) {
+			System.out.println("Enable verbose mode.");
 			verboseMode = true;
 			success = true;
 		}
 		if (parameter.matches("-[^-]*d[^-]*")) {
+			System.out.println("Enable development mode.");
 			devMode = true;
 			success = true;
 		}
 		if (parameter.matches("-[^-]*n[^-]*")) {
+			System.out.println("Disable GUI.");
 			disableGui = true;
+			success = true;
+		}
+		/* Log format: */
+		if (parameter.matches("-[^-]*x[^-]*")) {
+			System.out.println("Use XML for logging.");
+			logFormat = LOG_FORMAT.XML;
+			success = true;
+		}
+		if (parameter.matches("-[^-]*h[^-]*")) {
+			System.out.println("Use HTML for logging.");
+			logFormat = LOG_FORMAT.HTML;
 			success = true;
 		}
 		return success;
@@ -131,6 +156,14 @@ public class ParameterParser {
 	 */
 	public String getNetworkConfigFile() {
 		return networkConfigFile;
+	}
+	
+	/**
+	 * Getter for the format which should be used for log files
+	 * @return the format
+	 */
+	public LOG_FORMAT getLogFormat() {
+		return logFormat;
 	}
 
 }

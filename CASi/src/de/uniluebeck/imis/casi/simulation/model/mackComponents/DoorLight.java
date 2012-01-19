@@ -194,9 +194,9 @@ public class DoorLight extends AbstractInteractionComponent {
 			// don't affect agents that don't want in the room
 			return true;
 		}
-		if (action.getPriority() < 3) {
+		if (action.getPriority() > 3) {
 			// agents with a very low priority arn't allowed to pass
-			return false;
+			return true;
 		}
 		Random random = new Random(System.currentTimeMillis());
 		double value = random.nextDouble() + 0.25;

@@ -115,6 +115,17 @@ public class World {
 		printDoorGraph();
 		calculateDoorPaths();
 		connectInteractionComponentsWithAgents();
+		registerInteractionComponents();
+	}
+
+	/**
+	 * Connects all interaction components with the communication handler.
+	 */
+	private void registerInteractionComponents() {
+		CASi.SIM_LOG.info("Registering components at the communication handler! Please stay tuned...");
+		for(AbstractInteractionComponent comp : interactionComponents) {
+			comp.init();
+		}
 	}
 
 	/**

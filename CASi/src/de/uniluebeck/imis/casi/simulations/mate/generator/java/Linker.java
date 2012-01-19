@@ -45,7 +45,7 @@ public class Linker {
 			String mname = m.getName();
 			// ... if it starts with "link" and is not this "linkAll" method...
 			if (mname.startsWith("link") && (!mname.equals("linkAll"))) {
-				log.info(String.format("invoking %s", mname));
+				log.config(String.format("invoking %s", mname));
 				try {
 					// ... invoke that method!
 					m.invoke(this);

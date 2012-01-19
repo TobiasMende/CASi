@@ -19,8 +19,10 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.logging.FileHandler;
+import java.util.logging.Formatter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.logging.XMLFormatter;
 
 import de.uniluebeck.imis.casi.communication.ICommunicationHandler;
 import de.uniluebeck.imis.casi.communication.comLogger.CommunicationLogger;
@@ -29,6 +31,7 @@ import de.uniluebeck.imis.casi.controller.MainController;
 import de.uniluebeck.imis.casi.generator.IWorldGenerator;
 import de.uniluebeck.imis.casi.logging.DevLogFormatter;
 import de.uniluebeck.imis.casi.logging.ExtendedConsoleHandler;
+import de.uniluebeck.imis.casi.logging.HTMLFormatter;
 import de.uniluebeck.imis.casi.logging.SimLogFormatter;
 import de.uniluebeck.imis.casi.ui.GuiStub;
 import de.uniluebeck.imis.casi.ui.IMainView;
@@ -143,10 +146,15 @@ public class CASi {
 		System.out
 				.println("\t - d\tActivates the development mode. In this mode, all messages are written to the dev-log-file. (optional)");
 		System.out
+		.println("\t - h\tUse fancy html files instead of simple text for logging.");
+		System.out
 				.println("\t - n\tDeactivates the GUI. In this mode, no gui is shown. (optional)");
 
 		System.out
 				.println("\t - v\tActivates the verbose mode with much more output (optional)");
+		
+		System.out
+		.println("\t - x\tUse xml files for logging instead of simple text.");
 		// Complete Commands
 		System.out.println("\tThese commands can be used as described:");
 		System.out.println("\t --help (optional)");
@@ -282,11 +290,7 @@ public class CASi {
 
 		try {
 			new File("./log").mkdir();
-			devFileHandler = new FileHandler("log/" + getFileName()
-					+ "-dev.log");
-			devFileHandler.setFormatter(new DevLogFormatter()); // Use
-																// HTMLFormatter
-			// for fancy output
+			devFileHandler = getFileHandler(true);
 
 			if (DEV_MODE) {
 				// log everything to the log file
@@ -317,6 +321,49 @@ public class CASi {
 	}
 
 	/**
+	 * Getter for a log file formatter which fits to the log format, configured by the command line options.
+	 * @throws IOException if the file is not writable.
+	 */
+	private static FileHandler getFileHandler(boolean devLog) throws IOException {
+		FileHandler handler = null;
+		Formatter formatter = null;
+		String suffix = "";
+		switch (commandLineOptions.getLogFormat()) {
+		case HTML:
+			if(devLog) {
+				formatter = new HTMLFormatter(false);
+				suffix = "-dev.html";
+			} else {
+				formatter = new HTMLFormatter(true);
+				suffix = "-sim.html";
+			}
+			break;
+		case XML:
+			formatter = new XMLFormatter();
+			if(devLog) {
+				suffix = "-dev.xml";
+			} else {
+				suffix = "-sim.xml";
+			}
+			break;
+		default:
+			if(devLog) {
+				formatter = new DevLogFormatter();
+				suffix = "-dev.log";
+			} else {
+				formatter = new SimLogFormatter();
+				suffix = "-sim.log";
+			}
+			break;
+		}
+		handler = new FileHandler("log/" + getFileName()
+				+ suffix);
+		handler.setFormatter(formatter);
+		return handler;
+	}
+	
+
+	/**
 	 * Creates a file name for log files depending on the current time
 	 * 
 	 * @return a file name
@@ -344,10 +391,7 @@ public class CASi {
 
 		try {
 			new File("./log").mkdir();
-			simFileHandler = new FileHandler("log/" + getFileName()
-					+ "-sim.log");
-			simFileHandler.setFormatter(new SimLogFormatter()); // Use
-																// HTMLFormatter
+			simFileHandler = getFileHandler(false);
 			simFileHandler.setLevel(Level.ALL);
 		} catch (Exception e) {
 			System.out.println("Es wird keine Protokolldatei erzeugt: "

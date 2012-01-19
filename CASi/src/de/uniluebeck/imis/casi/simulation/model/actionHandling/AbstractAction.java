@@ -444,6 +444,7 @@ public abstract class AbstractAction implements Listenable<IActionListener>,
 	 *         interrupted.
 	 */
 	protected boolean preActionTask(AbstractComponent performer) {
+		CASi.SIM_LOG.info(performer+" starting "+this);
 		return true;
 	}
 
@@ -455,6 +456,7 @@ public abstract class AbstractAction implements Listenable<IActionListener>,
 	 *            the performer of the action
 	 */
 	protected void postActionTask(AbstractComponent performer) {
+		CASi.SIM_LOG.info(performer+" finishing "+this);
 	}
 
 	/**

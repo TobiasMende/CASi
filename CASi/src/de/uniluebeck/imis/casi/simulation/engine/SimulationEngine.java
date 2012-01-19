@@ -141,13 +141,6 @@ public class SimulationEngine {
 	public void init() {
 		CASi.SIM_LOG.info("Initializing the simulation!");
 		world.init();
-		try {
-			for(AbstractInteractionComponent comp : world.getInteractionComponents()) {
-					comp.init();
-			}
-		} catch (IllegalAccessException e) {
-			CASi.SIM_LOG.severe("World isn't sealed. Can't init!");
-		}
 	}
 
 }

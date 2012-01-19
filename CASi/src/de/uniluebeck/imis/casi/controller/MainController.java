@@ -80,7 +80,6 @@ public class MainController {
 	 * Initialize the simulation and show the ui
 	 */
 	public void init() {
-		CASi.SIM_LOG.info("Initializing the simulation ...");
 		SimulationEngine.getInstance().init();
 		
 				mainView.showUi();

@@ -283,7 +283,7 @@ public final class MACKNetworkHandler implements ICommunicationHandler {
 									|| message.getType().equals(
 											Message.Type.chat)) {
 								if (CASi.VERBOSE) {
-									CASi.SIM_LOG.info("Receiving: "
+									CASi.SIM_LOG.finer("Receiving: "
 											+ message.getBody());
 								}
 								comp.receive(message.getBody());
@@ -297,7 +297,7 @@ public final class MACKNetworkHandler implements ICommunicationHandler {
 			// Only listen to messages from the server:
 //			createPacketListener(comp, connection);
 			components.put(comp, chat);
-			log.info(identifier.getId()
+			CASi.SIM_LOG.config(identifier.getId()
 					+ ": Component is connected now. Chat with server was initialized");
 		} else {
 			log.warning(comp + "is not authenticated");
@@ -307,7 +307,7 @@ public final class MACKNetworkHandler implements ICommunicationHandler {
 
 	/**
 	 * Creates and sets a packet listener that observes the connection
-	 * @param comp the component to which packeges should be forwarded
+	 * @param comp the component to which packages should be forwarded
 	 * @param connection the connection to observe
 	 */
 	@SuppressWarnings("unused")
@@ -325,7 +325,7 @@ public final class MACKNetworkHandler implements ICommunicationHandler {
 					Message message = ((Message) packet);
 					if (message.getType().equals(Message.Type.normal)) {
 						if (CASi.VERBOSE) {
-							CASi.SIM_LOG.info("Receiving: "
+							CASi.SIM_LOG.finer("Receiving: "
 									+ message.getBody());
 						}
 						comp.receive(message.getBody());

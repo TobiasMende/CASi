@@ -108,7 +108,7 @@ Um die Weiterentwicklung des Projektes zu erleichtern, befindet sich in diesem A
 Das Projekt ist in verschiedene Ordner unterteilt, deren Sinn nachfolgend erläutert wird:
 \begin{description}
 	\item[src] In diesem Ordner befinden sich die Beschreibungen und Implementierungen des Simulators und der Simulationen.
-	\item[test] Dieser Ordner enthält die JUnit-Testfälle für einige Klassen im \texttt{src}-Ordner. Hierbei entspricht die interne Paket-Struktur dieses Ordners der Struktur des \texttt{src}-Ordners.
+	\item[test] Dieser Ordner enthält die JUnit-Testfälle für einige Klassen im \codeinline{src}-Ordner. Hierbei entspricht die interne Paket-Struktur dieses Ordners der Struktur des \codeinline{src}-Ordners.
 	\item[log] Logfiles, die während der Ausführung des Programms generiert werden, werden mit einem Zeitstempel in diesem Ordner abgelegt.
 	\item[doc] Die JavaDoc-Dokumentation des Simulators befindet sich in diesem Verzeichnis.
 	\item[dist] Im Distributionsverzeichnis finden sich ausführbare Versionen der Anwendungen als jar-Datei.
@@ -118,29 +118,29 @@ Das Projekt ist in verschiedene Ordner unterteilt, deren Sinn nachfolgend erläu
 	\item[reports] Reports über die Durchführung der Testfälle
 \end{description}
 \subsection{Paketstruktur}
-Alle Klassen, die zum Simulator gehören befinden sich in Unterpaketen des Paketes \texttt{de.uniluebeck\-.imis.casi} im Ordner \texttt{src}.
+Alle Klassen, die zum Simulator gehören befinden sich in Unterpaketen des Paketes \codeinline{de.uniluebeck\-.imis.casi} im Ordner \codeinline{src}.
 Nachfolgend wird der Sinn der verschiedenen Pakte erläutert:
 \begin{description}
-	\item[engine] Dieses Paket enthält die Basis des Simulators, die für die Koordination der Ausführung und die Verknüpfung der Komponenten sorgt. Hierzu zählen insbesondere die \texttt{SimulationEngine} und die \texttt{SimulationClock}.
-	\item[communication] In diesem Paket befinden sich die Schnittstellenbeschreibungen für Kommunikationshandler. In Unterpaketen befinden sich konkrete Implementierungen. So enthält \texttt{com\-munication\-.mack} die Implementierung des \texttt{MACKNetworkHandler}s.
-	\item[generator] Das \texttt{Generator}-Paket beinhaltet die Beschreibung der Schnittstellen, die von Generatoren der Welt implementiert werden müssen.
-	\item[ui] In diesem Paket befinden sich die Beschreibungen für Benutzungsschnittstellen. Unterpakete enthalten die Implementierungen verschiedener Userinterfaces. Das Paket \texttt{ui.simplegui} enthält die einfache graphische Benutzungsoberfläche.
-	\item[utils] Im \texttt{utils}-Paket befinden sich Klassen, die einen hohen Abstraktionsgrad aufweisen und somit leicht in andere Projekte portiert werden können, da sie größtenteils vom Simulator unabhängig sind.
+	\item[engine] Dieses Paket enthält die Basis des Simulators, die für die Koordination der Ausführung und die Verknüpfung der Komponenten sorgt. Hierzu zählen insbesondere die \codeclass{SimulationEngine} und die \texttt{SimulationClock}.
+	\item[communication] In diesem Paket befinden sich die Schnittstellenbeschreibungen für Kommunikationshandler. In Unterpaketen befinden sich konkrete Implementierungen. So enthält \codeinline{com\-munication\-.mack} die Implementierung des \codeclass{MACKNetworkHandler}s.
+	\item[generator] Das \codeinline{Generator}-Paket beinhaltet die Beschreibung der Schnittstellen, die von Generatoren der Welt implementiert werden müssen.
+	\item[ui] In diesem Paket befinden sich die Beschreibungen für Benutzungsschnittstellen. Unterpakete enthalten die Implementierungen verschiedener Userinterfaces. Das Paket \codeinline{ui.simplegui} enthält die einfache graphische Benutzungsoberfläche.
+	\item[utils] Im \codeinline{utils}-Paket befinden sich Klassen, die einen hohen Abstraktionsgrad aufweisen und somit leicht in andere Projekte portiert werden können, da sie größtenteils vom Simulator unabhängig sind.
 	\item[simulations] Dieses Paket kapselt in weiteren Unterpaketen die Beschreibungen einzelner Simulationen.
 	\item[simulation.model] Die Anwendungslogik befindet sich in diesem Paket.
 	\item[controller] Die Kontroller zur Verknüpfung der Komponenten und zur Steuerung des Programmflusses befinden sich in diesem Paket.
 	\item[logging] Dieses Paket beinhaltet Konfigurationsklassen für die Logger.
 \end{description}
 \subsection{Buildfile}
-Das Projektverzeichnis enthält das Ant-Buildfile \texttt{build.xml}, welches eine Reihe von Buildtargets definiert. Diese Ziele können entweder über die Konsole mit \texttt{ant <target-name>} oder aus Eclipse heraus ausgeführt werden. Nachfolgend befindet sich eine Beschreibung der wichtigsten Targets:
+Das Projektverzeichnis enthält das Ant-Buildfile \codeinline{build.xml}, welches eine Reihe von Buildtargets definiert. Diese Ziele können entweder über die Konsole mit \codemethod{ant <target-name>} oder aus Eclipse heraus ausgeführt werden. Nachfolgend befindet sich eine Beschreibung der wichtigsten Targets:
 \begin{description}
 	\item[clean] räumt das Projektverzeichnis auf und löscht die Binarie-, Dokuentations- und Reportverzeichnisse.
-	\item[clean-all] führt das Target \texttt{clean} aus und löscht außerdem das Log- und Distributionsverzeichnis.
+	\item[clean-all] führt das Target \codemethod{clean} aus und löscht außerdem das Log- und Distributionsverzeichnis.
 	\item[test] führt die Testfälle aus.
-	\item[test] führt die Testfälle aus und erzeugt HTML-Reports im \texttt{reports}-Verzeichnis.
+	\item[test] führt die Testfälle aus und erzeugt HTML-Reports im \codeinline{reports}-Verzeichnis.
 	\item[doc] erzeugt die JavaDoc-Dokumentation
-	\item[jar] erzeugt ein ausführbares jar-File des Simulators (\texttt{dist/CASi.jar})
-	\item[xmpp-registrator-jar] erstellt eine ausführbare Version des \texttt{XmppRegistrator}s.
+	\item[jar] erzeugt ein ausführbares jar-File des Simulators (\codeinline{dist/CASi.jar})
+	\item[xmpp-registrator-jar] erstellt eine ausführbare Version des \codeinline{XmppRegistrator}s.
 	\item[main] Erstellt alle Distributionen und die JavaDoc-Dokumentation.
 \end{description}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -149,11 +149,11 @@ Das Projektverzeichnis enthält das Ant-Buildfile \texttt{build.xml}, welches ei
 \section{Ausführungsanweisungen}\label{sec:appendix_install}
 Da es sich bei dem Projekt um ein Java-Projekt handelt, gibt es keine Installation im herkömmlichen Sinne. In diesem Abschnitt beschrieben, wie die Programme ausgeführt werden können.
 \subsection{Simulator}
-Die jar-Version des Simulators kann, nachdem sie mit \texttt{ant jar} erzeugt wurde, mit \texttt{java -jar dist/CASi.jar <parameter>} ausgeführt werden. Eine ausführliche Dokumentation der möglichen Parameter erhält man mit \texttt{java -jar dist/CASi.jar \texttt{-}\texttt{-}help}.
+Die jar-Version des Simulators kann, nachdem sie mit \codemethod{ant jar} erzeugt wurde, mit \codemethod{java -jar dist/CASi.jar <parameter>} ausgeführt werden. Eine ausführliche Dokumentation der möglichen Parameter erhält man mit \codemethod{java -jar dist/CASi.jar \codemethod{-}\codemethod{-}help}.
 \subsection{XmppRegistrator}
 Der XmppRegistrator kann automatisch alle für die Simulation benötigten XmppIdentifier am Jabber-Server registrieren. Dies ist besonders hilfreich, wenn der Server ein Delay zwischen zwei Registrierungsoperationen benötigt, da somit vermieden werden kann, dass die Identifier erst beim Start der Simulation registriert werden und somit die Ausführung der Simulation verzögert wird.
 
-Der XmppRegistrator verlangt als einzigen Parameter den Pfad zu einer Netzwerkkonfigurationsdatei und kann, nachdem er mit \texttt{ant xmpp-registrator-jar} erzeugt wurde, mit \texttt{java -jar dist/XmppRegistrator.jar <path-to-config-file>} ausgeführt werden.
+Der XmppRegistrator verlangt als einzigen Parameter den Pfad zu einer Netzwerkkonfigurationsdatei und kann, nachdem er mit \codemethod{ant xmpp-registrator-jar} erzeugt wurde, mit \codemethod{java -jar dist/XmppRegistrator.jar <path-to-config-file>} ausgeführt werden.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

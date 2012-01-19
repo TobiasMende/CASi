@@ -97,7 +97,7 @@ public class Move extends AtomicAction {
 		int pointsPerSecond = POINTS_PER_SECOND;
 		Object configValue = performer.getConfiguration(ConfigMap.MOVE_SPEED);
 		if(configValue != null) {
-			pointsPerSecond = (Integer)configValue;
+			pointsPerSecond = (int) Math.round(pointsPerSecond * ((Double) configValue));
 		}
 		for (int i = 0; i < pointsPerSecond; i++) {
 			if (doorToClose != null) {

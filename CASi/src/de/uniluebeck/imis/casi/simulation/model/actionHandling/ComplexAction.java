@@ -200,5 +200,13 @@ public class ComplexAction extends AbstractAction {
 	public String getInformationDescription() {
 		return subActions.size()+" sub actions";
 	}
+	
+	@Override
+	public void setPriority(int prio){
+		super.setPriority(prio);
+		for (AtomicAction subAction : subActions) {
+			subAction.setPriority(prio);
+		}
+	}
 
 }

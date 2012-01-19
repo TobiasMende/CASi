@@ -173,8 +173,9 @@ public final class Actions {
 		// but in fact Susi has to go to the womensRoom -> overwriting her
 		// Action
 		ActionCollector.getInstance().newAction(
-				AgentCollector.getInstance().findAgentByName("Susi Sekretärin").getIdentifier()+"_"+
-				toilettActionIdentifier+"_pool",
+				AgentCollector.getInstance().findAgentByName("Susi Sekretärin")
+						.getIdentifier()
+						+ "_" + toilettActionIdentifier + "_pool",
 				new GoAndStayThere(RoomCollector.getInstance()
 						.findRoomByIdentifier("womensRestroom"), 1));
 
@@ -195,7 +196,7 @@ public final class Actions {
 	 * @param action
 	 *            the action that everyone should do
 	 * @param identifier
-	 *            TODO
+	 *            used to generate the key at which the action should be stored
 	 */
 	private static void forAllAgentsActionPoolDoThis(AbstractAction action,
 			String givenIdentifier) {

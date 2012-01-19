@@ -36,7 +36,7 @@ public class Room implements IPosition {
 	/** the collection of walls this room consists of */
 	private List<Wall> walls = new LinkedList<Wall>();
 	/** A polygon that represents the shape of this room */
-	private Polygon polygonRepresentation;
+	private transient Polygon polygonRepresentation;
 	/** all doors in this room */
 	private Set<Door> doorsInRoom;
 	/** the unique identifier */

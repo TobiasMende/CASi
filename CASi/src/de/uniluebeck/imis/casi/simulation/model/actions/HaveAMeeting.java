@@ -33,7 +33,7 @@ public class HaveAMeeting extends ComplexAction {
 	 */
 	private static final long serialVersionUID = 5933636748690158732L;
 
-	IPosition where;
+	private IPosition where;
 	
 	public HaveAMeeting(IPosition where, SimulationTime supposedStartTime, int howLong, int prio) {
 		super();
@@ -49,5 +49,11 @@ public class HaveAMeeting extends ComplexAction {
 		res = String.format("%s: at %s @ %s", this.getClass()
 				.getName(), this.getEarliestStartTime().toString(),where.toString());
 		return res;
+	}
+	
+	@Override
+	public ComplexAction clone() {
+		// TODO Auto-generated method stub
+		return super.clone();
 	}
 }

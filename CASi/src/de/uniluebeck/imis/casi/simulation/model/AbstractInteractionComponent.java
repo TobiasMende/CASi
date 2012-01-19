@@ -71,7 +71,7 @@ public abstract class AbstractInteractionComponent extends AbstractComponent
 	protected Type type = Type.SENSOR;
 
 	/** The {@link Arc2D} representation of the monitored area */
-	private Shape shapeRepresentation;
+	private transient Shape shapeRepresentation;
 
 	/**
 	 * id for serialization

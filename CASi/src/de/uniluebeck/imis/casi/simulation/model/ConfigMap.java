@@ -44,7 +44,7 @@ public class ConfigMap extends HashMap<String, Object> {
 	public static final String TURN_CUBE_PROBABILITY = "TURN_CUBE_PROBABILITY";
 
 	/**
-	 * Under this identifier an {@link Integer}-Object may be saved at which
+	 * Under this identifier an {@link Double}-Object may be saved at which
 	 * relativ speed an {@link Agent} should walk during a {@link Move} -Action.
 	 */
 	public static final String MOVE_SPEED = "MOVE_SPEED";

@@ -31,6 +31,7 @@ import de.uniluebeck.imis.casi.simulation.model.actionHandling.AbstractAction.TY
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.ComplexAction;
 import de.uniluebeck.imis.casi.simulation.model.actions.CreateAMeeting;
 import de.uniluebeck.imis.casi.simulation.model.actions.GoAndSpeakTo;
+import de.uniluebeck.imis.casi.simulation.model.actions.GoAndStayThere;
 import de.uniluebeck.imis.casi.simulation.model.actions.Move;
 import de.uniluebeck.imis.casi.simulation.model.actions.StayHere;
 import de.uniluebeck.imis.casi.simulation.model.mackActions.GoAndWorkOnDesktop;
@@ -165,16 +166,17 @@ public final class Actions {
 		// all agents have some ActionPool actions
 
 		// they need to go to the restroome sometimes...
-		forAllAgentsActionPoolDoThis(new Move(RoomCollector.getInstance()
-				.findRoomByIdentifier("mensRestroom")));
-
+		forAllAgentsActionPoolDoThis(new GoAndStayThere(RoomCollector.getInstance()
+				.findRoomByIdentifier("mensRestroom"),1), "goToToilettSometimes");
+		
+		
 		// and need some coffee sometimes...
 		ComplexAction makeSomeCoffee = new ComplexAction();
 		makeSomeCoffee.addSubAction(new Move(RoomCollector.getInstance()
 				.findRoomByIdentifier("kitchen")));
 		makeSomeCoffee.addSubAction(new StayHere(5, 2));
 
-		forAllAgentsActionPoolDoThis(makeSomeCoffee);
+		forAllAgentsActionPoolDoThis(makeSomeCoffee, "makeCoffeeSometimes");
 
 	}
 
@@ -184,12 +186,13 @@ public final class Actions {
 	 * 
 	 * @param action
 	 *            the action that everyone should do
+	 * @param identifier TODO
 	 */
-	private static void forAllAgentsActionPoolDoThis(AbstractAction action) {
+	private static void forAllAgentsActionPoolDoThis(AbstractAction action, String givenIdentifier) {
 		for (Agent a : AgentCollector.getInstance().getAll()) {
 			AbstractAction clonedAction = action.clone();
 			ActionCollector.getInstance().newAction(
-					a.getIdentifier() + "_pool", clonedAction);
+					a.getIdentifier() +"_"+givenIdentifier+"_pool", clonedAction);
 		}
 	}
 }

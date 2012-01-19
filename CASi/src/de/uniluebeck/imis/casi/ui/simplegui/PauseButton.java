@@ -43,6 +43,7 @@ public class PauseButton extends JButton implements ActionListener {
 	public PauseButton() {
 		
 		this.setPreferredSize(new Dimension(30,30));
+		this.setBackground(ColorScheme.BACKGROUND_GUI);
 		this.addActionListener(this);
 	}
 	
@@ -52,7 +53,7 @@ public class PauseButton extends JButton implements ActionListener {
 	public void paintComponent(Graphics g) {
 		
 		super.paintComponent(g);
-		g.setColor(Color.GRAY);
+		g.setColor(ColorScheme.BLUE_LIGHT);
 		
 		/** Check, if clock is paused */
 		if(SimulationClock.getInstance().isPaused()) {

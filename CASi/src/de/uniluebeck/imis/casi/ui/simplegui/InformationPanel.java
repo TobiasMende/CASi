@@ -25,6 +25,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 
@@ -63,6 +64,8 @@ public class InformationPanel extends JPanel implements ActionListener,
 
 	private List<ComponentView> componentViews;
 
+	private JSplitPane splitPane;
+
 	/**
 	 * The constructor sets layout and components.
 	 */
@@ -83,13 +86,14 @@ public class InformationPanel extends JPanel implements ActionListener,
 	 */
 	private void setComponents() {
 
-		JPanel infoPanel = new JPanel();
-		infoPanel.setLayout(new GridLayout(0, 1));
+		// JPanel infoPanel = new JPanel();
+		// infoPanel.setLayout(new GridLayout(0, 1));
 
 		informationTextArea = new JTextArea();
 		informationTextArea.setBorder(BorderFactory
 				.createTitledBorder("Information:"));
 		informationTextArea.setEditable(false);
+		informationTextArea.setBackground(ColorScheme.BACKGROUND);
 
 		JScrollPane scrollPane = new JScrollPane(informationTextArea);
 
@@ -97,23 +101,28 @@ public class InformationPanel extends JPanel implements ActionListener,
 		informationTextAreaRoom.setBorder(BorderFactory
 				.createTitledBorder("Room information:"));
 		informationTextAreaRoom.setEditable(false);
+		informationTextAreaRoom.setBackground(ColorScheme.BACKGROUND);
 
 		JScrollPane scrollPaneRoom = new JScrollPane(informationTextAreaRoom);
 
-		infoPanel.add(scrollPane);
-		infoPanel.add(scrollPaneRoom);
+		this.splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
+				scrollPane, scrollPaneRoom);
+		splitPane.setDividerLocation(this.getHeight()/2);
+		// infoPanel.add(scrollPane);
+		// infoPanel.add(scrollPaneRoom);
 
-		add(infoPanel, BorderLayout.CENTER);
+		add(splitPane, BorderLayout.CENTER);
 	}
 
 	/**
 	 * This method sets the entries of the JComboBox.
 	 */
 	public void setInformationComboBox(List<ComponentView> componentViews) {
-
+		
+		splitPane.setDividerLocation(this.getHeight()/2);
 
 		this.componentViews = componentViews;
-		
+
 		try {
 
 			agentList = new ArrayList<Agent>();
@@ -150,6 +159,7 @@ public class InformationPanel extends JPanel implements ActionListener,
 		selectComponentBox = new JComboBox(getVectorData());
 		selectComponentBox.setBorder(BorderFactory
 				.createTitledBorder("Select component:"));
+		selectComponentBox.setBackground(ColorScheme.BACKGROUND_GUI);
 		selectComponentBox.addActionListener(this);
 		selectComponentBox.setRenderer(new ComboBoxRenderer());
 
@@ -228,7 +238,7 @@ public class InformationPanel extends JPanel implements ActionListener,
 	 * This method updates the information of the selected component.
 	 */
 	private void setInformation() {
-
+		
 		int selectedIndex_A = this.selectComponentBox.getSelectedIndex();
 		int selectedIndex_I = selectedIndex_A - agentList.size() - 1;
 

@@ -11,6 +11,7 @@
  */
 package de.uniluebeck.imis.casi.ui.simplegui;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
@@ -53,6 +54,8 @@ public class ClockViewPanel extends JPanel implements ISimulationClockListener,
 
 		/** Set layout to FlowLayout */
 		this.setLayout(new GridLayout(1, 0));
+		
+		this.setBackground(ColorScheme.BACKGROUND_GUI);
 
 		/** Set the components */
 		this.setComponents();
@@ -85,10 +88,13 @@ public class ClockViewPanel extends JPanel implements ISimulationClockListener,
 		this.slider.setPaintTicks(true);
 		this.slider.addChangeListener(this);
 		this.slider.setBorder(BorderFactory.createTitledBorder("Time scaler:"));
+		this.slider.setBackground(ColorScheme.BACKGROUND_GUI);
+		this.slider.setForeground(Color.BLACK);
 		this.add(this.slider);
 
 		/** Add control panel */
 		ControlPanel controlPanel = new ControlPanel();
+		controlPanel.setBackground(ColorScheme.BACKGROUND_GUI);
 		this.add(controlPanel);
 	}
 

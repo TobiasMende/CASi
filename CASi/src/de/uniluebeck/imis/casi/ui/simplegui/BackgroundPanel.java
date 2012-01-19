@@ -17,7 +17,6 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.AffineTransform;
@@ -67,6 +66,8 @@ public class BackgroundPanel extends JPanel implements MouseListener {
 		this.transform = transform;
 
 		this.viewSettings = viewSettings;
+		
+		this.setBackground(ColorScheme.BACKGROUND);
 		this.repaint();
 
 	}
@@ -103,7 +104,7 @@ public class BackgroundPanel extends JPanel implements MouseListener {
 			for (Room room : SimulationEngine.getInstance().getWorld()
 					.getRooms()) {
 				// Show shape representation of room:
-				g2D.setColor(Color.LIGHT_GRAY);
+				g2D.setColor(ColorScheme.ROOM);
 				g2D.fill(transform.createTransformedShape(room
 						.getShapeRepresentation()));
 
@@ -116,7 +117,7 @@ public class BackgroundPanel extends JPanel implements MouseListener {
 
 				// paint, if it is selected
 				if (viewSettings.isPaintRoomCentralPoints()) {
-					g2D.setColor(Color.GREEN);
+					g2D.setColor(ColorScheme.BLUE_DARK);
 					g2D.fillOval(centralPoint2.x, centralPoint2.y, 5, 5);
 				}
 
@@ -124,12 +125,7 @@ public class BackgroundPanel extends JPanel implements MouseListener {
 				for (Wall wall : room.getWalls()) {
 
 					/** Paint the walls in black */
-					if (wall.getDoors().isEmpty()) {
-						// for debugging: make door-less walls red!
-						g.setColor(Color.RED);
-					} else {
-						g.setColor(Color.BLACK);
-					}
+					g.setColor(ColorScheme.BLUE_VERY_DARK);
 					g2D.draw(transform.createTransformedShape(wall
 							.getShapeRepresentation()));
 				}
@@ -137,7 +133,6 @@ public class BackgroundPanel extends JPanel implements MouseListener {
 				/** Get the doors of this room */
 				for (Door door : room.getDoors()) {
 
-					g.setColor(Color.BLUE);
 					g.setFont(new Font(Font.MONOSPACED, Font.PLAIN,
 							(int) (8 * transform.getScaleX())));
 					Point2D internalDoorPoint = null;
@@ -147,12 +142,12 @@ public class BackgroundPanel extends JPanel implements MouseListener {
 							internalDoorPoint.getX() - 1.5,
 							internalDoorPoint.getY() - 1.5);
 
-					g.setColor(Color.YELLOW);
+					g.setColor(ColorScheme.ORANGE_LIGHT);
 					// paint door
 					g2D.draw(transform.createTransformedShape(door
 							.getShapeRepresentation()));
 					// Show central point of door:
-					g.setColor(Color.BLUE);
+					g.setColor(ColorScheme.BLUE);
 
 					// paint door central point
 					if (viewSettings.isPaintDoorCentralPoints()) {
@@ -166,11 +161,11 @@ public class BackgroundPanel extends JPanel implements MouseListener {
 			for (AbstractInteractionComponent interactionComp : SimulationEngine
 					.getInstance().getWorld().getInteractionComponents()) {
 
-				g.setColor(Color.BLUE);
+				g.setColor(ColorScheme.SENSOR_AREA);
 
 				// paint sensor monitoring area
 				if (viewSettings.isPaintSensorMonitoringArea()) {
-					g2D.draw(transform.createTransformedShape(interactionComp
+					g2D.fill(transform.createTransformedShape(interactionComp
 							.getShapeRepresentation()));
 				}
 
@@ -224,9 +219,9 @@ public class BackgroundPanel extends JPanel implements MouseListener {
 				/** Get the doors of this room */
 				for (Door door : room.getDoors()) {
 
-					g2D.setColor(Color.BLUE); /**/
+					g2D.setColor(Color.BLACK);
 					g2D.setFont(new Font(Font.MONOSPACED, Font.PLAIN,
-							(int) (8 * transform.getScaleX()))); /**/
+							(int) (8 * transform.getScaleX())));
 					Point2D internalDoorPoint = null;
 					internalDoorPoint = transform.deltaTransform(
 							door.getCentralPoint(), internalDoorPoint);

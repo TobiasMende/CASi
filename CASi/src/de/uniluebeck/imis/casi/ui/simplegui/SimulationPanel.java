@@ -250,11 +250,11 @@ public class SimulationPanel extends JLayeredPane implements
 
 		LinkedList<ComponentView> list = new LinkedList<ComponentView>();
 
-		if(!isNearRoomPoint(point)) {
-			
+		if (!isNearRoomPoint(point)) {
+
 			return list;
 		}
-		
+
 		Rectangle rect = new Rectangle((int) point.getX() - 3,
 				(int) point.getY() - 3, 6, 6);
 
@@ -277,8 +277,7 @@ public class SimulationPanel extends JLayeredPane implements
 				* point.getX(), transform.getScaleY() * point.getY());
 
 		int numberOfComponents = list.size();
-		double radius = /*transform.getDeterminant()* */ 1.5 * size * numberOfComponents
-				/ (2 * Math.PI);
+		double radius = 1.5 * size * numberOfComponents / (2 * Math.PI);
 		double angle = 2 * Math.PI / numberOfComponents;
 		double newAngle = 0;
 
@@ -303,7 +302,8 @@ public class SimulationPanel extends JLayeredPane implements
 	 * 
 	 * @param point
 	 *            the point
-	 * @return <code>true</code>, if the point is near a room point, else <code>false</code>.
+	 * @return <code>true</code>, if the point is near a room point, else
+	 *         <code>false</code>.
 	 */
 	public boolean isNearRoomPoint(Point2D point) {
 

@@ -74,7 +74,7 @@ public class MainViewSimpleGui extends JFrame implements IMainView,
 	}
 
 	/**
-	 * Realy shows the gui after using invoke later
+	 * Really shows the GUI after using invoke later
 	 */
 	private void showUiInternal() {
 		/** Set size of simple GUI */
@@ -120,6 +120,7 @@ public class MainViewSimpleGui extends JFrame implements IMainView,
 		/** Set menu bar */
 		JMenuBar menuBar = new JMenuBar();
 		JMenu mainMenu = new JMenu("Menu");
+		menuBar.setBackground(ColorScheme.BACKGROUND_GUI);
 
 		/** Configure save item */
 		JMenuItem stopItem = new JMenuItem("Stop Simulation");
@@ -156,11 +157,11 @@ public class MainViewSimpleGui extends JFrame implements IMainView,
 
 		/** New SimulationPanel */
 		simPanel = new SimulationPanel();
-		// JScrollPane scrollPane = new JScrollPane(simPanel);
 		JPanel centerPanel = new JPanel();
 		centerPanel.setLayout(null);
 		centerPanel.add(simPanel);
 		centerPanel.setBorder(BorderFactory.createTitledBorder("Simulation"));
+		centerPanel.setBackground(ColorScheme.BACKGROUND);
 
 		centerPanel.addComponentListener(simPanel);
 
@@ -170,11 +171,12 @@ public class MainViewSimpleGui extends JFrame implements IMainView,
 		/** New InformationPanel */
 		informationPanel = new InformationPanel();
 		
-		//Create a split pane with the two panels in it.
-		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
-		                           centerPanel, informationPanel);
+		splitPane = new JSplitPane();
+		splitPane.setLeftComponent(centerPanel);
+		splitPane.setRightComponent(informationPanel);
 		splitPane.setOneTouchExpandable(true);
 		splitPane.setDividerLocation(this.getWidth() - 317);
+		splitPane.setBackground(ColorScheme.BACKGROUND_GUI);
 
 		this.add(splitPane, BorderLayout.CENTER);
 		this.add(menuBar, BorderLayout.NORTH);

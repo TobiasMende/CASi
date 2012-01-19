@@ -249,7 +249,7 @@ public class CASi {
 		log.setUseParentHandlers(false);
 		SIM_LOG.setUseParentHandlers(false);
 		log.setLevel(Level.ALL);
-		SIM_LOG.setLevel(Level.INFO);
+		SIM_LOG.setLevel(Level.ALL);
 		configureDevelopmentLogging();
 		log.addHandler(devConsoleHandler);
 

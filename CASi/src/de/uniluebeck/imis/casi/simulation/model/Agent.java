@@ -135,9 +135,11 @@ public class Agent extends AbstractComponent implements
 	 *            the new state
 	 */
 	public void setState(STATE state) {
-		informListenersAboutStateChange(state);
-		CASi.SIM_LOG.config("State of " + this + " changed to " + state);
-		this.state = state;
+		if(!state.equals(this.state)) {
+			informListenersAboutStateChange(state);
+			CASi.SIM_LOG.config("State of " + this + " changed to " + state);
+			this.state = state;
+		}
 	}
 
 	/**

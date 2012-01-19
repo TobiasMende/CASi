@@ -470,15 +470,17 @@ public class World {
 		for (int j = 0; j < doorGraph.length; j++) {
 			head.append("d-" + j + "\t ");
 		}
-		log.fine(head.toString());
+		StringBuffer b = new StringBuffer();
+		b.append(head.toString());
+		b.append("\n");
 		for (int i = 0; i < doorGraph.length; i++) {
-			StringBuffer b = new StringBuffer();
 			b.append("d-" + i + ":\t ");
 			for (int j = 0; j < doorGraph.length; j++) {
 				b.append(doorGraph[i][j] + "\t ");
 			}
-			log.fine(b.toString());
+			b.append("\n");
 		}
+		log.fine(b.toString());
 	}
 
 	/**

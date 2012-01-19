@@ -43,6 +43,8 @@ public class HTMLFormatter extends java.util.logging.Formatter {
 		String dateStr = dateFormat.format(new Date(rec.getMillis()));
 		String className = rec.getSourceClassName();
 		String methodName = rec.getSourceMethodName();
+		String message = rec.getMessage().replaceAll("[\"]", "&quot;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
+		message = rec.getMessage().replaceAll("(\r\n|\r|\n|\n\r)", "<br>").replaceAll("(\t)", "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
 		r.append("<div class='log_entry'>");
 		if(!silent) {
 			r.append("<span class='log_class'>" + className + "</span> ");
@@ -50,13 +52,13 @@ public class HTMLFormatter extends java.util.logging.Formatter {
 		}
 		r.append("<span class='log_date'>" + dateStr + "</span><br />");
 		r.append("<span class='log_entry");
-		if (rec.getLevel().intValue() <= Level.FINE.intValue())
+		if (rec.getLevel().intValue() <= Level.CONFIG.intValue())
 			r.append(" log_fine");
 		else if (rec.getLevel().intValue() <= Level.INFO.intValue())
 			r.append(" log_default");
 		else
 			r.append(" log_error");
-		r.append("'>" + rec.getMessage().replaceAll("(\r\n|\r|\n|\n\r)", "<br>") + "</span>");
+		r.append("'>" + message + "</span>");
 		r.append("</div>");
 		return r.toString();
 	}
@@ -69,6 +71,7 @@ public class HTMLFormatter extends java.util.logging.Formatter {
 		r.append("<html lang='en' xml:lang='en'"
 				+ "xmlns='http://www.w3.org/1999/xhtml'>");
 		r.append("<head>");
+		r.append("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/> ");
 		r.append("<title>CASi: ");
 		if(silent) {
 			r.append("Simulation Log");
@@ -82,8 +85,8 @@ public class HTMLFormatter extends java.util.logging.Formatter {
 		r.append(".log_default {color:#000000;}");
 		r.append(".log_fine {color:#14690A;}");
 		r.append(".log_entry {width:100%; margin-bottom:10px}");
-		r.append(".log_class {color:#27003E; font-size:120%;}");
-		r.append(".log_method {color: #979797; font-size:110%;}");
+		r.append(".log_class {color:#27003E; font-size:110%;}");
+		r.append(".log_method {color: #979797; font-size:105%;}");
 		r.append(".log_date {width: 10em; font-size: 8pt; color:#666666;}");
 		r.append("</style>");
 		r.append("</head>");

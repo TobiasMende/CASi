@@ -13,6 +13,7 @@ package de.uniluebeck.imis.casi.simulation.model.mackActions;
 
 import java.util.logging.Logger;
 
+import de.uniluebeck.imis.casi.CASi;
 import de.uniluebeck.imis.casi.simulation.model.AbstractComponent;
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.AtomicAction;
 import de.uniluebeck.imis.casi.simulation.model.mackComponents.Cube;
@@ -73,6 +74,20 @@ public class TurnCube extends AtomicAction {
 	 */
 	public Cube.State getCubeState() {
 		return state;
+	}
+	
+	@Override
+	protected boolean preActionTask(AbstractComponent performer) {
+		// just to prevent logging
+		return CASi.VERBOSE ? super.preActionTask(performer) : true;
+	}
+	
+	@Override
+	protected void postActionTask(AbstractComponent performer) {
+		// just to prevent logging
+		if(CASi.VERBOSE) {
+			super.postActionTask(performer);
+		}
 	}
 
 }

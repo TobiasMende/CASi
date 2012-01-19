@@ -436,6 +436,9 @@ public abstract class AbstractAction implements Listenable<IActionListener>,
 	 * Can be used to describe a task that should be executed before performing
 	 * this action
 	 * 
+	 * The default behavior in {@link AbstractAction} just writes the start of
+	 * the action to the log.
+	 * 
 	 * @param performer
 	 *            the performer
 	 * @return <code>true</code> if the initialization was performed successful
@@ -444,7 +447,7 @@ public abstract class AbstractAction implements Listenable<IActionListener>,
 	 *         interrupted.
 	 */
 	protected boolean preActionTask(AbstractComponent performer) {
-		CASi.SIM_LOG.info(performer+" starting "+this);
+		CASi.SIM_LOG.info(performer + " starting " + this);
 		return true;
 	}
 
@@ -452,11 +455,14 @@ public abstract class AbstractAction implements Listenable<IActionListener>,
 	 * Can be used to describe a task that should be performed just after
 	 * completing this action.
 	 * 
+	 * The default behavior in {@link AbstractAction} just writes the end of the
+	 * action to the log.
+	 * 
 	 * @param performer
 	 *            the performer of the action
 	 */
 	protected void postActionTask(AbstractComponent performer) {
-		CASi.SIM_LOG.info(performer+" finishing "+this);
+		CASi.SIM_LOG.info(performer + " finishing " + this);
 	}
 
 	/**
@@ -514,8 +520,8 @@ public abstract class AbstractAction implements Listenable<IActionListener>,
 			// Delay between 0 and 60 minutes
 			int delay = rand.nextInt(60);
 			start = earliestStartTime;
-			setEarliestStartTime(SimulationClock.getInstance()
-					.getCurrentTime().plus(60 * delay));
+			setEarliestStartTime(SimulationClock.getInstance().getCurrentTime()
+					.plus(60 * delay));
 		}
 
 		if (deadline != null) {
@@ -525,14 +531,14 @@ public abstract class AbstractAction implements Listenable<IActionListener>,
 				distance = deadline.getTime() - start.getTime();
 			}
 			if (distance > 0) {
-				setDeadline(SimulationClock.getInstance()
-						.getCurrentTime().plus((int) (distance / 1000)));
+				setDeadline(SimulationClock.getInstance().getCurrentTime()
+						.plus((int) (distance / 1000)));
 			} else {
 				// No distance -> random delay:
 				// Delay between 0 and 120 minutes
 				int delay = rand.nextInt(120);
-				setDeadline(SimulationClock.getInstance()
-						.getCurrentTime().plus(60 * delay));
+				setDeadline(SimulationClock.getInstance().getCurrentTime()
+						.plus(60 * delay));
 			}
 		}
 	}

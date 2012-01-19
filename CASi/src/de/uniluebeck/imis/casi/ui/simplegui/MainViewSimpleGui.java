@@ -26,6 +26,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
+import javax.swing.SwingUtilities;
 
 import de.uniluebeck.imis.casi.controller.IUIController;
 import de.uniluebeck.imis.casi.ui.IMainView;
@@ -65,7 +66,17 @@ public class MainViewSimpleGui extends JFrame implements IMainView,
 	 */
 	@Override
 	public void showUi() {
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				showUiInternal();
+			}
+		});
+	}
 
+	/**
+	 * Realy shows the gui after using invoke later
+	 */
+	private void showUiInternal() {
 		/** Set size of simple GUI */
 		this.setSize(MainViewSimpleGui.WIDTH, MainViewSimpleGui.HEIGHT);
 		/** Set minimum size */

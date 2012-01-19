@@ -82,10 +82,8 @@ public class MainController {
 	public void init() {
 		CASi.SIM_LOG.info("Initializing the simulation ...");
 		SimulationEngine.getInstance().init();
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
+		
 				mainView.showUi();
-			}
-		});
+		
 	}
 }

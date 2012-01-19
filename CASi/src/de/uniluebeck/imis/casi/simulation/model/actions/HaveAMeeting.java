@@ -29,7 +29,7 @@ import de.uniluebeck.imis.casi.simulation.model.actionHandling.ComplexAction;
 public class HaveAMeeting extends ComplexAction {
 
 	/**
-	 * 
+	 * serial id, you guessed it.
 	 */
 	private static final long serialVersionUID = 5933636748690158732L;
 
@@ -47,13 +47,12 @@ public class HaveAMeeting extends ComplexAction {
 	public String getInformationDescription() {
 		String res;
 		res = String.format("%s: at %s @ %s", this.getClass()
-				.getName(), this.getEarliestStartTime().toString(),where.toString());
+				.getSimpleName(), this.getEarliestStartTime().toString(),where.toString());
 		return res;
 	}
 	
 	@Override
 	public ComplexAction clone() {
-		// TODO Auto-generated method stub
 		return super.clone();
 	}
 }

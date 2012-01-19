@@ -43,7 +43,7 @@ public class ViewMenu extends JMenu {
 		super("View");
 
 		paintSensorsItem = new JRadioButtonMenuItem("Show sensors/actuators");
-		paintSensorsItem.setSelected(CASi.DEV_MODE);
+		paintSensorsItem.setSelected(true);
 		paintSensorsItem.setActionCommand("paintSensors");
 		add(paintSensorsItem);
 

@@ -23,10 +23,25 @@ import de.uniluebeck.imis.casi.simulation.model.mackComponents.Cube;
  *
  */
 public class TurnCube extends AtomicAction {
+	/**
+	 * the logger to log with
+	 */
 	private static final Logger log = Logger.getLogger(TurnCube.class.getName());
+	/**
+	 * yes, its the serialID.
+	 */
 	private static final long serialVersionUID = 8116854211425530695L;
+	
+	/**
+	 * With what Cube this Action interacts
+	 */
 	private Cube cube;
+	
+	/**
+	 * the State to turn the Cube to 
+	 */
 	private Cube.State state;
+	
 	/**
 	 * Creates a new turn action
 	 * @param cube the cube to turn

@@ -123,7 +123,7 @@ public class Room implements IPosition {
 		}
 		return polygonRepresentation;
 	}
-
+	
 	/**
 	 * Adds a wall to the room
 	 * 
@@ -182,10 +182,24 @@ public class Room implements IPosition {
 	@Override
 	public boolean contains(Point2D point) {
 		if(getShapeRepresentation().contains(point)) {
-			return true;
+				return true;
 		}
 		for(Door d : getDoors()) {
 			if(d.contains(point)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * Checks whether a given wall lays on a wall of this room
+	 * @param point the point to check
+	 * @return {@code true} if the point lays on a wall, {@code false} otherwise.
+	 */
+	public boolean pointLaysOnWall(Point2D point) {
+		for(Wall w : walls) {
+			if(w.contains(point)) {
 				return true;
 			}
 		}

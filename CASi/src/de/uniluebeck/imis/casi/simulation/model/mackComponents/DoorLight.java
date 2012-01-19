@@ -14,6 +14,7 @@ package de.uniluebeck.imis.casi.simulation.model.mackComponents;
 import java.awt.geom.Point2D;
 import java.util.Iterator;
 import java.util.Random;
+import java.util.Set;
 import java.util.logging.Logger;
 
 import de.uniluebeck.imis.casi.CASi;
@@ -232,8 +233,14 @@ public class DoorLight extends AbstractInteractionComponent {
 	 */
 	private boolean agentWantsInRoom(Iterator<Point2D> iter) {
 		while (iter.hasNext()) {
-			if (room.contains(iter.next())) {
-				return true;
+			Point2D point = iter.next();
+			Set<Door> doorsInRoom = room.getDoors();
+			if(room.contains(point)) {
+				for(Door d : doorsInRoom) {
+					if(point.equals(d.getCentralPoint())) {
+						return true;
+					}
+				}
 			}
 		}
 		return false;

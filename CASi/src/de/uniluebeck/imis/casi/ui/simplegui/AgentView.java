@@ -22,8 +22,8 @@ import java.awt.geom.Point2D;
 
 import javax.swing.SwingUtilities;
 
-import de.uniluebeck.imis.casi.simulation.model.AbstractComponent.INTERRUPTIBILITY;
 import de.uniluebeck.imis.casi.simulation.model.AbstractComponent;
+import de.uniluebeck.imis.casi.simulation.model.AbstractComponent.INTERRUPTIBILITY;
 import de.uniluebeck.imis.casi.simulation.model.Agent;
 import de.uniluebeck.imis.casi.simulation.model.Agent.STATE;
 import de.uniluebeck.imis.casi.simulation.model.IAgentListener;
@@ -42,6 +42,7 @@ public class AgentView extends ComponentView implements IAgentListener,
 
 	private Agent agent;
 	private InformationPanel infoPanel;
+	private SimulationPanel simPanel;
 
 	/**
 	 * The AgentView needs the represented agent and the affine transform to
@@ -63,7 +64,7 @@ public class AgentView extends ComponentView implements IAgentListener,
 	public void setSelected(AbstractComponent component) {
 
 		isSelected = component.equals(agent);
-		
+
 		this.repaint();
 
 	}
@@ -84,6 +85,18 @@ public class AgentView extends ComponentView implements IAgentListener,
 	}
 
 	/**
+	 * This method sets the {@link SimulationPanel} in the AgentView.
+	 * 
+	 * @param simPanel
+	 *            the simulation panel
+	 */
+	public void setSimulationPanel(SimulationPanel simPanel) {
+
+		this.simPanel = simPanel;
+
+	}
+
+	/**
 	 * This method paints the agent as a filled circle.
 	 */
 	@Override
@@ -94,23 +107,23 @@ public class AgentView extends ComponentView implements IAgentListener,
 		Graphics2D g2D = (Graphics2D) g;
 
 		Dimension dim = getSize();
-		
+
 		if (this.isSelected) {
 			g2D.setColor(Color.YELLOW);
 			g2D.fillOval(0, 0, (int) dim.getWidth(), (int) dim.getHeight());
 		}
-		
+
 		g2D.setColor(Color.BLACK);
 		g2D.fillOval(1, 1, (int) dim.getWidth() - 2, (int) dim.getHeight() - 2);
 
 		g2D.setColor(stateColor);
 		g2D.fillOval(2, 2, (int) dim.getWidth() - 4, (int) dim.getHeight() - 4);
 
-//		if (this.isSelected) {
-//			g2D.setColor(Color.BLACK);
-//			g2D.fillOval(3, 3, (int) dim.getWidth() - 6,
-//					(int) dim.getHeight() - 6);
-//		}
+		// if (this.isSelected) {
+		// g2D.setColor(Color.BLACK);
+		// g2D.fillOval(3, 3, (int) dim.getWidth() - 6,
+		// (int) dim.getHeight() - 6);
+		// }
 	}
 
 	/**
@@ -152,17 +165,63 @@ public class AgentView extends ComponentView implements IAgentListener,
 	}
 
 	@Override
-	public void positionChanged(Point2D oldPosition, final Point2D newPosition,
+	public void positionChanged(final Point2D oldPosition, final Point2D newPosition,
 			Agent agent) {
 		SwingUtilities.invokeLater(new Runnable() {
 
 			@Override
 			public void run() {
+				
+				if(simPanel.isNearRoomPoint(oldPosition)) {
+					
+					simPanel.setSimulationToScale();
+				}
 
+//				/** List of components left in the room at central point */
+//				LinkedList<ComponentView> list = simPanel
+//						.getSimulationComponentesIn(position);
+//				int componentsToChange = list.size();
+//
+//				if (componentsToChange == 1) {
+//
+//					list.getFirst().setTransformedPosition();
+//
+//				} else if (componentsToChange > 1) {
+//
+//					simPanel.paintComponentsInCircle(position, 8, list);
+//				}
+				
 				/* Simply set the new location to the new position */
 				position = newPosition;
 
-				AgentView.this.setTransformed();
+//				/**
+//				 * List of components that are in the room at central point
+//				 * (same position)
+//				 */
+//				list = simPanel.getSimulationComponentesIn(position);
+//				componentsToChange = list.size();
+//				
+//				if (componentsToChange == 1) {
+//
+//					AgentView.this.setTransformedPosition();
+//					
+//				} else if (componentsToChange > 1) {
+//
+//					simPanel.paintComponentsInCircle(position, 8, list);
+//					
+//				} else {
+//					
+//					AgentView.this.setTransformedPosition();
+//				}
+					
+				if(simPanel.isNearRoomPoint(position)) {
+					
+					simPanel.setSimulationToScale();
+					
+				} else {
+					
+					AgentView.this.setTransformedPosition();
+				}
 
 			}
 		});
@@ -235,6 +294,12 @@ public class AgentView extends ComponentView implements IAgentListener,
 	@Override
 	public void mouseReleased(MouseEvent arg0) {
 
+	}
+
+	@Override
+	public Point2D getSimulationPosition() {
+
+		return agent.getCentralPoint();
 	}
 
 }

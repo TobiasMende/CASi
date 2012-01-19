@@ -18,6 +18,7 @@ import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Point2D;
 
 import de.uniluebeck.imis.casi.simulation.model.AbstractComponent;
 import de.uniluebeck.imis.casi.simulation.model.AbstractInteractionComponent;
@@ -148,6 +149,12 @@ public class InteractionComponentView extends ComponentView implements
 	@Override
 	public void mouseReleased(MouseEvent arg0) {
 
+	}
+
+	@Override
+	public Point2D getSimulationPosition() {
+		
+		return position;
 	}
 
 }

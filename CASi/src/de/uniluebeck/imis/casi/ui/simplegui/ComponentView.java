@@ -71,6 +71,13 @@ public abstract class ComponentView extends JComponent {
 	abstract public void setSelected(AbstractComponent component);
 
 	/**
+	 * Returns the real position in the simulation of this ComponentView.
+	 * 
+	 * @return the real position
+	 */
+	abstract public Point2D getSimulationPosition();
+
+	/**
 	 * Gets the real position for the agent
 	 * 
 	 * @param position
@@ -88,9 +95,10 @@ public abstract class ComponentView extends JComponent {
 	}
 
 	/**
-	 * This method sets the position of the agent depending on affine transform.
+	 * This method sets the position of the agent depending on the affine
+	 * transform.
 	 */
-	public void setTransformed() {
+	public void setTransformedPosition() {
 
 		Point point = getOptimizedPosition(position);
 		this.setBounds(point.x, point.y, (int) (8 * transform.getScaleX()),

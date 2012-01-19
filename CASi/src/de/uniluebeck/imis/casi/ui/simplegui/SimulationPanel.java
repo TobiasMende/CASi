@@ -14,12 +14,16 @@ package de.uniluebeck.imis.casi.ui.simplegui;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Graphics;
+import java.awt.Rectangle;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Logger;
 
 import javax.swing.BorderFactory;
@@ -29,6 +33,7 @@ import de.uniluebeck.imis.casi.simulation.engine.ISimulationClockListener;
 import de.uniluebeck.imis.casi.simulation.engine.SimulationEngine;
 import de.uniluebeck.imis.casi.simulation.model.AbstractInteractionComponent;
 import de.uniluebeck.imis.casi.simulation.model.Agent;
+import de.uniluebeck.imis.casi.simulation.model.Room;
 import de.uniluebeck.imis.casi.simulation.model.SimulationTime;
 
 /**
@@ -59,13 +64,15 @@ public class SimulationPanel extends JLayeredPane implements
 
 	private ViewSettings viewSettings;
 
+	private Set<Room> roomPoints;
+
 	/**
 	 * Constructor of the simulation panel sets the preferred size.
 	 */
 	public SimulationPanel() {
 
 		transform = new AffineTransform();
-		
+
 		viewSettings = new ViewSettings(this);
 
 		this.setLayout(null);
@@ -79,7 +86,7 @@ public class SimulationPanel extends JLayeredPane implements
 	 * panel to the right scale, depending on the frame size.
 	 * 
 	 */
-	private void setSimulationToScale() {
+	public void setSimulationToScale() {
 
 		Container parent = this.getParent();
 		double size = Math.min(parent.getWidth(), parent.getHeight());
@@ -92,8 +99,16 @@ public class SimulationPanel extends JLayeredPane implements
 
 		for (ComponentView componentView : simulationComponents) {
 
-			componentView.setTransformed();
+			componentView.setTransformedPosition();
 		}
+
+		for (Room room : roomPoints) {
+
+			paintComponentsInCircle(room.getCentralPoint(), 8,
+					getSimulationComponentesIn(room.getCentralPoint()));
+
+		}
+
 		SimulationPanel.this.invalidate();
 		backgroundPanel.repaint();
 
@@ -114,7 +129,7 @@ public class SimulationPanel extends JLayeredPane implements
 		worldSizeY = SimulationEngine.getInstance().getWorld()
 				.getSimulationDimension().getHeight();
 
-		backgroundPanel = new BackgroundPanel(transform,viewSettings);
+		backgroundPanel = new BackgroundPanel(transform, viewSettings);
 		backgroundPanel.setLocation(0, 0);
 		backgroundPanel.setInformationPanel(infoPanel);
 		this.add(backgroundPanel, new Integer(1));
@@ -129,6 +144,7 @@ public class SimulationPanel extends JLayeredPane implements
 				agent.addListener(agentView);
 				simulationComponents.add(agentView);
 				agentView.setInformationPanel(infoPanel);
+				agentView.setSimulationPanel(this);
 				this.add(agentView, new Integer(3));
 
 			}
@@ -143,6 +159,9 @@ public class SimulationPanel extends JLayeredPane implements
 				interactionCompView.setInformationPanel(infoPanel);
 				this.add(interactionCompView, new Integer(2));
 			}
+
+			this.roomPoints = SimulationEngine.getInstance().getWorld()
+					.getRooms();
 
 		} catch (IllegalAccessException e) {
 
@@ -208,10 +227,100 @@ public class SimulationPanel extends JLayeredPane implements
 	public void paint(Graphics g) {
 		super.paint(g);
 	}
-	
+
+	/**
+	 * Returns all the simulation components.
+	 * 
+	 * @return the simulation components
+	 */
 	public List<ComponentView> getSimulationComponents() {
-		
+
 		return simulationComponents;
+	}
+
+	/**
+	 * Returns all the simulation components in this point, if it is a central
+	 * point of a room.
+	 * 
+	 * @param point
+	 *            the point
+	 * @return the simulation components
+	 */
+	public LinkedList<ComponentView> getSimulationComponentesIn(Point2D point) {
+
+		LinkedList<ComponentView> list = new LinkedList<ComponentView>();
+
+		if(!isNearRoomPoint(point)) {
+			
+			return list;
+		}
+		
+		Rectangle rect = new Rectangle((int) point.getX() - 3,
+				(int) point.getY() - 3, 6, 6);
+
+		for (ComponentView componentView : simulationComponents) {
+
+			if (rect.contains(componentView.getSimulationPosition())) {
+
+				list.add(componentView);
+			}
+
+		}
+
+		return list;
+	}
+
+	public void paintComponentsInCircle(Point2D point, int size,
+			LinkedList<ComponentView> list) {
+
+		Point2D centerPoint = new Point2D.Double(transform.getScaleX()
+				* point.getX(), transform.getScaleY() * point.getY());
+
+		int numberOfComponents = list.size();
+		double radius = transform.getDeterminant() * size * numberOfComponents
+				/ (2 * Math.PI);
+		double angle = 2 * Math.PI / numberOfComponents;
+		double newAngle = 0;
+
+		for (ComponentView componentView : list) {
+
+			int scaledX = (int) ((radius * Math.cos(newAngle) - 2)
+					* transform.getScaleX() + centerPoint.getX());
+			int scaledY = (int) ((radius * Math.sin(newAngle) - 2)
+					* transform.getScaleY() + centerPoint.getY());
+
+			componentView.setBounds(scaledX, scaledY,
+					(int) (8 * transform.getScaleX()),
+					(int) (8 * transform.getScaleY()));
+
+			newAngle = newAngle + angle;
+		}
+
+	}
+
+	/**
+	 * This method checks, if the given point is in the near of a room point.
+	 * 
+	 * @param point
+	 *            the point
+	 * @return <code>true</code>, if the point is near a room point, else <code>false</code>.
+	 */
+	public boolean isNearRoomPoint(Point2D point) {
+
+		boolean isRoomCentral = false;
+		Rectangle rect = new Rectangle((int) point.getX() - 3,
+				(int) point.getY() - 3, 6, 6);
+
+		for (Room room : roomPoints) {
+
+			if (rect.contains(room.getCentralPoint())) {
+
+				isRoomCentral = true;
+			}
+
+		}
+
+		return isRoomCentral;
 	}
 
 }

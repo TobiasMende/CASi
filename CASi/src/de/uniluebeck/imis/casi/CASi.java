@@ -65,7 +65,9 @@ public class CASi {
 	 * The starting point for the entire program, changes can be made here to
 	 * customize the simulator
 	 * 
-	 * @param args the command line arguments. Use argument {@code --help} to get further information.
+	 * @param args
+	 *            the command line arguments. Use argument {@code --help} to get
+	 *            further information.
 	 */
 	public static void main(String[] args) {
 		// DON'T REMOVE THESE LINES:
@@ -75,8 +77,11 @@ public class CASi {
 	}
 
 	/**
-	 * Configures the simulator and the simulation itself. Change this method to provide customized behavior.
-	 * @param args the command line arguments
+	 * Configures the simulator and the simulation itself. Change this method to
+	 * provide customized behavior.
+	 * 
+	 * @param args
+	 *            the command line arguments
 	 */
 	private static void configureSimulation(String[] args) {
 		final IWorldGenerator generator = new de.uniluebeck.imis.casi.simulations.mate.generator.java.WorldGenerator();
@@ -85,7 +90,12 @@ public class CASi {
 		// final ICommunicationHandler networkHandler = new
 		// CommunicationLogger();
 		// ((MACKNetworkHandler)networkHandler).serializeSettings();
-		final IMainView mainView = new MainViewSimpleGui();
+		IMainView mainView = null;
+		if (commandLineOptions.isGuiDisabled()) {
+			// TODO create guiStub and save in mainView.
+		} else {
+			mainView = new MainViewSimpleGui();
+		}
 		final MainController mc = new MainController(generator, networkHandler,
 				mainView);
 		// Call the main controller and let it work:
@@ -95,15 +105,18 @@ public class CASi {
 
 	/**
 	 * Configures the applicaton itself. Don't change this method!
-	 * @param args the command line arguments
+	 * 
+	 * @param args
+	 *            the command line arguments
 	 */
 	private static void configureApplication(String[] args) {
 		try {
-			commandLineOptions = new ParameterParser(args);		
-			
+			commandLineOptions = new ParameterParser(args);
+
 		} catch (Exception e) {
 			System.err.println(e.getMessage());
-			System.err.println("An error occured while parsing the parameter. Please correct your input.");
+			System.err
+					.println("An error occured while parsing the parameter. Please correct your input.");
 			System.exit(0);
 		}
 		if (commandLineOptions.isHelpRequest()) {
@@ -127,9 +140,12 @@ public class CASi {
 		System.out
 				.println("\tFlags which can be used seperated or combined, e.g. '-vd' is equal to '-v -d' is equal to '-dv'.");
 		System.out
-				.println("\t - v\tActivates the verbose mode with much more output (optional)");
-		System.out
 				.println("\t - d\tActivates the development mode. In this mode, all messages are written to the dev-log-file. (optional)");
+		System.out
+				.println("\t - n\tDeactivates the GUI. In this mode, no gui is shown. (optional)");
+
+		System.out
+				.println("\t - v\tActivates the verbose mode with much more output (optional)");
 		// Complete Commands
 		System.out.println("\tThese commands can be used as described:");
 		System.out.println("\t --help (optional)");
@@ -140,16 +156,17 @@ public class CASi {
 				.println("\t\tSimulation uses the provided file to configure the network handler. Should be set. Otherwise, only a simple communication logger is used.");
 		System.out.println("\n");
 		System.out.println("Short Example:");
-		System.out.println("\tjava -jar CASi.jar --network-config network.conf.xml");
+		System.out
+				.println("\tjava -jar CASi.jar --network-config network.conf.xml");
 		System.out.println("Further Information:");
 		System.out
-				.println("\tIn normal mode, when the dev and verbose flag arn't set,\n" +
-						"\tthe simulator devides log outputs in two log files in a 'log'-folder in the execution directory.\n" +
-						"\tThe sim-log contains information about the behaviour of agents, actuators, sensors itself.\n" +
-						"\tThe dev-log contains detailed information about the behaviour of the simulator, which can be used for debugging but may be a bit confusing for users.\n" +
-						"\tIn the normal mode only informations, written to the sim-log with level 'info' or higher are written to the console.\n" +
-						"\tIf the dev mode is activated, all log outputs are written to the dev-log. No sim-log is created in this case.\n" +
-						"\tBy default, in dev mode only messages written to dev- or sim-log with level 'info' or higher are printed on the console.");
+				.println("\tIn normal mode, when the dev and verbose flag arn't set,\n"
+						+ "\tthe simulator devides log outputs in two log files in a 'log'-folder in the execution directory.\n"
+						+ "\tThe sim-log contains information about the behaviour of agents, actuators, sensors itself.\n"
+						+ "\tThe dev-log contains detailed information about the behaviour of the simulator, which can be used for debugging but may be a bit confusing for users.\n"
+						+ "\tIn the normal mode only informations, written to the sim-log with level 'info' or higher are written to the console.\n"
+						+ "\tIf the dev mode is activated, all log outputs are written to the dev-log. No sim-log is created in this case.\n"
+						+ "\tBy default, in dev mode only messages written to dev- or sim-log with level 'info' or higher are printed on the console.");
 		System.out.println("\n");
 		System.out.println("And now: try again and have fun ;-)");
 

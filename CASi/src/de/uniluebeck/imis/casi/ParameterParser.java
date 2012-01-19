@@ -26,6 +26,8 @@ public class ParameterParser {
 	private boolean verboseMode;
 	/** Was asked for help? */
 	private boolean helpRequest;
+	/** Should the gui be disabled? */
+	private boolean disableGui;
 	/** The configuration file for the network if one was connected */
 	private String networkConfigFile;
 
@@ -70,6 +72,10 @@ public class ParameterParser {
 			devMode = true;
 			success = true;
 		}
+		if (parameter.matches("-[^-]*n[^-]*")) {
+			disableGui = true;
+			success = true;
+		}
 		return success;
 	}
 
@@ -107,6 +113,14 @@ public class ParameterParser {
 	 */
 	public boolean networkConfigProvided() {
 		return networkConfigFile != null;
+	}
+	
+	/**
+	 * Checks whether the gui should be disabled
+	 * @return {@code true} if the gui should be disabled
+	 */
+	public boolean isGuiDisabled() {
+		return disableGui;
 	}
 
 	/**

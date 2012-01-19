@@ -113,7 +113,7 @@ public final class Actions {
 				+ "_createsThe12oclockMeeting", createMeeting);
 
 		// between 15:00 and 15:45: Felix visits Hermann for half an hour
-		AbstractAction goToHermann = new GoAndSpeakTo(hermann,30);
+		AbstractAction goToHermann = new GoAndSpeakTo(hermann, 30);
 		// using real timestamps to parse here. SimulationsStartTime is:
 		// 04/23/2012 09:00:42
 		try {
@@ -166,10 +166,18 @@ public final class Actions {
 		// all agents have some ActionPool actions
 
 		// they need to go to the restroome sometimes...
-		forAllAgentsActionPoolDoThis(new GoAndStayThere(RoomCollector.getInstance()
-				.findRoomByIdentifier("mensRestroom"),1), "goToToilettSometimes");
-		
-		
+		String toilettActionIdentifier = "goToToilettSometimes";
+		forAllAgentsActionPoolDoThis(new GoAndStayThere(RoomCollector
+				.getInstance().findRoomByIdentifier("mensRestroom"), 1),
+				toilettActionIdentifier);
+		// but in fact Susi has to go to the womensRoom -> overwriting her
+		// Action
+		ActionCollector.getInstance().newAction(
+				AgentCollector.getInstance().findAgentByName("Susi Sekretärin").getIdentifier()+"_"+
+				toilettActionIdentifier+"_pool",
+				new GoAndStayThere(RoomCollector.getInstance()
+						.findRoomByIdentifier("womensRestroom"), 1));
+
 		// and need some coffee sometimes...
 		ComplexAction makeSomeCoffee = new ComplexAction();
 		makeSomeCoffee.addSubAction(new Move(RoomCollector.getInstance()
@@ -186,13 +194,16 @@ public final class Actions {
 	 * 
 	 * @param action
 	 *            the action that everyone should do
-	 * @param identifier TODO
+	 * @param identifier
+	 *            TODO
 	 */
-	private static void forAllAgentsActionPoolDoThis(AbstractAction action, String givenIdentifier) {
+	private static void forAllAgentsActionPoolDoThis(AbstractAction action,
+			String givenIdentifier) {
 		for (Agent a : AgentCollector.getInstance().getAll()) {
 			AbstractAction clonedAction = action.clone();
 			ActionCollector.getInstance().newAction(
-					a.getIdentifier() +"_"+givenIdentifier+"_pool", clonedAction);
+					a.getIdentifier() + "_" + givenIdentifier + "_pool",
+					clonedAction);
 		}
 	}
 }

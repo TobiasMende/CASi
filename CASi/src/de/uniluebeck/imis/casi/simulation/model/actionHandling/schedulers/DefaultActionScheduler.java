@@ -128,48 +128,11 @@ public class DefaultActionScheduler implements IActionScheduler {
 		AbstractAction action = null;
 		if (tempAction != null) {
 			action = tempAction.clone();
-			updateAction(tempAction);
+			tempAction.updateParameter();
 		}
 		return action;
 	}
 
-	/**
-	 * Method for updating action parameter to prevent immediate replay of this
-	 * action.
-	 * 
-	 * @param action
-	 *            the action to update
-	 */
-	private void updateAction(AbstractAction action) {
-		SimulationTime start = null;
-		Random rand = new Random(System.currentTimeMillis());
-		if (action.getEarliestStartTime() != null) {
-			// Delay between 0 and 60 minutes
-			int delay = rand.nextInt(60);
-			start = action.getEarliestStartTime();
-			action.setEarliestStartTime(SimulationClock.getInstance()
-					.getCurrentTime().plus(60 * delay));
-		}
-
-		if (action.getDeadline() != null) {
-			long distance = 0;
-			// Save the distance between start and end time:
-			if (start != null) {
-				distance = action.getDeadline().getTime() - start.getTime();
-			}
-			if (distance > 0) {
-				action.setDeadline(SimulationClock.getInstance()
-						.getCurrentTime().plus((int) (distance / 1000)));
-			} else {
-				// No distance -> random delay:
-				// Delay between 0 and 120 minutes
-				int delay = rand.nextInt(120);
-				start = action.getEarliestStartTime();
-				action.setDeadline(SimulationClock.getInstance()
-						.getCurrentTime().plus(60 * delay));
-			}
-		}
-	}
 
 	@Override
 	public void addInterruptAction(AbstractAction action) {

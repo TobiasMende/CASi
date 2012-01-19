@@ -14,9 +14,11 @@ package de.uniluebeck.imis.casi.simulation.model.actionHandling;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Random;
 import java.util.logging.Logger;
 
 import de.uniluebeck.imis.casi.CASi;
+import de.uniluebeck.imis.casi.simulation.engine.SimulationClock;
 import de.uniluebeck.imis.casi.simulation.model.AbstractComponent;
 import de.uniluebeck.imis.casi.simulation.model.SimulationTime;
 import de.uniluebeck.imis.casi.utils.Listenable;
@@ -311,6 +313,7 @@ public abstract class AbstractAction implements Listenable<IActionListener>,
 
 	/**
 	 * Checks whether this action is a complex action.
+	 * 
 	 * @return <code>true</code> if this actions consists of a list of
 	 *         subactions, <code>false</code> otherwise.
 	 */
@@ -491,5 +494,45 @@ public abstract class AbstractAction implements Listenable<IActionListener>,
 	 * @return a description of the action
 	 */
 	public abstract String getInformationDescription();
+
+	/**
+	 * This method is called when this action should be updated for example in
+	 * cases when an action in the action pool should be rescheduled.
+	 * 
+	 * You may want to override this method to update your parameter.
+	 * 
+	 * By default this method updates the {@link AbstractAction#deadline} and
+	 * {@link AbstractAction#earliestStartTime} if this parameter are set before
+	 * with a random offset on the current time between 0 and 60 minutes.
+	 */
+	public void updateParameter() {
+		SimulationTime start = null;
+		Random rand = new Random(System.currentTimeMillis());
+		if (earliestStartTime != null) {
+			// Delay between 0 and 60 minutes
+			int delay = rand.nextInt(60);
+			start = earliestStartTime;
+			setEarliestStartTime(SimulationClock.getInstance()
+					.getCurrentTime().plus(60 * delay));
+		}
+
+		if (deadline != null) {
+			long distance = 0;
+			// Save the distance between start and end time:
+			if (start != null) {
+				distance = deadline.getTime() - start.getTime();
+			}
+			if (distance > 0) {
+				setDeadline(SimulationClock.getInstance()
+						.getCurrentTime().plus((int) (distance / 1000)));
+			} else {
+				// No distance -> random delay:
+				// Delay between 0 and 120 minutes
+				int delay = rand.nextInt(120);
+				setDeadline(SimulationClock.getInstance()
+						.getCurrentTime().plus(60 * delay));
+			}
+		}
+	}
 
 }

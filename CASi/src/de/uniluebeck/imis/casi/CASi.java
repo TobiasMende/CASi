@@ -23,6 +23,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import de.uniluebeck.imis.casi.communication.ICommunicationHandler;
+import de.uniluebeck.imis.casi.communication.comLogger.CommunicationLogger;
 import de.uniluebeck.imis.casi.communication.mack.MACKNetworkHandler;
 import de.uniluebeck.imis.casi.controller.MainController;
 import de.uniluebeck.imis.casi.generator.IWorldGenerator;
@@ -136,7 +137,7 @@ public class CASi {
 				.println("\t\tPrints this information. Prevents from starting the simulation.");
 		System.out.println("\t --network-config <path-to-config-file>");
 		System.out
-				.println("\t\tSimulation uses the provided file to configure the network handler. Should be set. Otherwise network config doesn't match the simulation.");
+				.println("\t\tSimulation uses the provided file to configure the network handler. Should be set. Otherwise, only a simple communication logger is used.");
 		System.out.println("\n");
 		System.out.println("Short Example:");
 		System.out.println("\tjava -jar CASi.jar --network-config network.conf.xml");
@@ -181,14 +182,14 @@ public class CASi {
 	 */
 	private static ICommunicationHandler generateCommunicationHandler(
 			String[] args) {
-		final ICommunicationHandler networkHandler;
+		final ICommunicationHandler handler;
 		if (commandLineOptions.networkConfigProvided()) {
-			networkHandler = new MACKNetworkHandler(
+			handler = new MACKNetworkHandler(
 					commandLineOptions.getNetworkConfigFile());
 		} else {
-			networkHandler = new MACKNetworkHandler();
+			handler = new CommunicationLogger();
 		}
-		return networkHandler;
+		return handler;
 	}
 
 	/**

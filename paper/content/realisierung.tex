@@ -19,7 +19,7 @@ Während der Simulation können die Welt und der Kommunikationshandler über die
 \subsubsection{SimulationClock}
 Die \codeclass{SimulationClock} ist das Herzstück der Simulation. Sie stößt sämtliche Aktionen der Komponenten des Modells an. Die Clock ist wie die Engine ebenfalls mit dem Singleton-Designpatter realisiert. So ist sicher gestellt, dass es nur eine Uhr geben kann, die aus allen Klassen erreichbar ist.
 
-Die \codeclass{SimulationClock} verwendet das Listener-Konzept, um Komponenten, die an der Simulationszeit interessiert sind regelmäßig über Änderungen zu informieren. Komponenten die sich als Listener bei der Uhr registrieren möchten müssen dazu das \codeclass{ISimulationClockListener}-Interface implementieren und können dann mit \begin{lstlisting}
+Die \codeclass{SimulationClock} verwendet das Listener-Konzept, um Komponenten, die an der Simulationszeit interessiert sind regelmäßig über Änderungen zu informieren. Komponenten die sich als Listener bei der Uhr registrieren möchten müssen dazu das \codeinterface{ISimulationClockListener}-Interface implementieren und können dann mit \begin{lstlisting}
 SimulationClock.getInstance()
 .addListener(ISimulationClockListener);
 \end{lstlisting}
@@ -57,7 +57,7 @@ Im Package \codeinline{.simulation.model.mackActions} befinden sich Aktionen, di
 Zu den wichtigsten allgemeinen Aktionen in unserer Implementierung zählen unter anderem:
 \begin{description}
 	\item[Move] Die \codeclass{Move}-Aktion dient dazu, die Position eines Agentens zu Ändern. Hierbei wird in der Initialisierung der Aktion nur das Ziel angegeben. Zum Zeitpunkt der Ausführung der Aktion wird automatisch der Weg zum Ziel berechnet und pro Iteration die Position um eine bestimmte Anzahl von Wegpunkten verändert. Dieser Aktion kann keine Dauer übergeben werden, da sie automatisch terminiert, wenn das Ziel erreicht wurde. Gibt es keinen Weg zum Ziel. Bricht die Aktion automatisch ab.
-	\item[Follow] Mit der \codeclass{Follow}-Aktion kann ein Agent einer  \texttt{AbstractComponent}  folgen. Somit ist es möglich, dass ein Agent einem anderen während eines Gespräches folgt. Die Aktion hat keine spezifische Dauer, sondern wird erst dann beendet, wenn \texttt{Follow.complete()} aufgerufen wird.
+	\item[Follow] Mit der \codeclass{Follow}-Aktion kann ein Agent einer  \codeclass{AbstractComponent}  folgen. Somit ist es möglich, dass ein Agent einem anderen während eines Gespräches folgt. Die Aktion hat keine spezifische Dauer, sondern wird erst dann beendet, wenn \codemethod{Follow.complete()} aufgerufen wird.
 	\item[SpeakTo] Mit dieser Aktion kann ein Agent mit einem anderen Sprechen. Hierbei wird zunächst überprüft, ob beide Agenten im selben Raum sind. Außerdem wird überprüft, ob die Aktion des anderen Agentens eine Unterbrechung zulässt.
 	
 	Wenn der Agent unterbrechbar ist, wird ihm eine Aktion vom Typ \codeclass{Follow} in die \codeinline{interrupt\-List} gelegt, so dass der Agent für die Dauer des Gespräches dem Sprecher folgt und ebenfalls mit dem Gespräch beschäftigt ist. Dies verhindert, dass der andere Agent im Gespräch wegläuft. In der Methode \codeclass{SpeakTo}\codemethod{.postActionTask(AbstractComponent)} wird \codeclass{Follow}\codemethod{.complete()} aufgerufen und somit der Gesprächspartner wieder freigegeben.
@@ -88,14 +88,14 @@ In unserer Implementierung nutzt der ActionScheduler im Wesentlichen den Schedul
 Die abstrahierte Beschreibung der Schnittstellen eines Kommunikationshandlers befindet sich im Paket \codeinline{de.uniluebeck.imis.casi.communication}. 
 
 Eine Implementierung für die Zusammenarbeit mit dem MACK Framework befindet sich in \codeinline{de.uni\-luebeck.imis.casi\-.com\-munication.mack}. \emph{Bei Änderungen am MACK-Protokoll sind im Wesentlichen die Methoden in diesem Paket anzupassen.}
-Kommunikationshandler können die externe Kommunikation des Simulators ermöglichen. Dies bedeutet, dass sie sehr flexibel sein müssen, um jede erdenkliche Art von Kommunikation zu ermöglichen. Aus diesem Grund sind Kommunikationshandler als Implementierung des \codeinline{ICommunication\-Handler}-Interface realisiert und müssen in der Main-Klasse \codeclass{CASi} an den \codeclass{MainController} übergeben werden. Es ist nur ein Kommunikationshandler zur Zeit vorgesehen. Benötigt man mehrere Handler, sind Subhandler denkbar, denen die Nachrichten weiter gegeben werden.
+Kommunikationshandler können die externe Kommunikation des Simulators ermöglichen. Dies bedeutet, dass sie sehr flexibel sein müssen, um jede erdenkliche Art von Kommunikation zu ermöglichen. Aus diesem Grund sind Kommunikationshandler als Implementierung des \codeinterface{ICommunication\-Handler}-Interface realisiert und müssen in der Main-Klasse \codeclass{CASi} an den \codeclass{MainController} übergeben werden. Es ist nur ein Kommunikationshandler zur Zeit vorgesehen. Benötigt man mehrere Handler, sind Subhandler denkbar, denen die Nachrichten weiter gegeben werden.
 
 In der Umsetzung des Simulators zum Testen des MACK Frameworks wurde der Kommunikationshandler \codeclass{MACKNetworkHandler} wie folgt realisiert:
 
-Der Handler bekommt zu Beginn eine Konfigurationsdatei in XML Format übergeben, die in diesem Fall Java Beans XML enthält, mit dem die allgemeine Konfiguration der Netzwerkschnittstelle und die zur Verfügung stehenden \codeinline{XmppIdentifier} aufgelistet sind. Jeder \codeinline{XmppIdentifier} setzt sich aus drei \codeclass{String}-Werten zusammen und repräsentiert eine Zeile aus der Tabelle \texttt{mate\_user\-devices} des Servers:\begin{description}
-	\item[componentOwner] Der eindeutige Name des Agents, dem die Komponente zugeordnet ist. Dieser \codeclass{String} muss identisch mit dem Feld \texttt{username} in der Tabelle \texttt{mate\_userdevices} sein.
-	\item[componentType] Die Art der Komponente. Dieser \codeclass{String} muss identisch mit dem Feld \texttt{channel} in der Tabell sein.
-	\item[id] Der XMPP Benutzername der Komponente ohne den Host (\texttt{@server.de}).
+Der Handler bekommt zu Beginn eine Konfigurationsdatei in XML Format übergeben, die in diesem Fall Java Beans XML enthält, mit dem die allgemeine Konfiguration der Netzwerkschnittstelle und die zur Verfügung stehenden \codeclass{XmppIdentifier} aufgelistet sind. Jeder \codeclass{XmppIdentifier} setzt sich aus drei \codeclass{String}-Werten zusammen und repräsentiert eine Zeile aus der Tabelle \codeinline{mate\_user\-devices} des Servers:\begin{description}
+	\item[componentOwner] Der eindeutige Name des Agents, dem die Komponente zugeordnet ist. Dieser \codeclass{String} muss identisch mit dem Feld \codeinline{username} in der Tabelle \codeinline{mate\_userdevices} sein.
+	\item[componentType] Die Art der Komponente. Dieser \codeclass{String} muss identisch mit dem Feld \codeinline{channel} in der Tabell sein.
+	\item[id] Der XMPP Benutzername der Komponente ohne den Host (\codeinline{@server.de}).
 \end{description}
 
 Die Netzwerkconfigurationsdatei enthält für jeden \codeinline{XmppIdentifier} einen Eintrag der Form
@@ -115,15 +115,15 @@ Die Netzwerkconfigurationsdatei enthält für jeden \codeinline{XmppIdentifier} 
 	</object>
 </void>
 \end{lstlisting}
- im Bereich der \codeclass{ArrayList} \texttt{useableJabberIdentifiers}. In der Initialisierungsphase des Simulators wird jeder Komponente, die sich mit \begin{lstlisting}
+ im Bereich der \codeclass{ArrayList} \codeinline{useableJabberIdentifiers}. In der Initialisierungsphase des Simulators wird jeder Komponente, die sich mit \begin{lstlisting}
 public void register(ICommunicationComponent comp);
 \end{lstlisting}
 am \codeclass{MACKNetworkHandler} anmeldet, eine Jabber-ID aus dieser Liste zugewiesen, sofern noch eine zum jeweiligen Typ passende verfügbar ist. Andernfalls wird eine Warnung ausgegeben und die Komponente nicht angemeldet.
-In der Registrierungsphase überprüft der Handler, ob der jeweilige Jabber-Identifier bereits am XMPP-Server registriert ist. Ist dies nicht der Fall, versucht der Simulator automatisch, den Identifier zu registrieren. Wenn mehrere Adressen noch nicht registriert wurden, kann es abhängig vom in der Konfigurationsdatei angegebenen \texttt{REGISTRATION\_DELAY} zum längeren Wartezeiten kommen, bevor der Simulator mit der Simulation beginnt. Wenn jedoch alle Komponenten bereits registriert sind, kann die Simulation ohne Wartezeit starten.
+In der Registrierungsphase überprüft der Handler, ob der jeweilige Jabber-Identifier bereits am XMPP-Server registriert ist. Ist dies nicht der Fall, versucht der Simulator automatisch, den Identifier zu registrieren. Wenn mehrere Adressen noch nicht registriert wurden, kann es abhängig vom in der Konfigurationsdatei angegebenen \codeinline{REGISTRATION\_DELAY} zum längeren Wartezeiten kommen, bevor der Simulator mit der Simulation beginnt. Wenn jedoch alle Komponenten bereits registriert sind, kann die Simulation ohne Wartezeit starten.
 
 Der \codeclass{MACKNetworkHandler} erzeugt nach erfolgreichem Zuordnen der Identifier und dem Login am Jabber-Server für jede Komponente einen Chat mit dem MACK-Server. Über diesen Chat werden Pull- und Push-Requests gesendet und Rückmeldungen empfangen und an die betroffene Komponente weitergeleitet.
 
-Sowohl die \codemethod{send}-Methode im \codeinline{ICommunicationHandler}-Interface, als auch die \codemethod{receive}-Methode im \codeinline{ICommunicationComponent}-Interface sehen vor, dass die Nachrichten vom Typ \codeclass{Object} sind. Hierdurch ist ein hoher Abstraktionsgrad und somit eine hohe Flexibilität gegeben. Für die richtige Interpretation der Nachrichten ist somit der Entwickler des Handlers und der Sensoren und Aktuatoren verantwortlich.
+Sowohl die \codemethod{send}-Methode im \codeinterface{ICommunicationHandler}-Interface, als auch die \codemethod{receive}-Methode im \codeinterface{ICommunicationComponent}-Interface sehen vor, dass die Nachrichten vom Typ \codeclass{Object} sind. Hierdurch ist ein hoher Abstraktionsgrad und somit eine hohe Flexibilität gegeben. Für die richtige Interpretation der Nachrichten ist somit der Entwickler des Handlers und der Sensoren und Aktuatoren verantwortlich.
 
 In der MATe Implementierung sind die Nachrichten immer vom Typ \codeclass{String}, da sie die den Body der Chat-Nachrichten, also die eigentliche Nachricht im Format des MACK-Protokolls enthalten.
 

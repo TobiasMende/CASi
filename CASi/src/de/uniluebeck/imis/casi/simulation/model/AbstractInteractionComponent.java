@@ -17,6 +17,7 @@ import java.awt.geom.Arc2D;
 import java.awt.geom.Area;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.logging.Logger;
 
@@ -28,6 +29,7 @@ import de.uniluebeck.imis.casi.simulation.engine.SimulationEngine;
 import de.uniluebeck.imis.casi.simulation.factory.WorldFactory;
 import de.uniluebeck.imis.casi.simulation.model.Agent.STATE;
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.AbstractAction;
+import de.uniluebeck.imis.casi.simulation.model.actionHandling.ComplexAction;
 
 /**
  * This class represents components that are able to interact with their
@@ -58,13 +60,13 @@ public abstract class AbstractInteractionComponent extends AbstractComponent
 	protected boolean wearable = false;
 
 	/** List of actions, that can be recognized and vetoed by this component */
-	protected Collection<AbstractAction> interestingActions;
+	protected Collection<Class> interestingActions = new ArrayList<Class>();
 	/** actual value this sensor has recognized */
 	protected Object lastValue;
 	/** Last message, the actuator has received from the network controller */
 	protected Object lastResponse;
 	/** Time for pulling values from the server in seconds */
-	public static final int PULL_INTERVALL = 10;
+	protected int PULL_INTERVALL = 10;
 	/** Counts the ticks of the clock */
 	protected int clockTickCounter = 0;
 	/** The type of this component */
@@ -247,7 +249,7 @@ public abstract class AbstractInteractionComponent extends AbstractComponent
 			return shapeRepresentation;
 		}
 		// Calculate the new shape:
-		double currentOpening = opening < 0 ? 360 : opening;
+		double currentOpening = opening < 0 ? 362 : opening;
 		Face currentDirection = direction == null ? Face.NORTH : direction;
 		double startAngle = currentDirection.degree()
 				- ((double) currentOpening / 2.0);
@@ -418,7 +420,10 @@ public abstract class AbstractInteractionComponent extends AbstractComponent
 	 *         otherwise.
 	 */
 	protected boolean checkInterest(AbstractAction action, Agent agent) {
-		return false;
+		if(!checkInterest(agent)) {
+			return false;
+		}
+		return checkInterest(action);
 	}
 
 	/**
@@ -432,6 +437,15 @@ public abstract class AbstractInteractionComponent extends AbstractComponent
 	 */
 	protected boolean checkInterest(Agent agent) {
 		return false;
+	}
+
+	/**
+	 * Checks whether this component is interested in a provided action or the current subaction if its a {@link ComplexAction}.
+	 * @param action the action to check
+	 * @return {@code true} if this action is interesting, {@code false} otherwise.
+	 */
+	protected boolean checkInterest(AbstractAction action) {
+		return getInterestingPart(action) != null;
 	}
 
 	@Override
@@ -473,5 +487,24 @@ public abstract class AbstractInteractionComponent extends AbstractComponent
 	public void init() {
 		SimulationEngine.getInstance().getCommunicationHandler().register(this);
 	}
+	
+	/**
+	 * Getter for the interesting part of a provided action
+	 * @param action the action to extract the interesting part.
+	 * @return the action itself, if it's interesting, the current subaction if its a {@link ComplexAction} and the current subaction is interesting or {@code null} otherwise.
+	 */
+	protected AbstractAction getInterestingPart(AbstractAction action) {
+		if(action == null) {
+			return null;
+		}
+		if(interestingActions.contains(action.getClass())) {
+			return action;
+		}
+		if(action instanceof ComplexAction) {
+			return getInterestingPart(((ComplexAction)action).getCurrentAction());
+		}
+		return null;
+	}
+	
 
 }

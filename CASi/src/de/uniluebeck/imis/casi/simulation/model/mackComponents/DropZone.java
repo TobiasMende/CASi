@@ -21,7 +21,6 @@ import de.uniluebeck.imis.casi.simulation.engine.SimulationEngine;
 import de.uniluebeck.imis.casi.simulation.model.AbstractInteractionComponent;
 import de.uniluebeck.imis.casi.simulation.model.Agent;
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.AbstractAction;
-import de.uniluebeck.imis.casi.simulation.model.actions.SpeakTo;
 
 /**
  * This class represents the drop zone which is used by the mate system.

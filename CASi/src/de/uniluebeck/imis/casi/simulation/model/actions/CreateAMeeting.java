@@ -42,7 +42,7 @@ public class CreateAMeeting extends AtomicAction {
 	private IPosition where;
 	private SimulationTime wishedStartTime;
 	private int expectedDuration;
-	private int priotiy;
+	private int meetingPriority;
 
 	/**
 	 * Creates a CreateAMeeting Action which will, whenever this get performed,
@@ -63,12 +63,12 @@ public class CreateAMeeting extends AtomicAction {
 	 *            the time at which this meeting should start
 	 * @param expectedDuration
 	 *            the duration of this meeting
-	 * @param priotiy
+	 * @param meetingPriority
 	 *            at what priority this meeting should be added to the agents
 	 */
 	public CreateAMeeting(SimulationTime timeToCreateTheMeeting, Agent creator,
 			Set<Agent> set, IPosition where, SimulationTime wishedStartTime,
-			int expectedDuration, int priotiy) {
+			int expectedDuration, int meetingPriority) {
 		super();
 		this.setEarliestStartTime(timeToCreateTheMeeting);
 		this.creator = creator;
@@ -76,7 +76,7 @@ public class CreateAMeeting extends AtomicAction {
 		this.where = where;
 		this.wishedStartTime = wishedStartTime;
 		this.expectedDuration = expectedDuration;
-		this.priority = priotiy;
+		this.meetingPriority = meetingPriority;
 	}
 
 	@Override
@@ -87,7 +87,7 @@ public class CreateAMeeting extends AtomicAction {
 
 		// create a prototype of this Meeting
 		AbstractAction meeting = new HaveAMeeting(where, wishedStartTime,
-				expectedDuration, priotiy);
+				expectedDuration, meetingPriority, set);
 
 		// and set its clone to every agent
 		for (Agent agent : set) {

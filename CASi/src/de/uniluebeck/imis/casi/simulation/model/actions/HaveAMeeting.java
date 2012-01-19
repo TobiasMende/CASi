@@ -11,7 +11,10 @@
  */
 package de.uniluebeck.imis.casi.simulation.model.actions;
 
-import de.uniluebeck.imis.casi.simulation.model.AbstractComponent;
+import java.util.ArrayList;
+import java.util.Collection;
+
+import de.uniluebeck.imis.casi.simulation.model.Agent;
 import de.uniluebeck.imis.casi.simulation.model.IPosition;
 import de.uniluebeck.imis.casi.simulation.model.SimulationTime;
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.ComplexAction;
@@ -35,8 +38,14 @@ public class HaveAMeeting extends ComplexAction {
 
 	private IPosition where;
 	
-	public HaveAMeeting(IPosition where, SimulationTime supposedStartTime, int howLong, int prio) {
+	private ArrayList<String> agentsInMeeting = new ArrayList<String>();
+	
+	
+	public HaveAMeeting(IPosition where, SimulationTime supposedStartTime, int howLong, int prio, Collection<Agent> agents) {
 		super();
+		for(Agent a :agents) {
+			agentsInMeeting.add(a.getIdentifier());
+		}
 		this.setEarliestStartTime(supposedStartTime);
 		this.where = where;
 		addSubAction(new Move(where));
@@ -54,5 +63,13 @@ public class HaveAMeeting extends ComplexAction {
 	@Override
 	public ComplexAction clone() {
 		return super.clone();
+	}
+	
+	/**
+	 * Gets a list of identifiers of agents that are in this meeting.
+	 * @return the agentsInMeeting the list of names
+	 */
+	public ArrayList<String> getAgentsInMeeting() {
+		return agentsInMeeting;
 	}
 }

@@ -79,6 +79,7 @@ public class DoorLight extends AbstractInteractionComponent {
 	public DoorLight(Door door, Room room, Agent agent) {
 		super("DoorLight-" + door.getIntIdentifier(), door.getCentralPoint());
 		SimulationClock.getInstance().addListener(this);
+		interestingActions.add(Move.class);
 		setShapeRepresentation(door.getShapeRepresentation());
 		type = Type.ACTUATOR;
 		this.door = door;
@@ -265,17 +266,6 @@ public class DoorLight extends AbstractInteractionComponent {
 			}
 		}
 		return null;
-	}
-
-	@Override
-	protected boolean checkInterest(AbstractAction action, Agent agent) {
-		if (!checkInterest(agent)) {
-			return false;
-		}
-		if (action instanceof ComplexAction) {
-			return (((ComplexAction) action).getCurrentAction() instanceof Move);
-		}
-		return action instanceof Move;
 	}
 
 	@Override

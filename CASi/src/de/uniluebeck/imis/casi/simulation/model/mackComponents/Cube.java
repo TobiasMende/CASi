@@ -74,6 +74,9 @@ public class Cube extends AbstractInteractionComponent {
 	 * value for {@link ConfigMap#TURN_CUBE_PROBABILITY}
 	 */
 	public static final double DEFAULT_TURN_CUBE_PROBABILITY = 0.15;
+	
+	/** the amount of minutes that have to elapse in minimum until this cube would schedule a new turn cube action */
+	private static final int TURN_CUBE_SCHEDULE_DELAY = 10;
 
 	/** Counter for the cube instances */
 	private static int idCounter;
@@ -81,6 +84,9 @@ public class Cube extends AbstractInteractionComponent {
 	private State currentState;
 	/** The message which is send as pull request */
 	private String pullMessage;
+	
+	/** The time when the last time a turn cube action was scheduled */
+	private SimulationTime lastTurnCubeScheduling;
 
 	/**
 	 * constructs a Cube.
@@ -137,7 +143,16 @@ public class Cube extends AbstractInteractionComponent {
 		}
 		Random rand = new Random(System.currentTimeMillis());
 		double value = rand.nextDouble();
-		return value <= probability;
+		if(value > probability) {
+			return false;
+		}
+		SimulationTime currentTime = SimulationClock.getInstance().getCurrentTime();
+		if(lastTurnCubeScheduling == null || lastTurnCubeScheduling.plus(60*TURN_CUBE_SCHEDULE_DELAY).before(currentTime)) {
+			lastTurnCubeScheduling = currentTime;
+			return true;
+		}
+		
+		return false;
 	}
 
 	/**

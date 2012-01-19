@@ -71,6 +71,9 @@ public abstract class AbstractComponent implements IPosition, Serializable {
 	 * @return the position
 	 */
 	public IPosition getCurrentPosition() {
+		if(position == null) {
+			position = WorldFactory.getRoomsWithPoint(coordinates).getFirst();
+		}
 		return position;
 	}
 

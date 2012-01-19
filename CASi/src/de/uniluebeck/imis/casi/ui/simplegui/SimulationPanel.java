@@ -172,12 +172,107 @@ public class SimulationPanel extends JLayeredPane implements
 	}
 
 	/**
-	 * Returns {@link ViewSettings} for the view menu.
+	 * Returns {@link ViewSettings} for the ViewMenu.
 	 * 
 	 * @return the view menu listener
 	 */
 	public ActionListener getViewMenuListener() {
 		return viewSettings;
+	}
+
+	/**
+	 * Returns all the simulation components.
+	 * 
+	 * @return the simulation components
+	 */
+	public List<ComponentView> getSimulationComponents() {
+	
+		return simulationComponents;
+	}
+
+	/**
+	 * Returns all the simulation components in this point, if it is a central
+	 * point of a room.
+	 * 
+	 * @param point
+	 *            the point
+	 * @return the simulation components
+	 */
+	public LinkedList<ComponentView> getSimulationComponentesIn(Point2D point) {
+	
+		LinkedList<ComponentView> list = new LinkedList<ComponentView>();
+	
+		if (!isNearRoomPoint(point)) {
+	
+			return list;
+		}
+	
+		Rectangle rect = new Rectangle((int) point.getX() - 3,
+				(int) point.getY() - 3, 6, 6);
+	
+		for (ComponentView componentView : simulationComponents) {
+	
+			if (rect.contains(componentView.getSimulationPosition())) {
+	
+				list.add(componentView);
+			}
+	
+		}
+	
+		return list;
+	}
+
+	public void paintComponentsInCircle(Point2D point, int size,
+			LinkedList<ComponentView> list) {
+	
+		Point2D centerPoint = new Point2D.Double(transform.getScaleX()
+				* point.getX(), transform.getScaleY() * point.getY());
+	
+		int numberOfComponents = list.size();
+		double radius = 1.5 * size * numberOfComponents / (2 * Math.PI);
+		double angle = 2 * Math.PI / numberOfComponents;
+		double newAngle = 0;
+	
+		for (ComponentView componentView : list) {
+	
+			int scaledX = (int) ((radius * Math.cos(newAngle) - 2)
+					* transform.getScaleX() + centerPoint.getX());
+			int scaledY = (int) ((radius * Math.sin(newAngle) - 2)
+					* transform.getScaleY() + centerPoint.getY());
+	
+			componentView.setBounds(scaledX, scaledY,
+					(int) (8 * transform.getScaleX()),
+					(int) (8 * transform.getScaleY()));
+	
+			newAngle = newAngle + angle;
+		}
+	
+	}
+
+	/**
+	 * This method checks, if the given point is in the near of a room point.
+	 * 
+	 * @param point
+	 *            the point
+	 * @return <code>true</code>, if the point is near a room point, else
+	 *         <code>false</code>.
+	 */
+	public boolean isNearRoomPoint(Point2D point) {
+	
+		boolean isRoomCentral = false;
+		Rectangle rect = new Rectangle((int) point.getX() - 3,
+				(int) point.getY() - 3, 6, 6);
+	
+		for (Room room : roomPoints) {
+	
+			if (rect.contains(room.getCentralPoint())) {
+	
+				isRoomCentral = true;
+			}
+	
+		}
+	
+		return isRoomCentral;
 	}
 
 	@Override
@@ -213,7 +308,7 @@ public class SimulationPanel extends JLayeredPane implements
 	@Override
 	public void componentResized(ComponentEvent arg0) {
 
-		/** Set scale relative to the frame size */
+		/* Set scale relative to the frame size */
 		setSimulationToScale();
 
 	}
@@ -226,101 +321,6 @@ public class SimulationPanel extends JLayeredPane implements
 	@Override
 	public void paint(Graphics g) {
 		super.paint(g);
-	}
-
-	/**
-	 * Returns all the simulation components.
-	 * 
-	 * @return the simulation components
-	 */
-	public List<ComponentView> getSimulationComponents() {
-
-		return simulationComponents;
-	}
-
-	/**
-	 * Returns all the simulation components in this point, if it is a central
-	 * point of a room.
-	 * 
-	 * @param point
-	 *            the point
-	 * @return the simulation components
-	 */
-	public LinkedList<ComponentView> getSimulationComponentesIn(Point2D point) {
-
-		LinkedList<ComponentView> list = new LinkedList<ComponentView>();
-
-		if (!isNearRoomPoint(point)) {
-
-			return list;
-		}
-
-		Rectangle rect = new Rectangle((int) point.getX() - 3,
-				(int) point.getY() - 3, 6, 6);
-
-		for (ComponentView componentView : simulationComponents) {
-
-			if (rect.contains(componentView.getSimulationPosition())) {
-
-				list.add(componentView);
-			}
-
-		}
-
-		return list;
-	}
-
-	public void paintComponentsInCircle(Point2D point, int size,
-			LinkedList<ComponentView> list) {
-
-		Point2D centerPoint = new Point2D.Double(transform.getScaleX()
-				* point.getX(), transform.getScaleY() * point.getY());
-
-		int numberOfComponents = list.size();
-		double radius = 1.5 * size * numberOfComponents / (2 * Math.PI);
-		double angle = 2 * Math.PI / numberOfComponents;
-		double newAngle = 0;
-
-		for (ComponentView componentView : list) {
-
-			int scaledX = (int) ((radius * Math.cos(newAngle) - 2)
-					* transform.getScaleX() + centerPoint.getX());
-			int scaledY = (int) ((radius * Math.sin(newAngle) - 2)
-					* transform.getScaleY() + centerPoint.getY());
-
-			componentView.setBounds(scaledX, scaledY,
-					(int) (8 * transform.getScaleX()),
-					(int) (8 * transform.getScaleY()));
-
-			newAngle = newAngle + angle;
-		}
-
-	}
-
-	/**
-	 * This method checks, if the given point is in the near of a room point.
-	 * 
-	 * @param point
-	 *            the point
-	 * @return <code>true</code>, if the point is near a room point, else
-	 *         <code>false</code>.
-	 */
-	public boolean isNearRoomPoint(Point2D point) {
-
-		boolean isRoomCentral = false;
-		Rectangle rect = new Rectangle((int) point.getX() - 3,
-				(int) point.getY() - 3, 6, 6);
-
-		for (Room room : roomPoints) {
-
-			if (rect.contains(room.getCentralPoint())) {
-
-				isRoomCentral = true;
-			}
-
-		}
-
-		return isRoomCentral;
 	}
 
 }

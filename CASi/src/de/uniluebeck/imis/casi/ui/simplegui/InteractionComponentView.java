@@ -86,6 +86,19 @@ public class InteractionComponentView extends ComponentView implements
 
 	}
 
+	@Override
+	public Point2D getSimulationPosition() {
+		
+		if(viewSettings.isPaintSensors()) {
+			
+			return position;
+		} else {
+			
+			// return a point outside the simulation
+			return new Point2D.Double(-10, -10);
+		}
+	}
+
 	/**
 	 * This method paints the interaction component as a filled rectangle.
 	 */
@@ -154,12 +167,6 @@ public class InteractionComponentView extends ComponentView implements
 	@Override
 	public void mouseReleased(MouseEvent arg0) {
 
-	}
-
-	@Override
-	public Point2D getSimulationPosition() {
-		
-		return position;
 	}
 
 }

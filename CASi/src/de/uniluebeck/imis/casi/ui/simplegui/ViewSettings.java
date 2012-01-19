@@ -92,7 +92,7 @@ public class ViewSettings implements ActionListener {
 			paintSensors = clickedItem.isSelected();
 		}
 
-		simulationPanel.repaint();
+		simulationPanel.setSimulationToScale();
 	}
 
 	/**

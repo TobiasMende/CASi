@@ -168,7 +168,7 @@ public class SimulationClock implements Listenable<ISimulationClockListener> {
 			timer = null;
 		}
 		invalidateTimer = false;
-		timer = new Timer("CASi-System-Clock", true);
+		timer = new Timer("CASi-System-Clock", false);
 		timer.schedule(new TimerTask() {
 
 			@Override

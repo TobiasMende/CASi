@@ -87,7 +87,7 @@ public class Mike extends AbstractInteractionComponent {
 	 *            the agent to which this component belongs
 	 */
 	private Mike(Room room, Point2D position, Agent agent) {
-		super("Mike-" + agent.getIdentifier() + idCounter++, position);
+		super("mike-" + agent.getIdentifier() + idCounter++, position);
 		interestingActions.add(SpeakTo.class);
 		interestingActions.add(HaveAMeeting.class);
 		setShapeRepresentation(room.getShapeRepresentation());
@@ -99,8 +99,11 @@ public class Mike extends AbstractInteractionComponent {
 
 	@Override
 	protected boolean handleInternal(AbstractAction action, Agent agent) {
-		AbstractAction interestingPart = getInterestingPart(action);
+		if(action instanceof HaveAMeeting) {
+			System.out.println();
+		}
 		if (messageToSend == null) {
+			AbstractAction interestingPart = getInterestingPart(action);
 			if (interestingPart == null) {
 				// not interested in this action
 				return true;
@@ -138,6 +141,10 @@ public class Mike extends AbstractInteractionComponent {
 	}
 
 	@Override
+	protected boolean checkInterest(Agent agent) {
+		return true;
+	}
+	@Override
 	public String getHumanReadableValue() {
 		StringBuffer buf = new StringBuffer();
 		buf.append("(");
@@ -162,6 +169,10 @@ public class Mike extends AbstractInteractionComponent {
 			SimulationEngine.getInstance().getCommunicationHandler()
 					.send(this, messageToSend);
 			messageToSend = null;
+			/* Send delay (speak-time) of 10 till 120 seconds */
+			clockTickCounter = 1;
+			Random rand = new Random(System.currentTimeMillis());
+			PULL_INTERVALL = 10+rand.nextInt(110);
 		}
 	}
 

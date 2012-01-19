@@ -30,6 +30,7 @@ import de.uniluebeck.imis.casi.generator.IWorldGenerator;
 import de.uniluebeck.imis.casi.logging.DevLogFormatter;
 import de.uniluebeck.imis.casi.logging.ExtendedConsoleHandler;
 import de.uniluebeck.imis.casi.logging.SimLogFormatter;
+import de.uniluebeck.imis.casi.ui.GuiStub;
 import de.uniluebeck.imis.casi.ui.IMainView;
 import de.uniluebeck.imis.casi.ui.simplegui.MainViewSimpleGui;
 
@@ -92,7 +93,7 @@ public class CASi {
 		// ((MACKNetworkHandler)networkHandler).serializeSettings();
 		IMainView mainView = null;
 		if (commandLineOptions.isGuiDisabled()) {
-			// TODO create guiStub and save in mainView.
+			mainView = new GuiStub();
 		} else {
 			mainView = new MainViewSimpleGui();
 		}

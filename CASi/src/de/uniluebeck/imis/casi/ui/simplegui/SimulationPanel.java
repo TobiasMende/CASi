@@ -277,7 +277,7 @@ public class SimulationPanel extends JLayeredPane implements
 				* point.getX(), transform.getScaleY() * point.getY());
 
 		int numberOfComponents = list.size();
-		double radius = transform.getDeterminant() * size * numberOfComponents
+		double radius = /*transform.getDeterminant()* */ 1.5 * size * numberOfComponents
 				/ (2 * Math.PI);
 		double angle = 2 * Math.PI / numberOfComponents;
 		double newAngle = 0;

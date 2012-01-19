@@ -14,8 +14,6 @@ package de.uniluebeck.imis.casi.simulation.model;
 import java.awt.Image;
 import java.awt.geom.Point2D;
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
 
 import de.uniluebeck.imis.casi.simulation.factory.WorldFactory;
 

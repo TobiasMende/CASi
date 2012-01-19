@@ -11,20 +11,16 @@
  */
 package de.uniluebeck.imis.casi.simulation.model.actions;
 
-import java.util.List;
 import java.util.Set;
 
 import de.uniluebeck.imis.casi.simulation.model.AbstractComponent;
 import de.uniluebeck.imis.casi.simulation.model.Agent;
 import de.uniluebeck.imis.casi.simulation.model.IPosition;
-import de.uniluebeck.imis.casi.simulation.model.Room;
 import de.uniluebeck.imis.casi.simulation.model.SimulationTime;
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.AbstractAction;
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.AtomicAction;
-import de.uniluebeck.imis.casi.simulation.model.actionHandling.ComplexAction;
 
 /**
- * @author Marvin Frick
  * 
  *         This action class shall be used whenever an Agent schedules a meeting
  *         which has an fixed time (both start time and duration) and multiple
@@ -33,9 +29,14 @@ import de.uniluebeck.imis.casi.simulation.model.actionHandling.ComplexAction;
  *         most of the time. As it is complicated to find a time slot which fits
  *         all agents, this action has exchangeable scheduling methods.
  * 
+ * @author Marvin Frick
  */
 public class CreateAMeeting extends AtomicAction {
 
+	/**
+	 * serialization identifier
+	 */
+	private static final long serialVersionUID = -3829562333684033056L;
 	private Agent creator;
 	private Set<Agent> set;
 	private IPosition where;

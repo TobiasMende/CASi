@@ -11,8 +11,6 @@
  */
 package de.uniluebeck.imis.casi.simulations.mate.generator.java;
 
-import java.util.concurrent.ConcurrentHashMap;
-
 import de.uniluebeck.imis.casi.generator.AgentCollector;
 import de.uniluebeck.imis.casi.generator.RoomCollector;
 import de.uniluebeck.imis.casi.simulation.model.Agent;

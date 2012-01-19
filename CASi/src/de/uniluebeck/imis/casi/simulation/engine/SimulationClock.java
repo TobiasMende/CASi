@@ -244,7 +244,7 @@ public class SimulationClock implements Listenable<ISimulationClockListener> {
 
 	@Override
 	public synchronized void removeListener(ISimulationClockListener listener) {
-		if(!listenersToRemove.contains(listener)) {
+		if (!listenersToRemove.contains(listener)) {
 			listenersToRemove.add(listener);
 		}
 		listenersToAdd.remove(listener);
@@ -348,6 +348,7 @@ public class SimulationClock implements Listenable<ISimulationClockListener> {
 		log.fine("Informed " + listeners.size()
 				+ " clock listeners about pause was set to " + pause);
 	}
+
 	/**
 	 * Handles the addition and remove actions from the listeners lists.
 	 */

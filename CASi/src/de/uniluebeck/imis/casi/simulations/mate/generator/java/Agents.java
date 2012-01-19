@@ -11,9 +11,12 @@
  */
 package de.uniluebeck.imis.casi.simulations.mate.generator.java;
 
+import java.util.concurrent.ConcurrentHashMap;
+
 import de.uniluebeck.imis.casi.generator.AgentCollector;
 import de.uniluebeck.imis.casi.generator.RoomCollector;
 import de.uniluebeck.imis.casi.simulation.model.Agent;
+import de.uniluebeck.imis.casi.simulation.model.ConfigMap;
 
 /**
  * Agent generator file with static methods that generate all the agents for
@@ -33,7 +36,7 @@ public class Agents {
 	 */
 	public static void generateAgents() {
 
-		AgentCollector agents = AgentCollector.getInstance();
+		AgentCollector agentC = AgentCollector.getInstance();
 		RoomCollector rooms = RoomCollector.getInstance();
 		Agent tempAgent = null;
 
@@ -41,7 +44,7 @@ public class Agents {
 		for (int i = 0; i < 0; i++) {
 			tempAgent = new Agent("agent_" + i + "_smith", "A. Smith the " + i,
 					"crowd");
-			agents.newAgent(tempAgent);
+			agentC.newAgent(tempAgent);
 		}
 
 		// ##########
@@ -51,16 +54,18 @@ public class Agents {
 				"Hermann Matsumbishi", "teamleader");
 		tempAgent.setDefaultPosition(rooms
 				.findRoomByIdentifier("officeHermann"));
-		agents.newAgent(tempAgent);
+		agentC.newAgent(tempAgent);
 
 		// ##########
 		// Zwotah Zwiebel
 		// ##########
-		agents.newAgent(new Agent("casi_zwotah_zwiebel", "Zwotah Zwiebel",
+		agentC.newAgent(new Agent("casi_zwotah_zwiebel", "Zwotah Zwiebel",
 				"coworker"));
-		Agent zwotah = agents.findAgentByName("Zwotah Zwiebel");
+		Agent zwotah = agentC.findAgentByName("Zwotah Zwiebel");
 		zwotah.setDefaultPosition(rooms.findRoomByIdentifier("officeZwotah"));
-
+		// zwotah is very attentive, he turns his cube more nearly every time
+		zwotah.addConfiguration(ConfigMap.TURN_CUBE_PROBABILITY, 0.9);
+		
 		// ##########
 		// Dagobert Dreieck
 		// ##########
@@ -68,7 +73,7 @@ public class Agents {
 				"coworker");
 		tempAgent.setDefaultPosition(rooms
 				.findRoomByIdentifier("officeDagobert"));
-		agents.newAgent(tempAgent);
+		agentC.newAgent(tempAgent);
 
 		// ##########
 		// Felix Freudentanz
@@ -76,7 +81,9 @@ public class Agents {
 		tempAgent = new Agent("casi_felix_freudentanz", "Felix Freudentanz",
 				"teamLeader");
 		tempAgent.setDefaultPosition(rooms.findRoomByIdentifier("officeFelix"));
-		agents.newAgent(tempAgent);
+		// Felix moves very fast!
+		tempAgent.addConfiguration(ConfigMap.MOVE_SPEED, 1.5);
+		agentC.newAgent(tempAgent);
 
 		// ##########
 		// Susi Sekretärin
@@ -84,7 +91,7 @@ public class Agents {
 		tempAgent = new Agent("casi_susi_sekretärin", "Susi Sekretärin",
 				"secretary");
 		tempAgent.setDefaultPosition(rooms.findRoomByIdentifier("officeSusi"));
-		agents.newAgent(tempAgent);
+		agentC.newAgent(tempAgent);
 
 		// ##########
 		// Rudi Random
@@ -92,6 +99,6 @@ public class Agents {
 		tempAgent = new Agent("casi_rudi_random", "Rudi Random",
 				"coworker");
 		tempAgent.setDefaultPosition(rooms.findRoomByIdentifier("officeRudi"));
-		agents.newAgent(tempAgent);
+		agentC.newAgent(tempAgent);
 	}
 }

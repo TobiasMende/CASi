@@ -57,7 +57,7 @@ public abstract class ComponentView extends JComponent {
 				(int) (8 * transform.getScaleY()));
 
 		/* Set state color to yellow for debugging */
-		this.stateColor = Color.WHITE;
+		this.stateColor = ColorScheme.BACKGROUND;
 		invalidate();
 	}
 

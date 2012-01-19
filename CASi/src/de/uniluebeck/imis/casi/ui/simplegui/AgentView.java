@@ -109,11 +109,15 @@ public class AgentView extends ComponentView implements IAgentListener,
 		Dimension dim = getSize();
 
 		if (this.isSelected) {
-			g2D.setColor(Color.YELLOW);
+			g2D.setColor(Color.BLACK);
 			g2D.fillOval(0, 0, (int) dim.getWidth(), (int) dim.getHeight());
+			g2D.setColor(ColorScheme.ORANGE_VERY_LIGHT);
 		}
 
-		g2D.setColor(Color.BLACK);
+		if (!this.isSelected) {
+
+			g2D.setColor(Color.BLACK);
+		}
 		g2D.fillOval(1, 1, (int) dim.getWidth() - 2, (int) dim.getHeight() - 2);
 
 		g2D.setColor(stateColor);

@@ -48,30 +48,34 @@ public class XmppRegistrator {
 
 	/** Flag which handles the interrupt before registering a new component */
 	private boolean registeredLastTime = false;
-	
+
 	/** A list of jabber identifiers which are free to use by the simulator */
 	private ArrayList<XmppIdentifier> usableJabberIdentifiers = new ArrayList<XmppIdentifier>();
 	/** Counts the registrations */
 	private int registrationCounter = 0;
-	
+
 	private ArrayList<XmppIdentifier> identifierToRegister = new ArrayList<XmppIdentifier>();
-	
+
 	/**
 	 * The main method
-	 * @param args the path to the config file
+	 * 
+	 * @param args
+	 *            the path to the config file
 	 */
 	public static void main(String[] args) {
-		if(args.length  != 1) {
+		if (args.length != 1) {
 			System.err.println("Wrong amount of parameter. Can't execute");
 			System.exit(0);
 		}
 		XmppRegistrator registrator = new XmppRegistrator(args[0]);
 		registrator.perform();
 	}
-	
+
 	/**
 	 * Constructor for a XmppRegistrator
-	 * @param path the path to the config file
+	 * 
+	 * @param path
+	 *            the path to the config file
 	 */
 	@SuppressWarnings("unchecked")
 	public XmppRegistrator(String path) {
@@ -91,48 +95,62 @@ public class XmppRegistrator {
 			if (dec != null)
 				dec.close();
 		}
-		
+
 	}
-	
+
 	/**
 	 * Performs the registration process.
 	 */
 	public void perform() {
-		System.out.println("Checking and registering "+usableJabberIdentifiers.size()+" identifiers");
-		System.out.println("======================================================================");
+		System.out.println("Checking and registering "
+				+ usableJabberIdentifiers.size() + " identifiers");
+		System.out
+				.println("======================================================================");
 		System.out.println("Checking identifiers:");
-		System.out.println("----------------------------------------------------------------------");
-		for(XmppIdentifier identifier : usableJabberIdentifiers) {
+		System.out
+				.println("----------------------------------------------------------------------");
+		for (XmppIdentifier identifier : usableJabberIdentifiers) {
 			check(identifier);
 		}
-		System.out.println("----------------------------------------------------------------------");
-		System.out.println("Need to register "+identifierToRegister.size()+" new identifiers");
-		int minutes = (identifierToRegister.size()-1)*REGISTRATION_DELAY;
-		if(minutes >= 60) {
-			int remainingMinutes = minutes%60;
-			System.out.println("Needs "+(minutes-remainingMinutes)/60+" hours and "+remainingMinutes+" minutes");
+		System.out
+				.println("----------------------------------------------------------------------");
+		System.out.println("Need to register " + identifierToRegister.size()
+				+ " new identifiers");
+		int minutes = (identifierToRegister.size() - 1) * REGISTRATION_DELAY;
+		if (minutes >= 60) {
+			int remainingMinutes = minutes % 60;
+			System.out.println("Needs " + (minutes - remainingMinutes) / 60
+					+ " hours and " + remainingMinutes + " minutes");
 		} else if (minutes > 0) {
-			System.out.println("Needs "+minutes+" minutes!");
+			System.out.println("Needs " + minutes + " minutes!");
 		}
-		System.out.println("----------------------------------------------------------------------");
-		for(XmppIdentifier identifier : identifierToRegister) {
-			if(register(identifier.getId())) {
-				System.out.println(identifier.getId()+" was registered successful.");
+		System.out
+				.println("----------------------------------------------------------------------");
+		for (XmppIdentifier identifier : identifierToRegister) {
+			if (register(identifier.getId())) {
+				System.out.println(identifier.getId()
+						+ " was registered successful.");
 				registrationCounter++;
 			} else {
-				System.err.println(identifier.getId()+" can't be registered.");
+				System.err
+						.println(identifier.getId() + " can't be registered.");
 			}
 		}
-		System.out.println("----------------------------------------------------------------------");
-		System.out.println("Done! "+registrationCounter+" identifiers were registered successful");
-		int unregistered = identifierToRegister.size()-registrationCounter;
-		if(unregistered > 0) {
-			System.out.println("Can't register "+unregistered+" identifiers. Pleas start the tool again in at least "+REGISTRATION_DELAY+" minutes");
+		System.out
+				.println("----------------------------------------------------------------------");
+		System.out.println("Done! " + registrationCounter
+				+ " identifiers were registered successful");
+		int unregistered = identifierToRegister.size() - registrationCounter;
+		if (unregistered > 0) {
+			System.out.println("Can't register " + unregistered
+					+ " identifiers. Pleas start the tool again in at least "
+					+ REGISTRATION_DELAY + " minutes");
 		}
 		System.out.println("Job completed");
-		System.out.println("======================================================================");
+		System.out
+				.println("======================================================================");
 	}
-	
+
 	private void check(XmppIdentifier identifier) {
 		ConnectionConfiguration config = new ConnectionConfiguration(
 				XMPP_SERVER, XMPP_PORT);
@@ -147,17 +165,19 @@ public class XmppRegistrator {
 				identifierToRegister.add(identifier);
 			}
 		} catch (XMPPException e) {
-			System.err.println("Can't connect "+identifier.getId());
+			System.err.println("Can't connect " + identifier.getId());
 		} finally {
 			connection.disconnect();
 		}
 	}
-	
+
 	/**
 	 * Registers a new account
-	 * @param id the identifier
-	 * @param connection the connection to the server
-	 * @return {@code true} if the registration was completed successful, {@code false} otherwise.
+	 * 
+	 * @param id
+	 *            the identifier
+	 * @return {@code true} if the registration was completed successful,
+	 *         {@code false} otherwise.
 	 */
 	private boolean register(String id) {
 		ConnectionConfiguration config = new ConnectionConfiguration(

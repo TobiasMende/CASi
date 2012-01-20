@@ -184,9 +184,6 @@ public class CASi {
 	/**
 	 * Sets the DEV_MODE and VERBOSE flag according to the command line
 	 * arguments
-	 * 
-	 * @param args
-	 *            the command line arguments
 	 */
 	private static void setupFlags() {
 		VERBOSE = commandLineOptions.isVerboseMode();

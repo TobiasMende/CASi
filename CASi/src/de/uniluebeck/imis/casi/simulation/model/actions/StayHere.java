@@ -15,9 +15,10 @@ import de.uniluebeck.imis.casi.simulation.model.AbstractComponent;
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.AtomicAction;
 
 /**
- * @author Marvin Frick
+ * The Agent stays at his current position and does _nothing_ for the given
+ * time.
  * 
- *         The Agent stays at his current position and does _nothing_ for the given time.
+ * @author Marvin Frick
  */
 public class StayHere extends AtomicAction {
 
@@ -28,10 +29,13 @@ public class StayHere extends AtomicAction {
 
 	/**
 	 * Creates a new boring StayHere Action.
-	 * @param duration how long should the agent do nothing
-	 * @param prio at what priority should the agent to nothing
+	 * 
+	 * @param duration
+	 *            how long should the agent do nothing
+	 * @param prio
+	 *            at what priority should the agent to nothing
 	 */
-	public StayHere(int duration, int prio){
+	public StayHere(int duration, int prio) {
 		this.setPriority(prio);
 		this.setDuration(duration);
 	}
@@ -46,5 +50,5 @@ public class StayHere extends AtomicAction {
 	public String getInformationDescription() {
 		return "stay here and do nothing";
 	}
-	
+
 }

@@ -59,7 +59,7 @@ public class CreateAMeeting extends AtomicAction {
 	 * @param where
 	 *            the IPosition (most likely a Room or an Agent) where this
 	 *            meeting is about to take place
-	 * @param whishedStartTime
+	 * @param wishedStartTime
 	 *            the time at which this meeting should start
 	 * @param expectedDuration
 	 *            the duration of this meeting

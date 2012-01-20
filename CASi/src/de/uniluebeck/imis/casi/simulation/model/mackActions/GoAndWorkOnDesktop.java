@@ -35,7 +35,7 @@ public class GoAndWorkOnDesktop extends ComplexAction {
 	/**
 	 * Creates a new workOnDesktop action after going to the agents desktop
 	 * 
-	 * @param dektop
+	 * @param desktop
 	 *            the desktop to go to
 	 * @param program
 	 *            what program to work with

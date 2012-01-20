@@ -42,7 +42,7 @@ public class StayHere extends AtomicAction {
 
 	@Override
 	protected boolean internalPerform(AbstractComponent performer) {
-		// TODO Auto-generated method stub
+		// nothing to do here
 		return false;
 	}
 

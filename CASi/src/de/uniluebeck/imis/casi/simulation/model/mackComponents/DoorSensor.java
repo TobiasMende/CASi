@@ -56,7 +56,6 @@ public class DoorSensor extends AbstractInteractionComponent implements
 		default:
 			value = 0;
 		}
-		// TODO check if doorsensor is correct as subject
 		Map<String,String> values = new HashMap<String, String>();
 		values.put("doorstate", Integer.toString(value));
 		String message = MACKProtocolFactory.generatePushMessage(agent, "doorsensor", values);

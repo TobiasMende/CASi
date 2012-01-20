@@ -20,6 +20,7 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.logging.Logger;
 
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
@@ -255,31 +256,30 @@ public abstract class AbstractInteractionComponent extends AbstractComponent
 		// Calculate the new shape:
 		double currentOpening = opening < 0 ? 360 : opening;
 		Rectangle2D bounds = calculateCircleBounds();
-		Point2D pointInRoom = null;
+		Point2D pointInRoom = getCentralPoint();
 		if (currentOpening >= 360) {
 			shapeRepresentation = new Ellipse2D.Double(bounds.getX(),
 					bounds.getY(), bounds.getWidth(), bounds.getHeight());
-			pointInRoom = getCentralPoint();
 		} else {
 			Face currentDirection = (direction == null) ? Face.NORTH
 					: direction;
 			double startAngle = currentDirection.degree()
 					- (currentOpening / 2.0);
-			shapeRepresentation = new Arc2D.Double(calculateCircleBounds(),
+			shapeRepresentation = new Arc2D.Double(bounds,
 					startAngle, currentOpening, Arc2D.PIE);
-			int scale = 3;
-			double xDir = currentDirection.direction().getX();
-			double yDir = currentDirection.direction().getY();
-			pointInRoom = new Point2D.Double(scale * xDir
-					+ getCentralPoint().getX(), scale * yDir
-					+ getCentralPoint().getY());
-			log.severe(currentDirection + ": "
-					+ currentDirection.direction().toString());
 		}
-		Room room = WorldFactory.getRoomsWithPoint(pointInRoom).getFirst();
+		LinkedList<Room> rooms = WorldFactory.getRoomsWithPoint(pointInRoom);
+		
 		Area area = new Area(shapeRepresentation);
-		Area roomArea = new Area(room.getShapeRepresentation());
-		area.intersect(roomArea);
+		if(rooms != null) {
+			Area roomArea = new Area();
+			for(Room room : rooms) {
+				roomArea.add(new Area(room.getShapeRepresentation()));
+			}
+			area.intersect(roomArea);
+		} else {
+			log.severe("Can't find room for "+pointInRoom);
+		}
 		if (area.isEmpty()) {
 			log.severe(this + ": monitored area is empty.");
 		}

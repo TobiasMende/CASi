@@ -1,3 +1,4 @@
+
 /*  	CASi Context Awareness Simulation Software
  *   Copyright (C) 2012 2012  Moritz Bürger, Marvin Frick, Tobias Mende
  *
@@ -119,13 +120,13 @@ public class Components {
 		// Rudi Random
 		// ##########
 		a = ac.findAgentByName("Rudi Random");
-		Door door8 = RoomCollector.getInstance().findDoorByIdentifier("rudis-south-soor");
+		Door door8 = RoomCollector.getInstance().findDoorByIdentifier("rudis-south-door");
 		DoorLight doorlightRudi = new DoorLight(door8, (Room) a.getDefaultPosition(), a);
 		doorlightRudi.setMonitoredArea(Face.SOUTH, 20, 180);
 		cc.newComponent(doorlightRudi);
 		cc.newComponent(new DoorSensor(door8, a));
 		
-		Door door9 = RoomCollector.getInstance().findDoorByIdentifier("rudis-west-soor");
+		Door door9 = RoomCollector.getInstance().findDoorByIdentifier("rudis-west-door");
 		doorlightRudi = new DoorLight(door9, (Room) a.getDefaultPosition(), a);
 		doorlightRudi.setMonitoredArea(Face.WEST, 20, 180);
 		cc.newComponent(doorlightRudi);

@@ -15,6 +15,7 @@ import java.awt.Point;
 import java.awt.Shape;
 import java.awt.geom.Arc2D;
 import java.awt.geom.Area;
+import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
@@ -60,6 +61,7 @@ public abstract class AbstractInteractionComponent extends AbstractComponent
 	protected boolean wearable = false;
 
 	/** List of actions, that can be recognized and vetoed by this component */
+	@SuppressWarnings("rawtypes")
 	protected Collection<Class> interestingActions = new ArrayList<Class>();
 	/** actual value this sensor has recognized */
 	protected Object lastValue;
@@ -107,7 +109,8 @@ public abstract class AbstractInteractionComponent extends AbstractComponent
 		 * @return the radian representation
 		 */
 		private double radian() {
-			return Math.toRadians(degree);
+			double factor = Math.PI / 180.0;
+			return degree * factor;
 		}
 
 		/**
@@ -116,7 +119,8 @@ public abstract class AbstractInteractionComponent extends AbstractComponent
 		 * @return the direction vector
 		 */
 		private Point2D direction() {
-			return new Point2D.Double(Math.cos(radian()), Math.sin(radian()));
+
+			return new Point2D.Double(Math.cos(radian()), -Math.sin(radian()));
 		}
 	}
 
@@ -249,25 +253,39 @@ public abstract class AbstractInteractionComponent extends AbstractComponent
 			return shapeRepresentation;
 		}
 		// Calculate the new shape:
-		double currentOpening = opening < 0 ? 362 : opening;
-		Face currentDirection = direction == null ? Face.NORTH : direction;
-		double startAngle = currentDirection.degree()
-				- ((double) currentOpening / 2.0);
-		shapeRepresentation = new Arc2D.Double(calculateCircleBounds(),
-				startAngle, currentOpening, Arc2D.PIE);
-		int scale = 3;
-		Point2D pointInRoom = new Point2D.Double(scale
-				* currentDirection.direction().getX()
-				+ getCentralPoint().getX(), scale
-				* currentDirection.direction().getY()
-				+ getCentralPoint().getY());
+		double currentOpening = opening < 0 ? 360 : opening;
+		Rectangle2D bounds = calculateCircleBounds();
+		Point2D pointInRoom = null;
+		if (currentOpening >= 360) {
+			shapeRepresentation = new Ellipse2D.Double(bounds.getX(),
+					bounds.getY(), bounds.getWidth(), bounds.getHeight());
+			pointInRoom = getCentralPoint();
+		} else {
+			Face currentDirection = (direction == null) ? Face.NORTH
+					: direction;
+			double startAngle = currentDirection.degree()
+					- (currentOpening / 2.0);
+			shapeRepresentation = new Arc2D.Double(calculateCircleBounds(),
+					startAngle, currentOpening, Arc2D.PIE);
+			int scale = 3;
+			double xDir = currentDirection.direction().getX();
+			double yDir = currentDirection.direction().getY();
+			pointInRoom = new Point2D.Double(scale * xDir
+					+ getCentralPoint().getX(), scale * yDir
+					+ getCentralPoint().getY());
+			log.severe(currentDirection + ": "
+					+ currentDirection.direction().toString());
+		}
 		Room room = WorldFactory.getRoomsWithPoint(pointInRoom).getFirst();
 		Area area = new Area(shapeRepresentation);
-		area.intersect(new Area(room.getShapeRepresentation()));
+		Area roomArea = new Area(room.getShapeRepresentation());
+		area.intersect(roomArea);
+		if (area.isEmpty()) {
+			log.severe(this + ": monitored area is empty.");
+		}
 		shapeRepresentation = area;
 		return shapeRepresentation;
 	}
-
 
 	/**
 	 * Calculates a quadratic area which is exactly big enough to contain the
@@ -420,7 +438,7 @@ public abstract class AbstractInteractionComponent extends AbstractComponent
 	 *         otherwise.
 	 */
 	protected boolean checkInterest(AbstractAction action, Agent agent) {
-		if(!checkInterest(agent)) {
+		if (!checkInterest(agent)) {
 			return false;
 		}
 		return checkInterest(action);
@@ -440,9 +458,13 @@ public abstract class AbstractInteractionComponent extends AbstractComponent
 	}
 
 	/**
-	 * Checks whether this component is interested in a provided action or the current subaction if its a {@link ComplexAction}.
-	 * @param action the action to check
-	 * @return {@code true} if this action is interesting, {@code false} otherwise.
+	 * Checks whether this component is interested in a provided action or the
+	 * current subaction if its a {@link ComplexAction}.
+	 * 
+	 * @param action
+	 *            the action to check
+	 * @return {@code true} if this action is interesting, {@code false}
+	 *         otherwise.
 	 */
 	protected boolean checkInterest(AbstractAction action) {
 		return getInterestingPart(action) != null;
@@ -487,24 +509,28 @@ public abstract class AbstractInteractionComponent extends AbstractComponent
 	public void init() {
 		SimulationEngine.getInstance().getCommunicationHandler().register(this);
 	}
-	
+
 	/**
 	 * Getter for the interesting part of a provided action
-	 * @param action the action to extract the interesting part.
-	 * @return the action itself, if it's interesting, the current subaction if its a {@link ComplexAction} and the current subaction is interesting or {@code null} otherwise.
+	 * 
+	 * @param action
+	 *            the action to extract the interesting part.
+	 * @return the action itself, if it's interesting, the current subaction if
+	 *         its a {@link ComplexAction} and the current subaction is
+	 *         interesting or {@code null} otherwise.
 	 */
 	protected AbstractAction getInterestingPart(AbstractAction action) {
-		if(action == null) {
+		if (action == null) {
 			return null;
 		}
-		if(interestingActions.contains(action.getClass())) {
+		if (interestingActions.contains(action.getClass())) {
 			return action;
 		}
-		if(action instanceof ComplexAction) {
-			return getInterestingPart(((ComplexAction)action).getCurrentAction());
+		if (action instanceof ComplexAction) {
+			return getInterestingPart(((ComplexAction) action)
+					.getCurrentAction());
 		}
 		return null;
 	}
-	
 
 }

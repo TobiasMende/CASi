@@ -234,5 +234,21 @@ public abstract class AbstractComponent implements IPosition, Serializable {
 		}
 		return configurationMap.get(identifier);
 	}
+	
+	/**
+	 * Setter for the representating image
+	 * @param representation the representation to set
+	 */
+	public void setImageRepresentation(Image representation) {
+		this.representation = representation;
+	}
+	
+	/**
+	 * Getter for the representating image
+	 * @return the representation
+	 */
+	public Image getImageRepresentation() {
+		return representation;
+	}
 
 }

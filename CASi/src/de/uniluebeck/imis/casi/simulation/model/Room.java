@@ -112,7 +112,7 @@ public class Room implements IPosition {
 		if (polygonRepresentation == null) {
 			List<Point2D> points = getWallPoints();
 			// Adding startpoint again for providing a closed path
-			points.add(walls.get(0).getStartPoint());
+//			points.add(walls.get(0).getStartPoint());
 			int[] x = new int[points.size()];
 			int[] y = new int[points.size()];
 			for (int i = 0; i < x.length; i++) {

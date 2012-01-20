@@ -153,7 +153,7 @@ public class Rooms {
 				new Point(130, 290)));
 		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(130, 290),
 				new Point(130, 240)));
-		theNewDoor = new Door();
+		theNewDoor = new Door("women-restroom-door");
 		theNewWall = WallFactory.getWallWithPoints(new Point(130, 240),
 				new Point(100, 240));
 		theNewWall.addDoor(theNewDoor);
@@ -243,7 +243,7 @@ public class Rooms {
 				new Point(340, 80)));
 		theNewWall = WallFactory.getWallWithPoints(new Point(340, 80),
 				new Point(250, 80));
-		theNewWall.addDoor(new Door("rudis-south-soor", 80, 5));
+		theNewWall.addDoor(new Door("rudis-south-door", 80, 5));
 		theNewRoom.addWall(theNewWall);
 		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(250, 100),
 				new Point(250, 80)));
@@ -259,7 +259,7 @@ public class Rooms {
 				new Point(250, 0)));
 		theNewWall = WallFactory.getWallWithPoints(new Point(250, 0),
 				new Point(250, 80));
-		theNewWall.addDoor(new Door("rudis-west-soor",10, 5));
+		theNewWall.addDoor(new Door("rudis-west-door",10, 5));
 		theNewRoom.addWall(theNewWall);
 		theNewRoom.addWall(WallFactory.getWallWithPoints(new Point(250, 80),
 				new Point(340, 80)));

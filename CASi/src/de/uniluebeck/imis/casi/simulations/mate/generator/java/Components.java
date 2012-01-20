@@ -17,7 +17,6 @@ import de.uniluebeck.imis.casi.generator.RoomCollector;
 import de.uniluebeck.imis.casi.simulation.model.AbstractInteractionComponent.Face;
 import de.uniluebeck.imis.casi.simulation.model.Agent;
 import de.uniluebeck.imis.casi.simulation.model.Door;
-import de.uniluebeck.imis.casi.simulation.model.IPosition;
 import de.uniluebeck.imis.casi.simulation.model.Room;
 import de.uniluebeck.imis.casi.simulation.model.mackComponents.Cube;
 import de.uniluebeck.imis.casi.simulation.model.mackComponents.Desktop;
@@ -120,12 +119,17 @@ public class Components {
 		// Rudi Random
 		// ##########
 		a = ac.findAgentByName("Rudi Random");
-		for (Door d : ((Room) a.getDefaultPosition()).getDoors()) {
-			DoorLight dl = new DoorLight(d, (Room) a.getDefaultPosition(), a);
-			dl.setMonitoredArea(Face.WEST, 20, 180);
-			cc.newComponent(dl);
-			cc.newComponent(new DoorSensor(d, a));
-		}
+		Door door8 = RoomCollector.getInstance().findDoorByIdentifier("rudis-south-soor");
+		DoorLight doorlightRudi = new DoorLight(door8, (Room) a.getDefaultPosition(), a);
+		doorlightRudi.setMonitoredArea(Face.SOUTH, 20, 180);
+		cc.newComponent(doorlightRudi);
+		cc.newComponent(new DoorSensor(door8, a));
+		
+		Door door9 = RoomCollector.getInstance().findDoorByIdentifier("rudis-west-soor");
+		doorlightRudi = new DoorLight(door9, (Room) a.getDefaultPosition(), a);
+		doorlightRudi.setMonitoredArea(Face.WEST, 20, 180);
+		cc.newComponent(doorlightRudi);
+		cc.newComponent(new DoorSensor(door9, a));
 		
 		// ##########
 		// Susi Sekretärin

@@ -167,6 +167,14 @@ public class BackgroundPanel extends JPanel implements MouseListener {
 				if (viewSettings.isPaintSensorMonitoringArea()) {
 					g2D.fill(transform.createTransformedShape(interactionComp
 							.getShapeRepresentation()));
+					Color draw = new Color(ColorScheme.BLUE_DARK.getRed(),ColorScheme.BLUE_DARK.getGreen(), ColorScheme.BLUE_DARK.getBlue(), 80);
+					g.setColor(draw);
+					 float [] dashes = {2.0F, 2.0F, 2.0F};
+					g2D.setStroke(new BasicStroke (1.0F, BasicStroke.CAP_BUTT, 
+                            BasicStroke.JOIN_MITER, 
+                            10.0F, dashes, 0.F));
+					g2D.draw(transform.createTransformedShape(interactionComp
+							.getShapeRepresentation()));
 				}
 
 			}

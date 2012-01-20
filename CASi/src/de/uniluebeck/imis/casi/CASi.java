@@ -146,7 +146,7 @@ public class CASi {
 		System.out
 				.println("\t - d\tActivates the development mode. In this mode, all messages are written to the dev-log-file. (optional)");
 		System.out
-		.println("\t - h\tUse fancy html files instead of simple text for logging.");
+		.println("\t - h\tUse fancy html files instead of simple text for logging. (optional, don't use x)");
 		System.out
 				.println("\t - n\tDeactivates the GUI. In this mode, no gui is shown. (optional)");
 
@@ -154,7 +154,7 @@ public class CASi {
 				.println("\t - v\tActivates the verbose mode with much more output (optional)");
 		
 		System.out
-		.println("\t - x\tUse xml files for logging instead of simple text.");
+		.println("\t - x\tUse xml files for logging instead of simple text. (optional, don't use h");
 		// Complete Commands
 		System.out.println("\tThese commands can be used as described:");
 		System.out.println("\t --help (optional)");

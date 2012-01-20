@@ -52,6 +52,6 @@ public class ColorScheme {
 	/* C8C8FF */
 	public static Color BACKGROUND_GUI = new Color(215,215,255);
 	/* 4D80C6 */
-	public static Color SENSOR_AREA = new Color(77, 128, 198, 50);
+	public static Color SENSOR_AREA = new Color(77, 128, 198, 15);
 
 }

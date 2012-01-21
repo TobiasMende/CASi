@@ -41,7 +41,7 @@ import de.uniluebeck.imis.casi.simulation.model.World;
  * 
  */
 public class WorldGenerator implements IWorldGenerator {
-	
+
 	private static String SIMULATION_NAME = "MATe Demo Simulation";
 
 	private static final Logger log = Logger.getLogger(WorldGenerator.class
@@ -63,6 +63,8 @@ public class WorldGenerator implements IWorldGenerator {
 	@Override
 	public World generateWorld() {
 
+		// TODO: decide what to do with this. We dont use it anymore and for JAR
+		// generating this sucks even more!
 		// backroundimage
 		BufferedImage image = null;
 		try {
@@ -81,23 +83,23 @@ public class WorldGenerator implements IWorldGenerator {
 			tempWorld.setStartTime(new SimulationTime("4/23/2012 09:00:42"));
 			tempWorld.setBackgroundImage(image);
 
-			log.info(SIMULATION_NAME+": generating rooms");
+			CASi.SIM_LOG.info(SIMULATION_NAME + ": generating rooms");
 			Rooms.generateRooms();
 
-			log.info(SIMULATION_NAME+": generating agents");
+			CASi.SIM_LOG.info(SIMULATION_NAME + ": generating agents");
 			Agents.generateAgents();
 
-			log.info(SIMULATION_NAME+": generating components");
+			CASi.SIM_LOG.info(SIMULATION_NAME + ": generating components");
 			Components.fillOfficesWithDesktopThings();
 			Components.addLightsAndSensorsToDoors();
 			Components.generateActuators();
 			Components.generateSensors();
-			
-			log.info(SIMULATION_NAME+": generating actions");
+
+			CASi.SIM_LOG.info(SIMULATION_NAME + ": generating actions");
 			Actions.generateActions(tempWorld.getStartTime());
 			Actions.generateActionsPools(tempWorld.getStartTime());
 
-			log.info(SIMULATION_NAME+": linking new world");
+			CASi.SIM_LOG.info(SIMULATION_NAME + ": linking new world");
 			Linker linker = new Linker();
 			linker.linkAll();
 

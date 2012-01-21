@@ -39,6 +39,35 @@ Die Uhr basiert auf einem Timer-Thread, der alle $x$ Millisekunden auslöst. Wen
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Generatoren}\label{subsec:real_generator}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Für das Erstellen einer neuen Simulation reicht es aus, eine Simulationswelt (der Klasse \codeclass{World}) zu erzeugen. Dieser Vorgang wird als Generierung bezeichnet und von einem Generator realisiert.
+Ein Beispiel, wie eine solche erzeugt werden kann, ist in Kapitel  \ref{chapter:dialogs} an Hand der Demonstrationssimulation dargestellt.\\ 
+
+Aus Modularitätsgründen haben wir uns für das Konzept eines leicht austauschbaren Generators entschieden. Dafür wurde das Interface \codeinterface{IWorldGenerator} entworfen, welches nur eine Methode (\codemethod{generateWorld()}) definiert, die von allen konkreten Generatoren als Schnittstelle genutzt werden sollte.
+Darüber hinaus gibt es im Generatorpaket (\codeinline{de.uniluebeck.imis.casi.generator}) einige Helferklassen, deren Name mit \codeclass{Collector} gekennzeichnet ist und einen \codeclass{Linker}.\\
+
+Durch den gewählten Ansatz der starken Abstraktion ist es Möglich Simulationen auf die unterschiedlichsten Arten zu beschreiben ohne Änderungen am Simulator vornehmen zu müssen. Das von uns gewählte, da am kurzfristigsten umzusetzende, Vorgehen ist es, direkt aus Java-Klassen heraus die Objekte der Simulationswelt zu erzeugen und zu verknüpfen. Weitere Möglichkeiten wären:
+\begin{itemize}
+  \item{Beschreibungssprachen wie XML, YML oder JSon}
+  \item{Erzeugung durch eine eingebettete Skriptsprache wie LUA oder JRuby}
+\end{itemize}
+In einem frühen Konzept unserer Projektarbeit war insbesondere eine Beschreibung durch eine spezifizierte XML (Arbeitstitel: \codeinline{CASiX}) vorgesehen. Diese wurde jedoch im Laufe des Semesters wegen nicht unerheblichen Aufwand zurück gestellt. Da eine saubere und klare Schnittstelle definiert wurde, sehen wir aber keine Probleme darin, diese später (auch durch Dritte) hinzuzufügen.
+
+\subsubsection{Generierung durch Java-Code}\label{subsec:real_generator_java}
+Für das Erstellen einer neuen Simulation hat es sich als sinnvoll erwiesen, ein neues Paket zu erstellen und darin das \codeinterface{IWorld\-Generator} zu implementieren. Innerhalb dieses Paketes ist eine Aufteilung in weitere Klasse zu empfehlen.
+
+\begin{figure}[htb]
+  \begin{center}
+    \includegraphics[width=\textwidth]{pics/howToGenerateAWorld.png}
+  \end{center}
+  \caption{abgewandeltes UML-Klassendiagramm zur Darstellung der Aufteilung eines Generators}
+  \label{fig:howToGenerateAWorld}
+\end{figure}
+In Abbildung \ref{fig:howToGenerateAWorld} ist, exemplarisch an unserer Demosimulation, eine solche Aufteilung gezeigt.
+Dort zu sehen ins das untere Paket für die MATe-Simulation. Darin: der eigentliche \codeclass{World\-Generator}, welcher die zu generierenden Teile durch Aufrufe von statischen Methoden an die andere Klassen delegiert. Hier gezeigt durch gestrichelten blauen Linien.
+Die jeweilen Klassen (alle als \codeinline{static} deklariert), arbeiten dann die in ihnen beschriebenen Java-Ausdrücke ab.
+Daraus resultierende Objekte werden in den vom CASi-Kern bereitgestellten Kollektoren gesammelt (gestrichelte grüne Pfeile). Die Reihenfolge der Erzeugung ist besonders zu beachten, da für einige Objekte andere bereits vorhanden sein müssen. Es hat sich die Reihenfolge: erst Räume, dann Agenten, dann Sensoren und Aktuatoren und schlussendlich Aktionen etabliert.
+Wenn alle Erzeugerklassen abgearbeitet sind, ruft der \codeclass{World\-Generator} den \codeclass{Linker} auf. Dieser ist auch vom CASi-Kern bereitgestellt. Er übernimmt das Verknüpfen der Objekte Untereinander, so zum Beispiel das hinzufügen der für die Agenten erzeugten Aktionen in deren Todo-Liste.
+Als letzen Schritt nimmt der Generator alle Komponenten (rote Pfeile) und erzeugt daraus ein \codeclass{World}-Objekt.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Benutzungsschnittstellen}\label{subsec:real_interfaces}
@@ -57,7 +86,7 @@ Im Package \codeinline{.simulation.model.mackActions} befinden sich Aktionen, di
 Zu den wichtigsten allgemeinen Aktionen in unserer Implementierung zählen unter anderem:
 \begin{description}
 	\item[Move] Die \codeclass{Move}-Aktion dient dazu, die Position eines Agentens zu Ändern. Hierbei wird in der Initialisierung der Aktion nur das Ziel angegeben. Zum Zeitpunkt der Ausführung der Aktion wird automatisch der Weg zum Ziel berechnet und pro Iteration die Position um eine bestimmte Anzahl von Wegpunkten verändert. Dieser Aktion kann keine Dauer übergeben werden, da sie automatisch terminiert, wenn das Ziel erreicht wurde. Gibt es keinen Weg zum Ziel. Bricht die Aktion automatisch ab.
-	\item[Follow] Mit der \codeclass{Follow}-Aktion kann ein Agent einer  \codeclass{AbstractComponent}  folgen. Somit ist es möglich, dass ein Agent einem anderen während eines Gespräches folgt. Die Aktion hat keine spezifische Dauer, sondern wird erst dann beendet, wenn \codemethod{Follow.complete()} aufgerufen wird.
+	\item[Follow] Mit der \codeclass{Follow}-Aktion kann ein Agent einer  \codeclass{AbstractComponent}  folgen. Somit ist es möglich, dass ein Agent einem anderen während eines Gespräches folgt. Die Aktion hat keine spezifische Dauer, sondern wird erst dann beendet, wenn \codeclass{Follow}\codemethod{.complete()} aufgerufen wird.
 	\item[SpeakTo] Mit dieser Aktion kann ein Agent mit einem anderen Sprechen. Hierbei wird zunächst überprüft, ob beide Agenten im selben Raum sind. Außerdem wird überprüft, ob die Aktion des anderen Agentens eine Unterbrechung zulässt.
 	
 	Wenn der Agent unterbrechbar ist, wird ihm eine Aktion vom Typ \codeclass{Follow} in die \codeinline{interrupt\-List} gelegt, so dass der Agent für die Dauer des Gespräches dem Sprecher folgt und ebenfalls mit dem Gespräch beschäftigt ist. Dies verhindert, dass der andere Agent im Gespräch wegläuft. In der Methode \codeclass{SpeakTo}\codemethod{.postActionTask(AbstractComponent)} wird \codeclass{Follow}\codemethod{.complete()} aufgerufen und somit der Gesprächspartner wieder freigegeben.

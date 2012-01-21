@@ -61,7 +61,7 @@ Die SimulationClock repräsentiert die Zeit in der Simulation. Die Geschwindigke
 
 Klassen können das \codeclass{ISimulationClockListener}-Interface implementieren und sich bei der Clock als Listener registrieren, um über Events wie das Ticken der Uhr, das Pausieren, Starten und Stoppen der Simulation informiert zu werden.
 
-Die Engine hält die Welt (\codeclass{World}) bereit, welche die Konfiguration und das Verhalten der Simulation beschreibt. Darüber hinaus hält die Engine Referenzen auf den Kommunikationshandler, der in unserer Implementierung für die Kommunikation mit dem MACK Server zuständig ist.
+Die Engine hält die Welt (\codeclass{World}) bereit, welche die Konfiguration und das Verhalten der Simulation beschreibt. Darüber hinaus hält die Engine Referenzen auf den Kommunikationshandler, der in unserer Implementierung für die Kommunikation mit dem Awareness-Hub zuständig ist.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\imiscomment{Grobkonzeption eines einzelnen Moduls}
 
@@ -94,7 +94,7 @@ Aktionen können allgemein durch folgende Parameter spezifiziert werden:
 \end{description}
 Es gibt \codeclass{AtomicAction}s und \codeclass{ComplexAction}s, welche aus einer Liste von atomaren Aktionen bestehen können. Mit diesem Konstrukt lassen sich unter anderem Aktionen wie das aufsuchen und reden mit einer anderen Person (\codeclass{Agent}) beschreiben.
 
-Um eine neue Aktion zur Verfügung zu stellen, muss eine neue Klasse implementiert werden, die von einer der abstrakten Klassen \codeclass{AtomicAction} oder \codeclass{ComplexAction} erbt. Die eigentliche Aktion muss in der \texttt{internalPerform(AbstractComponent performer)}-Methode beschrieben werden. Sollten vor der ersten Ausführung der Aktion Konfigurationsschritte notwendig sein, können diese in der Methode \codemethod{preActionTask(AbstractComponent performer)} beschrieben werden. Analog dazu gibt es auch eine Methode \codemethod{postActionTask(AbstractComponent performer)}, die vom Framework aufgerufen wird, nachdem der Job erledigt wurde.
+Um eine neue Aktion zur Verfügung zu stellen, muss eine neue Klasse implementiert werden, die von einer der abstrakten Klassen \codeclass{AtomicAction} oder \codeclass{ComplexAction} erbt. Die eigentliche Aktion muss in der \codemethod{internalPerform(AbstractComponent performer)}-Methode beschrieben werden. Sollten vor der ersten Ausführung der Aktion Konfigurationsschritte notwendig sein, können diese in der Methode \codemethod{preActionTask(AbstractComponent performer)} beschrieben werden. Analog dazu gibt es auch eine Methode \codemethod{postActionTask(AbstractComponent performer)}, die vom Framework aufgerufen wird, nachdem der Job erledigt wurde.
 
 Wenn eine Dauer angegeben wurde, kümmert sich dass Simulationsframework um das Dekrementieren der Zeit, in diesem Fall muss die \codemethod{internalPerform(AbstractComponent performer)}-Methode immer \codeinline{false} zurückgeben. Sobald diese Methode \codeinline{true} zurückgibt, gilt die Aktion als erledigt und es wird im Falle einer komplexen Aktion mit der nächsten atomaren Aktion fortgefahren.
 
@@ -106,7 +106,7 @@ Aktionen müssen vom Generator erzeugt werden und einem oder mehreren Agenten hi
 Zur Aktionsverwaltung hat jeder Agent einen \codeinterface{IActionScheduler}, der im Konstruktor ausgetauscht werden kann. Die Aufgabe des Schedulers ist es, die Aktions-Sammlungen bereit zu halten. Das Konzept sieht vor, dass es für jeden Agenten drei Listen von Aktionen gibt:
 \begin{description}
 	\item[todoList] Diese Liste beinhaltet Aufgaben, die in jedem Fall während der Simulation entsprechend ihrer oben beschriebenen Parameter ausgeführt werden sollen.
-	\item[actionPool] Diese Menge enthält Aufgaben, die optional ausgeführt werden können, wenn der Agent gerade keine anderen Aufgaben zu erledigen hat.
+	\item[actionPool] Diese Menge enthält Aufgaben, die optional ausgeführt werden können, wenn der Agent gerade keine anderen Aufgaben zu erledigen hat. Wenn eine Aufgabe aus dem Pool abgeschlossen wird, wird diese nicht aus dem Pool entfern. So können sich wiederholenden Zufallsaktionen simuliert werden.
 	\item[interruptActionList] In diese Liste werden während der Simulation Aktionen eingeordnet, die in jedem Fall unmittelbar als nächste Aktionen ausgeführt werden müssen. Sinnvoll ist dies insbesondere dann, wenn ein Agent darauf angewiesen ist, dass ein anderer Agent mit ihm interagiert. Dem zweiten Agenten kann dann eine Aktion auf die Interuppt-Liste gesetzt werden, damit er unmittelbar bei der nächsten Gelegenheit mit dem ersten Agenten interagiert und keine anderen Aktionen vorzieht.
 \end{description}
 
@@ -131,7 +131,7 @@ In der spezifischen Simulation und dem \codeclass{MACKCommunicationHandler} sind
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Sensoren und Aktuatoren}\label{subsec:concept_actuators_sensors}
-Da Sensoren und Aktuatoren viele Gemeinsamkeiten aufweisen, müssen alle konkreten Sensoren und Aktuatoren von der abstrakten Klasse \codeclass{AbstractInteractionComponent} erben, die auch das \codeinterface{ICommunication\-Component}-Interface implementiert.
+Da Sensoren und Aktuatoren viele Gemeinsamkeiten aufweisen, erben alle konkreten Sensoren und Aktuatoren von der abstrakten Klasse \codeclass{AbstractInteractionComponent}, die auch das \codeinterface{ICommunication\-Component}-Interface implementiert.
 
 Beide Komponenten haben einen Bereich, in dem sie auf Aktivitäten reagieren oder bei den Agenten Aktivitäten auslösen können. Der Bereich kann als Ausrichtung (Blickrichtung), Öffnungswinkel und Radius definiert werden, indem der entsprechende Konstruktor verwendet wird. Werden diese Parameter nicht angegeben, wird der komplette Raum, in dem sich eine Komponente befindet überwacht. Mit der Methode \codemethod{setShapeRepresentation(Shape shape)} kann darüber hinaus eine beliebige Shape als Überwachungsbereich festgelegt werden.
 

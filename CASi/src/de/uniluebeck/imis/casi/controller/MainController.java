@@ -13,8 +13,6 @@ package de.uniluebeck.imis.casi.controller;
 
 import java.util.logging.Logger;
 
-import javax.swing.SwingUtilities;
-
 import de.uniluebeck.imis.casi.CASi;
 import de.uniluebeck.imis.casi.communication.ICommunicationHandler;
 import de.uniluebeck.imis.casi.generator.IWorldGenerator;

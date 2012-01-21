@@ -11,9 +11,6 @@
  */
 package de.uniluebeck.imis.casi.simulation.model.mackActions;
 
-import de.uniluebeck.imis.casi.CASi;
-import de.uniluebeck.imis.casi.simulation.model.AbstractComponent;
-import de.uniluebeck.imis.casi.simulation.model.Agent;
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.ComplexAction;
 import de.uniluebeck.imis.casi.simulation.model.actions.Move;
 import de.uniluebeck.imis.casi.simulation.model.mackComponents.Desktop;

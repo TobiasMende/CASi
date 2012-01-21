@@ -24,6 +24,11 @@ import de.uniluebeck.imis.casi.simulation.model.actionHandling.ComplexAction;
 public class GoAndStayThere extends ComplexAction {
 
 	/**
+	 * Yep, its a serial ID for serialisation.
+	 */
+	private static final long serialVersionUID = -9177707412265777453L;
+
+	/**
 	 * Creates this simple action that lets the Agent move to pos and stay there
 	 * for duration.
 	 * 

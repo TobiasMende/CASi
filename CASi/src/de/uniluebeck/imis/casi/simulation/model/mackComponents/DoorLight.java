@@ -236,9 +236,9 @@ public class DoorLight extends AbstractInteractionComponent {
 		while (iter.hasNext()) {
 			Point2D point = iter.next();
 			Set<Door> doorsInRoom = room.getDoors();
-			if(room.contains(point)) {
-				for(Door d : doorsInRoom) {
-					if(point.equals(d.getCentralPoint())) {
+			if (room.contains(point)) {
+				for (Door d : doorsInRoom) {
+					if (point.equals(d.getCentralPoint())) {
 						return true;
 					}
 				}
@@ -276,6 +276,14 @@ public class DoorLight extends AbstractInteractionComponent {
 	@Override
 	public String getHumanReadableValue() {
 		return currentState.toString();
+	}
+
+	/**
+	 * Returns a String, describing this doorLight.
+	 */
+	public String toString() {
+		return String.format("DoorLight @ %s: %s", door.toString(),
+				currentState.toString());
 	}
 
 	@Override

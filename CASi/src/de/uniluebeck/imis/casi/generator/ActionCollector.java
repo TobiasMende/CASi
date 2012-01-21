@@ -12,11 +12,6 @@
 package de.uniluebeck.imis.casi.generator;
 
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.Vector;
-
-import de.uniluebeck.imis.casi.simulation.model.Agent;
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.AbstractAction;
 
 /**

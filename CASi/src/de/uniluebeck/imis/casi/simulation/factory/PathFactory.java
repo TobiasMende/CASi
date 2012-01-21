@@ -251,6 +251,7 @@ public class PathFactory {
 	 *            the end position
 	 * @return a path that describes the way
 	 */
+	//TODO: do we really not need this? Warns about being not used...
 	private static Path findPathInRoom(IPosition start, IPosition end) {
 		LinkedList<Room> rooms = WorldFactory.getRoomsWithPoint(start
 				.getCentralPoint());

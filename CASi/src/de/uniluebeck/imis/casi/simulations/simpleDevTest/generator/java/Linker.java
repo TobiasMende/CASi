@@ -17,7 +17,6 @@ import java.util.logging.Logger;
 import de.uniluebeck.imis.casi.generator.ActionCollector;
 import de.uniluebeck.imis.casi.generator.AgentCollector;
 import de.uniluebeck.imis.casi.simulation.model.Agent;
-import de.uniluebeck.imis.casi.simulation.model.actionHandling.AbstractAction;
 
 /**
  * A simulation Linker links all previously created rooms, agents, actions and

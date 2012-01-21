@@ -101,7 +101,6 @@ public final class Actions {
 				"womensRestroom");
 
 		AbstractAction tempAction = new Move(womensRoom);
-		AbstractAction move2 = tempAction.clone();
 
 		tempAction.setType(TYPE.NORMAL);
 		tempAction.setPriority(5);
@@ -131,7 +130,6 @@ public final class Actions {
 	 * @param startTime
 	 */
 	public static void generateActionsPools(SimulationTime startTime) {
-		// TODO FILL ME!
 
 	}
 }

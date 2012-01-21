@@ -12,10 +12,6 @@
 package de.uniluebeck.imis.casi.simulations.mate.generator.java;
 
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
 import java.util.logging.Logger;
 
 import de.uniluebeck.imis.casi.generator.ActionCollector;
@@ -24,10 +20,8 @@ import de.uniluebeck.imis.casi.generator.ComponentCollector;
 import de.uniluebeck.imis.casi.generator.RoomCollector;
 import de.uniluebeck.imis.casi.simulation.model.AbstractComponent;
 import de.uniluebeck.imis.casi.simulation.model.Agent;
-import de.uniluebeck.imis.casi.simulation.model.Room;
 import de.uniluebeck.imis.casi.simulation.model.SimulationTime;
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.AbstractAction;
-import de.uniluebeck.imis.casi.simulation.model.actionHandling.AbstractAction.TYPE;
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.ComplexAction;
 import de.uniluebeck.imis.casi.simulation.model.actions.CreateAMeeting;
 import de.uniluebeck.imis.casi.simulation.model.actions.GoAndSpeakTo;
@@ -35,7 +29,6 @@ import de.uniluebeck.imis.casi.simulation.model.actions.GoAndStayThere;
 import de.uniluebeck.imis.casi.simulation.model.actions.Move;
 import de.uniluebeck.imis.casi.simulation.model.actions.StayHere;
 import de.uniluebeck.imis.casi.simulation.model.mackActions.GoAndWorkOnDesktop;
-import de.uniluebeck.imis.casi.simulation.model.mackActions.WorkOnDesktop;
 import de.uniluebeck.imis.casi.simulation.model.mackComponents.Desktop;
 
 /**

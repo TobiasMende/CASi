@@ -13,7 +13,6 @@ package de.uniluebeck.imis.casi.simulation.engine;
 
 import de.uniluebeck.imis.casi.CASi;
 import de.uniluebeck.imis.casi.communication.ICommunicationHandler;
-import de.uniluebeck.imis.casi.simulation.model.AbstractInteractionComponent;
 import de.uniluebeck.imis.casi.simulation.model.World;
 
 /**

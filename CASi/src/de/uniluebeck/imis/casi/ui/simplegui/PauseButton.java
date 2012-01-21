@@ -16,11 +16,10 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.logging.Logger;
-
 import javax.swing.JButton;
 import javax.swing.SwingUtilities;
 
+import de.uniluebeck.imis.casi.CASi;
 import de.uniluebeck.imis.casi.simulation.engine.SimulationClock;
 
 /**
@@ -34,8 +33,6 @@ import de.uniluebeck.imis.casi.simulation.engine.SimulationClock;
 @SuppressWarnings("serial")
 public class PauseButton extends JButton implements ActionListener {
 	
-	private static final Logger log = Logger.getLogger(
-			PauseButton.class.getName());
 	
 	/**
 	 * Constructor of PauseButton sets preferred size and adds itself as ActionListener.
@@ -89,7 +86,7 @@ public class PauseButton extends JButton implements ActionListener {
 				/** If simulation is running */
 				if(!SimulationClock.getInstance().isPaused()) {
 					
-					log.info("Pause simulation");
+					CASi.SIM_LOG.info("Pause simulation");
 					
 					/** Set simulation clock paused */
 					SimulationClock.getInstance().setPaused(true);
@@ -97,7 +94,7 @@ public class PauseButton extends JButton implements ActionListener {
 					/** If simulation is paused */
 				} else if(SimulationClock.getInstance().isPaused()) {
 					
-					log.info("Resume simulation");
+					CASi.SIM_LOG.info("Resume simulation");
 					
 					/** Set simulation clock resumed */
 					SimulationClock.getInstance().setPaused(false);

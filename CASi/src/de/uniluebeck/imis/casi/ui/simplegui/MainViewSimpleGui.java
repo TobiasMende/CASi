@@ -28,7 +28,9 @@ import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.SwingUtilities;
 
+import de.uniluebeck.imis.casi.CASi;
 import de.uniluebeck.imis.casi.controller.IUIController;
+import de.uniluebeck.imis.casi.simulation.engine.SimulationClock;
 import de.uniluebeck.imis.casi.ui.IMainView;
 
 /**
@@ -99,8 +101,8 @@ public class MainViewSimpleGui extends JFrame implements IMainView,
 		this.simPanel.paintSimulationComponents(this.informationPanel);
 
 		/** Set agents, sensor and actuators in the information combo box */
-		this.informationPanel
-				.setInformationComboBox(simPanel.getSimulationComponents());
+		this.informationPanel.setInformationComboBox(simPanel
+				.getSimulationComponents());
 
 		/**
 		 * Set the listener (background panel of simulation panel) of the view
@@ -123,24 +125,12 @@ public class MainViewSimpleGui extends JFrame implements IMainView,
 		menuBar.setBackground(ColorScheme.BACKGROUND_GUI);
 
 		/** Configure save item */
-		JMenuItem stopItem = new JMenuItem("Stop Simulation");
-		stopItem.setActionCommand("stop");
-		stopItem.addActionListener(this);
-		mainMenu.add(stopItem);
-		mainMenu.addSeparator();
-
-		/** Configure save item */
-		JMenuItem saveItem = new JMenuItem("Save...");
-		saveItem.setActionCommand("save");
-		saveItem.addActionListener(this);
-		mainMenu.add(saveItem);
-
-		/** Configure load item */
-		JMenuItem loadItem = new JMenuItem("Load...");
-		loadItem.setActionCommand("load");
-		loadItem.addActionListener(this);
-		mainMenu.add(loadItem);
-		mainMenu.addSeparator();
+		// for now we dont have these things!
+//		JMenuItem stopItem = new JMenuItem("Stop Simulation");
+//		stopItem.setActionCommand("stop");
+//		stopItem.addActionListener(this);
+//		mainMenu.add(stopItem);
+//		mainMenu.addSeparator();
 
 		/** Configure close item */
 		JMenuItem closeItem = new JMenuItem("Exit");
@@ -170,7 +160,7 @@ public class MainViewSimpleGui extends JFrame implements IMainView,
 
 		/** New InformationPanel */
 		informationPanel = new InformationPanel();
-		
+
 		splitPane = new JSplitPane();
 		splitPane.setLeftComponent(centerPanel);
 		splitPane.setRightComponent(informationPanel);
@@ -181,7 +171,7 @@ public class MainViewSimpleGui extends JFrame implements IMainView,
 		this.add(splitPane, BorderLayout.CENTER);
 		this.add(menuBar, BorderLayout.NORTH);
 		this.add(clockViewPanel, BorderLayout.SOUTH);
-		
+
 		this.addComponentListener(this);
 	}
 
@@ -191,29 +181,10 @@ public class MainViewSimpleGui extends JFrame implements IMainView,
 		/**
 		 * Set actions of the main menu
 		 */
-
-		if (arg0.getActionCommand().equals("stop")) {
-
-			/*
-			 * TODO Stop option
-			 */
-
-		} else if (arg0.getActionCommand().equals("save")) {
+		if (arg0.getActionCommand().equals("close")) {
 
 			/*
-			 * TODO Save option
-			 */
-
-		} else if (arg0.getActionCommand().equals("load")) {
-
-			/*
-			 * TODO Load option
-			 */
-
-		} else if (arg0.getActionCommand().equals("close")) {
-
-			/*
-			 * TODO Want to save?
+			 * sorry, there is no "save".
 			 */
 
 			System.exit(0);
@@ -223,24 +194,24 @@ public class MainViewSimpleGui extends JFrame implements IMainView,
 
 	@Override
 	public void componentHidden(ComponentEvent e) {
-		
+
 	}
-	
+
 	@Override
 	public void componentMoved(ComponentEvent e) {
-		
+
 	}
 
 	@Override
 	public void componentResized(ComponentEvent e) {
-		
+
 		splitPane.setDividerLocation(this.getWidth() - 317);
-		
+
 	}
 
 	@Override
 	public void componentShown(ComponentEvent e) {
-		
+
 	}
 
 }

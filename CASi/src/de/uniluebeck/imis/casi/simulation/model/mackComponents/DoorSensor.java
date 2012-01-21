@@ -14,6 +14,7 @@ package de.uniluebeck.imis.casi.simulation.model.mackComponents;
 import java.util.HashMap;
 import java.util.Map;
 
+import de.uniluebeck.imis.casi.CASi;
 import de.uniluebeck.imis.casi.communication.mack.MACKProtocolFactory;
 import de.uniluebeck.imis.casi.simulation.engine.SimulationEngine;
 import de.uniluebeck.imis.casi.simulation.model.AbstractInteractionComponent;
@@ -56,6 +57,8 @@ public class DoorSensor extends AbstractInteractionComponent implements
 		default:
 			value = 0;
 		}
+		CASi.SIM_LOG.info(String.format("%s: changed state to %s",this.toString(), newState.toString()));
+		
 		Map<String,String> values = new HashMap<String, String>();
 		values.put("doorstate", Integer.toString(value));
 		String message = MACKProtocolFactory.generatePushMessage(agent, "doorsensor", values);

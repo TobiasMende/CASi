@@ -15,6 +15,7 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import de.uniluebeck.imis.casi.CASi;
 import de.uniluebeck.imis.casi.communication.ICommunicationHandler;
 import de.uniluebeck.imis.casi.communication.mack.MACKProtocolFactory;
 import de.uniluebeck.imis.casi.simulation.engine.SimulationEngine;
@@ -72,6 +73,7 @@ public class DropZone extends AbstractInteractionComponent {
 			agentKeys.add(agent);
 			createAndSendMessage();
 		}
+		CASi.SIM_LOG.info(String.format("%s put his key to %s", agent.toString(), this.toString()));
 	}
 
 	/**
@@ -85,6 +87,7 @@ public class DropZone extends AbstractInteractionComponent {
 			agentKeys.remove(agent);
 			createAndSendMessage();
 		}
+		CASi.SIM_LOG.info(String.format("%s removed his key from %s", agent.toString(), this.toString()));
 	}
 
 	/**

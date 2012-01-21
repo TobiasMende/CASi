@@ -13,6 +13,7 @@ package de.uniluebeck.imis.casi.communication.comLogger;
 
 import java.util.logging.Logger;
 
+import de.uniluebeck.imis.casi.CASi;
 import de.uniluebeck.imis.casi.communication.ICommunicationComponent;
 import de.uniluebeck.imis.casi.communication.ICommunicationHandler;
 
@@ -38,7 +39,9 @@ public class CommunicationLogger implements ICommunicationHandler {
 
 	@Override
 	public boolean send(ICommunicationComponent sender, Object message) {
-		log.info(sender + " has send a message: " + message);
+		if(CASi.VERBOSE){
+			log.info(sender + " has send a message: " + message);			
+		}
 		return true;
 	}
 

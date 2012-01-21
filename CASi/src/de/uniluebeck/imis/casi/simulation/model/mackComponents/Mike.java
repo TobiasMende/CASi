@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.Random;
 import java.util.logging.Logger;
 
+import de.uniluebeck.imis.casi.CASi;
 import de.uniluebeck.imis.casi.communication.mack.MACKProtocolFactory;
 import de.uniluebeck.imis.casi.simulation.engine.SimulationClock;
 import de.uniluebeck.imis.casi.simulation.engine.SimulationEngine;
@@ -92,15 +93,16 @@ public class Mike extends AbstractInteractionComponent {
 		interestingActions.add(HaveAMeeting.class);
 		setShapeRepresentation(room.getShapeRepresentation());
 		SimulationClock.getInstance().addListener(this);
-		PULL_INTERVALL  = 30;
+		PULL_INTERVALL = 30;
 		type = Type.SENSOR;
 		this.agent = agent;
 	}
 
 	@Override
 	protected boolean handleInternal(AbstractAction action, Agent agent) {
-		if(action instanceof HaveAMeeting) {
+		if (action instanceof HaveAMeeting) {
 			System.out.println();
+			// TODO: what is this? I dont even...
 		}
 		if (messageToSend == null) {
 			AbstractAction interestingPart = getInterestingPart(action);
@@ -113,6 +115,10 @@ public class Mike extends AbstractInteractionComponent {
 				values.put("speaker1", agent.toString());
 				values.put("speaker2", ((SpeakTo) interestingPart).getAgent()
 						.toString());
+				CASi.SIM_LOG.info(String.format(
+						"%s has detected voices of %s and %s", this.toString(),
+						agent.toString(), ((SpeakTo) interestingPart)
+								.getAgent().toString()));
 			} else if (interestingPart instanceof HaveAMeeting) {
 				HaveAMeeting meeting = (HaveAMeeting) interestingPart;
 				Random rand = new Random(System.currentTimeMillis());
@@ -127,9 +133,13 @@ public class Mike extends AbstractInteractionComponent {
 				}
 				values.put("speaker1", meeting.getAgentsInMeeting().get(first));
 				values.put("speaker2", meeting.getAgentsInMeeting().get(second));
+				CASi.SIM_LOG.info(String.format(
+						"%s has detected voices of %s and %s", this.toString(),
+						meeting.getAgentsInMeeting().get(first), meeting
+								.getAgentsInMeeting().get(second)));
 
 			} else {
-				log.warning("Unimplemented Case for action: "+interestingPart);
+				log.warning("Unimplemented Case for action: " + interestingPart);
 				return true;
 			}
 
@@ -144,6 +154,7 @@ public class Mike extends AbstractInteractionComponent {
 	protected boolean checkInterest(Agent agent) {
 		return true;
 	}
+
 	@Override
 	public String getHumanReadableValue() {
 		StringBuffer buf = new StringBuffer();
@@ -172,7 +183,7 @@ public class Mike extends AbstractInteractionComponent {
 			/* Send delay (speak-time) of 10 till 120 seconds */
 			clockTickCounter = 1;
 			Random rand = new Random(System.currentTimeMillis());
-			PULL_INTERVALL = 10+rand.nextInt(110);
+			PULL_INTERVALL = 10 + rand.nextInt(110);
 		}
 	}
 

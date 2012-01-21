@@ -14,6 +14,7 @@ package de.uniluebeck.imis.casi.simulation.model.mackComponents;
 import java.awt.geom.Point2D;
 import java.util.HashMap;
 
+import de.uniluebeck.imis.casi.CASi;
 import de.uniluebeck.imis.casi.communication.mack.MACKProtocolFactory;
 import de.uniluebeck.imis.casi.simulation.engine.SimulationEngine;
 import de.uniluebeck.imis.casi.simulation.model.AbstractInteractionComponent;
@@ -82,6 +83,7 @@ public class Desktop extends AbstractInteractionComponent {
 	 *            the initial frequency
 	 */
 	public void work(Program program, Frequency frequency) {
+		CASi.SIM_LOG.info(String.format("%s now working %s with %s",this.toString(),frequency,program));
 		this.currentFrequency = frequency;
 		this.currentProgram = program;
 		send();

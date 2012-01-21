@@ -24,6 +24,7 @@ import de.uniluebeck.imis.casi.CASi;
 import de.uniluebeck.imis.casi.generator.AgentCollector;
 import de.uniluebeck.imis.casi.generator.ComponentCollector;
 import de.uniluebeck.imis.casi.generator.IWorldGenerator;
+import de.uniluebeck.imis.casi.generator.Linker;
 import de.uniluebeck.imis.casi.generator.RoomCollector;
 import de.uniluebeck.imis.casi.simulation.model.AbstractComponent;
 import de.uniluebeck.imis.casi.simulation.model.SimulationTime;

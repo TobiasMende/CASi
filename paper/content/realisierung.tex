@@ -45,12 +45,12 @@ Ein Beispiel, wie eine solche erzeugt werden kann, ist in Kapitel  \ref{chapter:
 Aus Modularitätsgründen haben wir uns für das Konzept eines leicht austauschbaren Generators entschieden. Dafür wurde das Interface \codeinterface{IWorldGenerator} entworfen, welches nur eine Methode (\codemethod{generateWorld()}) definiert, die von allen konkreten Generatoren als Schnittstelle genutzt werden sollte.
 Darüber hinaus gibt es im Generatorpaket (\codeinline{de.uniluebeck.imis.casi.generator}) einige Helferklassen, deren Name mit \codeclass{Collector} gekennzeichnet ist und einen \codeclass{Linker}.\\
 
-Durch den gewählten Ansatz der starken Abstraktion ist es Möglich Simulationen auf die unterschiedlichsten Arten zu beschreiben ohne Änderungen am Simulator vornehmen zu müssen. Das von uns gewählte, da am kurzfristigsten umzusetzende, Vorgehen ist es, direkt aus Java-Klassen heraus die Objekte der Simulationswelt zu erzeugen und zu verknüpfen. Weitere Möglichkeiten wären:
+Durch den gewählten Ansatz der starken Abstraktion ist es möglich Simulationen auf die unterschiedlichsten Arten zu beschreiben ohne Änderungen am Simulator vornehmen zu müssen. Das von uns gewählte, am kurzfristigsten umzusetzende Vorgehen ist es, direkt aus Java-Klassen heraus die Objekte der Simulationswelt zu erzeugen und zu verknüpfen. Weitere Möglichkeiten wären:
 \begin{itemize}
   \item{Beschreibungssprachen wie XML, YML oder JSon}
   \item{Erzeugung durch eine eingebettete Skriptsprache wie LUA oder JRuby}
 \end{itemize}
-In einem frühen Konzept unserer Projektarbeit war insbesondere eine Beschreibung durch eine spezifizierte XML (Arbeitstitel: \codeinline{CASiX}) vorgesehen. Diese wurde jedoch im Laufe des Semesters wegen nicht unerheblichen Aufwand zurück gestellt. Da eine saubere und klare Schnittstelle definiert wurde, sehen wir aber keine Probleme darin, diese später (auch durch Dritte) hinzuzufügen.
+In einem frühen Konzept unserer Projektarbeit war insbesondere eine Beschreibung durch eine spezifizierte XML (Arbeitstitel: \codeinline{CASiX}) vorgesehen. Diese wurde jedoch im Laufe des Semesters wegen nicht unerheblichen Aufwand zurückgestellt. Da eine saubere und klare Schnittstelle definiert wurde, sehen wir aber keine Probleme darin, diese später (auch durch Dritte) hinzuzufügen.
 
 \subsubsection{Generierung durch Java-Code}\label{subsec:real_generator_java}
 Für das Erstellen einer neuen Simulation hat es sich als sinnvoll erwiesen, ein neues Paket zu erstellen und darin das \codeinterface{IWorld\-Generator} zu implementieren. Innerhalb dieses Paketes ist eine Aufteilung in weitere Klasse zu empfehlen.
@@ -63,16 +63,80 @@ Für das Erstellen einer neuen Simulation hat es sich als sinnvoll erwiesen, ein
   \label{fig:howToGenerateAWorld}
 \end{figure}
 In Abbildung \ref{fig:howToGenerateAWorld} ist, exemplarisch an unserer Demosimulation, eine solche Aufteilung gezeigt.
-Dort zu sehen ins das untere Paket für die MATe-Simulation. Darin: der eigentliche \codeclass{World\-Generator}, welcher die zu generierenden Teile durch Aufrufe von statischen Methoden an die andere Klassen delegiert. Hier gezeigt durch gestrichelten blauen Linien.
-Die jeweilen Klassen (alle als \codeinline{static} deklariert), arbeiten dann die in ihnen beschriebenen Java-Ausdrücke ab.
-Daraus resultierende Objekte werden in den vom CASi-Kern bereitgestellten Kollektoren gesammelt (gestrichelte grüne Pfeile). Die Reihenfolge der Erzeugung ist besonders zu beachten, da für einige Objekte andere bereits vorhanden sein müssen. Es hat sich die Reihenfolge: erst Räume, dann Agenten, dann Sensoren und Aktuatoren und schlussendlich Aktionen etabliert.
-Wenn alle Erzeugerklassen abgearbeitet sind, ruft der \codeclass{World\-Generator} den \codeclass{Linker} auf. Dieser ist auch vom CASi-Kern bereitgestellt. Er übernimmt das Verknüpfen der Objekte Untereinander, so zum Beispiel das hinzufügen der für die Agenten erzeugten Aktionen in deren Todo-Liste.
-Als letzen Schritt nimmt der Generator alle Komponenten (rote Pfeile) und erzeugt daraus ein \codeclass{World}-Objekt.
+Dort ist das untere Paket für die MATe-Simulation zu sehen. Darin: der eigentliche \codeclass{World\-Generator}, welcher die zu generierenden Teile durch Aufrufe von statischen Methoden an die andere Klassen delegiert. Hier gezeigt durch gestrichelten blauen Linien.
+Die jeweiligen Klassen (alle als \codeinline{static} deklariert), arbeiten dann die in ihnen beschriebenen Java-Ausdrücke ab.
+Daraus resultierende Objekte werden in den, vom CASi-Kern bereitgestellten, Kollektoren gesammelt (gestrichelte grüne Pfeile). Die Reihenfolge der Erzeugung ist besonders zu beachten, da für einige Objekte andere bereits vorhanden sein müssen. Es hat sich die Reihenfolge: erst Räume, dann Agenten, dann Sensoren und Aktuatoren und schlussendlich Aktionen etabliert.
+Wenn alle Erzeugerklassen abgearbeitet sind, ruft der \codeclass{World\-Generator} den \codeclass{Linker} auf. Dieser ist auch vom CASi-Kern bereitgestellt. Er übernimmt das Verknüpfen der Objekte untereinander, so zum Beispiel das Hinzufügen der für die Agenten erzeugten Aktionen in deren Todo-Liste.
+Als letzten Schritt nimmt der Generator alle Komponenten (rote Pfeile) und erzeugt daraus ein \codeclass{World}-Objekt.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Benutzungsschnittstellen}\label{subsec:real_interfaces}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+Als Benutzungsschnittstelle für den Simulator haben wir die \textit{Simple GUI} entwickelt. Diese soll die simulierte Welt grafisch darstellen und es ermöglichen gewünschte Informationen abzurufen. Wir wollten, dass diese Benutzungsschnittstelle sowohl für die späteren Hauptbenutzer, die Simulationen testen, viele Funktionen bietet, aber auch für Benutzer verständlich ist, die von dem System noch keine fortgeschrittenen Kenntnisse haben. Zum Beispiel könnte es auch benutzt werden, um anderen das MACK Framework zu präsentieren und zu veranschaulichen.
+
+Die \textit{Simple GUI} ist eines der Module des Simulators, die sich leicht durch ein passendes Anderes ersetzen lassen. Wenn also beispielsweise die angezeigten Informationen nicht ausreichend oder für bestimmte Simulationen überflüssig und deshalb störend sind, kann man die Benutzungsschnittstelle austauschen. Realisiert wird dies durch das Interface \codeinterface{IMainView}, die neue Schnittstelle muss bei der Implementierung dieses Interface benutzen.
+
+Für die graphische Oberfläche benutzen wir die Swingbibliothek, da wir aus dem Praktikum \textit{Software-Technik} einige Erfahrung damit haben.
+
+Die \textit{Simple GUI} ist aufgebaut, wie in Abbildung \ref{fig:screen} zu sehen ist. Im Simulationsbereich (rot) wird die simulierte Welt gezeichnet. Der Informationsbereich (grün) an der rechten Seite bietet dem Benutzer die Möglichkeit detaillierte Informationen über Simulationskomponenten abzufragen. Zwischen dem Simulationsbereich und dem Informationsbereich befindet sich ein verschiebbare Trennung. Der Steuerungsbereich (blau) im unteren Teil lässt den Benutzer eingeschränkt Einfluss auf die Simulation nehmen. Die Menüleiste (gelb) im oberen Bildbereich bietet einige grundlegende Programmfunktionen. Letztere sollte in einem im Fenster ausgeführten Programm nicht fehlen, da sie den meisten Benutzern vertraut ist und ihr Fehlen für eine gewisse Hilflosigkeit sorgen könnte. 
+
+\begin{figure}[htb]
+  \begin{center}
+    \includegraphics[width=\textwidth]{pics/screen2.png}
+  \end{center}
+  \caption{Screenshot der Anwendung}
+  \label{fig:screen}
+\end{figure}
+
+Der Simulationsbereich besteht aus einem \codeclass{JLayeredPane} auf diesem wiederum gibt es drei Ebenen:
+
+\begin{itemize}
+\item Ebene 1: Auf der tiefsten Ebene wird der Hintergrund gezeichnet. Dazu gehören die Räume mit ihren Wänden und Türen und die Einflussbereiche der Sensoren. Außerdem werden einige weitere, für Debugging wichtige Elemente dargestellt, wie die zentralen Punkte der Räume und der Türen. Ebenfalls auf dieser Ebene liegen die Labels für Sensoren, Räume und Türen. In ungünstigen Fällen können sich die Bezeichner im Simulationsbereich überschneiden. Da aber die Identifizierung der Komponenten trotzdem möglich ist und die Berechnung für Bezeichnerposition und -größe für beliebige Simulationen recht schwierig ist, haben wir uns entschieden, das Problem zu vernachlässigen.
+
+\item Ebene 2: Auf dieser Ebene liegen die Sensoren und Aktuatoren. Diese sind ein wesentlicher Bestandteil der Simulation und sollen deshalb nicht durch Teile des Hintergrundes verdeckt werden. Jedes dieser Komponenten wird dargestellt mit Hilfe der Klasse \codeclass{InteractionComponentView}, die von \codeclass{ComponentView} erbt, welche wiederum ein \codeclass{JComponent} ist. Ein Sensor oder Aktuator wird gezeichnet als ein Quadrat mit der Hintergrundfarbe der Simulation. Da die Sensoren und Aktuatoren beliebig viele Zustände annehmen können, haben wir darauf verzichtet zu implementieren, dass ihr Zustand an der Färbung erkennbar ist.
+
+\item Ebene 3: Auf der obersten Ebene befinden sich die Agenten. Diese haben wir als wichtigstes Bestandteil der Simulation eingestuft, deshalb sollen sie durch nichts Anderes überdeckt werden. Jeder Agent wird dargestellt mittels der von uns implementierten Klasse \codeclass{AgentView}, die ebenfalls von \codeclass{ComponentView} erbt. Die Klasse \codeclass{AgentView} implementiert das Interface \codeinterface{IAgentListener}. Mit den Methoden \codemethod{stateChanged(STATE newState, Agent agent)} und \codemethod{positionChanged(Point2D oldPosition, Point2D newPosition, Agent agent)} erkennt diese Komponente, ob sich der Status oder die Position des Agenten verändert hat und zeichnet sich entsprechend neu. Agenten werden als Kreise gezeichnet, ihre Farbe entspricht ihrem Zustand, so bedeutet \textit{rot} zum Beispiel, dass der Agent gerade beschäftigt ist.
+\end{itemize} 
+
+Um den Simulationsbereich gut auszunutzen, skaliert sich die gezeichnete, simulierte Welt automatisch so, dass sie möglichst groß angezeigt wird.
+
+Im Simulationsbereich gibt es einige Interaktionsmöglichkeiten. Verschiedene Teile der Simulation können per Mausklick ausgewählt werden, über diese Komponenten werden dann weitere Informationen angezeigt. Zu diesen Interaktionselementen gehören:
+
+\begin{itemize}
+\item Agenten:  Wenn diese Komponente angeklickt wurde, wird sie als \textit{markiert} gesetzt. Äußerlich erkennt man das daran, dass sie größer gezeichnet wird als die Anderen. Zur Zeit kann nur eine Komponente markiert sein, das bedeutet, wenn eine neue Komponente markiert wird, wird bei der alten die Markierung gelöscht.
+
+\item Sensoren/Aktuatoren:  Auch diese Komponente wird markiert, wenn sie angeklickt wurde und wird dann größer gezeichnet.
+
+\item Räume: Für die Darstellung der Räume gibt es keine eigene Klasse, weil die Darstellung sich während der Simulation nicht verändert. Um Extrainformationen zu Räumen zu bekommen, muss auf die entsprechende Stelle auf dem Hintergrund geklickt werden.
+\end{itemize} 
+
+Ein Problem war, dass sich die Sensoren, Aktuatoren und Agenten, die in den meisten Fälle auf zentralen Punkte der Räume gezeichnet werden, sich überlappen und dann nicht mehr anklickbar waren. Um die Anzeige der Simulation zu optimieren, werden diese Komponenten nun in einem Kreis um die Mittelpunkte der Räume angeordnet. Auf diese Weise können sie ohne Probleme selektiert werden.
+
+Der Informationsbereich dient zur Darstellung detaillierter Informationen zu bestimmten Komponenten der Simulation. Im oberen Bereich befindet sich eine Auswahlmöglichkeit (\codeclass{JComboBox}). Hier sind alle Agenten beziehungsweise Sensoren/Aktuatoren, die beiden Gruppen mit Trennzeichen separiert, vom Benutzer auswählbar. Die Auswahl einer Komponente ist gleichbedeutend mit einem Mausklick auf die Komponente, sie wird also auf markiert gesetzt. Im oberen Informationsbereich werden die Informationen zum aktuell markierten Agenten, Sensor oder Aktuator angezeigt. Im unteren Informationsbereich werden Informationen zum zuletzt angeklickten Raum angegeben (beim Starten des Programmes ist dieser Bereich leer).
+
+Der Steuerungsbereich gibt dem Benutzer die Möglichkeit Einfluss auf die laufende Simulation zu nehmen. Links befindet sich die Anzeige der Zeit und des Datums der Simulation, anhand derer der Benutzer erkennt wie weit die Simulation fortgeschritten ist. Um die Simulationsgeschwindigkeit zu verändern, befindet sich in der Mitte ein Schieberegler (\codeclass{JSlider}). Wir haben uns hier für einen Schieberegler entschieden, um einfach die minimale und maximale Simulationsgeschwindigkeit einhalten zu können. Der Schieberegler hat eine quadratische Skala, um sinnvolle Verhältnisse zwischen den Einteilungen des Reglers zu schaffen. Rechts befindet sich noch ein Pausebutton zum Pausieren der Simulation. Wir benutzten hier die Metapher des Audiospielers, mit den bekannten Symbolen für \textit{Pause} und \textit{Wiedergabe}.
+
+Die Menüleiste beinhaltet zwei Menüs. Unter dem Bezeichner \textit{Menu} werden grundlegende Programmfunktionen angeboten:
+\begin{itemize}
+
+\item \textit{Pause/Resume}: Dieser Menüpunkt hat die gleiche Funktion wie der Pausebutton im Steuerungsbereich. Er pausiert die Simulation oder setzt sie fort.
+
+\item \textit{Exit}: Dieser Menüpunkt beendet das Programm.
+\end{itemize}
+
+In dem Menü \textit{View} lassen sich Einstellungen zur Anzeige im Simulationsbereich machen. Es können folgende Einstellungen gemacht werden:
+\begin{itemize}
+
+\item \textit{Show sensors/actuators}: Blendet die vorhandenen Sensoren und Aktuatoren ein oder aus.
+\item \textit{Show sensor/actuator area}: Blendet die Einflussbereiche der Sensoren und Aktuatoren ein oder aus.
+\item \textit{Show sensor/actuator labels}: Blendet die Namen sowie einige Statusinformationen zu den Sensoren und Aktuatoren ein oder aus.
+\item \textit{Show door labels}: Blendet die Bezeichner der Türen ein oder aus.
+\item \textit{Show door points}: Blendet die zentralen Punkte von Türen ein oder aus.
+\item \textit{Show room labels}: Blendet die Namen der Räume ein oder aus.
+\item \textit{Show room points}: Blendet die zentralen Punkte der Räume ein oder aus.
+\end{itemize}
+Die Anzeigeeinstellungen werden durch Radiobuttons (\codeclass{JRadioButtonMenuItem}) vorgenommen, an denen leicht erkennbar ist, welche Elemente zur Zeit angezeigt und ausgeblendet werden. Welche Komponenten zu Beginn eingeblendet sind, hängt davon ab, in welchem Modus das Programm gestartet wird. Ist Entwicklermodus aktiv, werden alle Elemente angezeigt, um Debugging zu ermöglichen. Anderenfalls werden nur die Sensoren und Aktuatoren eingeblendet und zusätzliche Informationen können bei Bedarf angezeigt werden. Das soll die Übersicht zum Programmstart bewahren. 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Aktionen}\label{subsec:real_actions}

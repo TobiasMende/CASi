@@ -81,10 +81,11 @@ public class ClockViewPanel extends JPanel implements ISimulationClockListener,
 		this.slider = new JSlider(JSlider.HORIZONTAL,
 				SimulationClock.MINIMUM_SCALE_FACTOR,
 				SimulationClock.MAXIMUM_SCALE_FACTOR,
-				this.calculateScaledValue(SimulationClock.getInstance().getScaleFactor()));
+				this.recalculateScaledValue(SimulationClock.DEFAULT_SCALE_FACTOR));
+
 		this.slider.setMajorTickSpacing(200);
 		this.slider.setMinorTickSpacing(100);
-		this.slider.setSnapToTicks(false);
+//		this.slider.setSnapToTicks(true);
 		this.slider.setPaintTicks(true);
 		this.slider.addChangeListener(this);
 		this.slider.setBorder(BorderFactory.createTitledBorder("Time scaler:"));
@@ -113,29 +114,64 @@ public class ClockViewPanel extends JPanel implements ISimulationClockListener,
 		double min = SimulationClock.MINIMUM_SCALE_FACTOR;
 
 		/** Compute values of the quadratic function */
-		double a = (max - min) / (Math.pow(max, 2) - Math.pow(min, 2));
-		double c = max - a * Math.pow(max, 2);
+//		double a = (max - min) / (Math.pow(min, 2) - Math.pow(max, 2));
+//		double c = max - a * Math.pow(min, 2);
+		
+		double a = (max - min)/(1/min - 1/max);
+		double b = min - a/max;
 
 		/** Invert the value limits */
-		double number = -value + max + min;
+//		double number = -value + max + min;
 
 		/** Square and scale the new value */
-		number = a * Math.pow(number, 2) + c;
+//		value = (int) (a * Math.pow(value, 2) + c);
+		
+		value = (int) (a/value + b);
 
 		/** Check, if the new values are in range */
-		if ((int) number < SimulationClock.MINIMUM_SCALE_FACTOR) {
+		if ((int) value < min) {
 
 			/** Else return minimum */
-			return SimulationClock.MINIMUM_SCALE_FACTOR;
+			return (int) min;
 		}
-		if ((int) number > SimulationClock.MAXIMUM_SCALE_FACTOR) {
+		if ((int) value > max) {
 
 			/** Else return maximum */
-			return SimulationClock.MAXIMUM_SCALE_FACTOR;
+			return (int) max;
 		}
 
 		/** Return the new value */
-		return (int) (number);
+		return value;
+	}
+	
+	private int recalculateScaledValue(int value) {
+
+		/** Save maximum and minimum in doubles */
+		double max = SimulationClock.MAXIMUM_SCALE_FACTOR;
+		double min = SimulationClock.MINIMUM_SCALE_FACTOR;
+
+		/** Compute values of the quadratic function */
+		double a = (max - min)/(1/min - 1/max);
+		double b = min - a/max;
+
+		/** Invert the value limits */
+
+		value = (int) (a / value - b);
+
+		/** Check, if the new values are in range */
+		if ((int) value < min) {
+
+			/** Else return minimum */
+			return (int) min;
+		}
+		if ((int) value > max) {
+
+			/** Else return maximum */
+			return (int) max;
+		}
+
+		/** Return the new value */
+		return value;
 	}
 
 	@Override

@@ -137,7 +137,9 @@ public class SimulationClock implements Listenable<ISimulationClockListener> {
 		}
 		simulationStartTime = startTime;
 		this.currentTime = currentTime;
-		scaleFactor = factor;
+		if(scaleFactor <= 0) {
+			scaleFactor = factor;
+		}
 	}
 
 	/**

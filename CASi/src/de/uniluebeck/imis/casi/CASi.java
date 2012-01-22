@@ -33,6 +33,7 @@ import de.uniluebeck.imis.casi.logging.DevLogFormatter;
 import de.uniluebeck.imis.casi.logging.ExtendedConsoleHandler;
 import de.uniluebeck.imis.casi.logging.HTMLFormatter;
 import de.uniluebeck.imis.casi.logging.SimLogFormatter;
+import de.uniluebeck.imis.casi.simulation.engine.SimulationClock;
 import de.uniluebeck.imis.casi.ui.GuiStub;
 import de.uniluebeck.imis.casi.ui.IMainView;
 import de.uniluebeck.imis.casi.ui.simplegui.MainViewSimpleGui;
@@ -91,9 +92,12 @@ public class CASi {
 		final IWorldGenerator generator = new de.uniluebeck.imis.casi.simulations.mate.generator.java.WorldGenerator();
 		Locale.setDefault(Locale.GERMAN);
 		final ICommunicationHandler networkHandler = generateCommunicationHandler(args);
-		// final ICommunicationHandler networkHandler = new
-		// CommunicationLogger();
-		// ((MACKNetworkHandler)networkHandler).serializeSettings();
+		if(commandLineOptions.getSpeedFactor() > 0) {
+			// set the provided scale factor.
+			int scaleFactor = 1000/commandLineOptions.getSpeedFactor();
+			SimulationClock.getInstance().setScaleFactor(scaleFactor);
+			CASi.SIM_LOG.info("Setting simulation speed factor to "+commandLineOptions.getSpeedFactor()+" ("+scaleFactor+" milliseconds are 1 simulated second.)");
+		}
 		IMainView mainView = null;
 		if (commandLineOptions.isGuiDisabled()) {
 			mainView = new GuiStub();
@@ -102,6 +106,7 @@ public class CASi {
 		}
 		final MainController mc = new MainController(generator, networkHandler,
 				mainView);
+		
 		// Call the main controller and let it work:
 		mc.init();
 		mc.start();
@@ -156,14 +161,20 @@ public class CASi {
 		System.out
 		.println("\t - x\tUse xml files for logging instead of simple text. (optional, don't use h");
 		// Complete Commands
-		System.out.println("\tThese commands can be used as described:");
-		System.out.println("\t --help (optional)");
+		System.out.println("\n\tThese commands can be used as described:");
+		System.out.println("\t --help");
 		System.out
-				.println("\t\tPrints this information. Prevents from starting the simulation.");
+				.println("\t\tPrints this information. Prevents from starting the simulation. (optional)");
 		System.out.println("\t --network-config <path-to-config-file>");
 		System.out
 				.println("\t\tSimulation uses the provided file to configure the network handler. Should be set. Otherwise, only a simple communication logger is used.");
+		System.out.println("\t --speed <int speed-factor>");
+		System.out
+				.println("\t\tCan be used to set an initial factor for the simulation speed. Should be between 1 and 100. (optional)");
+		
+		// End of commands
 		System.out.println("\n");
+		System.out.println("\t+++++++++++++++++++++++++++++++++++++++++++++++++++\n");
 		System.out.println("Short Example:");
 		System.out
 				.println("\tjava -jar CASi.jar --network-config network.conf.xml");

@@ -37,6 +37,8 @@ public class ParameterParser {
 	private boolean helpRequest;
 	/** Should the gui be disabled? */
 	private boolean disableGui;
+	/** A factor for the simulation speed */
+	private int speedFactor;
 	/** The configuration file for the network if one was connected */
 	private String networkConfigFile;
 	/** The format for log files */
@@ -56,6 +58,8 @@ public class ParameterParser {
 
 			if (args[i].matches("--network-config") && args.length > i + 1) {
 				networkConfigFile = args[++i];
+			} else if (args[i].matches("--speed") && args.length > i + 1) {
+				speedFactor = Integer.parseInt(args[++i]);
 			} else if (args[i].matches("--help")) {
 				helpRequest = true;
 			} else {
@@ -164,6 +168,10 @@ public class ParameterParser {
 	 */
 	public LOG_FORMAT getLogFormat() {
 		return logFormat;
+	}
+	
+	public int getSpeedFactor() {
+		return speedFactor;
 	}
 
 }

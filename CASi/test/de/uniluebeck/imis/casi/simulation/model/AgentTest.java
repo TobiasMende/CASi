@@ -17,90 +17,6 @@ import org.junit.Test;
 
 public class AgentTest {
 
-	@Test
-	public void testContainsIPosition() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testContainsPoint2D() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testGetShapeRepresentation() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testAgentStringString() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testAgentStringStringStringIPosition() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testAgentStringStringString() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testSetState() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testIsTemplate() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testGetTodoList() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testGetActionPool() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testSetTodoList() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testAddActionToPool() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testAddActionToList() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testSetActionPool() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testAddListener() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testRemoveListener() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testTimeChanged() {
-		fail("Not yet implemented");
-	}
 
 	@Test
 	public void testClone() {
@@ -109,25 +25,4 @@ public class AgentTest {
 		assertFalse("Agents are same object", a == b);
 		assertTrue("Agents are not equal", a.equals(b));
 	}
-
-	@Test
-	public void testSimulationPaused() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testSimulationStopped() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testSimulationStarted() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testGetCentralPoint() {
-		fail("Not yet implemented");
-	}
-
 }

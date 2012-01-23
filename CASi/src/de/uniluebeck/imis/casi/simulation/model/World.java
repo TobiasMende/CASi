@@ -92,12 +92,8 @@ public class World {
 	/**
 	 * Seals the world
 	 * 
-	 * @throws IllegalAccessException
 	 */
-	public void seal() throws IllegalAccessException {
-		if (sealed) {
-			throw new IllegalAccessException("World is sealed yet");
-		}
+	public void seal() {
 		sealed = true;
 	}
 

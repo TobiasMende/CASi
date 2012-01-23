@@ -94,9 +94,9 @@ public class CASi {
 		final ICommunicationHandler networkHandler = generateCommunicationHandler(args);
 		if(commandLineOptions.getSpeedFactor() > 0) {
 			// set the provided scale factor.
-			int scaleFactor = 1000/commandLineOptions.getSpeedFactor();
-			SimulationClock.getInstance().setScaleFactor(scaleFactor);
+			int scaleFactor = (int)Math.round(1000/commandLineOptions.getSpeedFactor());
 			CASi.SIM_LOG.info("Setting simulation speed factor to "+commandLineOptions.getSpeedFactor()+" ("+scaleFactor+" milliseconds are 1 simulated second.)");
+			SimulationClock.getInstance().setScaleFactor(scaleFactor);
 		}
 		IMainView mainView = null;
 		if (commandLineOptions.isGuiDisabled()) {
@@ -170,7 +170,7 @@ public class CASi {
 				.println("\t\tSimulation uses the provided file to configure the network handler. Should be set. Otherwise, only a simple communication logger is used.");
 		System.out.println("\t --speed <int speed-factor>");
 		System.out
-				.println("\t\tCan be used to set an initial factor for the simulation speed. Should be between 1 and 100. (optional)");
+				.println("\t\tCan be used to set an initial factor for the simulation speed. Should be between 0.5 and 100. (optional)");
 		
 		// End of commands
 		System.out.println("\n");

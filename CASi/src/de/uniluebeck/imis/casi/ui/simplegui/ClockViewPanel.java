@@ -81,7 +81,7 @@ public class ClockViewPanel extends JPanel implements ISimulationClockListener,
 		this.slider = new JSlider(JSlider.HORIZONTAL,
 				SimulationClock.MINIMUM_SCALE_FACTOR,
 				SimulationClock.MAXIMUM_SCALE_FACTOR,
-				this.recalculateScaledValue(SimulationClock.DEFAULT_SCALE_FACTOR));
+				this.recalculateScaledValue(SimulationClock.getInstance().getScaleFactor()));
 
 		this.slider.setMajorTickSpacing(200);
 		this.slider.setMinorTickSpacing(100);

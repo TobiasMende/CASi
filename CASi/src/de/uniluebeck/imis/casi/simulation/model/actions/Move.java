@@ -244,7 +244,7 @@ public class Move extends AtomicAction {
 
 	@Override
 	public String getInformationDescription() {
-		return "from "+startPosition+ "to "+endPosition;
+		return "from "+startPosition+ " to "+endPosition;
 	}
 
 }

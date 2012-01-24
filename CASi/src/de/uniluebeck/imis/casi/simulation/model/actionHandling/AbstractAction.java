@@ -480,9 +480,10 @@ public abstract class AbstractAction implements Listenable<IActionListener>,
 		b.append(type.toString() + ", ");
 		b.append(state.toString() + ", ");
 		b.append("Dur: " + duration + ",");
-		b.append("S: " + earliestStartTime + ",");
-		b.append("D: " + deadline + ",");
-		b.append("P: " + priority);
+		b.append("S: " + earliestStartTime + ", ");
+		b.append("D: " + deadline + ", ");
+		b.append("P: " + priority+", ");
+		b.append(getInformationDescription());
 		b.append("]");
 		return b.toString();
 	}

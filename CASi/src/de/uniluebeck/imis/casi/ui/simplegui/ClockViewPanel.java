@@ -30,7 +30,7 @@ import de.uniluebeck.imis.casi.simulation.model.SimulationTime;
 
 /**
  * This class extends JPanel and shows the simulation time in the simple GUI. It
- * allows also to scale the simulation time with a slider. In addition is
+ * allows also to scale the simulation time with a slider. In addition it
  * contains a control panel to pause and resume the simulation.
  * 
  * @author Moritz Bürger
@@ -40,7 +40,10 @@ import de.uniluebeck.imis.casi.simulation.model.SimulationTime;
 public class ClockViewPanel extends JPanel implements ISimulationClockListener,
 		ChangeListener {
 
+	/** The label showing the time */
 	private JLabel timeLabel;
+
+	/** The slider scaling the time */
 	private JSlider slider;
 
 	/**
@@ -54,7 +57,7 @@ public class ClockViewPanel extends JPanel implements ISimulationClockListener,
 
 		/** Set layout to FlowLayout */
 		this.setLayout(new GridLayout(1, 0));
-		
+
 		this.setBackground(ColorScheme.BACKGROUND_GUI);
 
 		/** Set the components */
@@ -70,22 +73,22 @@ public class ClockViewPanel extends JPanel implements ISimulationClockListener,
 	 */
 	private void setComponents() {
 
-		/** JLabel showing the simulation time */
+		/* JLabel showing the simulation time */
 		this.timeLabel = new JLabel();
 		this.timeLabel.setFont(new Font("sans", Font.BOLD, 16));
 		this.timeLabel
 				.setBorder(BorderFactory.createTitledBorder("Date/Time:"));
 		this.add(this.timeLabel);
 
-		/** JSlider to set the speed */
+		/* JSlider to set the speed */
 		this.slider = new JSlider(JSlider.HORIZONTAL,
 				SimulationClock.MINIMUM_SCALE_FACTOR,
 				SimulationClock.MAXIMUM_SCALE_FACTOR,
-				this.recalculateScaledValue(SimulationClock.getInstance().getScaleFactor()));
+				this.recalculateScaledValue(SimulationClock.getInstance()
+						.getScaleFactor()));
 
 		this.slider.setMajorTickSpacing(200);
 		this.slider.setMinorTickSpacing(100);
-//		this.slider.setSnapToTicks(true);
 		this.slider.setPaintTicks(true);
 		this.slider.addChangeListener(this);
 		this.slider.setBorder(BorderFactory.createTitledBorder("Time scaler:"));
@@ -93,40 +96,40 @@ public class ClockViewPanel extends JPanel implements ISimulationClockListener,
 		this.slider.setForeground(Color.BLACK);
 		this.add(this.slider);
 
-		/** Add control panel */
+		/* Add control panel */
 		ControlPanel controlPanel = new ControlPanel();
 		controlPanel.setBackground(ColorScheme.BACKGROUND_GUI);
 		this.add(controlPanel);
 	}
 
 	/**
-	 * This method gets a value between maximum and minimum and computes a
-	 * squared and scaled value between minimum and maximum.
+	 * This method gets a value from the slider and calculates it to a value for
+	 * the simulation clock.
 	 * 
 	 * @param value
-	 *            - value between maximum and minimum
-	 * @return squared value between minimum and maximum
+	 *            the value from the slider
+	 * @return the value for the simulation clock
 	 */
 	private int calculateScaledValue(int value) {
 
-		/** Save maximum and minimum in doubles */
+		/* Save maximum and minimum in doubles */
 		double max = SimulationClock.MAXIMUM_SCALE_FACTOR;
 		double min = SimulationClock.MINIMUM_SCALE_FACTOR;
 
-		/** Compute values of the quadratic function */
-//		double a = (max - min) / (Math.pow(min, 2) - Math.pow(max, 2));
-//		double c = max - a * Math.pow(min, 2);
-		
-		double a = (max - min)/(1/min - 1/max);
-		double b = min - a/max;
+		/* Compute values of the quadratic function */
+		// double a = (max - min) / (Math.pow(min, 2) - Math.pow(max, 2));
+		// double c = max - a * Math.pow(min, 2);
+
+		double a = (max - min) / (1 / min - 1 / max);
+		double b = min - a / max;
 
 		/** Invert the value limits */
-//		double number = -value + max + min;
+		// double number = -value + max + min;
 
 		/** Square and scale the new value */
-//		value = (int) (a * Math.pow(value, 2) + c);
-		
-		value = (int) (a/value + b);
+		// value = (int) (a * Math.pow(value, 2) + c);
+
+		value = (int) (a / value + b);
 
 		/** Check, if the new values are in range */
 		if ((int) value < min) {
@@ -143,7 +146,15 @@ public class ClockViewPanel extends JPanel implements ISimulationClockListener,
 		/** Return the new value */
 		return value;
 	}
-	
+
+	/**
+	 * This method gets a value from the simulation clock and calculates it to a
+	 * value for the slider.
+	 * 
+	 * @param value
+	 *            the value from the simulation clock
+	 * @return the value for the slider
+	 */
 	private int recalculateScaledValue(int value) {
 
 		/** Save maximum and minimum in doubles */
@@ -151,8 +162,8 @@ public class ClockViewPanel extends JPanel implements ISimulationClockListener,
 		double min = SimulationClock.MINIMUM_SCALE_FACTOR;
 
 		/** Compute values of the quadratic function */
-		double a = (max - min)/(1/min - 1/max);
-		double b = min - a/max;
+		double a = (max - min) / (1 / min - 1 / max);
+		double b = min - a / max;
 
 		/** Invert the value limits */
 
@@ -174,13 +185,16 @@ public class ClockViewPanel extends JPanel implements ISimulationClockListener,
 		return value;
 	}
 
+	/**
+	 * Actualizes the value of the time label.
+	 */
 	@Override
 	public void timeChanged(final SimulationTime newTime) {
 		SwingUtilities.invokeLater(new Runnable() {
 
 			@Override
 			public void run() {
-				/** Calculate the new scale factor */
+				/* Calculate the new scale factor */
 				double newScaleFactor = ClockViewPanel.this
 						.calculateScaledValue(ClockViewPanel.this.slider
 								.getValue());
@@ -240,6 +254,9 @@ public class ClockViewPanel extends JPanel implements ISimulationClockListener,
 
 	}
 
+	/**
+	 * Sets new value from the slider to the simulation clock.
+	 */
 	@Override
 	public void stateChanged(ChangeEvent arg0) {
 		SwingUtilities.invokeLater(new Runnable() {

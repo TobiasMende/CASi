@@ -52,17 +52,28 @@ public class InformationPanel extends JPanel implements ActionListener,
 	private static final Logger log = Logger.getLogger(InformationPanel.class
 			.getName());
 
+	/** ComboBox to select the component */
 	private JComboBox selectComponentBox;
+
+	/** TextArea to show information of the selected component */
 	private JTextArea informationTextArea;
+
+	/** TextArea to show information of the selected room */
 	private JTextArea informationTextAreaRoom;
 
+	/** List of agent in the simulation */
 	private ArrayList<Agent> agentList;
+
+	/** List of sensors and actuators in the simulation */
 	private ArrayList<AbstractInteractionComponent> interactionCompList;
 
+	/** Saves the last clicked room */
 	private Room shownRoom;
 
+	/** List of all component views */
 	private List<ComponentView> componentViews;
 
+	/** SplitPane between the TextAreas */
 	private JSplitPane splitPane;
 
 	/**
@@ -70,13 +81,13 @@ public class InformationPanel extends JPanel implements ActionListener,
 	 */
 	public InformationPanel() {
 
-		/** Set layout to FlowLayout */
+		/* Set layout to FlowLayout */
 		this.setLayout(new BorderLayout());
 
-		/** Set the components */
+		/* Set the components */
 		this.setComponents();
 
-		/** Set preferred size */
+		/* Set preferred size */
 		this.setPreferredSize(new Dimension(250, 0));
 	}
 
@@ -84,9 +95,6 @@ public class InformationPanel extends JPanel implements ActionListener,
 	 * Sets components of the information panel.
 	 */
 	private void setComponents() {
-
-		// JPanel infoPanel = new JPanel();
-		// infoPanel.setLayout(new GridLayout(0, 1));
 
 		informationTextArea = new JTextArea();
 		informationTextArea.setBorder(BorderFactory
@@ -104,11 +112,9 @@ public class InformationPanel extends JPanel implements ActionListener,
 
 		JScrollPane scrollPaneRoom = new JScrollPane(informationTextAreaRoom);
 
-		this.splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
-				scrollPane, scrollPaneRoom);
-		splitPane.setDividerLocation(this.getHeight()/2);
-		// infoPanel.add(scrollPane);
-		// infoPanel.add(scrollPaneRoom);
+		this.splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, scrollPane,
+				scrollPaneRoom);
+		splitPane.setDividerLocation(this.getHeight() / 2);
 
 		add(splitPane, BorderLayout.CENTER);
 	}
@@ -117,8 +123,8 @@ public class InformationPanel extends JPanel implements ActionListener,
 	 * This method sets the entries of the JComboBox.
 	 */
 	public void setInformationComboBox(List<ComponentView> componentViews) {
-		
-		splitPane.setDividerLocation(this.getHeight()/2);
+
+		splitPane.setDividerLocation(this.getHeight() / 2);
 
 		this.componentViews = componentViews;
 
@@ -142,14 +148,6 @@ public class InformationPanel extends JPanel implements ActionListener,
 
 			}
 
-			// roomList = new ArrayList<Room>();
-			//
-			// for(Room room : SimulationEngine
-			// .getInstance().getWorld().getRooms()) {
-			//
-			// roomList.add(room);
-			// }
-
 		} catch (IllegalAccessException e) {
 
 			log.warning("Exception: " + e.toString());
@@ -170,39 +168,36 @@ public class InformationPanel extends JPanel implements ActionListener,
 
 		add(selectComponentBox, BorderLayout.NORTH);
 
-		/** Add the information panel as listener on the simulation clock */
+		/* Add the information panel as listener on the simulation clock */
 		SimulationClock.getInstance().addListener(this);
 
 	}
 
+	/**
+	 * This method returns the data for the selection box and adds a separator
+	 * between the agents and sensors/actuators.
+	 * 
+	 * @return data as {@link Vector} of String.
+	 */
 	private Vector<String> getVectorData() {
 
 		Vector<String> data = new Vector<String>();
 
-		/** Add agent to vector */
+		/* Add agent to vector */
 		for (Agent agent : agentList) {
 
 			data.addElement(agent.getName());
 		}
 
-		/** Add separator to vector */
+		/* Add separator to vector */
 		data.addElement(ComboBoxRenderer.SEPERATOR);
 
-		/** Add interaction components to vector */
+		/* Add interaction components to vector */
 		for (AbstractInteractionComponent interactionComp : interactionCompList) {
 
 			data.addElement(interactionComp.getIdentifier() + "::"
 					+ interactionComp.getType());
 		}
-
-		// /** Add separator to vector */
-		// data.addElement(ComboBoxRenderer.SEPERATOR);
-		//
-		// /** Add rooms to vector */
-		// for (Room room : roomList) {
-		//
-		// data.addElement(room.toString());
-		// }
 
 		return data;
 	}
@@ -211,7 +206,7 @@ public class InformationPanel extends JPanel implements ActionListener,
 	 * Sets the room, that is shown.
 	 * 
 	 * @param room
-	 *            thr room
+	 *            the room
 	 */
 	public void showRoomInformationOf(Room room) {
 
@@ -219,6 +214,9 @@ public class InformationPanel extends JPanel implements ActionListener,
 		setInformation();
 	}
 
+	/**
+	 * Sets the information, if selection box changes.
+	 */
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 
@@ -237,7 +235,7 @@ public class InformationPanel extends JPanel implements ActionListener,
 	 * This method updates the information of the selected component.
 	 */
 	private void setInformation() {
-		
+
 		int selectedIndex_A = this.selectComponentBox.getSelectedIndex();
 		int selectedIndex_I = selectedIndex_A - agentList.size() - 1;
 
@@ -383,6 +381,13 @@ public class InformationPanel extends JPanel implements ActionListener,
 		return info;
 	}
 
+	/**
+	 * This method returns the information of a room as String.
+	 * 
+	 * @param room
+	 *            the room
+	 * @return the information
+	 */
 	private String getRoomInformation(Room room) {
 
 		String info;
@@ -441,7 +446,7 @@ public class InformationPanel extends JPanel implements ActionListener,
 	}
 
 	/**
-	 * Sets information new, if time changed.
+	 * Sets information, if time changed.
 	 */
 	@Override
 	public void timeChanged(SimulationTime newTime) {

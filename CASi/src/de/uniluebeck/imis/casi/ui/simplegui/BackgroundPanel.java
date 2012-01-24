@@ -45,13 +45,17 @@ import de.uniluebeck.imis.casi.simulation.model.Wall;
 @SuppressWarnings("serial")
 public class BackgroundPanel extends JPanel implements MouseListener {
 
+	/** The class logger */
 	private static final Logger log = Logger.getLogger(BackgroundPanel.class
 			.getName());
 
+	/** The affine transform to scale the background */
 	private final AffineTransform transform;
 
+	/** the information panel to show room information */
 	private InformationPanel infoPanel;
 
+	/** The view settings save the settings of the view menu */
 	private ViewSettings viewSettings;
 
 	/**
@@ -66,7 +70,7 @@ public class BackgroundPanel extends JPanel implements MouseListener {
 		this.transform = transform;
 
 		this.viewSettings = viewSettings;
-		
+
 		this.setBackground(ColorScheme.BACKGROUND);
 		this.repaint();
 
@@ -92,15 +96,15 @@ public class BackgroundPanel extends JPanel implements MouseListener {
 
 		super.paint(g);
 
-		/** Cast graphics into 2DGraphics */
+		/* Cast graphics into 2DGraphics */
 		Graphics2D g2D = (Graphics2D) g;
 
-		/** Set the stroke to 3 */
+		/* Set the stroke to 3 */
 		g2D.setStroke(new BasicStroke(1));
 
 		try {
 
-			/** Get all rooms of the simulation */
+			/* Get all rooms of the simulation */
 			for (Room room : SimulationEngine.getInstance().getWorld()
 					.getRooms()) {
 				// Show shape representation of room:
@@ -121,16 +125,16 @@ public class BackgroundPanel extends JPanel implements MouseListener {
 					g2D.fillOval(centralPoint2.x, centralPoint2.y, 5, 5);
 				}
 
-				/** Get the walls of this room */
+				/* Get the walls of this room */
 				for (Wall wall : room.getWalls()) {
 
-					/** Paint the walls in black */
+					/* Paint the walls in black */
 					g.setColor(ColorScheme.BLUE_VERY_DARK);
 					g2D.draw(transform.createTransformedShape(wall
 							.getShapeRepresentation()));
 				}
 
-				/** Get the doors of this room */
+				/* Get the doors of this room */
 				for (Door door : room.getDoors()) {
 
 					g.setFont(new Font(Font.MONOSPACED, Font.PLAIN,
@@ -157,7 +161,7 @@ public class BackgroundPanel extends JPanel implements MouseListener {
 
 			}
 
-			/** Get the interaction components */
+			/* Get the interaction components */
 			for (AbstractInteractionComponent interactionComp : SimulationEngine
 					.getInstance().getWorld().getInteractionComponents()) {
 
@@ -167,12 +171,13 @@ public class BackgroundPanel extends JPanel implements MouseListener {
 				if (viewSettings.isPaintSensorMonitoringArea()) {
 					g2D.fill(transform.createTransformedShape(interactionComp
 							.getShapeRepresentation()));
-					Color draw = new Color(ColorScheme.BLUE_DARK.getRed(),ColorScheme.BLUE_DARK.getGreen(), ColorScheme.BLUE_DARK.getBlue(), 80);
+					Color draw = new Color(ColorScheme.BLUE_DARK.getRed(),
+							ColorScheme.BLUE_DARK.getGreen(),
+							ColorScheme.BLUE_DARK.getBlue(), 80);
 					g.setColor(draw);
-					 float [] dashes = {2.0F, 2.0F, 2.0F};
-					g2D.setStroke(new BasicStroke (1.0F, BasicStroke.CAP_BUTT, 
-                            BasicStroke.JOIN_MITER, 
-                            10.0F, dashes, 0.F));
+					float[] dashes = { 2.0F, 2.0F, 2.0F };
+					g2D.setStroke(new BasicStroke(1.0F, BasicStroke.CAP_BUTT,
+							BasicStroke.JOIN_MITER, 10.0F, dashes, 0.F));
 					g2D.draw(transform.createTransformedShape(interactionComp
 							.getShapeRepresentation()));
 				}
@@ -224,7 +229,7 @@ public class BackgroundPanel extends JPanel implements MouseListener {
 			// paint door names, if selected
 			if (viewSettings.isPaintDoorLabels()) {
 
-				/** Get the doors of this room */
+				/* Get the doors of this room */
 				for (Door door : room.getDoors()) {
 
 					g2D.setColor(Color.BLACK);
@@ -245,7 +250,7 @@ public class BackgroundPanel extends JPanel implements MouseListener {
 		// paint sensor labels, if selected
 		if (viewSettings.isPaintSensorLabels()) {
 
-			/** Get the interaction components */
+			/* Get the interaction components */
 			for (AbstractInteractionComponent interactionComp : SimulationEngine
 					.getInstance().getWorld().getInteractionComponents()) {
 
@@ -267,6 +272,10 @@ public class BackgroundPanel extends JPanel implements MouseListener {
 		}
 	}
 
+	/**
+	 * If mouse clicked on the shape of a room, show room information in the
+	 * information panel.
+	 */
 	@Override
 	public void mouseClicked(MouseEvent e) {
 

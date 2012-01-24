@@ -28,9 +28,7 @@ import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.SwingUtilities;
 
-import de.uniluebeck.imis.casi.CASi;
 import de.uniluebeck.imis.casi.controller.IUIController;
-import de.uniluebeck.imis.casi.simulation.engine.SimulationClock;
 import de.uniluebeck.imis.casi.ui.IMainView;
 
 /**
@@ -43,23 +41,33 @@ import de.uniluebeck.imis.casi.ui.IMainView;
 public class MainViewSimpleGui extends JFrame implements IMainView,
 		ActionListener, ComponentListener {
 
+	/** The class logger */
 	private static final Logger log = Logger.getLogger(MainViewSimpleGui.class
 			.getName());
 
-	private IUIController uicontroller;
+	/** The simulation panel */
 	private SimulationPanel simPanel;
+	
+	/** The view menu*/
 	private ViewMenu viewMenu;
+	
+	/** The information panel */
 	private InformationPanel informationPanel;
 
+	/** SplitPane between simulation panel and information panel */
 	private JSplitPane splitPane;
 
+	
+	/** The standard width of the simulation frame */
 	public static final int WIDTH = 1020;
+
+	/** The standard height of the simulation frame */
 	public static final int HEIGHT = 650;
 
 	@Override
 	public void setUIController(IUIController controller) {
 
-		this.uicontroller = controller;
+		// nothing to do here
 
 	}
 
@@ -79,32 +87,33 @@ public class MainViewSimpleGui extends JFrame implements IMainView,
 	 * Really shows the GUI after using invoke later
 	 */
 	private void showUiInternal() {
-		/** Set size of simple GUI */
+		
+		/* Set size of simple GUI */
 		this.setSize(MainViewSimpleGui.WIDTH, MainViewSimpleGui.HEIGHT);
-		/** Set minimum size */
+		/* Set minimum size */
 		this.setMinimumSize(new Dimension(500, 300));
-		/** Set default close operation to 'exit on close' */
+		/* Set default close operation to 'exit on close' */
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		/** Set the location of the frame in the center of screen */
+		/* Set the location of the frame in the center of screen */
 		this.setLocationRelativeTo(null);
-		/** Set layout to 'null' */
+		/* Set layout to 'null' */
 		this.setLayout(new BorderLayout());
-		/** Set title of the frame */
+		/* Set title of the frame */
 		this.setTitle("CASi (MACK Simulator)");
 
-		/** Set up components */
+		/* Set up components */
 		this.setComponents();
 
-		/** Set frame visible, paint components of the simulation */
+		/* Set frame visible, paint components of the simulation */
 		this.setVisible(true);
 		simPanel.setVisible(true);
 		this.simPanel.paintSimulationComponents(this.informationPanel);
 
-		/** Set agents, sensor and actuators in the information combo box */
+		/* Set agents, sensor and actuators in the information combo box */
 		this.informationPanel.setInformationComboBox(simPanel
 				.getSimulationComponents());
 
-		/**
+		/*
 		 * Set the listener (background panel of simulation panel) of the view
 		 * menu
 		 */
@@ -119,12 +128,12 @@ public class MainViewSimpleGui extends JFrame implements IMainView,
 	 */
 	private void setComponents() {
 
-		/** Set menu bar */
+		/* Set menu bar */
 		JMenuBar menuBar = new JMenuBar();
 		JMenu mainMenu = new JMenu("Menu");
 		menuBar.setBackground(ColorScheme.BACKGROUND_GUI);
 
-		/** Configure save item */
+		/* Configure save item */
 		// for now we dont have these things!
 //		JMenuItem stopItem = new JMenuItem("Stop Simulation");
 //		stopItem.setActionCommand("stop");
@@ -132,20 +141,20 @@ public class MainViewSimpleGui extends JFrame implements IMainView,
 //		mainMenu.add(stopItem);
 //		mainMenu.addSeparator();
 
-		/** Configure close item */
+		/* Configure close item */
 		JMenuItem closeItem = new JMenuItem("Exit");
 		closeItem.setActionCommand("close");
 		closeItem.addActionListener(this);
 		mainMenu.add(closeItem);
 
-		/** Add menu to menu bar */
+		/* Add menu to menu bar */
 		menuBar.add(mainMenu);
 
-		/** Add view to menu bar */
+		/* Add view to menu bar */
 		viewMenu = new ViewMenu();
 		menuBar.add(viewMenu);
 
-		/** New SimulationPanel */
+		/* New SimulationPanel */
 		simPanel = new SimulationPanel();
 		JPanel centerPanel = new JPanel();
 		centerPanel.setLayout(null);
@@ -155,10 +164,10 @@ public class MainViewSimpleGui extends JFrame implements IMainView,
 
 		centerPanel.addComponentListener(simPanel);
 
-		/** New ClockViewPanel */
+		/* New ClockViewPanel */
 		ClockViewPanel clockViewPanel = new ClockViewPanel();
 
-		/** New InformationPanel */
+		/* New InformationPanel */
 		informationPanel = new InformationPanel();
 
 		splitPane = new JSplitPane();

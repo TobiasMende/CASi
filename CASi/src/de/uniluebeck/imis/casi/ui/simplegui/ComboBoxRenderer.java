@@ -31,8 +31,10 @@ import javax.swing.border.EmptyBorder;
 @SuppressWarnings("serial")
 public class ComboBoxRenderer extends JLabel implements ListCellRenderer {
 
+	/** String representing a separator */
 	public static final String SEPERATOR = "M19Rt2798g251R47G93u5z07962L";
 
+	/** The separator */
 	private JSeparator separator;
 
 	/**
@@ -45,6 +47,9 @@ public class ComboBoxRenderer extends JLabel implements ListCellRenderer {
 		separator = new JSeparator(JSeparator.HORIZONTAL);
 	}
 
+	/**
+	 * Sets separators in the ComboBox.
+	 */
 	@Override
 	public Component getListCellRendererComponent(JList list, Object value,
 			int index, boolean isSelected, boolean cellHasFocus) {

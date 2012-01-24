@@ -27,7 +27,7 @@ import de.uniluebeck.imis.casi.CASi;
  */
 public class ViewSettings implements ActionListener {
 
-	/** booleans to adjust the information showed in the gui */
+	/** Boolean to adjust the information showed in the GUI */
 	private boolean paintDoorLabels, paintSensorLabels, paintRoomLabels,
 			paintSensorMonitoringArea, paintDoorCentralPoints,
 			paintRoomCentralPoints, paintSensors;
@@ -92,7 +92,7 @@ public class ViewSettings implements ActionListener {
 			paintSensors = clickedItem.isSelected();
 		}
 
-		simulationPanel.setSimulationToScale();
+		simulationPanel.paintScaledSimulation();
 	}
 
 	/**

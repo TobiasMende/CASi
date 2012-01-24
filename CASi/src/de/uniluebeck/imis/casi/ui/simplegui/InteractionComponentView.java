@@ -35,8 +35,13 @@ import de.uniluebeck.imis.casi.simulation.model.AbstractInteractionComponent;
 public class InteractionComponentView extends ComponentView implements
 		MouseListener {
 
+	/** THe representing sensor or actuator */
 	private AbstractInteractionComponent interactionComp;
+	
+	/** The information panel to set the selected agent in the combobox */
 	private InformationPanel infoPanel;
+	
+	/** The view settings save the settings of the view menu */
 	private ViewSettings viewSettings;
 
 	/**
@@ -136,11 +141,6 @@ public class InteractionComponentView extends ComponentView implements
 		g2D.setColor(this.stateColor);
 		g2D.fillRect(2, 2, (int) dim.getWidth() - 4, (int) dim.getHeight() - 4);
 		
-//		if (this.isSelected) {
-//			g2D.setColor(Color.GREEN);
-//			g2D.fillRect(3, 3, (int) dim.getWidth() - 6,
-//					(int) dim.getHeight() - 6);
-//		}
 	}
 
 	@Override

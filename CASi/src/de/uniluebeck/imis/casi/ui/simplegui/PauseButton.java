@@ -52,10 +52,10 @@ public class PauseButton extends JButton implements ActionListener {
 		super.paintComponent(g);
 		g.setColor(ColorScheme.BLUE_LIGHT);
 		
-		/** Check, if clock is paused */
+		/* Check, if clock is paused */
 		if(SimulationClock.getInstance().isPaused()) {
 			
-			/** Paint triangle (play)*/
+			/* Paint triangle (play)*/
 			int[] x = {6,6,26};
 			int[] y = {8,22,15};
 			g.fillPolygon(x,y,3);
@@ -64,7 +64,7 @@ public class PauseButton extends JButton implements ActionListener {
 			
 		} else {
 			
-			/** Paint two rectangles (pause)*/
+			/* Paint two rectangles (pause)*/
 			g.fillRect(8, 5, 5, 20);
 			g.fillRect(16, 5, 5, 20);
 			g.setColor(Color.BLACK);
@@ -83,20 +83,20 @@ public class PauseButton extends JButton implements ActionListener {
 			@Override
 			public void run() {
 		
-				/** If simulation is running */
+				/* If simulation is running */
 				if(!SimulationClock.getInstance().isPaused()) {
 					
 					CASi.SIM_LOG.info("Pause simulation");
 					
-					/** Set simulation clock paused */
+					/* Set simulation clock paused */
 					SimulationClock.getInstance().setPaused(true);
 					
-					/** If simulation is paused */
+					/* If simulation is paused */
 				} else if(SimulationClock.getInstance().isPaused()) {
 					
 					CASi.SIM_LOG.info("Resume simulation");
 					
-					/** Set simulation clock resumed */
+					/* Set simulation clock resumed */
 					SimulationClock.getInstance().setPaused(false);
 				
 				}			

@@ -21,37 +21,37 @@ import java.awt.Color;
  */
 public class ColorScheme {
 
-	/* orange tones */
-	/* EDB14E */
+	/* Orange tones */
+	/** Light orange, value: EDB14E, from the selected color scheme. */
 	public static Color ORANGE_LIGHT = new Color(237, 177, 78);
-	/* EDC076 */
+	/** Very light orange, value: EDC076, from the selected color scheme. */
 	public static Color ORANGE_VERY_LIGHT = new Color(237, 192, 118);
-	/* DD941A */
+	/** Orange, value: DD941A, from the selected color scheme. */
 	public static Color ORANGE = new Color(221, 148, 26);
-	/* A87E37 */
+	/** Dark orange, value: A87E37, from the selected color scheme. */
 	public static Color ORANGE_DARK = new Color(168, 126, 55);
-	/* 935F09 */
+	/** Very dark orange, value: 935F09, from the selected color scheme. */
 	public static Color ORANGE_VERY_DARK = new Color(147, 95, 9);
 
-	/* blue tones */
-	/* 2B476E */
+	/* Blue tones */
+	/** Dark blue, value: 2B476E, from the selected color scheme. */
 	public static Color BLUE_DARK = new Color(43, 71, 110);
-	/* 0A2E60 */
+	/** Very dark blue, value: 0A2E60, from the selected color scheme. */
 	public static Color BLUE_VERY_DARK = new Color(10, 46, 96);
-	/* 1C4D91 */
+	/** Blue, value: 1C4D91, from the selected color scheme. */
 	public static Color BLUE = new Color(28, 77, 145);
-	/* 4D80C6 */
+	/** Light blue, value: 4D80C6, from the selected color scheme. */
 	public static Color BLUE_LIGHT = new Color(77, 128, 198);
-	/* 6B91C6 */
+	/** Very light blue, value: 6B91C6, from the selected color scheme. */
 	public static Color BLUE_VERY_LIGHT = new Color(107, 145, 198);
 	
-	/* EEEEFF */
+	/** Extremely light blue, value: EEEEFF, background color. */
 	public static Color BACKGROUND = new Color(238,238,255);
-	/* F0E68C */
+	/** Extremely light orange, value: F0E68C, room color. */
 	public static Color ROOM = new Color(255,250,205);
-	/* C8C8FF */
+	/** Special blue tone, value: C8C8FF, for the GUI background. */
 	public static Color BACKGROUND_GUI = new Color(215,215,255);
-	/* 4D80C6 */
+	/** Special blue tone, value: 4D80C6, for the sensor/actuator monitoring area. */
 	public static Color SENSOR_AREA = new Color(77, 128, 198, 15);
 
 }

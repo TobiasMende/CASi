@@ -33,10 +33,10 @@ public class ControlPanel extends JPanel {
 
 		this.setBorder(BorderFactory.createTitledBorder("Control field:"));
 
-		/** Set Layout */
+		/* Set Layout */
 		this.setLayout(new FlowLayout());
 
-		/** Set the components */
+		/* Set the components */
 		this.setComponents();
 
 	}
@@ -46,7 +46,7 @@ public class ControlPanel extends JPanel {
 	 */
 	private void setComponents() {
 
-		/** Set start button */
+		/* Set start button */
 		PauseButton pauseButton = new PauseButton();
 		pauseButton.setSize(pauseButton.getPreferredSize());
 		this.add(pauseButton);

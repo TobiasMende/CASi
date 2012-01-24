@@ -29,6 +29,7 @@ import de.uniluebeck.imis.casi.CASi;
 @SuppressWarnings("serial")
 public class ViewMenu extends JMenu {
 
+	/** Menu item of the view menu */
 	private JRadioButtonMenuItem paintDoorLabelsItem, paintSensorLabelsItem,
 			paintRoomLabelsItem, paintSensorMonitoringAreaItem,
 			paintDoorCentralPointsItem, paintRoomCentralPointsItem,

@@ -40,8 +40,13 @@ import de.uniluebeck.imis.casi.simulation.model.actionHandling.AbstractAction;
 public class AgentView extends ComponentView implements IAgentListener,
 		MouseListener {
 
+	/** The represented agent */
 	private Agent agent;
+	
+	/** The information panel to set the selected agent in the combobox */
 	private InformationPanel infoPanel;
+	
+	/** The simulation panel to repaint it, when agents are overlapping*/
 	private SimulationPanel simPanel;
 
 	/**
@@ -122,12 +127,6 @@ public class AgentView extends ComponentView implements IAgentListener,
 
 		g2D.setColor(stateColor);
 		g2D.fillOval(2, 2, (int) dim.getWidth() - 4, (int) dim.getHeight() - 4);
-
-		// if (this.isSelected) {
-		// g2D.setColor(Color.BLACK);
-		// g2D.fillOval(3, 3, (int) dim.getWidth() - 6,
-		// (int) dim.getHeight() - 6);
-		// }
 	}
 
 	/**
@@ -154,6 +153,9 @@ public class AgentView extends ComponentView implements IAgentListener,
 
 	}
 
+	/**
+	 * Sets the state color of this AgentView, if the state changed.
+	 */
 	@Override
 	public void stateChanged(final STATE newState, Agent agent) {
 		SwingUtilities.invokeLater(new Runnable() {
@@ -168,62 +170,38 @@ public class AgentView extends ComponentView implements IAgentListener,
 		});
 	}
 
+	/**
+	 * Sets the position of this AgentView, and repaints the simulation, if the
+	 * agent moved from or to a room central point.
+	 */
 	@Override
-	public void positionChanged(final Point2D oldPosition, final Point2D newPosition,
-			Agent agent) {
+	public void positionChanged(final Point2D oldPosition,
+			final Point2D newPosition, Agent agent) {
 		SwingUtilities.invokeLater(new Runnable() {
 
 			@Override
 			public void run() {
-				
-				if(simPanel.isNearRoomPoint(oldPosition)) {
-					
-					simPanel.setSimulationToScale();
+
+				// check if the old point was in the near of a room central
+				// point
+				if (simPanel.isNearRoomPoint(oldPosition)) {
+
+					// if true, repaint the simulation
+					simPanel.paintScaledSimulation();
 				}
 
-//				/** List of components left in the room at central point */
-//				LinkedList<ComponentView> list = simPanel
-//						.getSimulationComponentesIn(position);
-//				int componentsToChange = list.size();
-//
-//				if (componentsToChange == 1) {
-//
-//					list.getFirst().setTransformedPosition();
-//
-//				} else if (componentsToChange > 1) {
-//
-//					simPanel.paintComponentsInCircle(position, 8, list);
-//				}
-				
-				/* Simply set the new location to the new position */
+				// Simply set the new location to the new position
 				position = newPosition;
 
-//				/**
-//				 * List of components that are in the room at central point
-//				 * (same position)
-//				 */
-//				list = simPanel.getSimulationComponentesIn(position);
-//				componentsToChange = list.size();
-//				
-//				if (componentsToChange == 1) {
-//
-//					AgentView.this.setTransformedPosition();
-//					
-//				} else if (componentsToChange > 1) {
-//
-//					simPanel.paintComponentsInCircle(position, 8, list);
-//					
-//				} else {
-//					
-//					AgentView.this.setTransformedPosition();
-//				}
-					
-				if(simPanel.isNearRoomPoint(position)) {
-					
-					simPanel.setSimulationToScale();
-					
+				// check if the new point is in the near of a room central point
+				if (simPanel.isNearRoomPoint(position)) {
+
+					// if true, repaint the simulation
+					simPanel.paintScaledSimulation();
+
 				} else {
-					
+
+					// else only repaint this agent
 					AgentView.this.setTransformedPosition();
 				}
 
@@ -239,7 +217,7 @@ public class AgentView extends ComponentView implements IAgentListener,
 
 			@Override
 			public void run() {
-				// Handle here!!!
+				// nothing to do here
 
 			}
 		});
@@ -253,7 +231,7 @@ public class AgentView extends ComponentView implements IAgentListener,
 
 			@Override
 			public void run() {
-				// Handle here!!!
+				// nothing to do here
 
 			}
 		});
@@ -267,13 +245,16 @@ public class AgentView extends ComponentView implements IAgentListener,
 
 			@Override
 			public void run() {
-				// Handle here!!!
+				// nothing to do here
 
 			}
 		});
 
 	}
 
+	/**
+	 * Sets this agent as selected in the information panel.
+	 */
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
 
@@ -300,6 +281,10 @@ public class AgentView extends ComponentView implements IAgentListener,
 
 	}
 
+	/**
+	 * Returns the position of the {@link Agent} that is represented by this
+	 * AgentView.
+	 */
 	@Override
 	public Point2D getSimulationPosition() {
 

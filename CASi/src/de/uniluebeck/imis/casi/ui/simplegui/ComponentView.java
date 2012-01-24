@@ -33,9 +33,19 @@ import de.uniluebeck.imis.casi.simulation.model.AbstractComponent;
 @SuppressWarnings("serial")
 public abstract class ComponentView extends JComponent {
 
+	/**
+	 * <code>true</code>, if the component view is selected, else
+	 * <code>false</code>
+	 */
 	protected boolean isSelected;
+
+	/** Color representing the state of the component */
 	protected Color stateColor;
+
+	/** The affine transform to scale the component */
 	protected AffineTransform transform;
+
+	/** The position of the component */
 	protected Point2D position;
 
 	/**
@@ -43,9 +53,9 @@ public abstract class ComponentView extends JComponent {
 	 * the affine transform to scale the position and size.
 	 * 
 	 * @param startPosition
-	 *            - start position
+	 *            the start position
 	 * @param transform
-	 *            - the affine transform
+	 *            the affine transform
 	 */
 	public ComponentView(Point2D startPosition, AffineTransform transform) {
 		this.transform = transform;

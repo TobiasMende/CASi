@@ -54,17 +54,25 @@ public class SimulationPanel extends JLayeredPane implements
 	private static final Logger log = Logger.getLogger(SimulationPanel.class
 			.getName());
 
+	/** The affine transform to scale the simulation */
 	private final AffineTransform transform;
+
+	/** The background panel */
 	private BackgroundPanel backgroundPanel;
 
+	/** X-component of the size of the simulation */
 	private double worldSizeX;
+	/** Y-component of the size of the simulation */
 	private double worldSizeY;
 
+	/** List of all component views in the simulation */
 	private ArrayList<ComponentView> simulationComponents = new ArrayList<ComponentView>();
 
+	/** The view settings of the view menu */
 	private ViewSettings viewSettings;
 
-	private Set<Room> roomPoints;
+	/** List of rooms in the simulation */
+	private Set<Room> rooms;
 
 	/**
 	 * Constructor of the simulation panel sets the preferred size.
@@ -86,7 +94,7 @@ public class SimulationPanel extends JLayeredPane implements
 	 * panel to the right scale, depending on the frame size.
 	 * 
 	 */
-	public void setSimulationToScale() {
+	public void paintScaledSimulation() {
 
 		Container parent = this.getParent();
 		double size = Math.min(parent.getWidth(), parent.getHeight());
@@ -102,7 +110,7 @@ public class SimulationPanel extends JLayeredPane implements
 			componentView.setTransformedPosition();
 		}
 
-		for (Room room : roomPoints) {
+		for (Room room : rooms) {
 
 			paintComponentsInCircle(room.getCentralPoint(), 8,
 					getSimulationComponentesIn(room.getCentralPoint()));
@@ -160,15 +168,14 @@ public class SimulationPanel extends JLayeredPane implements
 				this.add(interactionCompView, new Integer(2));
 			}
 
-			this.roomPoints = SimulationEngine.getInstance().getWorld()
-					.getRooms();
+			this.rooms = SimulationEngine.getInstance().getWorld().getRooms();
 
 		} catch (IllegalAccessException e) {
 
 			log.warning("Exception: " + e.toString());
 		}
 		/** Set scale */
-		setSimulationToScale();
+		paintScaledSimulation();
 	}
 
 	/**
@@ -186,7 +193,7 @@ public class SimulationPanel extends JLayeredPane implements
 	 * @return the simulation components
 	 */
 	public List<ComponentView> getSimulationComponents() {
-	
+
 		return simulationComponents;
 	}
 
@@ -199,54 +206,65 @@ public class SimulationPanel extends JLayeredPane implements
 	 * @return the simulation components
 	 */
 	public LinkedList<ComponentView> getSimulationComponentesIn(Point2D point) {
-	
+
 		LinkedList<ComponentView> list = new LinkedList<ComponentView>();
-	
+
 		if (!isNearRoomPoint(point)) {
-	
+
 			return list;
 		}
-	
+
 		Rectangle rect = new Rectangle((int) point.getX() - 3,
 				(int) point.getY() - 3, 6, 6);
-	
+
 		for (ComponentView componentView : simulationComponents) {
-	
+
 			if (rect.contains(componentView.getSimulationPosition())) {
-	
+
 				list.add(componentView);
 			}
-	
+
 		}
-	
+
 		return list;
 	}
 
+	/**
+	 * This method paints given {@link ComponentView}s in a circle around a
+	 * given {@link Point2D}. The size is the maximum size of the components.
+	 * 
+	 * @param point
+	 *            the central point
+	 * @param size
+	 *            the maximum size of the components
+	 * @param list
+	 *            the list of components
+	 */
 	public void paintComponentsInCircle(Point2D point, int size,
 			LinkedList<ComponentView> list) {
-	
+
 		Point2D centerPoint = new Point2D.Double(transform.getScaleX()
 				* point.getX(), transform.getScaleY() * point.getY());
-	
+
 		int numberOfComponents = list.size();
 		double radius = 1.5 * size * numberOfComponents / (2 * Math.PI);
 		double angle = 2 * Math.PI / numberOfComponents;
 		double newAngle = 0;
-	
+
 		for (ComponentView componentView : list) {
-	
+
 			int scaledX = (int) ((radius * Math.cos(newAngle) - 2)
 					* transform.getScaleX() + centerPoint.getX());
 			int scaledY = (int) ((radius * Math.sin(newAngle) - 2)
 					* transform.getScaleY() + centerPoint.getY());
-	
+
 			componentView.setBounds(scaledX, scaledY,
 					(int) (8 * transform.getScaleX()),
 					(int) (8 * transform.getScaleY()));
-	
+
 			newAngle = newAngle + angle;
 		}
-	
+
 	}
 
 	/**
@@ -258,20 +276,20 @@ public class SimulationPanel extends JLayeredPane implements
 	 *         <code>false</code>.
 	 */
 	public boolean isNearRoomPoint(Point2D point) {
-	
+
 		boolean isRoomCentral = false;
 		Rectangle rect = new Rectangle((int) point.getX() - 3,
 				(int) point.getY() - 3, 6, 6);
-	
-		for (Room room : roomPoints) {
-	
+
+		for (Room room : rooms) {
+
 			if (rect.contains(room.getCentralPoint())) {
-	
+
 				isRoomCentral = true;
 			}
-	
+
 		}
-	
+
 		return isRoomCentral;
 	}
 
@@ -309,7 +327,7 @@ public class SimulationPanel extends JLayeredPane implements
 	public void componentResized(ComponentEvent arg0) {
 
 		/* Set scale relative to the frame size */
-		setSimulationToScale();
+		paintScaledSimulation();
 
 	}
 

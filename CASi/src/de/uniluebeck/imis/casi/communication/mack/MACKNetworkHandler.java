@@ -56,6 +56,8 @@ public final class MACKNetworkHandler implements ICommunicationHandler {
 			.getName());
 	/** The jabber identifier of the mack server */
 	private String MACK_SERVER_IDENTIFIER;
+	/** The default resource identifier */
+	private String RESOURCE;
 
 	/** The port on which to connect to to the XMPP_SERVER */
 	private int XMPP_PORT;
@@ -89,6 +91,7 @@ public final class MACKNetworkHandler implements ICommunicationHandler {
 	public MACKNetworkHandler() {
 		setupDefaults();
 		setupUsableJabberIdentifiers();
+		RESOURCE = "CASi-"+System.currentTimeMillis();
 	}
 
 	/**
@@ -100,6 +103,7 @@ public final class MACKNetworkHandler implements ICommunicationHandler {
 		XMPP_SERVER = "macjabber.de";
 		XMPP_PASSWORD = "ao8Thim2iengeehoeyae4aequigaeV";
 		MACK_SERVER_IDENTIFIER = "mate_server_1@macjabber.de";
+		RESOURCE = "CASi-"+System.currentTimeMillis();
 	}
 
 	/**
@@ -114,6 +118,7 @@ public final class MACKNetworkHandler implements ICommunicationHandler {
 		log.info("Loading setup from config file!");
 		XMLDecoder dec = null;
 		try {
+			RESOURCE = "CASi-"+System.currentTimeMillis();
 			dec = new XMLDecoder(new FileInputStream(path));
 			XMPP_SERVER = (String) dec.readObject();
 			REGISTRATION_DELAY = (Integer) dec.readObject();
@@ -177,8 +182,8 @@ public final class MACKNetworkHandler implements ICommunicationHandler {
 		try {
 			if (CASi.VERBOSE) {
 				CASi.SIM_LOG.info("Sending: " + message);
-				chat.sendMessage((String) message);
 			}
+			chat.sendMessage((String) message);
 		} catch (XMPPException e) {
 			CASi.SIM_LOG.severe("Can't send to mack server: "
 					+ e.fillInStackTrace());
@@ -240,7 +245,7 @@ public final class MACKNetworkHandler implements ICommunicationHandler {
 			connection.connect();
 			boolean createdAccount = false;
 			try {
-				connection.login(identifier.getId(), XMPP_PASSWORD);
+				connection.login(identifier.getId(), XMPP_PASSWORD, RESOURCE);
 			} catch (XMPPException e) {
 				log.info(identifier.getId()
 						+ " seems not to be registered. Trying to register now");
@@ -250,7 +255,8 @@ public final class MACKNetworkHandler implements ICommunicationHandler {
 					registeredLastTime = true;
 					log.info("Account for " + identifier.getId()
 							+ " was registered successfull. Logging in...");
-					connection.login(identifier.getId(), XMPP_PASSWORD);
+					connection.login(identifier.getId(), XMPP_PASSWORD, RESOURCE);
+					
 				}
 			}
 			createChat(identifier, comp, connection);
@@ -283,7 +289,7 @@ public final class MACKNetworkHandler implements ICommunicationHandler {
 									|| message.getType().equals(
 											Message.Type.chat)) {
 								if (CASi.VERBOSE) {
-									CASi.SIM_LOG.finer("Receiving: "
+									CASi.SIM_LOG.info("Receiving: "
 											+ message.getBody());
 								}
 								comp.receive(message.getBody());
@@ -325,7 +331,7 @@ public final class MACKNetworkHandler implements ICommunicationHandler {
 					Message message = ((Message) packet);
 					if (message.getType().equals(Message.Type.normal)) {
 						if (CASi.VERBOSE) {
-							CASi.SIM_LOG.finer("Receiving: "
+							CASi.SIM_LOG.info("Receiving: "
 									+ message.getBody());
 						}
 						comp.receive(message.getBody());

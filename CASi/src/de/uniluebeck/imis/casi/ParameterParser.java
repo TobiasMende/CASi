@@ -80,12 +80,10 @@ public class ParameterParser {
 	private boolean parseFlags(String parameter) {
 		boolean success = false;
 		if (parameter.matches("-[^-]*v[^-]*")) {
-			System.out.println("Enable verbose mode.");
 			verboseMode = true;
 			success = true;
 		}
 		if (parameter.matches("-[^-]*d[^-]*")) {
-			System.out.println("Enable development mode.");
 			devMode = true;
 			success = true;
 		}

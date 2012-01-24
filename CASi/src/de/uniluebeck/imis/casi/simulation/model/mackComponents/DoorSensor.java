@@ -58,7 +58,7 @@ public class DoorSensor extends AbstractInteractionComponent implements
 			value = 0;
 		}
 		CASi.SIM_LOG.info(String.format("%s: changed state to %s",this.toString(), newState.toString()));
-		
+		lastValue = newState;
 		Map<String,String> values = new HashMap<String, String>();
 		values.put("doorstate", Integer.toString(value));
 		String message = MACKProtocolFactory.generatePushMessage(agent, "doorsensor", values);

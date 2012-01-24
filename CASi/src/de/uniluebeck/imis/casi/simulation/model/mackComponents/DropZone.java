@@ -112,6 +112,7 @@ public class DropZone extends AbstractInteractionComponent {
 			values.put("user" + i, a.toString());
 			i++;
 		}
+		lastValue = agentKeys;
 		String message = MACKProtocolFactory.generatePushMessage(agent,
 				"dropzone", values);
 		SimulationEngine.getInstance().getCommunicationHandler()

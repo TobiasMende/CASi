@@ -345,7 +345,13 @@ public abstract class AbstractInteractionComponent extends AbstractComponent
 	 * 
 	 * @return the value in a nicer format
 	 */
-	public abstract String getHumanReadableValue();
+	public String getHumanReadableValue() {
+		if(lastValue != null) {
+			return lastValue.toString();
+		} else {
+			return "unset";
+		}
+	}
 
 	/**
 	 * Getter for the type of this sensor
@@ -358,8 +364,7 @@ public abstract class AbstractInteractionComponent extends AbstractComponent
 
 	@Override
 	public String toString() {
-		return super.toString() + " (" + getType() + ", "
-				+ getHumanReadableValue() + ")";
+		return this.getClass().getSimpleName()+" @ "+agent+" ("+getHumanReadableValue()+")";
 	}
 
 	@Override
@@ -533,5 +538,7 @@ public abstract class AbstractInteractionComponent extends AbstractComponent
 		}
 		return null;
 	}
+	
+	
 
 }

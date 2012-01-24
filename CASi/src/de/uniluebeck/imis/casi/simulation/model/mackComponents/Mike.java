@@ -137,6 +137,7 @@ public class Mike extends AbstractInteractionComponent {
 						"%s has detected voices of %s and %s", this.toString(),
 						meeting.getAgentsInMeeting().get(first), meeting
 								.getAgentsInMeeting().get(second)));
+				lastValue = values;
 
 			} else {
 				log.warning("Unimplemented Case for action: " + interestingPart);
@@ -158,14 +159,12 @@ public class Mike extends AbstractInteractionComponent {
 	@Override
 	public String getHumanReadableValue() {
 		StringBuffer buf = new StringBuffer();
-		buf.append("(");
 		for (String name : values.values()) {
 			buf.append(name + ", ");
 		}
 		if (!values.isEmpty()) {
 			buf.delete(buf.length() - 2, buf.length() - 1);
 		}
-		buf.append(")");
 		return buf.toString();
 	}
 

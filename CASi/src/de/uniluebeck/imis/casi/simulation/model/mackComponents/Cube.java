@@ -80,8 +80,6 @@ public class Cube extends AbstractInteractionComponent {
 
 	/** Counter for the cube instances */
 	private static int idCounter;
-	/** The current state of this cube */
-	private State currentState;
 	/** The message which is send as pull request */
 	private String pullMessage;
 	
@@ -97,7 +95,7 @@ public class Cube extends AbstractInteractionComponent {
 	public Cube(Point2D coordinates, Agent owner) {
 		super("cube-" + owner.getIdentifier() + "-" + idCounter++, coordinates);
 		SimulationClock.getInstance().addListener(this);
-		currentState = State.unknown;
+		lastValue = State.unknown;
 		radius = 50;
 		type = Type.MIXED;
 		agent = owner;
@@ -181,23 +179,23 @@ public class Cube extends AbstractInteractionComponent {
 		possibleInactiveStates.add(State.break_short);
 		if (freq.equals(Frequency.inactive)) {
 			if (!program.equals(Program.unknown)
-					&& !possibleInactiveStates.contains(currentState)) {
+					&& !possibleInactiveStates.contains(lastValue)) {
 				turn = new TurnCube(this,
 						getRandomState(possibleInactiveStates));
 			}
 		} else if ((freq.equals(Frequency.active) || freq
 				.equals(Frequency.very_active)) && program.equals(Program.text)) {
-			if (!currentState.equals(State.writing)) {
+			if (!lastValue.equals(State.writing)) {
 				turn = new TurnCube(this, State.writing);
 			}
 		} else if (program.equals(Program.browser)) {
 			possibleInactiveStates.remove(State.reading);
 			if (freq.equals(Frequency.active)
-					&& !possibleInactiveStates.contains(currentState)) {
+					&& !possibleInactiveStates.contains(lastValue)) {
 				turn = new TurnCube(this,
 						getRandomState(possibleInactiveStates));
 			} else if (freq.equals(Frequency.very_active)
-					&& !currentState.equals(State.writing)) {
+					&& !lastValue.equals(State.writing)) {
 				turn = new TurnCube(this, State.writing);
 			}
 		}
@@ -233,17 +231,12 @@ public class Cube extends AbstractInteractionComponent {
 	public void turnCube(State state) {
 		if (setCurrentState(state)) {
 			HashMap<String, String> values = new HashMap<String, String>();
-			values.put("activity", currentState.toString());
+			values.put("activity", lastValue.toString());
 			String message = MACKProtocolFactory.generatePushMessage(agent,
 					this.getType(), values);
 			SimulationEngine.getInstance().getCommunicationHandler()
 					.send(this, message);
 		}
-	}
-
-	@Override
-	public String getHumanReadableValue() {
-		return "State: " + currentState.toString();
 	}
 
 	@Override
@@ -280,10 +273,10 @@ public class Cube extends AbstractInteractionComponent {
 	 *            the currentState to set
 	 */
 	private boolean setCurrentState(State currentState) {
-		if (!currentState.equals(this.currentState)) {
+		if (!currentState.equals(this.lastValue)) {
 			CASi.SIM_LOG.info(this + ": changing state from "
-					+ this.currentState + " to " + currentState);
-			this.currentState = currentState;
+					+ this.lastValue + " to " + currentState);
+			this.lastValue = currentState;
 			return true;
 		}
 		return false;
@@ -298,7 +291,7 @@ public class Cube extends AbstractInteractionComponent {
 		possibleStates.add(State.break_long);
 		possibleStates.add(State.break_short);
 		if (shouldScheduleTurnCubeAction(agent) && newState.equals(STATE.IDLE)
-				&& !possibleStates.contains(currentState)) {
+				&& !possibleStates.contains(lastValue)) {
 			TurnCube turn = new TurnCube(this, getRandomState(possibleStates));
 			CASi.SIM_LOG.info(this + ": I'm telling " + agent
 					+ " to turn me to " + turn.getCubeState());
@@ -319,7 +312,7 @@ public class Cube extends AbstractInteractionComponent {
 		possibleStates.add(State.break_short);
 		if (shouldScheduleTurnCubeAction(agent)
 				&& interruptibility.equals(INTERRUPTIBILITY.INTERRUPTIBLE)
-				&& !possibleStates.contains(currentState)) {
+				&& !possibleStates.contains(lastValue)) {
 			TurnCube turn = new TurnCube(this, getRandomState(possibleStates));
 			CASi.SIM_LOG.info(this + ": I'm telling " + agent
 					+ " to turn me to " + turn.getCubeState());

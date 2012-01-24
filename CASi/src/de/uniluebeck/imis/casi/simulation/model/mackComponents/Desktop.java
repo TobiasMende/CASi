@@ -71,7 +71,7 @@ public class Desktop extends AbstractInteractionComponent {
 
 	@Override
 	public String getHumanReadableValue() {
-		return "[P: " + currentProgram + ", F: " + currentFrequency + "]";
+		return "P: " + currentProgram + ", F: " + currentFrequency;
 	}
 
 	/**

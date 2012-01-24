@@ -17,6 +17,8 @@ import java.util.Random;
 import java.util.Set;
 import java.util.logging.Logger;
 
+import com.sun.xml.internal.bind.v2.model.core.MaybeElement;
+
 import de.uniluebeck.imis.casi.CASi;
 import de.uniluebeck.imis.casi.communication.mack.MACKInformation;
 import de.uniluebeck.imis.casi.communication.mack.MACKProtocolFactory;
@@ -55,8 +57,6 @@ public class DoorLight extends AbstractInteractionComponent {
 		uninterruptible;
 	}
 
-	/** The current state of this door light */
-	private State currentState = State.maybeInterruptible;
 	/** The door to which this actuator is attached */
 	private Door door;
 	/** The room to which the access is restricted by this light */
@@ -85,6 +85,7 @@ public class DoorLight extends AbstractInteractionComponent {
 		this.door = door;
 		this.room = room;
 		this.agent = agent;
+		lastValue = State.maybeInterruptible;
 		pullMessage = MACKProtocolFactory.generatePullRequest(agent,
 				"doorlight", "interruptibility");
 	}
@@ -137,10 +138,10 @@ public class DoorLight extends AbstractInteractionComponent {
 	 *            the currentState to set
 	 */
 	private void setCurrentState(State currentState) {
-		if (!currentState.equals(this.currentState)) {
+		if (!currentState.equals(lastValue)) {
 			CASi.SIM_LOG.info(this + ": changing state from "
-					+ this.currentState + " to " + currentState);
-			this.currentState = currentState;
+					+ lastValue + " to " + currentState);
+			lastValue = currentState;
 		}
 	}
 
@@ -159,7 +160,7 @@ public class DoorLight extends AbstractInteractionComponent {
 			log.info("No path iterator. Allowing acces now.");
 			return true;
 		}
-		switch (currentState) {
+		switch ((State)lastValue) {
 		case interruptible:
 			allowAccess = true;
 			break;
@@ -271,19 +272,6 @@ public class DoorLight extends AbstractInteractionComponent {
 	@Override
 	protected boolean checkInterest(Agent agent) {
 		return agent != this.agent;
-	}
-
-	@Override
-	public String getHumanReadableValue() {
-		return currentState.toString();
-	}
-
-	/**
-	 * Returns a String, describing this doorLight.
-	 */
-	public String toString() {
-		return String.format("DoorLight @ %s: %s", door.toString(),
-				currentState.toString());
 	}
 
 	@Override

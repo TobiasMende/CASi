@@ -79,7 +79,7 @@ public class XmppIdentifier {
 	}
 
 	/**
-	 * Setter for the agent identifier of the {@link Agent} to which this identfier belongs.
+	 * Setter for the agent identifier of the Agent (user identifier) to which this identfier belongs.
 	 * @param componentOwner
 	 *            the componentOwner to set
 	 */

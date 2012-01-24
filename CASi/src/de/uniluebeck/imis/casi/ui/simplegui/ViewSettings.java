@@ -96,6 +96,9 @@ public class ViewSettings implements ActionListener {
 	}
 
 	/**
+	 * Returns <code>true</code> if door labels are to be painted,
+	 * <code>false</code> otherwise.
+	 * 
 	 * @return the paintDoorLabels
 	 */
 	public boolean isPaintDoorLabels() {
@@ -103,6 +106,9 @@ public class ViewSettings implements ActionListener {
 	}
 
 	/**
+	 * Returns <code>true</code> if sensor labels are to be painted,
+	 * <code>false</code> otherwise.
+	 * 
 	 * @return the paintSensorLabels
 	 */
 	public boolean isPaintSensorLabels() {
@@ -110,6 +116,9 @@ public class ViewSettings implements ActionListener {
 	}
 
 	/**
+	 * Returns <code>true</code> if room labels are to be painted,
+	 * <code>false</code> otherwise.
+	 * 
 	 * @return the paintRoomLabels
 	 */
 	public boolean isPaintRoomLabels() {
@@ -117,6 +126,9 @@ public class ViewSettings implements ActionListener {
 	}
 
 	/**
+	 * Returns <code>true</code> if sensor/actuator areas are to be painted,
+	 * <code>false</code> otherwise.
+	 * 
 	 * @return the paintSensorMonitoringArea
 	 */
 	public boolean isPaintSensorMonitoringArea() {
@@ -124,6 +136,9 @@ public class ViewSettings implements ActionListener {
 	}
 
 	/**
+	 * Returns <code>true</code> if door central points are to be painted,
+	 * <code>false</code> otherwise.
+	 * 
 	 * @return the paintDoorCentralPoints
 	 */
 	public boolean isPaintDoorCentralPoints() {
@@ -131,6 +146,9 @@ public class ViewSettings implements ActionListener {
 	}
 
 	/**
+	 * Returns <code>true</code> if room central points are to be painted,
+	 * <code>false</code> otherwise.
+	 * 
 	 * @return the paintRoomCentralPoints
 	 */
 	public boolean isPaintRoomCentralPoints() {
@@ -138,6 +156,9 @@ public class ViewSettings implements ActionListener {
 	}
 
 	/**
+	 * Returns <code>true</code> if sensors and actuators are to be painted,
+	 * <code>false</code> otherwise.
+	 * 
 	 * @return the paintSensors
 	 */
 	public boolean isPaintSensors() {

@@ -39,7 +39,9 @@ public class ConfigMap extends HashMap<String, Object> {
 	 * assumed to be correct.
 	 * 
 	 * This identifier usually makes sense if configuring the behavior or the
-	 * experience of an {@link Agent}
+	 * experience of an {@link Agent}.
+	 * 
+	 * The value should be between {@code 0.0} and {@code 1.0}.
 	 */
 	public static final String TURN_CUBE_PROBABILITY = "TURN_CUBE_PROBABILITY";
 

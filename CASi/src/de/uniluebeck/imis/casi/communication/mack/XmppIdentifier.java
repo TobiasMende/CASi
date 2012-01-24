@@ -79,6 +79,7 @@ public class XmppIdentifier {
 	}
 
 	/**
+	 * Setter for the agent identifier of the {@link Agent} to which this identfier belongs.
 	 * @param componentOwner
 	 *            the componentOwner to set
 	 */
@@ -87,6 +88,7 @@ public class XmppIdentifier {
 	}
 
 	/**
+	 * Setter for the tye of the component.
 	 * @param componentType
 	 *            the componentType to set
 	 */
@@ -95,6 +97,7 @@ public class XmppIdentifier {
 	}
 
 	/**
+	 * Setter for the jabber identifier to set.
 	 * @param id
 	 *            the id to set
 	 */

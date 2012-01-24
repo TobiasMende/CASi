@@ -17,6 +17,10 @@ package de.uniluebeck.imis.casi.simulation.model;
  *
  */
 public interface IDoorListener {
-	/** Event: door state has changed */
+	/** Event: door state has changed 
+	 * 
+	 * @param oldState the state before the change
+	 * @param newState the state after the change
+	 */
 	public void stateChanged(Door.State oldState, Door.State newState);
 }

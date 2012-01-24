@@ -168,6 +168,10 @@ public class ParameterParser {
 		return logFormat;
 	}
 	
+	/**
+	 * Getter for the speed factor
+	 * @return the speed factor for the simulation clock.
+	 */
 	public double getSpeedFactor() {
 		return speedFactor;
 	}

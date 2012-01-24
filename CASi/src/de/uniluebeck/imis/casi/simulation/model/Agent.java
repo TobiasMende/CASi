@@ -470,6 +470,7 @@ public class Agent extends AbstractComponent implements
 	}
 
 	/**
+	 * Setter for the default position.
 	 * @param defaultPosition
 	 *            the defaultPosition to set
 	 */

@@ -51,18 +51,34 @@ public class Cube extends AbstractInteractionComponent {
 	 */
 	private static final long serialVersionUID = -3061958723193321546L;
 
-	/** The states which can be represented by this cube */
+	/** The states which can be represented by this cube. */
 	public enum State {
-		break_long(0), break_short(1), unknown(2), reading(3), writing(4), meeting(
-				5);
+		/** the agents does a long break */
+		break_long(0),
+		/** the agent does a short break */
+		break_short(1),
+		/** the state can't be established */
+		unknown(2),
+		/** the agent is reading */
+		reading(3),
+		/** the agent is writing */
+		writing(4),
+		/** the agent is in a meeting */
+		meeting(5);
 		/** int value for the state */
 		private int intValue;
 
+		/**
+		 * Internal constructor for the states
+		 * @param intValue the integer value which is used in the MACK framework.
+		 */
 		private State(int intValue) {
 			this.intValue = intValue;
 		}
 
-		/** Getter for the int value */
+		/** Getter for the int value 
+		 * @return the value which is used by the mack framework.
+		 * */
 		public int intValue() {
 			return intValue;
 		}
@@ -74,15 +90,18 @@ public class Cube extends AbstractInteractionComponent {
 	 * value for {@link ConfigMap#TURN_CUBE_PROBABILITY}
 	 */
 	public static final double DEFAULT_TURN_CUBE_PROBABILITY = 0.15;
-	
-	/** the amount of minutes that have to elapse in minimum until this cube would schedule a new turn cube action */
+
+	/**
+	 * the amount of minutes that have to elapse in minimum until this cube
+	 * would schedule a new turn cube action.
+	 */
 	private static final int TURN_CUBE_SCHEDULE_DELAY = 10;
 
 	/** Counter for the cube instances */
 	private static int idCounter;
 	/** The message which is send as pull request */
 	private String pullMessage;
-	
+
 	/** The time when the last time a turn cube action was scheduled */
 	private SimulationTime lastTurnCubeScheduling;
 
@@ -141,15 +160,18 @@ public class Cube extends AbstractInteractionComponent {
 		}
 		Random rand = new Random(System.currentTimeMillis());
 		double value = rand.nextDouble();
-		if(value > probability) {
+		if (value > probability) {
 			return false;
 		}
-		SimulationTime currentTime = SimulationClock.getInstance().getCurrentTime();
-		if(lastTurnCubeScheduling == null || lastTurnCubeScheduling.plus(60*TURN_CUBE_SCHEDULE_DELAY).before(currentTime)) {
+		SimulationTime currentTime = SimulationClock.getInstance()
+				.getCurrentTime();
+		if (lastTurnCubeScheduling == null
+				|| lastTurnCubeScheduling.plus(60 * TURN_CUBE_SCHEDULE_DELAY)
+						.before(currentTime)) {
 			lastTurnCubeScheduling = currentTime;
 			return true;
 		}
-		
+
 		return false;
 	}
 
@@ -274,8 +296,8 @@ public class Cube extends AbstractInteractionComponent {
 	 */
 	private boolean setCurrentState(State currentState) {
 		if (!currentState.equals(this.lastValue)) {
-			CASi.SIM_LOG.info(this + ": changing state from "
-					+ this.lastValue + " to " + currentState);
+			CASi.SIM_LOG.info(this + ": changing state from " + this.lastValue
+					+ " to " + currentState);
 			this.lastValue = currentState;
 			return true;
 		}

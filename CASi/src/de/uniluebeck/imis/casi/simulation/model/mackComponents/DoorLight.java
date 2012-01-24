@@ -17,8 +17,6 @@ import java.util.Random;
 import java.util.Set;
 import java.util.logging.Logger;
 
-import com.sun.xml.internal.bind.v2.model.core.MaybeElement;
-
 import de.uniluebeck.imis.casi.CASi;
 import de.uniluebeck.imis.casi.communication.mack.MACKInformation;
 import de.uniluebeck.imis.casi.communication.mack.MACKProtocolFactory;
@@ -284,6 +282,14 @@ public class DoorLight extends AbstractInteractionComponent {
 	@Override
 	public String getType() {
 		return "doorlight";
+	}
+	
+	/**
+	 * Getter for the door to which this doorlight is assigned.
+	 * @return the door
+	 */
+	public Door getDoor() {
+		return door;
 	}
 
 }

@@ -37,11 +37,17 @@ public class CreateAMeeting extends AtomicAction {
 	 * serialization identifier
 	 */
 	private static final long serialVersionUID = -3829562333684033056L;
+	/** The agent which creates and invites to the meeting */
 	private Agent creator;
+	/** the agents which take part in the meeting */
 	private Set<Agent> set;
+	/** the position where the meeting should be */
 	private IPosition where;
+	/** the start time for the meeting */
 	private SimulationTime wishedStartTime;
+	/** the duration of the meeting */
 	private int expectedDuration;
+	/** the priority of the meeting */
 	private int meetingPriority;
 
 	/**

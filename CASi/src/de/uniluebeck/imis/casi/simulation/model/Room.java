@@ -208,6 +208,7 @@ public class Room implements IPosition {
 
 	
 	/**
+	 * Setter for an unique identifier for this room.
 	 * @param identifier the identifier to set
 	 */
 	public void setIdentifier(String identifier) {

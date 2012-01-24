@@ -35,15 +35,23 @@ public class HaveAMeeting extends ComplexAction {
 	 * serial id, you guessed it.
 	 */
 	private static final long serialVersionUID = 5933636748690158732L;
-
+	/** the position of the meeting */
 	private IPosition where;
-	
+	/** the agents which take part in the meeting */
 	private ArrayList<String> agentsInMeeting = new ArrayList<String>();
-	
-	
-	public HaveAMeeting(IPosition where, SimulationTime supposedStartTime, int howLong, int prio, Collection<Agent> agents) {
+
+	/**
+	 * Constructor for a new meeting.
+	 * @param where the positon
+	 * @param supposedStartTime the start time
+	 * @param howLong the duration
+	 * @param prio the priority
+	 * @param agents the agents in this meeting 
+	 */
+	public HaveAMeeting(IPosition where, SimulationTime supposedStartTime,
+			int howLong, int prio, Collection<Agent> agents) {
 		super();
-		for(Agent a :agents) {
+		for (Agent a : agents) {
 			agentsInMeeting.add(a.getIdentifier());
 		}
 		this.setEarliestStartTime(supposedStartTime);
@@ -51,22 +59,23 @@ public class HaveAMeeting extends ComplexAction {
 		addSubAction(new Move(where));
 		addSubAction(new StayHere(howLong, prio));
 	}
-	
+
 	@Override
 	public String getInformationDescription() {
 		String res;
-		res = String.format("%s: at %s @ %s", this.getClass()
-				.getSimpleName(), this.getEarliestStartTime().toString(),where.toString());
+		res = String.format("%s: at %s @ %s", this.getClass().getSimpleName(),
+				this.getEarliestStartTime().toString(), where.toString());
 		return res;
 	}
-	
+
 	@Override
 	public ComplexAction clone() {
 		return super.clone();
 	}
-	
+
 	/**
 	 * Gets a list of identifiers of agents that are in this meeting.
+	 * 
 	 * @return the agentsInMeeting the list of names
 	 */
 	public ArrayList<String> getAgentsInMeeting() {

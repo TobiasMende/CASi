@@ -13,6 +13,7 @@ package de.uniluebeck.imis.casi.simulation.model.mackActions;
 
 import java.util.Random;
 
+import de.uniluebeck.imis.casi.simulation.engine.SimulationClock;
 import de.uniluebeck.imis.casi.simulation.model.AbstractComponent;
 import de.uniluebeck.imis.casi.simulation.model.Agent;
 import de.uniluebeck.imis.casi.simulation.model.actionHandling.AtomicAction;
@@ -34,7 +35,7 @@ public class WorkOnDesktop extends AtomicAction {
 	private Desktop.Program program;
 	/** the initial frequency */
 	private Desktop.Frequency frequency;
-	
+	/** counter for ticks of the {@link SimulationClock}. Is used to do automatic frequency updates */
 	private int iterationCounter;
 
 	/**

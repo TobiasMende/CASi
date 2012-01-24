@@ -17,16 +17,28 @@ import java.util.Hashtable;
 import de.uniluebeck.imis.casi.simulation.model.Wall;
 
 /**
- * This caching factory's purpose is mainly to cache already created walls during
- * Room creation to make it easier to handle doors. If some wall has a door set
- * and another wall is equal to this wall, it has to get the same door.
+ * This caching factory's purpose is mainly to cache already created walls
+ * during Room creation to make it easier to handle doors. If some wall has a
+ * door set and another wall is equal to this wall, it has to get the same door.
  * 
  * @author Marvin Frick
  */
 public final class WallFactory {
-
+	/** Saves all walls which have already been created */
 	private static final Hashtable<Integer, Wall> wallCache = new Hashtable<Integer, Wall>();
 
+	/**
+	 * Getter for a wall with the provided start and end points.
+	 * 
+	 * Searches for a wall in the wall cache even with reversed start and end
+	 * point and creates a new wall if no matching wall exists.
+	 * 
+	 * @param start
+	 *            the start point
+	 * @param end
+	 *            the end point
+	 * @return a wall which matches the start and end point.
+	 */
 	public static final Wall getWallWithPoints(Point2D start, Point2D end) {
 
 		// check if this wall is in the cache

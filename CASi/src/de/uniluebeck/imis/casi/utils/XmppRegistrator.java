@@ -53,7 +53,7 @@ public class XmppRegistrator {
 	private ArrayList<XmppIdentifier> usableJabberIdentifiers = new ArrayList<XmppIdentifier>();
 	/** Counts the registrations */
 	private int registrationCounter = 0;
-
+	/** Identfiers which have to be registered before they can be used. */
 	private ArrayList<XmppIdentifier> identifierToRegister = new ArrayList<XmppIdentifier>();
 
 	/**
@@ -151,6 +151,16 @@ public class XmppRegistrator {
 				.println("======================================================================");
 	}
 
+	/**
+	 * Method for checking whether the provided identifier is registered at the
+	 * jabber server.
+	 * 
+	 * Adds the identifier to {@link XmppRegistrator#identifierToRegister} if it
+	 * seems not to be registered.
+	 * 
+	 * @param identifier
+	 *            the identifier to check.
+	 */
 	private void check(XmppIdentifier identifier) {
 		ConnectionConfiguration config = new ConnectionConfiguration(
 				XMPP_SERVER, XMPP_PORT);

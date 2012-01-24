@@ -32,6 +32,7 @@ import de.uniluebeck.imis.casi.simulation.model.actionHandling.AbstractAction;
 public class DoorSensor extends AbstractInteractionComponent implements
 		IDoorListener {
 	private static final long serialVersionUID = -7466985585534462471L;
+	/** the door to which this sensor is assigned */
 	private Door door;
 	/**
 	 * Creates a new door sensor for a provided door
@@ -79,6 +80,14 @@ public class DoorSensor extends AbstractInteractionComponent implements
 	@Override
 	public String getType() {
 		return "doorsensor";
+	}
+	
+	/**
+	 * Getter for the door to which this doorlight is assigned.
+	 * @return the door
+	 */
+	public Door getDoor() {
+		return door;
 	}
 
 }

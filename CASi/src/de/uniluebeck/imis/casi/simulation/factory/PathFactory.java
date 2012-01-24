@@ -242,36 +242,6 @@ public class PathFactory {
 		return path;
 	}
 
-	/**
-	 * Calculates a path if start and end are in the same room
-	 * 
-	 * @param start
-	 *            the start position
-	 * @param end
-	 *            the end position
-	 * @return a path that describes the way
-	 */
-	//TODO: do we really not need this? Warns about being not used...
-	private static Path findPathInRoom(IPosition start, IPosition end) {
-		LinkedList<Room> rooms = WorldFactory.getRoomsWithPoint(start
-				.getCentralPoint());
-		Room room = null;
-		for (Room r : rooms) {
-			if (r.contains(start) && r.contains(end)) {
-				room = r;
-				break;
-			}
-		}
-		if (room == null) {
-			log.warning("Can't handle this. Start and end are in different rooms");
-			return null;
-		}
-		InRoomPathSolver solver = new InRoomPathSolver(room, end.getCentralPoint());
-		List<Point2D> points = solver.compute(start.getCentralPoint());
-		Path path = new Path(start.getCentralPoint(), end.getCentralPoint());
-		path.addAll(points);
-		return path;
-	}
 
 	/**
 	 * Method for calculating a path in a given room
@@ -330,80 +300,5 @@ public class PathFactory {
 			}
 		}
 		return null;
-	}
-
-	/**
-	 * Calculates a path which's sub paths arn't longer than the give maximum
-	 * length. This can be useful, if one need steps that can be performed in
-	 * each second.
-	 * 
-	 * @param path
-	 *            the path to split
-	 * @param maximumPathLength
-	 *            the maximum path length
-	 * @return a fine grained path
-	 * @deprecated because the algorithm provides path with sub paths of the
-	 *             size <code>1</code> and this method isn't needed.
-	 */
-	@Deprecated
-	public static Path getFineGrainedPath(Path path, double maximumPathLength) {
-		Path grainedPath = new Path(path.getStartPoint(), path.getEndPoint());
-		for (Iterator<Point2D> iter = path.iterator(); iter.hasNext();) {
-			Point2D first = iter.next();
-			if (iter.hasNext()) {
-				Point2D second = iter.next();
-				grainedPath.addAll(getFineGrainedPath(first, second,
-						maximumPathLength));
-			} else {
-				// Reached the last point
-				break;
-			}
-		}
-		return grainedPath;
-	}
-
-	/**
-	 * Calculates a fine grained path between two points. This means, that the
-	 * linear path is cut into further steps. This is useful if you need
-	 * subpaths for each second.
-	 * 
-	 * @param start
-	 *            the start point
-	 * @param end
-	 *            the end point
-	 * @param maximumPathLength
-	 *            the maximum distance between interpoints
-	 * @return a new fine grained path
-	 * @deprecated because the algorithm provides path with sub paths of the
-	 *             size <code>1</code> and this method isn't needed.
-	 */
-	@Deprecated
-	public static Path getFineGrainedPath(Point2D start, Point2D end,
-			double maximumPathLength) {
-		Point2D directionVector = GraphicFactory.getDirectionVector(start, end);
-		double length = GraphicFactory.calculateVectorLength(directionVector);
-		Point2D normalizedDirectionVector = GraphicFactory
-				.getNormalizedVector(directionVector);
-		Path path = new Path(start, end);
-		path.add(start);
-		Point2D lastPoint = start;
-		// Calculating interpoints while the remaining length is bigger than the
-		// maximum path length
-		while (length > maximumPathLength) {
-			// Calculating interpoint
-			double x = lastPoint.getX() + maximumPathLength
-					* normalizedDirectionVector.getX();
-			double y = lastPoint.getY() + maximumPathLength
-					* normalizedDirectionVector.getY();
-			lastPoint = new Point2D.Double(x, y);
-			// adding interpoint
-			path.add(lastPoint);
-			// calculating reaming length
-			length -= maximumPathLength;
-		}
-		path.add(end);
-
-		return path;
-
 	}
 }

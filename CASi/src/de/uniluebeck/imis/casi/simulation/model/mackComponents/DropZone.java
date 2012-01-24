@@ -36,7 +36,7 @@ public class DropZone extends AbstractInteractionComponent {
 	 * serialization identifier
 	 */
 	private static final long serialVersionUID = 5267989276308595425L;
-
+	/** the keys (references to agents) which are in this zone. */
 	private ArrayList<Agent> agentKeys = new ArrayList<Agent>();
 
 	/**

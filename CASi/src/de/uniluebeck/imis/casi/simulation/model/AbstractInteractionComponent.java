@@ -85,7 +85,15 @@ public abstract class AbstractInteractionComponent extends AbstractComponent
 
 	/** Enumeration for possible directions in which this component looks */
 	public enum Face {
-		NORTH(90), SOUTH(270), EAST(0), WEST(180), NORTH_EAST(45), SOUTH_EAST(
+		/** direction: up */
+		NORTH(90), 
+		/** direction: bottom */
+		SOUTH(270), 
+		/** direction: right */
+		EAST(0), 
+		/** direction: left */
+		WEST(180), 
+		NORTH_EAST(45), SOUTH_EAST(
 				315), NORTH_WEST(135), SOUTH_WEST(225);
 		/** The degree representation of this face */
 		private double degree;

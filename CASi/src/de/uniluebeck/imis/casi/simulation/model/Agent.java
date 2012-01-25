@@ -360,9 +360,9 @@ public class Agent extends AbstractComponent implements
 		Agent newAgent;
 		try {
 			newAgent = (Agent) Tools.deepCopy(this);
-			newAgent.setState(STATE.IDLE);
 			newAgent.agentListeners = new LinkedList<IAgentListener>();
 			newAgent.extendedListeners = new LinkedList<IExtendedAgentListener>();
+			newAgent.setState(STATE.IDLE);
 			return newAgent;
 		} catch (Exception e) {
 			log.severe("An error occured while cloning the agent: "

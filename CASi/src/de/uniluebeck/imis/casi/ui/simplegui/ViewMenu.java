@@ -13,8 +13,8 @@ package de.uniluebeck.imis.casi.ui.simplegui;
 
 import java.awt.event.ActionListener;
 
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenu;
-import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JSeparator;
 
 import de.uniluebeck.imis.casi.CASi;
@@ -30,7 +30,7 @@ import de.uniluebeck.imis.casi.CASi;
 public class ViewMenu extends JMenu {
 
 	/** Menu item of the view menu */
-	private JRadioButtonMenuItem paintDoorLabelsItem, paintSensorLabelsItem,
+	private JCheckBoxMenuItem paintDoorLabelsItem, paintSensorLabelsItem,
 			paintRoomLabelsItem, paintSensorMonitoringAreaItem,
 			paintDoorCentralPointsItem, paintRoomCentralPointsItem,
 			paintSensorsItem;
@@ -43,19 +43,19 @@ public class ViewMenu extends JMenu {
 
 		super("View");
 
-		paintSensorsItem = new JRadioButtonMenuItem("Show sensors/actuators");
+		paintSensorsItem = new JCheckBoxMenuItem("Show sensors/actuators");
 		paintSensorsItem.setSelected(true);
 		paintSensorsItem.setActionCommand("paintSensors");
 		add(paintSensorsItem);
 
-		paintSensorMonitoringAreaItem = new JRadioButtonMenuItem(
+		paintSensorMonitoringAreaItem = new JCheckBoxMenuItem(
 				"Show sensor/actuator area");
 		paintSensorMonitoringAreaItem.setSelected(CASi.DEV_MODE);
 		paintSensorMonitoringAreaItem
 				.setActionCommand("paintSensorMonitoringArea");
 		add(paintSensorMonitoringAreaItem);
 
-		paintSensorLabelsItem = new JRadioButtonMenuItem(
+		paintSensorLabelsItem = new JCheckBoxMenuItem(
 				"Show sensor/actuator labels");
 		paintSensorLabelsItem.setSelected(CASi.DEV_MODE);
 		paintSensorLabelsItem.setActionCommand("paintSensorLabels");
@@ -63,12 +63,12 @@ public class ViewMenu extends JMenu {
 		
 		add(new JSeparator());
 
-		paintDoorLabelsItem = new JRadioButtonMenuItem("Show door labels");
+		paintDoorLabelsItem = new JCheckBoxMenuItem("Show door labels");
 		paintDoorLabelsItem.setSelected(CASi.DEV_MODE);
 		paintDoorLabelsItem.setActionCommand("paintDoorLabels");
 		add(paintDoorLabelsItem);
 
-		paintDoorCentralPointsItem = new JRadioButtonMenuItem(
+		paintDoorCentralPointsItem = new JCheckBoxMenuItem(
 				"Show door points");
 		paintDoorCentralPointsItem.setSelected(CASi.DEV_MODE);
 		paintDoorCentralPointsItem.setActionCommand("paintDoorCentralPoints");
@@ -76,12 +76,12 @@ public class ViewMenu extends JMenu {
 		
 		add(new JSeparator());
 
-		paintRoomLabelsItem = new JRadioButtonMenuItem("Show room labels");
+		paintRoomLabelsItem = new JCheckBoxMenuItem("Show room labels");
 		paintRoomLabelsItem.setSelected(CASi.DEV_MODE);
 		paintRoomLabelsItem.setActionCommand("paintRoomLabels");
 		add(paintRoomLabelsItem);
 
-		paintRoomCentralPointsItem = new JRadioButtonMenuItem(
+		paintRoomCentralPointsItem = new JCheckBoxMenuItem(
 				"Show room points");
 		paintRoomCentralPointsItem.setSelected(CASi.DEV_MODE);
 		paintRoomCentralPointsItem.setActionCommand("paintRoomCentralPoints");

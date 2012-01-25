@@ -125,21 +125,17 @@ public class InteractionComponentView extends ComponentView implements
 
 		Dimension dim = getSize();
 
+		g2D.setColor(Color.BLACK);
+		g2D.fillRect(0, 0, (int) dim.getWidth(), (int) dim.getHeight());
 		if (this.isSelected) {
-			g2D.setColor(Color.BLACK);
-			g2D.fillRect(0, 0, (int) dim.getWidth(), (int) dim.getHeight());
 			g2D.setColor(ColorScheme.ORANGE_VERY_LIGHT);
-		}
-
-		if (!this.isSelected) {
-
-			g2D.setColor(Color.BLACK);
+			g2D.fillRect(1, 1, (int) dim.getWidth() - 2, (int) dim.getHeight() - 2);
+		} else {
+			g2D.setColor(this.stateColor);
+			g2D.fillRect(1, 1, (int) dim.getWidth() - 2, (int) dim.getHeight() - 2);
 		}
 		
-		g2D.fillRect(1, 1, (int) dim.getWidth() - 2, (int) dim.getHeight() - 2);
 
-		g2D.setColor(this.stateColor);
-		g2D.fillRect(2, 2, (int) dim.getWidth() - 4, (int) dim.getHeight() - 4);
 		
 	}
 

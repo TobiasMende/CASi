@@ -14,7 +14,7 @@ package de.uniluebeck.imis.casi.ui.simplegui;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.JRadioButtonMenuItem;
+import javax.swing.JCheckBoxMenuItem;
 
 import de.uniluebeck.imis.casi.CASi;
 
@@ -60,7 +60,7 @@ public class ViewSettings implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 
-		JRadioButtonMenuItem clickedItem = (JRadioButtonMenuItem) arg0
+		JCheckBoxMenuItem clickedItem = (JCheckBoxMenuItem) arg0
 				.getSource();
 
 		if (arg0.getActionCommand().equals("paintDoorLabels")) {

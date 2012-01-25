@@ -273,7 +273,7 @@ public class Cube extends AbstractInteractionComponent {
 			log.severe("Message was invalid");
 			return;
 		}
-		CASi.SIM_LOG.fine(this + ": Receiving update!");
+		CASi.SIM_LOG.finest(this + ": Receiving update!");
 		String activity = info.getAccessibleEntities().get("activity");
 		if (activity != null) {
 			for (State s : State.values()) {

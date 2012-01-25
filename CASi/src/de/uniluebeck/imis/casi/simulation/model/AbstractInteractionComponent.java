@@ -401,7 +401,7 @@ public abstract class AbstractInteractionComponent extends AbstractComponent
 	 * communication handler
 	 */
 	protected void sendRecurringMessage(SimulationTime newTime) {
-		CASi.SIM_LOG.fine(this + ": Sending Pull Request");
+		CASi.SIM_LOG.finest(this + ": Sending Pull Request");
 	}
 
 	@Override

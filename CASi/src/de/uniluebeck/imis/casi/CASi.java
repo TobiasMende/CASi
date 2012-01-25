@@ -400,7 +400,11 @@ public class CASi {
 		try {
 			new File("./log").mkdir();
 			simFileHandler = getFileHandler(false);
-			simFileHandler.setLevel(Level.ALL);
+			if(CASi.VERBOSE) {
+				simFileHandler.setLevel(Level.ALL);
+			} else {
+				simFileHandler.setLevel(Level.FINE);
+			}
 		} catch (Exception e) {
 			System.out.println("Es wird keine Protokolldatei erzeugt: "
 					+ e.getMessage());

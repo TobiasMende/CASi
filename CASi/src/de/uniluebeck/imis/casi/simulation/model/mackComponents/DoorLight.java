@@ -108,7 +108,7 @@ public class DoorLight extends AbstractInteractionComponent {
 					+ agent);
 			return;
 		}
-		CASi.SIM_LOG.fine(this + ": Receiving update!");
+		CASi.SIM_LOG.finest(this + ": Receiving update!");
 		try {
 			int value = Integer.parseInt(interrupt);
 			switch (value) {

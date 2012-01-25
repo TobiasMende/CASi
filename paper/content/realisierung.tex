@@ -1,10 +1,8 @@
 \chapter{Realisierung}\label{chapter:realization}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\imiscomment{Beschreibung der hard- und software-technischen Realisierung}
-
-\imiscomment{Struktur dieses Kapitel kann je nach Problemstellung unterschiedlich gestaltet werden}
-
+%\imiscomment{Beschreibung der hard- und software-technischen Realisierung}
+%
+%\imiscomment{Struktur dieses Kapitel kann je nach Problemstellung unterschiedlich gestaltet werden}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Realisierung der Einzelmodule}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -43,14 +41,14 @@ Für das Erstellen einer neuen Simulation reicht es aus, eine Simulationswelt (d
 Ein Beispiel, wie eine solche erzeugt werden kann, ist in Kapitel  \ref{chapter:dialogs} an Hand der Demonstrationssimulation dargestellt.\\ 
 
 Aus Modularitätsgründen haben wir uns für das Konzept eines leicht austauschbaren Generators entschieden. Dafür wurde das Interface \codeinterface{IWorldGenerator} entworfen, welches nur eine Methode (\codemethod{generateWorld()}) definiert, die von allen konkreten Generatoren als Schnittstelle genutzt werden sollte.
-Darüber hinaus gibt es im Generatorpaket (\codeinline{de.uniluebeck.imis.casi.generator}) einige Helferklassen, deren Name mit \codeclass{Collector} gekennzeichnet ist und einen \codeclass{Linker}.\\
+Darüber hinaus gibt es im Generatorpaket (\codeinline{de.uniluebeck.imis.casi.gene\-rator}) einige Helferklassen, deren Name mit \codeclass{Collector} gekennzeichnet ist und einen \codeclass{Linker}.\\
 
 Durch den gewählten Ansatz der starken Abstraktion ist es möglich Simulationen auf die unterschiedlichsten Arten zu beschreiben ohne Änderungen am Simulator vornehmen zu müssen. Das von uns gewählte, am kurzfristigsten umzusetzende Vorgehen ist es, direkt aus Java-Klassen heraus die Objekte der Simulationswelt zu erzeugen und zu verknüpfen. Weitere Möglichkeiten wären:
 \begin{itemize}
   \item{Beschreibungssprachen wie XML, YML oder JSon}
   \item{Erzeugung durch eine eingebettete Skriptsprache wie LUA oder JRuby}
 \end{itemize}
-In einem frühen Konzept unserer Projektarbeit war insbesondere eine Beschreibung durch eine spezifizierte XML (Arbeitstitel: \codeinline{CASiX}) vorgesehen. Diese wurde jedoch im Laufe des Semesters wegen nicht unerheblichen Aufwand zurückgestellt. Da eine saubere und klare Schnittstelle definiert wurde, sehen wir aber keine Probleme darin, diese später (auch durch Dritte) hinzuzufügen.
+In einem frühen Konzept unserer Projektarbeit war insbesondere eine Beschreibung durch eine spezifizierte XML (Arbeitstitel: \codeinline{CASiX}) vorgesehen. Diese wurde jedoch im Laufe des Semesters wegen nicht unerheblichen Aufwand zurückgestellt. Da eine saubere und klare Schnittstelle definiert wurde, ist es ohne Weiteres möglich, dass diese später noch hinzugefügt werden.
 
 \subsubsection{Generierung durch Java-Code}\label{subsec:real_generator_java}
 Für das Erstellen einer neuen Simulation hat es sich als sinnvoll erwiesen, ein neues Paket zu erstellen und darin das \codeinterface{IWorld\-Generator} zu implementieren. Innerhalb dieses Paketes ist eine Aufteilung in weitere Klasse zu empfehlen.

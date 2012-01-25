@@ -96,7 +96,7 @@ Es gibt \codeclass{AtomicAction}s und \codeclass{ComplexAction}s, welche aus ein
 
 Um eine neue Aktion zur Verfügung zu stellen, muss eine neue Klasse implementiert werden, die von einer der abstrakten Klassen \codeclass{AtomicAction} oder \codeclass{ComplexAction} erbt. Die eigentliche Aktion muss in der \codemethod{internalPerform(AbstractComponent performer)}-Methode beschrieben werden. Sollten vor der ersten Ausführung der Aktion Konfigurationsschritte notwendig sein, können diese in der Methode \codemethod{preActionTask(AbstractComponent performer)} beschrieben werden. Analog dazu gibt es auch eine Methode \codemethod{postActionTask(AbstractComponent performer)}, die vom Framework aufgerufen wird, nachdem der Job erledigt wurde.
 
-Wenn eine Dauer angegeben wurde, kümmert sich dass Simulationsframework um das Dekrementieren der Zeit, in diesem Fall muss die \codemethod{internalPerform(AbstractComponent performer)}-Methode immer \codeinline{false} zurückgeben. Sobald diese Methode \codeinline{true} zurückgibt, gilt die Aktion als erledigt und es wird im Falle einer komplexen Aktion mit der nächsten atomaren Aktion fortgefahren.
+Wenn eine Dauer angegeben wurde, kümmert sich dass Simulationsframework um das Dekrementieren der Zeit, in diesem Fall muss die \codemethod{internalPerform(AbstractComponent per\-for\-mer)}-Methode immer \codeinline{false} zurückgeben. Sobald diese Methode \codeinline{true} zurückgibt, gilt die Aktion als erledigt und es wird im Falle einer komplexen Aktion mit der nächsten atomaren Aktion fortgefahren.
 
 Aktionen müssen vom Generator erzeugt werden und einem oder mehreren Agenten hinzugefügt werden.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -131,7 +131,7 @@ In der spezifischen Simulation und dem \codeclass{MACKCommunicationHandler} sind
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Sensoren und Aktuatoren}\label{subsec:concept_actuators_sensors}
-Da Sensoren und Aktuatoren viele Gemeinsamkeiten aufweisen, erben alle konkreten Sensoren und Aktuatoren von der abstrakten Klasse \codeclass{AbstractInteractionComponent}, die auch das \codeinterface{ICommunication\-Component}-Interface implementiert.
+Da Sensoren und Aktuatoren viele Gemeinsamkeiten aufweisen, erben alle konkreten Sensoren und Aktuatoren von der abstrakten Klasse \codeclass{AbstractInteractionComponent}, die auch das \codeinterface{ICom\-muni\-cation\-Component}-Interface implementiert.
 
 Beide Komponenten haben einen Bereich, in dem sie auf Aktivitäten reagieren oder bei den Agenten Aktivitäten auslösen können. Der Bereich kann als Ausrichtung (Blickrichtung), Öffnungswinkel und Radius definiert werden, indem der entsprechende Konstruktor verwendet wird. Werden diese Parameter nicht angegeben, wird der komplette Raum, in dem sich eine Komponente befindet überwacht. Mit der Methode \codemethod{setShapeRepresentation(Shape shape)} kann darüber hinaus eine beliebige Shape als Überwachungsbereich festgelegt werden.
 

@@ -1,4 +1,3 @@
-
 /*  	CASi Context Awareness Simulation Software
  *   Copyright (C) 2012 2012  Moritz Bürger, Marvin Frick, Tobias Mende
  *
@@ -41,10 +40,18 @@ public class Components {
 	 * Put all your actuators here!
 	 */
 	public static void generateActuators() {
-//		ComponentCollector ac = ComponentCollector.getInstance();
-//		RoomCollector rooms = RoomCollector.getInstance();
-//		AgentCollector agents = AgentCollector.getInstance();
+		// all these things are created directly for their users in the specific
+		// methods.
+	}
 
+	/**
+	 * Fills the ComponentCollector with sensors.
+	 * 
+	 * Put all your sensors here!
+	 */
+	public static void generateSensors() {
+		// all these things are created directly for their users in the specific
+		// methods.
 	}
 
 	/**
@@ -56,7 +63,7 @@ public class Components {
 
 		for (Agent ag : AgentCollector.getInstance().getAll()) {
 			Room r = (Room) ag.getDefaultPosition();
-			
+
 			c.newComponent(new Desktop(r.getCentralPoint(), ag));
 			c.newComponent(new Cube(r.getCentralPoint(), ag));
 			c.newComponent(new Mike((Room) r, ag));
@@ -120,18 +127,21 @@ public class Components {
 		// Rudi Random
 		// ##########
 		a = ac.findAgentByName("Rudi Random");
-		Door door8 = RoomCollector.getInstance().findDoorByIdentifier("rudis-south-door");
-		DoorLight doorlightRudi = new DoorLight(door8, (Room) a.getDefaultPosition(), a);
+		Door door8 = RoomCollector.getInstance().findDoorByIdentifier(
+				"rudis-south-door");
+		DoorLight doorlightRudi = new DoorLight(door8,
+				(Room) a.getDefaultPosition(), a);
 		doorlightRudi.setMonitoredArea(Face.SOUTH, 20, 180);
 		cc.newComponent(doorlightRudi);
 		cc.newComponent(new DoorSensor(door8, a));
-		
-		Door door9 = RoomCollector.getInstance().findDoorByIdentifier("rudis-west-door");
+
+		Door door9 = RoomCollector.getInstance().findDoorByIdentifier(
+				"rudis-west-door");
 		doorlightRudi = new DoorLight(door9, (Room) a.getDefaultPosition(), a);
 		doorlightRudi.setMonitoredArea(Face.WEST, 20, 180);
 		cc.newComponent(doorlightRudi);
 		cc.newComponent(new DoorSensor(door9, a));
-		
+
 		// ##########
 		// Susi Sekretärin
 		// ##########
@@ -142,15 +152,6 @@ public class Components {
 		dl.setMonitoredArea(Face.WEST, 20, 180);
 		cc.newComponent(dl);
 		cc.newComponent(new DoorSensor(door, a));
-
-	}
-
-	/**
-	 * Fills the ComponentCollector with sensors.
-	 * 
-	 * Put all your sensors here!
-	 */
-	public static void generateSensors() {
 
 	}
 }

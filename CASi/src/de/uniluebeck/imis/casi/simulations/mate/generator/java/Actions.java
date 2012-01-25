@@ -42,6 +42,9 @@ import de.uniluebeck.imis.casi.simulation.model.mackComponents.Desktop;
  */
 public final class Actions {
 
+	/**
+	 * Yep, its the logger.
+	 */
 	private static final Logger log = Logger.getLogger(WorldGenerator.class
 			.getName());
 

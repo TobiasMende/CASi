@@ -26,6 +26,10 @@ import de.uniluebeck.imis.casi.simulation.model.AbstractInteractionComponent;
  * 
  */
 public class ComponentCollector {
+	
+	/**
+	 * Logging is useful for developers.
+	 */
 	private static final Logger log = Logger.getLogger(ComponentCollector.class
 			.getName());
 	

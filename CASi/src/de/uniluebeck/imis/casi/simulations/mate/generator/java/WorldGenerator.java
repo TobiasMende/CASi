@@ -42,13 +42,31 @@ import de.uniluebeck.imis.casi.simulation.model.World;
  */
 public class WorldGenerator implements IWorldGenerator {
 
+	/**
+	 * The name of this simulation.
+	 * Used for prefixing many things.
+	 */
 	private static String SIMULATION_NAME = "MATe Demo Simulation";
 
+	/**
+	 * The logger for developing purposes.
+	 */
 	private static final Logger log = Logger.getLogger(WorldGenerator.class
 			.getName());
 
+	/**
+	 * The new world object that we're going to fill
+	 */
 	World tempWorld = new World();
+	
+	/**
+	 * shortcut for the singleton RoomCollector
+	 */
 	RoomCollector rooms = RoomCollector.getInstance();
+	
+	/**
+	 * shortcut for the singleton AgentCollector
+	 */
 	AgentCollector agents = AgentCollector.getInstance();
 
 	/**

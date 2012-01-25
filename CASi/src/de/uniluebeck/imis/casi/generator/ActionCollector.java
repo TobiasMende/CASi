@@ -23,6 +23,7 @@ import de.uniluebeck.imis.casi.simulation.model.actionHandling.AbstractAction;
  * 
  */
 public class ActionCollector {
+	
 	/** The instance of this singleton */
 	private static ActionCollector instance;
 

@@ -30,8 +30,17 @@ import de.uniluebeck.imis.casi.simulation.model.World;
  * 
  */
 public class GeneratorStub implements IWorldGenerator {
+
+	/**
+	 * Logging is useful for developers.
+	 */
 	private static final Logger log = Logger.getLogger(GeneratorStub.class
 			.getName());
+
+	/**
+	 * The new world object that we're going to fill (or don't fill, in this
+	 * particular case)
+	 */
 	private World world = new World();
 
 	@Override

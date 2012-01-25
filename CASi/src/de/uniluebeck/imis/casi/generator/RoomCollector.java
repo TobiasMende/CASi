@@ -27,6 +27,10 @@ import de.uniluebeck.imis.casi.simulation.model.Room;
  * 
  */
 public class RoomCollector {
+	
+	/**
+	 * Logging is useful for developers.
+	 */
 	private static final Logger log = Logger.getLogger(RoomCollector.class
 			.getName());
 	/** The instance of this singleton */

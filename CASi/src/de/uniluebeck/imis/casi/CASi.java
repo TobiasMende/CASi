@@ -282,53 +282,6 @@ public class CASi {
 	}
 
 	/**
-	 * Configuring the development logging
-	 * 
-	 * @throws SecurityException
-	 *             if no write permissions are given for the log directory
-	 * @throws IOException
-	 *             if an error occurred while writing the log file
-	 */
-	private static void configureDevelopmentLogging() {
-		// Configure console logger
-		devConsoleHandler = new ExtendedConsoleHandler();
-		devConsoleHandler.setFormatter(new DevLogFormatter());
-
-		// Configure file logger
-
-		try {
-			new File("./log").mkdir();
-			devFileHandler = getFileHandler(true);
-
-			if (DEV_MODE) {
-				// log everything to the log file
-				devFileHandler.setLevel(Level.ALL);
-			} else {
-				// define the behavior of the development handler in productive
-				// mode
-				// log everything important into the dev log file
-				devFileHandler.setLevel(Level.CONFIG);
-			}
-		} catch (Exception e) {
-			System.out.println("Es wird keine Protokolldatei erzeugt: "
-					+ e.getMessage());
-		}
-
-		if (DEV_MODE) {
-			// log more information on the console
-			if (VERBOSE) {
-				devConsoleHandler.setLevel(Level.ALL);
-			} else {
-				devConsoleHandler.setLevel(Level.INFO);
-			}
-		} else {
-			// define the behavior of the development handler in productive mode
-			devConsoleHandler.setLevel(Level.SEVERE); // show important errors
-			// on the console
-		}
-	}
-
-	/**
 	 * Getter for a log file formatter which fits to the log format, configured by the command line options.
 	 * @throws IOException if the file is not writable.
 	 */
@@ -380,6 +333,61 @@ public class CASi {
 		Date time = Calendar.getInstance().getTime();
 		DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd-hhmmss");
 		return formatter.format(time);
+	}
+
+	/**
+	 * Configuring the development logging
+	 * 
+	 * @throws SecurityException
+	 *             if no write permissions are given for the log directory
+	 * @throws IOException
+	 *             if an error occurred while writing the log file
+	 */
+	private static void configureDevelopmentLogging() {
+		// Configure console logger
+		devConsoleHandler = new ExtendedConsoleHandler();
+		devConsoleHandler.setFormatter(new DevLogFormatter());
+	
+		// Configure file logger
+	
+		try {
+			new File("./log").mkdir();
+			devFileHandler = getFileHandler(true);
+	
+			if (DEV_MODE) {
+				// log everything to the log file
+				if(VERBOSE) {
+					devFileHandler.setLevel(Level.ALL);
+				} else {
+					devFileHandler.setLevel(Level.FINE);
+				}
+			} else {
+				// define the behavior of the development handler in productive
+				// mode
+				// log everything important into the dev log file
+				if(VERBOSE) {
+					devFileHandler.setLevel(Level.CONFIG);
+				} else {
+					devFileHandler.setLevel(Level.INFO);
+				}
+			}
+		} catch (Exception e) {
+			System.out.println("Es wird keine Protokolldatei erzeugt: "
+					+ e.getMessage());
+		}
+	
+		if (DEV_MODE) {
+			// log more information on the console
+			if (VERBOSE) {
+				devConsoleHandler.setLevel(Level.ALL);
+			} else {
+				devConsoleHandler.setLevel(Level.INFO);
+			}
+		} else {
+			// define the behavior of the development handler in productive mode
+			devConsoleHandler.setLevel(Level.SEVERE); // show important errors
+			// on the console
+		}
 	}
 
 	/**

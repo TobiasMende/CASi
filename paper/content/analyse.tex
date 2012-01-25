@@ -25,7 +25,7 @@ Das Büroszenario ist das Standardszenario des IMIS, für das bereits Teile eine
 Es gibt mehrere Büros, abgehend von einem Korridor. Jedes Büro hat einen Schreibtisch, der eine Dropzone und einen Cube beherbergt. Außerdem steht in jedem Büro ein Telefon und es gibt eine akustische Überwachung, mit der festgestellt werden kann, ob der dort arbeitende Anwender gerade spricht (Telefon/Gäste). 
 
 Es gibt an jeder Bürotür ein interaktives Türschild und eine Ampel, die Besuchern Informationen über die Unterbrechbarkeit des Bürobesitzers liefert.
-Vom Flur abgehend gibt es Toiletten, eine Teeküche und einen Konferenzraum. Die Toiletten melden wenn sie belegt sind, aus Gründen der Privatsphäre jedoch natürlich nicht, wer gerade drauf sitzt. Personen haben die Möglichkeit bevor sie aufstehen zu sehen, ob die Toilette gerade besetzt ist. In der Teeküche gibt es einen Kaffeeautomaten der gerne von Mitarbeitern zum Pausengespräch genutzt wird. Im Konferenzraum werden täglich um 10 Uhr die Tagesziele besprochen, dazu müssen alle Mitarbeiter kommen.
+Vom Flur abgehend gibt es Toiletten, eine Teeküche und einen Konferenzraum. Die Toiletten melden wenn sie belegt sind, aus Gründen der Privatsphäre jedoch natürlich nicht, wer gerade drauf sitzt. \imiscomment{vielleicht doch etwas zu umgangssprachlich?!} Personen haben die Möglichkeit bevor sie aufstehen zu sehen, ob die Toilette gerade besetzt ist. In der Teeküche gibt es einen Kaffeeautomaten der gerne von Mitarbeitern zum Pausengespräch genutzt wird. Im Konferenzraum werden täglich die Tagesziele besprochen, dazu müssen alle Mitarbeiter kommen.
 
 Das Standardverhalten wenn Personen keine spezifische Aktion vorhaben ist, im Büro am Schreibtisch sitzen, sich Kaffee zu holen oder eine der Toiletten aufzusuchen.
 
@@ -33,7 +33,7 @@ Mögliche Zufallskomponente, die einen Anwender in seiner aktuellen Aktion unter
 
 \subsection*{Szenario: Museum}
  
-In einem Museum gibt verschiedene Bereiche mit unterschiedlichen Themengebieten, zum Beispiel könnte es in einer Ausstellung über die menschlichen Sinne die Bereiche \glqq Sehen\grqq , \glqq Hören\grqq, \glqq Fühlen\grqq und andere geben. Außerdem gibt es Toiletten und einen Souvenierladen.
+In einem Museum gibt es verschiedene Bereiche mit unterschiedlichen Themengebieten, zum Beispiel könnte es in einer Ausstellung über die menschlichen Sinne die Bereiche \glqq Sehen\grqq , \glqq Hören\grqq, \glqq Fühlen\grqq und andere geben. Außerdem gibt es Toiletten und einen Souvenierladen.
 
 Personen im Museum sind Besucher (20 – 100) und verschiedene Mitarbeiter (10 – 20). Einige Mitarbeiter machen Führungen mit Besuchern durch bestimmte Bereiche, einige Mitarbeiter bewachen empfindliche oder wertvolle Ausstellungsstücke und können Besuchern Wege zu bestimmten Bereichen wie Toiletten und dem Ausgang weisen.
 
@@ -51,7 +51,7 @@ Die Station hat außerdem zwei Computerarbeitsplätze im Schwesternzimmer, sowie
 
 Die Simulation beginnt am 1.11.2011 um 4:30. Eine der beiden Nachtschwestern macht einen Kontrollgang. Danach begibt sich sich zurück ins Schwesternzimmer und arbeitet für zwei Stunden am PC. Um 5:00 Uhr wechselt das HMS in Raum 1 von stabil auf kritisch. Wenn das Panel im Schwesternzimmer dies anzeigt, soll eine Schwester, welche dies sieht sofort in das entsprechende Zimmer gehen und Gegenmaßnahmen vornehmen, so dass der Zustand im Anschluss mindestens stabil ist. Danach setzt die Schwester ihr vorherige Aktivität fort. 
 
-Um 5:30 macht die andere Schwester einen Rundgang. Um 6:00 kommt der 1. Arzt. Er holt sich zunächst einen Kaffee aus der Küche um danach in seinem Zimmer für 30 Minuten am Computer die Vorkommnisse der letzten Nacht durchzugehen (lesen). Der zweite Arzt kommt um 6:15 holt sich ebenfalls einen Kaffee und geht danach in sein Zimmer um an seinem Computer die Vorkommnisse der letzten Nacht zu analysieren. Um 6:45 kommen die ersten 5 Tagesschwestern. Um 7:00 Uhr treffen sich alle anwesenden Mitarbeiter zur Besprechung im Schwesternzimmer (1 Stunde). Danach gehen die Nachtschwestern nach Hause. Um 9:00 wird der Patient aus Zimmer 3 in den OP gebracht. Arzt 1 operiert für 3 Stunden zusammen mit 5 Schwestern, die dafür zur Arbeit kommen, den Patienten. Während dieser Zeit ignoriert er alle Meldungen, d.h. er unterbricht diese Aktion nicht, selbst wenn das System einen Vorfall bei einem anderen Patienten meldet.
+Um 5:30 macht die andere Schwester einen Rundgang. Um 6:00 kommt der erste Arzt. Er holt sich zunächst einen Kaffee aus der Küche um danach in seinem Zimmer für 30 Minuten am Computer die Vorkommnisse der letzten Nacht durchzugehen (lesen). Der zweite Arzt kommt um 6:15 holt sich ebenfalls einen Kaffee und geht danach in sein Zimmer um an seinem Computer die Vorkommnisse der letzten Nacht zu analysieren. Um 6:45 kommen die ersten 5 Tagesschwestern. Um 7:00 Uhr treffen sich alle anwesenden Mitarbeiter zur Besprechung im Schwesternzimmer (1 Stunde). Danach gehen die Nachtschwestern nach Hause. Um 9:00 wird der Patient aus Zimmer 3 in den OP gebracht. Arzt 1 operiert für 3 Stunden zusammen mit 5 Schwestern, die dafür zur Arbeit kommen, den Patienten. Während dieser Zeit ignoriert er alle Meldungen, d.h. er unterbricht diese Aktion nicht, selbst wenn das System einen Vorfall bei einem anderen Patienten meldet.
 
 Um 10:00 Uhr melden die HMS in R4 und R5, dass der Zustand von gut auf lebensgefährlich wechselt. Der freie Arzt unterbricht seine Aktivität und geht in das erste Zimmer. Die Schwester, die am nächsten ist, geht in das zweite Zimmer. Dem operierenden Arzt wird die Situation via Tablett Computer gemeldet. Der freie Arzt erkennt eine Fehlfunktion des Systems und setzt den Zustand wieder auf gut. Anschließend geht er zum zweiten kritischen Patienten. 
 
@@ -130,11 +130,3 @@ Der Simulator soll im IMIS auf den Arbeitsplätzen der Entwickler laufen. Die Ar
 
 Wegen des hohen Netzwerkaufkommens ist es optimal, Server und Simulator auf einer Maschine laufen lassen zu können und den Netzwerkverkehr lokal abzuwickeln.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%\imiscomment{Beschreibung des räumlich-zeitlichen Umfeldes für den Einsatz des Systems}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Organisationsanalyse}\label{sec:orga_ana}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\imiscomment{Beschreibung des organisatorischen Umfeldes für den Einsatz des Systems, also z.B. den betrieblichen Kontext bei einem System im Arbeitseinsatz}

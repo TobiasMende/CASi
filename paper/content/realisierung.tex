@@ -17,15 +17,23 @@ Während der Simulation können die Welt und der Kommunikationshandler über die
 \subsubsection{SimulationClock}
 Die \codeclass{SimulationClock} ist das Herzstück der Simulation. Sie stößt sämtliche Aktionen der Komponenten des Modells an. Die Clock ist wie die Engine ebenfalls mit dem Singleton-Designpatter realisiert. So ist sicher gestellt, dass es nur eine Uhr geben kann, die aus allen Klassen erreichbar ist.
 
-Die \codeclass{SimulationClock} verwendet das Listener-Konzept, um Komponenten, die an der Simulationszeit interessiert sind regelmäßig über Änderungen zu informieren. Komponenten die sich als Listener bei der Uhr registrieren möchten müssen dazu das \codeinterface{ISimulationClockListener}-Interface implementieren und können dann mit \begin{lstlisting}
+Die \codeclass{SimulationClock} verwendet das Listener-Konzept, um Komponenten, die an der Simulationszeit interessiert sind regelmäßig über Änderungen zu informieren. Komponenten die sich als Listener bei der Uhr registrieren möchten müssen dazu das \codeinterface{ISimulationClockListener}-Interface implementieren und können dann mit 
+\begin{illfloat}[H]
+  \begin{lstlisting}
 SimulationClock.getInstance()
 .addListener(ISimulationClockListener);
-\end{lstlisting}
+  \end{lstlisting}
+  \illcaption{Beispiel für das Hinzufügen eines Listeners an die SimulationClock}
+\end{illfloat}
+
 hinzugefügt und analog mit
+\begin{illfloat}[H]
 \begin{lstlisting}
 SimulationClock.getInstance()
 .removeListener(ISimulationClockListener);
 \end{lstlisting}
+  \illcaption{Beispiel für das Hinzufügen eines Listeners an die SimulationClock}
+\end{illfloat}
 wieder entfernt werden.
 
 Über das Listener-Konzept werden in jeder simulierten Sekunden Aktionen bei den Listenern angestoßen. Standardmäßig ist es nicht möglich, eine Java-Collection während des Durchlaufens dieser zu verändern. Somit wäre es unmöglich, dass sich eine Komponente als Listener abmelden kann. Die \codeclass{SimulationClock} speichert jedoch alle Hinzufüge- und Entfernanfragen an die Listener-Collection zwischen und führt diese vor dem nächsten Durchlauf aus.
@@ -38,7 +46,7 @@ Die Uhr basiert auf einem Timer-Thread, der alle $x$ Millisekunden auslöst. Wen
 \subsection{Generatoren}\label{subsec:real_generator}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 Für das Erstellen einer neuen Simulation reicht es aus, eine Simulationswelt (der Klasse \codeclass{World}) zu erzeugen. Dieser Vorgang wird als Generierung bezeichnet und von einem Generator realisiert.
-Ein Beispiel, wie eine solche erzeugt werden kann, ist in Kapitel  \ref{chapter:dialogs} an Hand der Demonstrationssimulation dargestellt.\\ 
+Ein Beispiel, wie eine solche erzeugt werden kann, ist in diesem Kapitel an Hand der Demonstrationssimulation dargestellt.\\ 
 
 Aus Modularitätsgründen haben wir uns für das Konzept eines leicht austauschbaren Generators entschieden. Dafür wurde das Interface \codeinterface{IWorldGenerator} entworfen, welches nur eine Methode (\codemethod{generateWorld()}) definiert, die von allen konkreten Generatoren als Schnittstelle genutzt werden sollte.
 Darüber hinaus gibt es im Generatorpaket (\codeinline{de.uniluebeck.imis.casi.gene\-rator}) einige Helferklassen, deren Name mit \codeclass{Collector} gekennzeichnet ist und einen \codeclass{Linker}.\\
@@ -186,6 +194,7 @@ Der Handler bekommt zu Beginn eine Konfigurationsdatei in XML Format übergeben,
 \end{description}
 
 Die Netzwerkconfigurationsdatei enthält für jeden \codeinline{XmppIdentifier} einen Eintrag der Form
+\begin{illfloat}[H]
 \begin{lstlisting}[language=XML]
 <void method="add">
 	<object class="de.uniluebeck.imis.casi.communication
@@ -202,9 +211,15 @@ Die Netzwerkconfigurationsdatei enthält für jeden \codeinline{XmppIdentifier} 
 	</object>
 </void>
 \end{lstlisting}
- im Bereich der \codeclass{ArrayList} \codeinline{useableJabberIdentifiers}. In der Initialisierungsphase des Simulators wird jeder Komponente, die sich mit \begin{lstlisting}
+\illcaption{Beispiel für eine XML Netzwerkkonfigurationsdatei}
+\end{illfloat}
+im Bereich der \codeclass{ArrayList} \codeinline{useableJabberIdentifiers}. In der Initialisierungsphase des Simulators wird jeder Komponente, die sich mit
+\begin{illfloat}[H]
+   \begin{lstlisting}
 public void register(ICommunicationComponent comp);
-\end{lstlisting}
+   \end{lstlisting}
+\illcaption{Beispiel zur Registrierung einer kommunizierenden Komponente}
+\end{illfloat}
 am \codeclass{MACKNetworkHandler} anmeldet, eine Jabber-ID aus dieser Liste zugewiesen, sofern noch eine zum jeweiligen Typ passende verfügbar ist. Andernfalls wird eine Warnung ausgegeben und die Komponente nicht angemeldet.
 In der Registrierungsphase überprüft der Handler, ob der jeweilige Jabber-Identifier bereits am XMPP-Server registriert ist. Ist dies nicht der Fall, versucht der Simulator automatisch, den Identifier zu registrieren. Wenn mehrere Adressen noch nicht registriert wurden, kann es abhängig vom in der Konfigurationsdatei angegebenen \codeinline{REGISTRATION\_DELAY} zum längeren Wartezeiten kommen, bevor der Simulator mit der Simulation beginnt. Wenn jedoch alle Komponenten bereits registriert sind, kann die Simulation ohne Wartezeit starten.
 

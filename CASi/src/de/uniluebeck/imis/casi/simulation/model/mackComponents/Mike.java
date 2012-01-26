@@ -100,10 +100,6 @@ public class Mike extends AbstractInteractionComponent {
 
 	@Override
 	protected boolean handleInternal(AbstractAction action, Agent agent) {
-		if (action instanceof HaveAMeeting) {
-			System.out.println();
-			// TODO: what is this? I dont even...
-		}
 		if (messageToSend == null) {
 			AbstractAction interestingPart = getInterestingPart(action);
 			if (interestingPart == null) {

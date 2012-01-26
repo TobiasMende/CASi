@@ -80,10 +80,6 @@ public class WorldGenerator implements IWorldGenerator {
 	 */
 	@Override
 	public World generateWorld() {
-
-		// TODO: decide what to do with this. We dont use it anymore and for JAR
-		// generating this sucks even more!
-		// backroundimage
 		BufferedImage image = null;
 		try {
 			image = ImageIO

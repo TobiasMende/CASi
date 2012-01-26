@@ -56,8 +56,6 @@ public final class MACKNetworkHandler implements ICommunicationHandler {
 			.getName());
 	/** The jabber identifier of the mack server */
 	private String MACK_SERVER_IDENTIFIER;
-	/** The default resource identifier */
-	private String RESOURCE;
 
 	/** The port on which to connect to to the XMPP_SERVER */
 	private int XMPP_PORT;
@@ -91,7 +89,6 @@ public final class MACKNetworkHandler implements ICommunicationHandler {
 	public MACKNetworkHandler() {
 		setupDefaults();
 		setupUsableJabberIdentifiers();
-		RESOURCE = "CASi-"+System.currentTimeMillis();
 	}
 
 	/**
@@ -103,7 +100,6 @@ public final class MACKNetworkHandler implements ICommunicationHandler {
 		XMPP_SERVER = "macjabber.de";
 		XMPP_PASSWORD = "ao8Thim2iengeehoeyae4aequigaeV";
 		MACK_SERVER_IDENTIFIER = "mate_server_1@macjabber.de";
-		RESOURCE = "CASi-"+System.currentTimeMillis();
 	}
 
 	/**
@@ -118,7 +114,6 @@ public final class MACKNetworkHandler implements ICommunicationHandler {
 		log.info("Loading setup from config file!");
 		XMLDecoder dec = null;
 		try {
-			RESOURCE = "CASi-"+System.currentTimeMillis();
 			dec = new XMLDecoder(new FileInputStream(path));
 			XMPP_SERVER = (String) dec.readObject();
 			REGISTRATION_DELAY = (Integer) dec.readObject();
@@ -245,7 +240,7 @@ public final class MACKNetworkHandler implements ICommunicationHandler {
 			connection.connect();
 			boolean createdAccount = false;
 			try {
-				connection.login(identifier.getId(), XMPP_PASSWORD, RESOURCE);
+				connection.login(identifier.getId(), XMPP_PASSWORD);
 			} catch (XMPPException e) {
 				log.info(identifier.getId()
 						+ " seems not to be registered. Trying to register now");
@@ -255,7 +250,7 @@ public final class MACKNetworkHandler implements ICommunicationHandler {
 					registeredLastTime = true;
 					log.info("Account for " + identifier.getId()
 							+ " was registered successfull. Logging in...");
-					connection.login(identifier.getId(), XMPP_PASSWORD, RESOURCE);
+					connection.login(identifier.getId(), XMPP_PASSWORD);
 					
 				}
 			}

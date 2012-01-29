@@ -25,7 +25,7 @@
 		<delete dir="${docs.dir}" />
 		<delete dir="${test.reports}" />
 	</target>
-	<target name="clean-all" depends="clean" description="Cleans the project folder">
+	<target name="clean-all" depends="clean" description="Cleans the project folder including dist and log folder.">
 		<delete dir="${dist.dir}" />
 		<delete dir="${log.dir}" />
 	</target>

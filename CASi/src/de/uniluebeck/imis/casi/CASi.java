@@ -159,7 +159,7 @@ public class CASi {
 				.println("\t - v\tActivates the verbose mode with much more output (optional)");
 		
 		System.out
-		.println("\t - x\tUse xml files for logging instead of simple text. (optional, don't use h");
+		.println("\t - x\tUse xml files for logging instead of simple text. (optional, don't use h)");
 		// Complete Commands
 		System.out.println("\n\tThese commands can be used as described:");
 		System.out.println("\t --help");
@@ -168,7 +168,7 @@ public class CASi {
 		System.out.println("\t --network-config <path-to-config-file>");
 		System.out
 				.println("\t\tSimulation uses the provided file to configure the network handler. Should be set. Otherwise, only a simple communication logger is used.");
-		System.out.println("\t --speed <int speed-factor>");
+		System.out.println("\t --speed <double speed-factor>");
 		System.out
 				.println("\t\tCan be used to set an initial factor for the simulation speed. Should be between 0.5 and 100. (optional)");
 		

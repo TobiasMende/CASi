@@ -132,9 +132,9 @@ Nachfolgend wird der Sinn der verschiedenen Pakte erläutert:
 	\item[logging] Dieses Paket beinhaltet Konfigurationsklassen für die Logger.
 \end{description}
 \subsection{Buildfile}
-Das Projektverzeichnis enthält das Ant-Buildfile \codeinline{build.xml}, welches eine Reihe von Buildtargets definiert. Diese Ziele können entweder über die Konsole mit \codemethod{ant <target-name>} oder aus Eclipse heraus ausgeführt werden. Nachfolgend befindet sich eine Beschreibung der wichtigsten Targets:
+Das Projektverzeichnis enthält das Ant-Buildfile \codeinline{build.xml}, welches eine Reihe von Buildtargets definiert. Diese Ziele können entweder über die Konsole mit \codemethod{ant <target-name>} oder aus Eclipse heraus ausgeführt werden. Nachfolgend befindet sich eine Beschreibung der wichtigsten Targets, eine vollständige Beschreibung aller Targets erhält man durch Ausführen des Befehls \codeinline{ant -p} im Projektverzeichnis:
 \begin{description}
-	\item[clean] räumt das Projektverzeichnis auf und löscht die Binarie-, Dokuentations- und Reportverzeichnisse.
+	\item[clean] räumt das Projektverzeichnis auf und löscht die Binarie-, Dokumentations- und Reportverzeichnise.
 	\item[clean-all] führt das Target \codemethod{clean} aus und löscht außerdem das Log- und Distributionsverzeichnis.
 	\item[test] führt die Testfälle aus.
 	\item[test] führt die Testfälle aus und erzeugt HTML-Reports im \codeinline{reports}-Verzeichnis.

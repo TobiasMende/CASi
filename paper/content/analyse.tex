@@ -6,7 +6,7 @@ In diesem Kapitel werden die Analyseschritte und die Vorüberlegungen beschriebe
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Problemanalyse}\label{sec:problem_ana}
-Bei der Entwicklung des MACK Frameworks geht es vor allem darum, geeignete Reasoner zu entwickeln, die auf Basis von Sensordaten Zustände von Personen ermitteln können und diese an Aktuatoren weiterleiten. Hierbei entstehen komplexe Abhängigkeiten, da die ermittelten Werte der Sensoren vom Verhalten der Personen abhängen, welches wiederum zu einem gewissen Anteil von den Meldungen der Aktuatoren abhängen können.
+Bei der Entwicklung des MACK Frameworks geht es vor allem um die Entwicklung eines zentralen Systems, das aus verschiedenen Reasonern besteht, die auf Basis von Sensordaten Zustände von Personen ermitteln können und diese an Aktuatoren weiterleiten. Dieses System soll durch verschiedene externe Komponenten wie Sensoren und Aktuatoren erweitert werden um auf beliebige Kontexte adaptiert werden zu können. Hierbei entstehen komplexe Abhängigkeiten, da die ermittelten Werte der Sensoren vom Verhalten der Personen abhängen, welches wiederum zu einem gewissen Anteil von den Meldungen der Aktuatoren abhängen können.
 
 Um die Effizienz und Vollständigkeit der Reasoner zu verifizieren gibt es bislang nur die Möglichkeit, diese mit Hardware-Impementierungen der Sensoren und Aktuatoren zu verknüpfen und denkbare Szenarien durchzuführen. Dies birgt zum einen das Problem, dass zunächst die Hardware entwickelt werden muss, was mit hohem Zeit- und Kostenaufwand verbunden ist. Zum anderen muss das System von vielen Benutzern eingesetzt werden, um repräsentative Ergebnisse zu erhalten.
 
@@ -22,7 +22,7 @@ Die Implementierung aller Szenarien im beschriebenen Umfang ist nicht teil unser
 
 Das Büroszenario ist das Standardszenario des IMIS, für das bereits Teile einer Hardware-Implemen\-tierung und Reasoner vorliegen.
 
-Es gibt mehrere Büros, abgehend von einem Korridor. Jedes Büro hat einen Schreibtisch, der eine Dropzone und einen Cube beherbergt. Außerdem steht in jedem Büro ein Telefon und es gibt eine akustische Überwachung, mit der festgestellt werden kann, ob der dort arbeitende Anwender gerade spricht (Telefon/Gäste). 
+Es gibt mehrere Büros, abgehend von einem Korridor. Jedes Büro hat einen Schreibtisch, der eine Dropzone\footnote{Bei der Dropzone handelt es sich um eine Station, in die verschiedene Benutzer Marken bzw. ihre Schlüssel legen können. Das Gerät erkennt dann, welche Marken vorhanden sind und führt so Rückschlüsse auf die im Raum befindlichen Personen durch.} und einen Cubus\footnote{Der Cubus ist ein Würfel, dessen Oberseite den vom Framework ermittelten Zustand des Besitzers angibt. Durch Drehen des Würfels kann die explizite Änderung des Zustands erwirkt werden. Weitere Informationen befinden sich in Abschnitt 3.1 von \cite{doku-sensor-aktuator}.} beherbergt. Außerdem steht in jedem Büro ein Telefon und es gibt eine akustische Überwachung, mit der festgestellt werden kann, ob der dort arbeitende Anwender gerade spricht (Telefon/Gäste). 
 
 Es gibt an jeder Bürotür ein interaktives Türschild und eine Ampel, die Besuchern Informationen über die Unterbrechbarkeit des Bürobesitzers liefert.
 Vom Flur abgehend gibt es Toiletten, eine Teeküche und einen Konferenzraum. Die Toiletten melden, wenn sie belegt sind, aus Gründen der Privatsphäre jedoch nicht, wer gerade sie benutzt. Personen haben die Möglichkeit bevor sie aufstehen zu sehen, ob die Toilette gerade besetzt ist. In der Teeküche gibt es einen Kaffeeautomaten der gerne von Mitarbeitern zum Pausengespräch genutzt wird. Im Konferenzraum werden täglich die Tagesziele besprochen, dazu müssen alle Mitarbeiter kommen.
@@ -47,7 +47,7 @@ In einem Krankenhaus auf einer Intensivstation arbeiten 10 Krankenschwestern und
 
 Alle Mitarbeiter verfügen über einen Tablett PC, über den sie innerhalb der Station lokalisiert werden können. Darüber hinaus werden die Geräte zur Protokolierung der Visiten verwendet. Wenn ein Patient in den Zustand kritisch oder schlechter wechselt, werden beide Ärzte über das Tablett informiert. Sie erhalten die Zustandseinschätzung des Monitors, die Analysewerte und die Information, welcher Patient in welchem Raum betroffen ist.
 
-Die Station hat außerdem zwei Computerarbeitsplätze im Schwesternzimmer, sowie zwei mit Computern ausgestattete Behandlungszimmer, die gleichzeitig die Büros der Ärzte sind. Alle Computer sind mit dem \glqq Desktop Activity Analyzer\grqq\ ausgestattet.
+Die Station hat außerdem zwei Computerarbeitsplätze im Schwesternzimmer, sowie zwei mit Computern ausgestattete Behandlungszimmer, die gleichzeitig die Büros der Ärzte sind. Alle Computer sind mit dem \glqq Desktop Activity Analyzer\footnote{Der DAA überwachte die Aktivität und die Programmart, die sich im Vordergrund befindet. Siehe Abschnitt 3.4 von \cite{doku-sensor-aktuator}.}\grqq\ ausgestattet.
 
 Die Simulation beginnt am 1.11.2011 um 4:30. Eine der beiden Nachtschwestern macht einen Kontrollgang. Danach begibt sich sich zurück ins Schwesternzimmer und arbeitet für zwei Stunden am PC. Um 5:00 Uhr wechselt das HMS in Raum 1 von stabil auf kritisch. Wenn das Panel im Schwesternzimmer dies anzeigt, soll eine Schwester, welche dies sieht sofort in das entsprechende Zimmer gehen und Gegenmaßnahmen vornehmen, so dass der Zustand im Anschluss mindestens stabil ist. Danach setzt die Schwester ihr vorherige Aktivität fort. 
 
@@ -128,5 +128,5 @@ Im gesamten Entwicklungsprozess haben wir eng mit den späteren Nutzern zusammen
 \section{Kontextanalyse}\label{sec:context_ana}
 Der Simulator soll im IMIS auf den Arbeitsplätzen der Entwickler laufen. Die Arbeitsplätze sind mindestens Quad-Core-Maschinen. Der Simulator soll während der Entwicklung zur Verifikation einzelner Änderungen eingesetzt werden. Außerdem sollen längere Simulationen durchgeführt werden, deren Ergebnisse später mit Hilfe der Logfiles ausgewertet werden können. Das System muss also sowohl im Vorder- als auch im Hintergrund laufen können.
 
-Wegen des hohen Netzwerkaufkommens ist es optimal, Server und Simulator auf einer Maschine laufen lassen zu können und den Netzwerkverkehr lokal abzuwickeln.
+Wegen des hohen Netzwerkaufkommens ist es optimal, Server und Simulator auf einer Maschine laufen lassen zu können und den Netzwerkverkehr über lokale Loopback-Devices abzuwickeln.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

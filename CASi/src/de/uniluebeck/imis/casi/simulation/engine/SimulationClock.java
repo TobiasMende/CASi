@@ -81,9 +81,13 @@ public class SimulationClock implements Listenable<ISimulationClockListener> {
 	 * 
 	 * @return the instance
 	 */
-	public synchronized static SimulationClock getInstance() {
+	public static SimulationClock getInstance() {
 		if (instance == null) {
-			instance = new SimulationClock();
+			synchronized (SimulationClock.class) {
+				if(instance == null) {
+					instance = new SimulationClock();
+				}
+			}
 		}
 		return instance;
 	}
@@ -222,7 +226,7 @@ public class SimulationClock implements Listenable<ISimulationClockListener> {
 	 * 
 	 * @return whether the simulation is paused or not
 	 */
-	public synchronized boolean isPaused() {
+	public boolean isPaused() {
 		return paused;
 	}
 
@@ -232,7 +236,7 @@ public class SimulationClock implements Listenable<ISimulationClockListener> {
 	 * @return <code>true</code> if the simulation is started yet,
 	 *         <code>false</code> otherwise.
 	 */
-	public synchronized boolean isStarted() {
+	public boolean isStarted() {
 		return started;
 	}
 
@@ -257,7 +261,7 @@ public class SimulationClock implements Listenable<ISimulationClockListener> {
 	 * 
 	 * @return the current time
 	 */
-	public synchronized SimulationTime getCurrentTime() {
+	public SimulationTime getCurrentTime() {
 		return currentTime;
 	}
 
@@ -293,7 +297,7 @@ public class SimulationClock implements Listenable<ISimulationClockListener> {
 	 * @return the current factor (the amount of real milliseconds which must
 	 *         elapse before one simulated second is finished)
 	 */
-	public synchronized int getScaleFactor() {
+	public int getScaleFactor() {
 		return scaleFactor;
 	}
 

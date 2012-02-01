@@ -291,7 +291,7 @@ public final class MACKNetworkHandler implements ICommunicationHandler {
 							} else {
 								CASi.SIM_LOG.warning("Message of type "
 										+ message.getType()
-										+ " received. I didn't pass it!");
+										+ " received. I didn't pass it!: "+message.getError());
 							}
 						}
 					});

@@ -54,7 +54,11 @@ public class SimulationEngine {
 	 */
 	public static SimulationEngine getInstance() {
 		if (instance == null) {
-			instance = new SimulationEngine();
+			synchronized (SimulationEngine.class) {
+				if(instance == null) {
+					instance = new SimulationEngine();
+				}
+			}
 		}
 		return instance;
 	}

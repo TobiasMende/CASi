@@ -1,4 +1,5 @@
 \chapter{Konzeption}\label{chapter:concept}
+\imiscomment{Kapitelüberblick (4-5 Zeilen)}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %\imiscomment{Grobkonzeption der Arbeit}
@@ -15,7 +16,6 @@ In Abbildung \ref{fig:architecture} wird die Modularität der Architektur des Si
 
 Die Pfeile in der Abbildung geben den Hauptinformationsfluss zwischen den Komponenten an.
 
-% this is an example for using TikZ:
 \begin{figure}[htb]
   \begin{center}
 	\begin{tikzpicture}[minimum width=3.3cm,minimum height=0.8cm]
@@ -57,9 +57,9 @@ Die Pfeile in der Abbildung geben den Hauptinformationsfluss zwischen den Kompon
 
 Der Kern des Simulationsframeworks ist die Simulationsengine, die im wesentlichen aus den Klasse \codeclass{SimulationEngine} und \codeclass{SimulationClock} besteht. Sowohl die Uhr als auch die Maschine sind als Singleton realisiert und können deshalb aus jeder Klasse angesprochen werden.
 
-Die SimulationClock repräsentiert die Zeit in der Simulation. Die Geschwindigkeit der Uhr und somit die Geschwindigkeit der Simulation kann skaliert werden. Der Skalierungsfaktor in der Uhr gibt dabei an, wie viele Millisekunden in Echtzeit einer simulierten Sekunde entsprechen. Somit resultiert ein niedriger Wert in einer höheren Geschwindigkeit.
+Die \codeclass{SimulationClock} repräsentiert die Zeit in der Simulation. Die Geschwindigkeit der Uhr, und somit die Geschwindigkeit der Simulation, kann skaliert werden. Der Skalierungsfaktor in der Uhr gibt dabei an, wie viele Millisekunden in Echtzeit einer simulierten Sekunde entsprechen. Somit resultiert ein niedriger Wert in einer höheren Geschwindigkeit.
 
-Klassen können das \codeclass{ISimulationClockListener}-Interface implementieren und sich bei der Clock als Listener registrieren, um über Events wie das Ticken der Uhr, das Pausieren, Starten und Stoppen der Simulation informiert zu werden.
+Klassen können das \codeclass{ISimulationClockListener}-Interface implementieren und sich bei der Uhr als Zuhörer registrieren, um über Events wie das Ticken der Uhr, das Pausieren, Starten und Stoppen der Simulation informiert zu werden.
 
 Die Engine hält die simulierte Welt (\codeclass{World}) bereit, welche die Konfiguration und das Verhalten der Simulation beschreibt. Darüber hinaus hält die Engine Referenzen auf den Kommunikationshandler, der in unserer Implementierung für die Kommunikation mit dem Awareness-Hub zuständig ist.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -69,32 +69,32 @@ Die Engine hält die simulierte Welt (\codeclass{World}) bereit, welche die Konf
 \subsection{Generatoren}\label{subsec:concept_generators}
 Generatoren erzeugen \codeclass{World}-Objekte, die von der Simulationsengine simuliert werden können.
 
-Ein Generator muss sich darum kümmern, Räume, Sensoren, Aktuatoren, Agenten und Aktionen zur erzeugen und geeignet zu verknüpfen. In unserer Implementierung gibt es einen Generator, der eine Welt erzeugt, in dem fest einprogrammiert Java-Objekte erzeugt werden.
+Ein Generator muss sich darum kümmern, Räume, Sensoren, Aktuatoren, Agenten und Aktionen zu erzeugen und geeignet zu verknüpfen. In unserer Implementierung gibt es einen Generator in dem fest einprogrammiert Java-Objekte erzeugt werden.
 
-Eine weitere Möglichkeit für einen Generator wäre ein XML Handler, der Java-Objekte aus einer XML-Beschreibung generiert.
+Eine weitere Möglichkeit für einen Generator stellt zum Beispiel ein XML-Handler dar, der Java-Objekte aus einer XML-Beschreibung generiert.
 
-Generatoren können in der Main-Klasse des Simulators ausgetauscht werden. Die einzigen Vorraussetzungen, die ein Generator erfüllen muss, sind, dass er das \codeinterface{IWorldGenerator}-Interface implementiert und eine vollständige Welt erzeugt.
+Generatoren können in der Main-Klasse (\codeclass{CASi}) des Simulators ausgetauscht werden. Die einzigen Vorraussetzungen, die ein Generator erfüllen muss, sind, dass er die \codeinterface{IWorldGenerator}-Schnittstelle implementiert und eine vollständige \codeclass{World}-Instanz erzeugt.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Benutzungsschnittstellen}\label{subsec:concept_interfaces}
-Benutzungsschnittstellen können bereit gestellt werden, indem eine Implementierung des Interfaces \codeinterface{IMainView} in der Main-Klasse des Simulators an den \codeclass{MainController} übergeben wird. Die Benutzungsschnittstellen können sowohl passiv als auch interaktiv gestaltet werden. Hierfür können sich Objekte des Interfaces als Listener bei den Objekten des Modells registrieren und auf die \codeclass{SimulationClock} und die Engine zugreifen, da beide Komponenten als Singleton realisiert sind.
+Benutzungsschnittstellen können bereit gestellt werden, indem eine Implementierung des Interfaces \codeinterface{IMainView} in der Main-Klasse des Simulators an den \codeclass{MainController} übergeben wird. Die Benutzungsschnittstellen können sowohl passiv als auch interaktiv gestaltet werden. Hierfür können sich Implementierungen der Schnittstelle als Zuhörer (\emph{Listener}) bei den Objekten des Modells registrieren und auf die \codeclass{SimulationClock} und die Engine zugreifen, da beide Komponenten als Singleton realisiert sind.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Aktionen}\label{subsec:concept_actions}
 Aktionen können allgemein durch folgende Parameter spezifiziert werden:
 \begin{description}
-	\item[priority] Die Priorität einer Aktion als Integer zwischen \texttt{0} und \texttt{10}.
-	\item[duration] Die Dauer in Sekunden oder \texttt{-1}, falls keine Dauer angegeben wird (z.B. bei \texttt{Move}-Aktionen, die dann fertig sind, wenn das Ziel erreicht wurde).
+	\item[priority] Die Priorität einer Aktion als Ganzzahl zwischen \codeinline{0} und \codeinline{10}.
+	\item[duration] Die Dauer in Sekunden oder \codeinline{-1}, falls keine Dauer angegeben wird (z.B. bei \codeclass{Move}-Aktionen, die dann fertig sind, wenn das Ziel erreicht wurde).
 	\item[earliestStartTime] ein Zeitpunkt (\codeclass{SimulationTime}), ab dem die Aktion gestartet werden darf oder \codeinline{null}, falls die Aktion zu einem beliebigen Zeitpunkt gestartet werden kann.
 	\item[deadline] ein Zeitpunkt, zu dem die Aktion erledigt sein muss oder \codeinline{null}, falls keine Headline angegeben wurde.
 	\item[state] der aktuelle Status der Aktion, z.B. \codeinline{SCHEDULED}, wenn die Aktion einem Agenten hinzugefügt wurde, dieser sie aber noch nicht ausgeführt hat, \codeinline{ONGOING}, wenn die Aktion gerade durchgeführt wird oder \codeinline{COMPLETED}, wenn die Aktion erfolgreich durchgeführt wurde.
 \end{description}
 Es gibt \codeclass{AtomicAction}s und \codeclass{ComplexAction}s, wobei letztere aus einer Liste von atomaren Aktionen bestehen können. Mit diesem Konstrukt lassen sich unter anderem Aktionen wie das aufsuchen und reden mit einer anderen Person (\codeclass{Agent}) beschreiben.
 
-Um eine neue Aktion zur Verfügung zu stellen, muss eine neue Klasse implementiert werden, die von einer der abstrakten Klassen \codeclass{AtomicAction} oder \codeclass{ComplexAction} erbt. Die eigentliche Aktion muss in der \codemethod{internalPerform(AbstractComponent performer)}-Methode beschrieben werden. Sollten vor der ersten Ausführung der Aktion Konfigurationsschritte notwendig sein, können diese in der Methode \codemethod{preActionTask(AbstractComponent performer)} beschrieben werden. Analog dazu gibt es auch eine Methode \codemethod{postActionTask(AbstractComponent performer)}, die vom Framework aufgerufen wird, nachdem der Job erledigt wurde.
+Um eine neue Aktion zur Verfügung zu stellen, muss eine Klasse implementiert werden, die von einer der abstrakten Klassen \codeclass{AtomicAction} oder \codeclass{ComplexAction} erbt. Die eigentliche Aktion muss in der \codemethod{internalPerform(AbstractComponent performer)}-Methode beschrieben werden. Sollten vor der ersten Ausführung der Aktion Konfigurationsschritte notwendig sein, können diese in der Methode \codemethod{preActionTask(AbstractComponent performer)} beschrieben werden. Analog dazu gibt es auch eine Methode \codemethod{postActionTask(AbstractComponent performer)}, die vom Framework aufgerufen wird, nachdem der Job erledigt wurde.
 
 Wenn eine Dauer angegeben wurde, kümmert sich dass Simulationsframework um das Dekrementieren der Zeit, in diesem Fall muss die \codemethod{internalPerform(AbstractComponent per\-for\-mer)}-Methode immer \codeinline{false} zurückgeben. Sobald diese Methode \codeinline{true} zurückgibt, gilt die Aktion als erledigt und es wird im Falle einer komplexen Aktion mit der nächsten atomaren Aktion fortgefahren.
 

@@ -55,13 +55,13 @@ Die Pfeile in der Abbildung geben den Hauptinformationsfluss zwischen den Kompon
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Simulationsengine}\label{subsec:concept_engine}
 
-Der Kern des Simulationsframeworks ist die Simulationsengine, die im wesentlichen aus den Klasse \codeclass{SimulationEngine} und \codeclass{SimulationClock} besteht. Sowohl die Clock als auch die Engine sind als Singleton realisiert und können deshalb aus jeder Klasse angesprochen werden.
+Der Kern des Simulationsframeworks ist die Simulationsengine, die im wesentlichen aus den Klasse \codeclass{SimulationEngine} und \codeclass{SimulationClock} besteht. Sowohl die Uhr als auch die Maschine sind als Singleton realisiert und können deshalb aus jeder Klasse angesprochen werden.
 
 Die SimulationClock repräsentiert die Zeit in der Simulation. Die Geschwindigkeit der Uhr und somit die Geschwindigkeit der Simulation kann skaliert werden. Der Skalierungsfaktor in der Uhr gibt dabei an, wie viele Millisekunden in Echtzeit einer simulierten Sekunde entsprechen. Somit resultiert ein niedriger Wert in einer höheren Geschwindigkeit.
 
 Klassen können das \codeclass{ISimulationClockListener}-Interface implementieren und sich bei der Clock als Listener registrieren, um über Events wie das Ticken der Uhr, das Pausieren, Starten und Stoppen der Simulation informiert zu werden.
 
-Die Engine hält die Welt (\codeclass{World}) bereit, welche die Konfiguration und das Verhalten der Simulation beschreibt. Darüber hinaus hält die Engine Referenzen auf den Kommunikationshandler, der in unserer Implementierung für die Kommunikation mit dem Awareness-Hub zuständig ist.
+Die Engine hält die simulierte Welt (\codeclass{World}) bereit, welche die Konfiguration und das Verhalten der Simulation beschreibt. Darüber hinaus hält die Engine Referenzen auf den Kommunikationshandler, der in unserer Implementierung für die Kommunikation mit dem Awareness-Hub zuständig ist.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\imiscomment{Grobkonzeption eines einzelnen Moduls}
 
@@ -92,7 +92,7 @@ Aktionen können allgemein durch folgende Parameter spezifiziert werden:
 	\item[deadline] ein Zeitpunkt, zu dem die Aktion erledigt sein muss oder \codeinline{null}, falls keine Headline angegeben wurde.
 	\item[state] der aktuelle Status der Aktion, z.B. \codeinline{SCHEDULED}, wenn die Aktion einem Agenten hinzugefügt wurde, dieser sie aber noch nicht ausgeführt hat, \codeinline{ONGOING}, wenn die Aktion gerade durchgeführt wird oder \codeinline{COMPLETED}, wenn die Aktion erfolgreich durchgeführt wurde.
 \end{description}
-Es gibt \codeclass{AtomicAction}s und \codeclass{ComplexAction}s, welche aus einer Liste von atomaren Aktionen bestehen können. Mit diesem Konstrukt lassen sich unter anderem Aktionen wie das aufsuchen und reden mit einer anderen Person (\codeclass{Agent}) beschreiben.
+Es gibt \codeclass{AtomicAction}s und \codeclass{ComplexAction}s, wobei letztere aus einer Liste von atomaren Aktionen bestehen können. Mit diesem Konstrukt lassen sich unter anderem Aktionen wie das aufsuchen und reden mit einer anderen Person (\codeclass{Agent}) beschreiben.
 
 Um eine neue Aktion zur Verfügung zu stellen, muss eine neue Klasse implementiert werden, die von einer der abstrakten Klassen \codeclass{AtomicAction} oder \codeclass{ComplexAction} erbt. Die eigentliche Aktion muss in der \codemethod{internalPerform(AbstractComponent performer)}-Methode beschrieben werden. Sollten vor der ersten Ausführung der Aktion Konfigurationsschritte notwendig sein, können diese in der Methode \codemethod{preActionTask(AbstractComponent performer)} beschrieben werden. Analog dazu gibt es auch eine Methode \codemethod{postActionTask(AbstractComponent performer)}, die vom Framework aufgerufen wird, nachdem der Job erledigt wurde.
 
@@ -115,7 +115,7 @@ Die Kernfunktionalität eines Action-Schedulers ist es, mit geeigneten Algorithm
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Kommunikationshandlern}\label{subsec:concept_communication}
+\subsection{Kommunikationshandler}\label{subsec:concept_communication}
 Ein Kommunikationshandler muss das \codeinterface{ICommunicationHandler}-Interface implementieren. Kommunikationshandler sind für die Verwaltung der Kommunikation mit einem beliebigem Gegenpart außerhalb des Simulators zuständig. Ein konkretes Beispiel ist ein Netzwerkhandler, der die Kommunikation über eine Netzwerkschnittstelle verwalten kann. In der aktuellen Implementierung ist der \codeclass{MACKNetworkHandler} ein Kommunikationshandler der den Informationsaustausch mit dem MACK Server realisiert.
 
 Innerhalb der Simulation interagiert der Kommunikationshandler mit Sensoren und Aktuatoren, die beide das Interface \codeinterface{ICommunicationComponent} implementieren.. Die Komponenten registrieren sich in der Initialisierungsphase des Simulators beim Handler, indem die Methode \codemethod{re\-gister (ICom\-muni\-cation\-Component comp)} aufgerufen wird.

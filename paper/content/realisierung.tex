@@ -8,7 +8,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Simulationsengine \& Simulationclock}\label{subsec:real_engine}
+\subsection{SimulationEngine und SimulationClock}\label{subsec:real_engine}
 \subsubsection{SimulationEngine}
 Die \codeclass{SimulationEngine} ist als Singleton realisiert. Dies hat den Vorteil, dass es zur Laufzeit nur eine Instanz von ihr geben kann, die in allen Klassen verfügbar ist. Diese Instanz hält die \codeclass{World}, den \codeclass{CommunicationHandler} bereit. Beide Objekte können vor dem Start der Simulation, d.h. vor dem Start der \codeclass{SimulationClock} mit den jeweiligen Setter-Methoden gesetzt werden. Der Aufruf dieser Methoden nach dem Start der Simulation erzeugt einen \codeclass{IllegalAccessException}.
 
@@ -36,7 +36,7 @@ SimulationClock.getInstance()
 \end{illfloat}
 wieder entfernt werden.
 
-Über das Listener-Konzept werden in jeder simulierten Sekunden Aktionen bei den Listenern angestoßen. Standardmäßig ist es nicht möglich, eine Java-Collection während des Durchlaufens dieser zu verändern. Somit wäre es unmöglich, dass sich eine Komponente als Listener abmelden kann. Die \codeclass{SimulationClock} speichert jedoch alle Hinzufüge- und Entfernanfragen an die Listener-Collection zwischen und führt diese vor dem nächsten Durchlauf aus.
+Über das Listener-Konzept werden in jeder simulierten Sekunde Aktionen bei den Listenern angestoßen. Standardmäßig ist es nicht möglich, eine Java-Collection während des Durchlaufens dieser zu verändern. Somit wäre es unmöglich, dass sich eine Komponente als Listener abmelden kann. Die \codeclass{SimulationClock} speichert jedoch alle Hinzufüge- und Entfernanfragen an die Listener-Collection zwischen und führt diese vor dem nächsten Durchlauf aus.
 
 Die Uhr basiert auf einem Timer-Thread, der alle $x$ Millisekunden auslöst. Wenn die Uhrzeit skaliert wird, wird mit dem nächsten Tick ein neuer Timer eingerichtet. Das pausieren der Simulation stoppt nicht den Timer-Thread sondern verhindert lediglich, dass dieser die \codeclass{SimulationTime} inkrementiert.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -81,7 +81,7 @@ Als letzten Schritt nimmt der Generator alle Komponenten (rote Pfeile) und erzeu
 
 Als Benutzungsschnittstelle für den Simulator haben wir die \emph{Simple GUI} entwickelt. Diese soll die simulierte Welt grafisch darstellen und es ermöglichen, gewünschte Informationen abzurufen. Wir wollten, dass diese Benutzungsschnittstelle sowohl für die späteren Hauptbenutzer, die Simulationen testen, viele Funktionen bietet, aber auch für Benutzer verständlich ist, die von dem System noch keine fortgeschrittenen Kenntnisse haben. Zum Beispiel könnte sie auch benutzt werden, um anderen das MACK Framework zu präsentieren und zu veranschaulichen.
 
-Die \emph{Simple GUI} ist eines der Module des Simulators, die sich leicht durch ein passendes Anderes ersetzen lassen. Wenn also beispielsweise die angezeigten Informationen nicht ausreichend oder für bestimmte Simulationen überflüssig und deshalb störend sind, kann man die Benutzungsschnittstelle austauschen. Realisiert wird dies durch das Interface \codeinterface{IMainView}, die neue Schnittstelle muss bei der Implementierung dieses Interface benutzen. Ein ganz einfaches Beispiel für eine Implementierung ist die Klasse \codeclass{GuiStub}, die eingesetzt wird, wenn keine grafische Benutzungsschnittstelle erwünscht ist.
+Die \emph{Simple GUI} ist eines der Module des Simulators, die sich leicht durch ein passendes anderes ersetzen lassen. Wenn also beispielsweise die angezeigten Informationen nicht ausreichend oder für bestimmte Simulationen überflüssig und deshalb störend sind, kann man die Benutzungsschnittstelle austauschen. Realisiert wird dies durch das Interface \codeinterface{IMainView}, die neue Schnittstelle muss bei der Implementierung dieses Interface benutzen. Ein ganz einfaches Beispiel für eine Implementierung ist die Klasse \codeclass{GuiStub}, die eingesetzt wird, wenn keine grafische Benutzungsschnittstelle erwünscht ist.
 
 Für die graphische Oberfläche benutzen wir die Swingbibliothek, da wir aus dem Praktikum \emph{Softwaretechnik} einige Erfahrung mit der Swing-Entwicklung haben.
 
@@ -102,7 +102,7 @@ Der Simulationsbereich besteht aus einer \codeclass{JLayeredPane}. Auf dieser wi
 
 \item Ebene 2: Auf dieser Ebene liegen die Sensoren und Aktuatoren. Diese sind ein wesentlicher Bestandteil der Simulation und sollen deshalb nicht durch Teile des Hintergrundes verdeckt werden. Jedes dieser Komponenten wird dargestellt mit Hilfe der Klasse \codeclass{InteractionCom\-ponentView}, die von \codeclass{ComponentView} erbt, welche wiederum eine \codeclass{JComponent} ist. Ein Sensor oder Aktuator wird gezeichnet als ein Quadrat mit der Hintergrundfarbe der Simulation. Da die Sensoren und Aktuatoren beliebig viele Zustände annehmen können, haben wir darauf verzichtet zu implementieren, dass ihr Zustand an der Färbung erkennbar ist.
 
-\item Ebene 3: Auf der obersten Ebene befinden sich die Agenten. Diese haben wir als wichtigstes Bestandteil der Simulation eingestuft, deshalb sollen sie durch nichts Anderes überdeckt werden. Jeder Agent wird dargestellt mittels der von uns implementierten Klasse \codeclass{AgentView}, die ebenfalls von \codeclass{ComponentView} erbt. Die Klasse \codeclass{AgentView} implementiert das Interface \codeinterface{IAgentListener}. Mit den Methoden \codemethod{state\-Changed(STATE new\-State,\- Agent agent)} und \codemethod{position\-Changed(Point2D oldPosition, Point2D new\-Position,\- Agent agent)} erkennt diese Komponente, ob sich der Status oder die Position des Agenten verändert hat und zeichnet sich entsprechend neu. Agenten werden als Kreise gezeichnet, ihre Farbe entspricht ihrem Zustand, so bedeutet \textit{rot} zum Beispiel, dass der Agent gerade beschäftigt ist.
+\item Ebene 3: Auf der obersten Ebene befinden sich die Agenten. Diese haben wir als wichtigsten Bestandteil der Simulation eingestuft, deshalb sollen sie durch nichts anderes überdeckt werden. Jeder Agent wird dargestellt mittels der von uns implementierten Klasse \codeclass{AgentView}, die ebenfalls von \codeclass{ComponentView} erbt. Die Klasse \codeclass{AgentView} implementiert das Interface \codeinterface{IAgentListener}. Mit den Methoden \codemethod{state\-Changed(STATE new\-State,\- Agent agent)} und \codemethod{position\-Changed(Point2D oldPosition, Point2D new\-Position,\- Agent agent)} erkennt diese Komponente, ob sich der Status oder die Position des Agenten verändert hat und zeichnet sich entsprechend neu. Agenten werden als Kreise gezeichnet, ihre Farbe entspricht ihrem Zustand, so bedeutet \textit{rot} zum Beispiel, dass der Agent gerade beschäftigt ist.
 \end{itemize} 
 
 Um den Simulationsbereich gut auszunutzen, skaliert sich die gezeichnete, simulierte Welt automatisch so, dass sie möglichst groß angezeigt wird.
@@ -198,7 +198,7 @@ Die Netzwerkconfigurationsdatei enthält für jeden \codeinline{XmppIdentifier} 
 \begin{lstlisting}[language=XML]
 <void method="add">
 	<object class="de.uniluebeck.imis.casi.communication
-	               .mack.XmppIdentifier">
+.mack.XmppIdentifier">
 		<void property="componentOwner">
 			<string>casi_hermann_matsumbishi</string>
 		</void>

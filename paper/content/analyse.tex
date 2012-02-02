@@ -117,6 +117,15 @@ Bei der Zielgruppe handelt es sich um erfahrene Entwickler, die mit dem Simulato
 
 Da wir die späteren Benutzer als Experten eingestuft haben, standen wir von Anfang an viel mit ihnen in Kontakt, um beispielsweise die spätere Spezifikationssprache der Simulationen festzulegen. Unser Ergebnis war hier, dass mindestens grundlegende Kenntnisse in Java und XML gegeben sind und deshalb die Simulationen mittels dieser Sprachen spezifiziert werden können. Die Erstellung der Simulation nur anhand von Java-Klassen ist zwar umständlich, aber so konnten wir den Fokus auf die Entwicklung des eigentlichen Simulators setzen.
 
+Um eine Simulation zu beschreiben, sollen folgende Teile definiert werden können:
+\begin{itemize}
+\item Eine Umgebung beispielsweise ein Gebäude mit Räumen und Türen.
+\item Personen, die an der Simulation beteiligt sind, diese werden im Weiteren Agents genannt.
+\item Verschiedene Sensoren und Aktuatoren, die beteiligt sind und getestet werden sollen.
+\item Aktionen, die von Agents oder Sensoren/Aktuatoren angestoßen werden, um reale Abläufe zu simulieren.
+\end{itemize}
+  
+
 Eine weitere wichtige Frage an die erfahrenen Benutzer war, welche Art von Benutzungsschnittstellen für sie implementiert werden sollten. Wir haben erfahren, dass sowohl besonderer Wert auf detaillierte Logausgaben gelegt wird als auch eine einfache grafische Oberfläche erwünscht ist, da diese für das Erlangen eines ersten Eindrucks von der Arbeit des Systems besonders gut geeignet ist. Die grafische Oberfläche soll hierbei ausschließlich zur Visualisierung und nicht zum Erstellen der Simulation dienen. Ansonsten  wäre der Aufwand der Implementierung zu groß gewesen. Auf den Ablauf der Simulation soll nur sehr begrenzt Einfluss genommen werden können, zum Beispiel durch Verändern der Simulationsgeschwindigkeit oder Pausieren der Simulation.
 
 Im gesamten Entwicklungsprozess haben wir eng mit den späteren Nutzern zusammengearbeitet und uns möglichst früh Rückmeldung zu offenen Fragen und Entwicklungsentscheidungen geholt. So wollten wir sicherstellen, dass die Benutzer direkt an der Entwicklung beteiligt sind und somit mögliche Fehlentwicklungen vermieden werden.

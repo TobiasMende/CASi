@@ -17,7 +17,7 @@ Darüber hinaus muss evaluiert werden, ob der Simulator seinen Zweck erfüllt un
 
 %\imiscomment{Was soll evaluiert werden und warum\ldots}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Vorgehen}\label{sec:eva_approach}
+\section{Methoden und Vorgehen}\label{sec:eva_approach}
 Insbesondere zu Beginn der Entwicklungsphase war es nicht möglich, das Gesamtsystem zu testen, da viele Klassen noch nicht oder nicht vollständig implementiert waren. Aus diesem Grund haben wir für Teilbereiche, deren Funktionalität besonders wichtig oder aufwändig ist, Testfälle entwickelt, mit denen das gekapselte Testen dieser Klassen möglich ist.
 
 Die einzige effektive Methode zum Testen des Gesamtsystems stellt die Entwicklung einer umfangreichen Simulation dar. Da es bereits eine Implementierung der MATe Anwendung gibt und ein Server für diese Anwendung zur Verfügung steht, haben wir ein Szenario entwickelt, das mit diesem Server zusammenarbeiten kann und somit die Interaktion zwischen dem MATe Server und dem Simulator verifizieren kann.
@@ -38,21 +38,25 @@ Um zu verifizieren, dass der Simulator seinen Zweck erfüllt und die Entwicklung
 
 %\imiscomment{Welches Vorgehen wurde bei der Evaluierung gewählt und warum\ldots}
 
-\imiscomment{Hier bietet sich der Einsatz von Diagrammen und Schaubildern an.}
+%\imiscomment{Hier bietet sich der Einsatz von Diagrammen und Schaubildern an.}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Methoden}\label{sec:eva_methods}
+%\section{Methoden}\label{sec:eva_methods}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\imiscomment{Welches Methoden kamen zum Einsatz und warum\ldots}
+%\imiscomment{Welches Methoden kamen zum Einsatz und warum\ldots}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Ergebnisse}\label{sec:eva_results}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\imiscomment{Welche Ergebnisse brachte die Evaluierung und was ist davon zu halten\ldots}
+Die Methode des User-centered Desgin war sehr erfolgreich. Durch die vielen, frühzeitigen Rückmeldung der späteren Benutzer konnten wir uns immer schnell an Wünsche und Anregungen anpassen. So haben wir vermieden, dass sich nach der Arbeitsphase am Projekt noch sehr aufwendige Änderungen ergeben.
 
-\imiscomment{Hier helfen Tabellen und Grafiken beim Vermitteln der Sachverhalte.}
+Unsere Evaluation hat ergeben, dass unser System im Wesentlichen funktionsfähig ist und ein guter Aufsatzpunkt für weitere Arbeiten an diesem Projekt bietet. Der Ablauf der Simulation wirkt auf uns realistisch und sollte sich gut zum Testen des MACK Frameworks eignen. Die Sensoren und Aktuatoren ändern ihre Werte, in Abhängigkeit des Geschehens und nehmen ebenfalls Einfluss darauf. Ein Problem ist allerdings, dass bei schneller Simulationsgeschwindigkeit die Antworten des MACK Servers stark verzögert sind. In diesem Fall passen die Sensor- und Aktuatorwerte nicht zum aktuellen Verhalten der Simulation.
+
+%\imiscomment{Welche Ergebnisse brachte die Evaluierung und was ist davon zu halten\ldots}
+
+%\imiscomment{Hier helfen Tabellen und Grafiken beim Vermitteln der Sachverhalte.}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

@@ -26,6 +26,9 @@ import javax.swing.JPanel;
 @SuppressWarnings("serial")
 public class ControlPanel extends JPanel {
 
+	/** Static pause button that can be accessed in this simple GUI package */
+	static PauseButton pauseButton;
+	
 	/**
 	 * The constructor sets layout and components.
 	 */
@@ -47,7 +50,7 @@ public class ControlPanel extends JPanel {
 	private void setComponents() {
 
 		/* Set start button */
-		PauseButton pauseButton = new PauseButton();
+		pauseButton = new PauseButton();
 		pauseButton.setSize(pauseButton.getPreferredSize());
 		this.add(pauseButton);
 

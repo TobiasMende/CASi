@@ -128,32 +128,6 @@ public class MainViewSimpleGui extends JFrame implements IMainView,
 	 */
 	private void setComponents() {
 
-		/* Set menu bar */
-		JMenuBar menuBar = new JMenuBar();
-		JMenu mainMenu = new JMenu("Menu");
-		menuBar.setBackground(ColorScheme.BACKGROUND_GUI);
-
-		/* Configure save item */
-		// for now we dont have these things!
-//		JMenuItem stopItem = new JMenuItem("Stop Simulation");
-//		stopItem.setActionCommand("stop");
-//		stopItem.addActionListener(this);
-//		mainMenu.add(stopItem);
-//		mainMenu.addSeparator();
-
-		/* Configure close item */
-		JMenuItem closeItem = new JMenuItem("Exit");
-		closeItem.setActionCommand("close");
-		closeItem.addActionListener(this);
-		mainMenu.add(closeItem);
-
-		/* Add menu to menu bar */
-		menuBar.add(mainMenu);
-
-		/* Add view to menu bar */
-		viewMenu = new ViewMenu();
-		menuBar.add(viewMenu);
-
 		/* New SimulationPanel */
 		simPanel = new SimulationPanel();
 		JPanel centerPanel = new JPanel();
@@ -176,6 +150,31 @@ public class MainViewSimpleGui extends JFrame implements IMainView,
 		splitPane.setOneTouchExpandable(true);
 		splitPane.setDividerLocation(this.getWidth() - 317);
 		splitPane.setBackground(ColorScheme.BACKGROUND_GUI);
+		
+		/* Set menu bar */
+		JMenuBar menuBar = new JMenuBar();
+		JMenu mainMenu = new JMenu("Menu");
+		menuBar.setBackground(ColorScheme.BACKGROUND_GUI);
+
+		/* Configure save item */
+		JMenuItem stopItem = new JMenuItem("Pause/resume simulation");
+//		stopItem.setActionCommand("stop");
+		stopItem.addActionListener(ControlPanel.pauseButton);
+		mainMenu.add(stopItem);
+		mainMenu.addSeparator();
+
+		/* Configure close item */
+		JMenuItem closeItem = new JMenuItem("Exit");
+		closeItem.setActionCommand("close");
+		closeItem.addActionListener(this);
+		mainMenu.add(closeItem);
+
+		/* Add menu to menu bar */
+		menuBar.add(mainMenu);
+
+		/* Add view to menu bar */
+		viewMenu = new ViewMenu();
+		menuBar.add(viewMenu);
 
 		this.add(splitPane, BorderLayout.CENTER);
 		this.add(menuBar, BorderLayout.NORTH);

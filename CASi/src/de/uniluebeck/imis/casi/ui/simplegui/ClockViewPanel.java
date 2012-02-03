@@ -120,30 +120,30 @@ public class ClockViewPanel extends JPanel implements ISimulationClockListener,
 		// double a = (max - min) / (Math.pow(min, 2) - Math.pow(max, 2));
 		// double c = max - a * Math.pow(min, 2);
 
+		/* 1/ x scale */
 		double a = (max - min) / (1 / min - 1 / max);
 		double b = min - a / max;
-
-		/** Invert the value limits */
-		// double number = -value + max + min;
-
-		/** Square and scale the new value */
-		// value = (int) (a * Math.pow(value, 2) + c);
-
 		value = (int) (a / value + b);
+		
+//		/* linear scale */
+//		double a = -1;
+//		double b = max + min;
+//		value = (int) (a * value + b);
+		
 
-		/** Check, if the new values are in range */
+		/* Check, if the new values are in range */
 		if ((int) value < min) {
 
-			/** Else return minimum */
+			/* Else return minimum */
 			return (int) min;
 		}
 		if ((int) value > max) {
 
-			/** Else return maximum */
+			/* Else return maximum */
 			return (int) max;
 		}
 
-		/** Return the new value */
+		/* Return the new value */
 		return value;
 	}
 
@@ -157,31 +157,33 @@ public class ClockViewPanel extends JPanel implements ISimulationClockListener,
 	 */
 	private int recalculateScaledValue(int value) {
 
-		/** Save maximum and minimum in doubles */
+		/* Save maximum and minimum in doubles */
 		double max = SimulationClock.MAXIMUM_SCALE_FACTOR;
 		double min = SimulationClock.MINIMUM_SCALE_FACTOR;
 
-		/** Compute values of the quadratic function */
+		/* 1/x scale */
 		double a = (max - min) / (1 / min - 1 / max);
 		double b = min - a / max;
-
-		/** Invert the value limits */
-
 		value = (int) (a / value - b);
-
-		/** Check, if the new values are in range */
+		
+//		/* linear scale */
+//		double a = -1;
+//		double b = max + min;
+//		value = (int) ((value - b)/a);
+		
+		/* Check, if the new values are in range */
 		if ((int) value < min) {
 
-			/** Else return minimum */
+			/* Else return minimum */
 			return (int) min;
 		}
 		if ((int) value > max) {
 
-			/** Else return maximum */
+			/* Else return maximum */
 			return (int) max;
 		}
 
-		/** Return the new value */
+		/* Return the new value */
 		return value;
 	}
 
@@ -259,6 +261,7 @@ public class ClockViewPanel extends JPanel implements ISimulationClockListener,
 	 */
 	@Override
 	public void stateChanged(ChangeEvent arg0) {
+		
 		SwingUtilities.invokeLater(new Runnable() {
 
 			@Override

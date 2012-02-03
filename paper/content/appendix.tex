@@ -16,10 +16,10 @@
   \listoffigures
 
 % The list of tables
-  \cleardoublepage
-  \phantomsection
-  \addcontentsline{toc}{chapter}{Tabellen}
-  \listoftables
+%  \cleardoublepage
+%  \phantomsection
+%  \addcontentsline{toc}{chapter}{Tabellen}
+%  \listoftables
 
 % list of listings
   \cleardoublepage
@@ -86,19 +86,19 @@
 \chapter{Anhänge}\label{chapter:appendix}
 % \addcontentsline{toc}{chapter}{Anhänge}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+Folgend sind die Projektstruktur (Abschnitt \ref{sec:appendix_structure}) inklusive der konzeptionellen Aufteilung einzelner Arbeitsteilgebiete in verschiedene Ordner und Pakete und eine Hilfestellung zum Ausführen des Simulationsprogramms (Abschnitt \ref{sec:appendix_install}) gegeben.\\ 
 \imiscomment{Umfangreiche zusätzliche Informationen, die im Textverlauf stören würden, aber für die Arbeit wichtig sind, wie z.B. Programmcode, Fragebögen, Evaluationstabellen}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Programmcode}\label{sec:appendix_A}
+%\section{Programmcode}\label{sec:appendix_A}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Modul 1}
+%\subsection{Modul 1}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Modul 2}
+%\subsection{Modul 2}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -154,11 +154,6 @@ Die jar-Version des Simulators kann, nachdem sie mit \codemethod{ant jar} erzeug
 Der XmppRegistrator kann automatisch alle für die Simulation benötigten XmppIdentifier am Jabber-Server registrieren. Dies ist besonders hilfreich, wenn der Server ein Delay zwischen zwei Registrierungsoperationen benötigt, da somit vermieden werden kann, dass die Identifier erst beim Start der Simulation registriert werden und somit die Ausführung der Simulation verzögert wird.
 
 Der XmppRegistrator verlangt als einzigen Parameter den Pfad zu einer Netzwerkkonfigurationsdatei und kann, nachdem er mit \codemethod{ant xmpp-registrator-jar} erzeugt wurde, mit \codemethod{java -jar dist/XmppRegistrator.jar <path-to-config-file>} ausgeführt werden.
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Evaluationsergebnisse}\label{sec:appendix_C}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter*{Erklärung}\addcontentsline{toc}{chapter}{Erklärung}

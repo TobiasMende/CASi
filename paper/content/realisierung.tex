@@ -17,7 +17,7 @@ Während der Simulation können die Welt und der Kommunikationshandler über die
 \subsubsection{SimulationClock}
 Die \codeclass{SimulationClock} ist das Herzstück der Simulation. Sie stößt sämtliche Aktionen der Komponenten des Modells an. Die Clock ist wie die Engine ebenfalls mit dem Singleton-Designpatter realisiert. So ist sicher gestellt, dass es nur eine Uhr geben kann, die aus allen Klassen erreichbar ist.
 
-Die \codeclass{SimulationClock} verwendet das Listener-Konzept, um Komponenten, die an der Simulationszeit interessiert sind regelmäßig über Änderungen zu informieren. Komponenten die sich als Listener bei der Uhr registrieren möchten müssen dazu das \codeinterface{ISimulationClockListener}-Interface implementieren und können dann mit 
+Die \codeclass{SimulationClock} verwendet das Listener-Konzept, um Komponenten, die an der Simulationszeit interessiert sind regelmäßig über Änderungen zu informieren. Komponenten die sich als Listener bei der Uhr registrieren möchten müssen dazu die \codeinterface{ISimulationClockListener}-Schnittstelle implementieren und können dann mit 
 \begin{illfloat}[H]
   \begin{lstlisting}
 SimulationClock.getInstance()
@@ -48,7 +48,7 @@ Die Uhr basiert auf einem Timer-Thread, der alle $x$ Millisekunden auslöst. Wen
 Für das Erstellen einer neuen Simulation reicht es aus, eine Simulationswelt (der Klasse \codeclass{World}) zu erzeugen. Dieser Vorgang wird als Generierung bezeichnet und von einem Generator realisiert.
 Ein Beispiel, wie eine solche erzeugt werden kann, ist in diesem Kapitel an Hand der Demonstrationssimulation dargestellt.\\ 
 
-Aus Modularitätsgründen haben wir uns für das Konzept eines leicht austauschbaren Generators entschieden. Dafür wurde das Interface \codeinterface{IWorldGenerator} entworfen, welches nur eine Methode (\codemethod{generateWorld()}) definiert, die von allen konkreten Generatoren als Schnittstelle genutzt werden sollte.
+Aus Modularitätsgründen haben wir uns für das Konzept eines leicht austauschbaren Generators entschieden. Dafür wurde die Schnittstelle \codeinterface{IWorldGenerator} entworfen, welches nur eine Methode (\codemethod{generateWorld()}) definiert, die von allen konkreten Generatoren als Schnittstelle genutzt werden sollte.
 Darüber hinaus gibt es im Generatorpaket (\codeinline{de.uniluebeck.imis.casi.gene\-rator}) einige Helferklassen, deren Name mit \codeclass{Collector} gekennzeichnet ist und einen \codeclass{Linker}.\\
 
 Durch den gewählten Ansatz der starken Abstraktion ist es möglich Simulationen auf die unterschiedlichsten Arten zu beschreiben ohne Änderungen am Simulator vornehmen zu müssen. Das von uns gewählte, am kurzfristigsten umzusetzende Vorgehen ist es, direkt aus Java-Klassen heraus die Objekte der Simulationswelt zu erzeugen und zu verknüpfen. Weitere Möglichkeiten wären:
@@ -79,11 +79,11 @@ Als letzten Schritt nimmt der Generator alle Komponenten (rote Pfeile) und erzeu
 \subsection{Benutzungsschnittstellen}\label{subsec:real_interfaces}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Als Benutzungsschnittstelle für den Simulator haben wir die \emph{Simple GUI} entwickelt. Diese soll die simulierte Welt grafisch darstellen und es ermöglichen, gewünschte Informationen abzurufen. Wir wollten, dass diese Benutzungsschnittstelle sowohl für die späteren Hauptbenutzer, die Simulationen testen, viele Funktionen bietet, aber auch für Benutzer verständlich ist, die von dem System noch keine fortgeschrittenen Kenntnisse haben. Zum Beispiel könnte sie auch benutzt werden, um anderen das MACK Framework zu präsentieren und zu veranschaulichen.
+Als Benutzungsschnittstelle für den Simulator haben wir die \emph{Simple GUI} entwickelt. Diese soll die simulierte Welt grafisch darstellen und es ermöglichen, gewünschte Informationen abzurufen. Wir wollten, dass diese Benutzungsschnittstelle sowohl für die späteren Hauptbenutzer, die Simulationen testen, viele Funktionen bietet, aber auch für Benutzer verständlich ist, die von dem System noch keine fortgeschrittenen Kenntnisse haben. Zum Beispiel könnte sie auch benutzt werden, um anderen das MACK-Framework zu präsentieren und zu veranschaulichen.
 
 Die \emph{Simple GUI} ist eines der Module des Simulators, die sich leicht durch ein passendes anderes ersetzen lassen. Wenn also beispielsweise die angezeigten Informationen nicht ausreichend oder für bestimmte Simulationen überflüssig und deshalb störend sind, kann man die Benutzungsschnittstelle austauschen. Realisiert wird dies durch das Interface \codeinterface{IMainView}, die neue Schnittstelle muss bei der Implementierung dieses Interface benutzen. Ein ganz einfaches Beispiel für eine Implementierung ist die Klasse \codeclass{GuiStub}, die eingesetzt wird, wenn keine grafische Benutzungsschnittstelle erwünscht ist.
 
-Für die graphische Oberfläche benutzen wir die Swingbibliothek, da wir aus dem Praktikum \emph{Softwaretechnik} einige Erfahrung mit der Swing-Entwicklung haben.
+Für die graphische Oberfläche benutzen wir die Swing-Bibliothek, da wir aus dem Praktikum \emph{Softwaretechnik} einige Erfahrung mit der Swing-Entwicklung haben.
 
 Die \emph{Simple GUI} ist aufgebaut, wie in Abbildung \ref{fig:simplegui-screen} zu sehen ist. Im Simulationsbereich (rot) wird die simulierte Welt gezeichnet. Der Informationsbereich (grün) an der rechten Seite bietet dem Benutzer die Möglichkeit detaillierte Informationen über Simulationskomponenten abzufragen. Zwischen dem Simulationsbereich und dem Informationsbereich befindet sich ein verschiebbare Trennung. Der Steuerungsbereich (blau) im unteren Teil lässt den Benutzer eingeschränkt Einfluss auf die Simulation nehmen. Die Menüleiste (gelb) im oberen Bildbereich bietet einige grundlegende Programmfunktionen. Letztere sollte in einem im Fenster ausgeführten Programm nicht fehlen, da sie den meisten Benutzern vertraut ist und ihr Fehlen für eine gewisse Hilflosigkeit sorgen könnte. 
 
@@ -144,9 +144,9 @@ Die Anzeigeeinstellungen werden durch Checkboxen (\codeclass{JCheckBoxMenuItem})
 \subsection{Aktionen}\label{subsec:real_actions}
 In unserer Implementierung sind verschiedenen Aktionen enthalten. In der Package-Struktur haben wir diese wie folgt aufgeteilt:
 
-In \codeinline{.simulation.model.actions} befinden sich Aktionen, die allgemein im Simulator durchgeführt werden können. Diese sind unabhängig vom MACK Framework, Sensoren und Aktuatoren.
+In \codeinline{.simulation.model.actions} befinden sich Aktionen, die allgemein im Simulator durchgeführt werden können. Diese sind unabhängig vom MACK-Framework, Sensoren und Aktuatoren.
 
-Im Package \codeinline{.simulation.model.mackActions} befinden sich Aktionen, die bestimmte Sensoren und Aktuatoren benötigen und somit abhängig von der jeweiligen Simulation sind.
+Im Paket \codeinline{.simulation.model.mackActions} befinden sich Aktionen, die bestimmte Sensoren und Aktuatoren benötigen und somit abhängig von der jeweiligen Simulation sind.
 
 \subsubsection{Allgemeine Aktionen}
 Zu den wichtigsten allgemeinen Aktionen in unserer Implementierung zählen unter anderem:
@@ -165,7 +165,7 @@ Die simulationspezifischen Aktionen hängen von Sensoren und Aktuatoren einer Si
 \begin{description}
 	\item[WorkOnDesktop] Mit dieser Aktion kann man einen Agenten für eine bestimmte Zeit arbeiten lassen. Hierfür erzeugt man eine neue Instanz dieser Klasse und gibt im Konstruktor den Arbeitsplatz, die Programmklasse, die Frequenz und die Dauer an.
 	
-	Die Programmklasse ist dabei äquivalent zu den Klassen, mit denen auch das MACK Framework umgehen kann. Die Frequenz ändert sich während der Ausführung um einen normalen Arbeitsfluss zu simulieren.
+	Die Programmklasse ist dabei äquivalent zu den Klassen, mit denen auch das MACK-Framework umgehen kann. Die Frequenz ändert sich während der Ausführung um einen normalen Arbeitsfluss zu simulieren.
 	\item[TurnCube] Mit der \codeclass{TurnCube}-Aktion kann ein \codeclass{Cube} (Cubus) auf einen bestimmten Status gedreht werden.
 	\item[PutKeyInDropZone] Diese Aktion fügt eine Referenz auf den Agenten in eine Liste einer Dropzone. Vorher wird überprüft, ob der Agent bereits einer anderen \codeclass{DropZone} hinzugefügt wurde, um zu vermeiden, dass der Agent seinen \glqq Schlüssel\grqq\ in mehrere Dropzones legen kann.
 	\item[RemoveKeyFromDropZone] Analog zur \codeclass{PutKeyInDropZone}-Aktion kann mit dieser Aktion eine Referenz auf einen Agenten aus einer \codeclass{DropZone} entfernt werden.
@@ -174,7 +174,7 @@ Die simulationspezifischen Aktionen hängen von Sensoren und Aktuatoren einer Si
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Aktionsverwaltung}\label{subsec:real_actionhandling}
-In unserer Implementierung nutzt der ActionScheduler im Wesentlichen den Scheduling-Algorithmus \emph{Earliest Deadline First}. Darüber hinaus nutzt der Scheduler weitere Möglichkeiten um auch Parameter außer der Deadline zu berücksichtigen, da nicht jede Aufgabe eine Deadline haben muss. 
+In unserer Implementierung nutzt die Verwaltungskomponente für Aufgaben im Wesentlichen den Scheduling-Algorithmus \emph{Earliest Deadline First}. Darüber hinaus nutzt der Scheduler weitere Möglichkeiten um auch Parameter außer der Deadline zu berücksichtigen, da nicht jede Aufgabe eine Deadline haben muss. 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -182,14 +182,14 @@ In unserer Implementierung nutzt der ActionScheduler im Wesentlichen den Schedul
 \subsection{Kommunikationshandler}\label{subsec:real_communication}
 Die abstrahierte Beschreibung der Schnittstellen eines Kommunikationshandlers befindet sich im Paket \codeinline{de.uniluebeck.imis.casi.communication}. 
 
-Eine Implementierung für die Zusammenarbeit mit dem MACK Framework befindet sich in \codeinline{de.uni\-luebeck.imis.casi\-.com\-munication.mack}. \emph{Bei Änderungen am MACK-Protokoll sind im Wesentlichen die Methoden in diesem Paket anzupassen.}
-Kommunikationshandler können die externe Kommunikation des Simulators ermöglichen. Dies bedeutet, dass sie sehr flexibel sein müssen, um jede erdenkliche Art von Kommunikation zu ermöglichen. Aus diesem Grund sind Kommunikationshandler als Implementierung des \codeinterface{ICommunication\-Handler}-Interface realisiert und müssen in der Main-Klasse \codeclass{CASi} an den \codeclass{MainController} übergeben werden. Es ist nur ein Kommunikationshandler zur Zeit vorgesehen. Benötigt man mehrere Handler, sind Subhandler denkbar, denen die Nachrichten weiter gegeben werden.
+Eine Implementierung für die Zusammenarbeit mit dem MACK-Framework befindet sich in \codeinline{de.uni\-luebeck.imis.casi\-.com\-munication.mack}. \emph{Bei Änderungen am MACK-Protokoll sind im Wesentlichen die Methoden in diesem Paket anzupassen.}
+Kommunikationshandler können die externe Kommunikation des Simulators ermöglichen. Dies bedeutet, dass sie sehr flexibel sein müssen, um jede erdenkliche Art von Kommunikation zu ermöglichen. Aus diesem Grund sind Kommunikationshandler als Implementierung der \codeinterface{ICommunication\-Handler}-Schnittstelle realisiert. Sie müssen in der Main-Klasse \codeclass{CASi} an den \codeclass{MainController} übergeben werden. Es ist nur ein Kommunikationshandler zur Zeit vorgesehen. Benötigt man mehrere Handler, sind Subhandler denkbar, denen die Nachrichten weiter gegeben werden.
 
-In der Umsetzung des Simulators zum Testen des MACK Frameworks wurde der Kommunikationshandler \codeclass{MACKNetworkHandler} wie folgt realisiert:
+In der Umsetzung des Simulators zum Testen des MACK-Frameworks wurde der Kommunikationshandler \codeclass{MACKNetworkHandler} wie folgt realisiert:
 
-Der Handler bekommt zu Beginn eine Konfigurationsdatei in XML Format übergeben, die in diesem Fall Java Beans XML enthält, mit dem die allgemeine Konfiguration der Netzwerkschnittstelle und die zur Verfügung stehenden \codeclass{XmppIdentifier} aufgelistet sind. Jeder \codeclass{XmppIdentifier} setzt sich aus drei \codeclass{String}-Werten zusammen und repräsentiert eine Zeile aus der Tabelle \codeinline{mate\_user\-devices} des Servers:\begin{description}
+Der Handler bekommt zu Beginn eine Konfigurationsdatei in XML-Format übergeben, die in diesem Fall Java-Beans-XML enthält, mit der die allgemeine Konfiguration der Netzwerkschnittstelle und die zur Verfügung stehenden \codeclass{XmppIdentifier} aufgelistet sind. Jeder \codeclass{XmppIdentifier} setzt sich aus drei \codeclass{String}-Werten zusammen und repräsentiert eine Zeile aus der Tabelle \codeinline{mate\_user\-devices} des Servers:\begin{description}
 	\item[componentOwner] Der eindeutige Name des Agents, dem die Komponente zugeordnet ist. Dieser \codeclass{String} muss identisch mit dem Feld \codeinline{username} in der Tabelle \codeinline{mate\_userdevices} sein.
-	\item[componentType] Die Art der Komponente. Dieser \codeclass{String} muss identisch mit dem Feld \codeinline{channel} in der Tabell sein.
+	\item[componentType] Die Art der Komponente. Dieser \codeclass{String} muss identisch mit dem Feld \codeinline{channel} in der Tabelle sein.
 	\item[id] Der XMPP Benutzername der Komponente ohne den Host (\codeinline{@server.de}).
 \end{description}
 

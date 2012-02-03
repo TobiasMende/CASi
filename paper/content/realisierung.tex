@@ -38,7 +38,7 @@ wieder entfernt werden.
 
 Über das Listener-Konzept werden in jeder simulierten Sekunde Aktionen bei den Listenern angestoßen. Standardmäßig ist es nicht möglich, eine Java-Collection während des Durchlaufens dieser zu verändern. Somit wäre es unmöglich, dass sich eine Komponente als Listener abmelden kann. Die \codeclass{SimulationClock} speichert jedoch alle Hinzufüge- und Entfernanfragen an die Listener-Collection zwischen und führt diese vor dem nächsten Durchlauf aus.
 
-Die Uhr basiert auf einem Timer-Thread, der alle $x$ Millisekunden auslöst. Wenn die Uhrzeit skaliert wird, wird mit dem nächsten Tick ein neuer Timer eingerichtet. Das pausieren der Simulation stoppt nicht den Timer-Thread sondern verhindert lediglich, dass dieser die \codeclass{SimulationTime} inkrementiert.
+Die Uhr basiert auf einem Timer-Thread, der alle $x$ Millisekunden auslöst. Wenn die Uhrzeit skaliert wird, wird mit dem nächsten Tick ein neuer Timer eingerichtet. Das Pausieren der Simulation stoppt nicht den Timer-Thread sondern verhindert lediglich, dass dieser die \codeclass{SimulationTime} inkrementiert.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
@@ -59,7 +59,7 @@ Durch den gewählten Ansatz der starken Abstraktion ist es möglich Simulationen
 In einem frühen Konzept unserer Projektarbeit war insbesondere eine Beschreibung durch eine spezifizierte XML (Arbeitstitel: \codeinline{CASiX}) vorgesehen. Diese wurde jedoch im Laufe des Semesters wegen nicht unerheblichen Aufwand zurückgestellt. Da eine saubere und klare Schnittstelle definiert wurde, ist es ohne Weiteres möglich, dass diese später noch hinzugefügt werden.
 
 \subsubsection{Generierung durch Java-Code}\label{subsec:real_generator_java}
-Für das Erstellen einer neuen Simulation hat es sich als sinnvoll erwiesen, ein neues Paket zu erstellen und darin das \codeinterface{IWorld\-Generator} zu implementieren. Innerhalb dieses Paketes ist eine Aufteilung in weitere Klasse zu empfehlen.
+Für das Erstellen einer neuen Simulation hat es sich als sinnvoll erwiesen, ein neues Paket zu erstellen und darin die \codeinterface{IWorld\-Generator}-Schnittstelle zu implementieren. Innerhalb dieses Paketes ist eine Aufteilung in weitere Klasse zu empfehlen.
 
 \begin{figure}[htb]
   \begin{center}
@@ -70,7 +70,7 @@ Für das Erstellen einer neuen Simulation hat es sich als sinnvoll erwiesen, ein
 \end{figure}
 In Abbildung \ref{fig:howToGenerateAWorld} ist, exemplarisch an unserer Demosimulation, eine solche Aufteilung gezeigt.
 Dort ist das untere Paket für die MATe-Simulation zu sehen. Darin: der eigentliche \codeclass{World\-Generator}, welcher die zu generierenden Teile durch Aufrufe von statischen Methoden an die andere Klassen delegiert. Hier gezeigt durch gestrichelten blauen Linien.
-Die jeweiligen Klassen (alle als \codeinline{static} deklariert), arbeiten dann die in ihnen beschriebenen Java-Ausdrücke ab.
+Die jeweiligen Klassen (alle als \codeinline{static} deklariert), arbeiten dann die, in ihnen beschriebenen, Java-Ausdrücke ab.
 Daraus resultierende Objekte werden in den, vom CASi-Kern bereitgestellten, Kollektoren gesammelt (gestrichelte grüne Pfeile). Die Reihenfolge der Erzeugung ist besonders zu beachten, da für einige Objekte andere bereits vorhanden sein müssen. Es hat sich die Reihenfolge: erst Räume, dann Agenten, dann Sensoren und Aktuatoren und schlussendlich Aktionen etabliert.
 Wenn alle Erzeugerklassen abgearbeitet sind, ruft der \codeclass{World\-Generator} den \codeclass{Linker} auf. Dieser ist auch vom CASi-Kern bereitgestellt. Er übernimmt das Verknüpfen der Objekte untereinander, so zum Beispiel das Hinzufügen der für die Agenten erzeugten Aktionen in deren Todo-Liste.
 Als letzten Schritt nimmt der Generator alle Komponenten (rote Pfeile) und erzeugt daraus ein \codeclass{World}-Objekt.
@@ -118,12 +118,12 @@ Ein Problem war, dass sich die Sensoren, Aktuatoren und Agenten, die in den meis
 
 Der Informationsbereich dient zur Darstellung detaillierter Informationen zu bestimmten Komponenten der Simulation. Im oberen Bereich befindet sich eine Auswahlmöglichkeit (\codeclass{JComboBox}). Hier sind alle Agenten, Sensoren und Aktuatoren aufgeführt. Die Gruppen sind mit Trennzeichen separiert und vom Benutzer auswählbar. Die Auswahl einer Komponente ist gleichbedeutend mit einem Mausklick auf die Komponente, sie wird also ebenfalls im Simulationspanel markiert. Im oberen Informationsbereich werden die Informationen zum aktuell markierten Agenten, Sensor oder Aktuator angezeigt. Im unteren Informationsbereich werden Informationen zum zuletzt angeklickten Raum angegeben (beim Starten des Simulators ist dieser Bereich leer).
 
-Der Steuerungsbereich gibt dem Benutzer die Möglichkeit Einfluss auf die laufende Simulation zu nehmen. Links befindet sich die Anzeige der Zeit und des Datums der Simulation, anhand derer der Benutzer erkennt wie weit die Simulation fortgeschritten ist. Um die Simulationsgeschwindigkeit zu verändern, befindet sich in der Mitte ein Schieberegler (\codeclass{JSlider}). Wir haben uns hier für einen Schieberegler entschieden, um einfach die minimale und maximale Simulationsgeschwindigkeit einhalten zu können. Der Schieberegler hat eine quadratische Skala, um sinnvolle Verhältnisse zwischen den Einteilungen des Reglers zu schaffen. Rechts befindet sich noch ein Togglebutton zum Pausieren der Simulation. Wir benutzten hier die Metapher des Audiospielers, mit den bekannten Symbolen für \emph{Pause} und \emph{Wiedergabe}.
+Der Steuerungsbereich gibt dem Benutzer die Möglichkeit Einfluss auf die laufende Simulation zu nehmen. Auf der linken Seite befindet sich die Anzeige der Zeit und des Datums der Simulation, anhand derer der Benutzer erkennt wie weit die Simulation fortgeschritten ist. Um die Simulationsgeschwindigkeit zu verändern, befindet sich in der Mitte ein Schieberegler (\codeclass{JSlider}). Wir haben uns hier für einen Schieberegler entschieden, um einfach die minimale und maximale Simulationsgeschwindigkeit einhalten zu können. Der Schieberegler hat eine quadratische Skala, um sinnvolle Verhältnisse zwischen den Einteilungen des Reglers zu schaffen. Im rechten Bereich befindet sich noch ein Togglebutton zum Pausieren der Simulation. Wir benutzten hier die Metapher des Audiospielers, mit den bekannten Symbolen für \emph{Pause} und \emph{Wiedergabe}.
 
 Die Menüleiste beinhaltet zwei Menüs. Unter dem Bezeichner \emph{Menu} werden grundlegende Programmfunktionen angeboten:
 \begin{description}
 
-\item[Pause/Resume] Dieser Menüpunkt hat die gleiche Funktion wie der Pausebutton im Steuerungsbereich. Er pausiert die Simulation oder setzt sie fort.
+\item[Pause/ Resume] Dieser Menüpunkt hat die gleiche Funktion wie der Pausebutton im Steuerungsbereich. Er pausiert die Simulation oder setzt sie fort.
 
 \item[Exit] Dieser Menüpunkt beendet das Programm.
 \end{description}
@@ -153,7 +153,7 @@ Zu den wichtigsten allgemeinen Aktionen in unserer Implementierung zählen unter
 \begin{description}
 	\item[Move] Die \codeclass{Move}-Aktion dient dazu, die Position eines Agentens zu Ändern. Hierbei wird in der Initialisierung der Aktion nur das Ziel angegeben. Zum Zeitpunkt der Ausführung der Aktion wird automatisch der Weg zum Ziel berechnet und pro Iteration die Position um eine bestimmte Anzahl von Wegpunkten verändert. Dieser Aktion kann keine Dauer übergeben werden, da sie automatisch terminiert, wenn das Ziel erreicht wurde. Gibt es keinen Weg zum Ziel. Bricht die Aktion automatisch ab.
 	\item[Follow] Mit der \codeclass{Follow}-Aktion kann ein Agent einer  \codeclass{AbstractComponent}  folgen. Somit ist es möglich, dass ein Agent einem anderen während eines Gespräches folgt. Die Aktion hat keine spezifische Dauer, sondern wird erst dann beendet, wenn \codeclass{Follow}\codemethod{.complete()} aufgerufen wird.
-	\item[SpeakTo] Mit dieser Aktion kann ein Agent mit einem anderen Sprechen. Hierbei wird zunächst überprüft, ob beide Agenten im selben Raum sind. Außerdem wird überprüft, ob die Aktion des anderen Agentens eine Unterbrechung zulässt.
+	\item[SpeakTo] Mit dieser Aktion kann ein Agent mit einem anderen sprechen. Hierbei wird zunächst überprüft, ob beide Agenten im selben Raum sind. Außerdem wird überprüft, ob die Aktion der anderen Person eine Unterbrechung zulässt.
 	
 	Wenn der Agent unterbrechbar ist, wird ihm eine Aktion vom Typ \codeclass{Follow} in die \codeinline{interrupt\-List} gelegt, so dass der Agent für die Dauer des Gespräches dem Sprecher folgt und ebenfalls mit dem Gespräch beschäftigt ist. Dies verhindert, dass der andere Agent im Gespräch wegläuft. In der Methode \codeclass{SpeakTo}\codemethod{.postActionTask(AbstractComponent)} wird \codeclass{Follow}\codemethod{.complete()} aufgerufen und somit der Gesprächspartner wieder freigegeben.
 	\item[GoAndSpeakTo] Diese \codeclass{ComplexAction} sorgt dafür, dass der ausführende Agent zunächst die Standard-Position des Gesprächspartners aufsucht, welche in der Regel sein Büro ist, und dort versucht, mit ihm zu reden. 

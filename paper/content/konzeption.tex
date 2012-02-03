@@ -92,7 +92,7 @@ Aktionen können allgemein durch folgende Parameter spezifiziert werden:
 	\item[deadline] ein Zeitpunkt, zu dem die Aktion erledigt sein muss oder \codeinline{null}, falls keine Headline angegeben wurde.
 	\item[state] der aktuelle Status der Aktion, z.B. \codeinline{SCHEDULED}, wenn die Aktion einem Agenten hinzugefügt wurde, dieser sie aber noch nicht ausgeführt hat, \codeinline{ONGOING}, wenn die Aktion gerade durchgeführt wird oder \codeinline{COMPLETED}, wenn die Aktion erfolgreich durchgeführt wurde.
 \end{description}
-Es gibt \codeclass{AtomicAction}s und \codeclass{ComplexAction}s, wobei letztere aus einer Liste von atomaren Aktionen bestehen können. Mit diesem Konstrukt lassen sich unter anderem Aktionen wie das aufsuchen und reden mit einer anderen Person (\codeclass{Agent}) beschreiben.
+Es gibt \codeclass{AtomicAction}s und \codeclass{ComplexAction}s, wobei letztere aus einer Liste von atomaren Aktionen bestehen können. Mit diesem Konstrukt lassen sich unter anderem Aktionen wie das Aufsuchen und Reden mit einer anderen Person (\codeclass{Agent}) beschreiben.
 
 Um eine neue Aktion zur Verfügung zu stellen, muss eine Klasse implementiert werden, die von einer der abstrakten Klassen \codeclass{AtomicAction} oder \codeclass{ComplexAction} erbt. Die eigentliche Aktion muss in der \codemethod{internalPerform(AbstractComponent performer)}-Methode beschrieben werden. Sollten vor der ersten Ausführung der Aktion Konfigurationsschritte notwendig sein, können diese in der Methode \codemethod{preActionTask(AbstractComponent performer)} beschrieben werden. Analog dazu gibt es auch eine Methode \codemethod{postActionTask(AbstractComponent performer)}, die vom Framework aufgerufen wird, nachdem der Job erledigt wurde.
 
@@ -110,13 +110,13 @@ Zur Aktionsverwaltung hat jeder Agent einen \codeinterface{IActionScheduler}, de
 	\item[interruptActionList] In diese Liste werden während der Simulation Aktionen eingeordnet, die in jedem Fall unmittelbar als nächste Aktionen ausgeführt werden müssen. Sinnvoll ist dies insbesondere dann, wenn ein Agent darauf angewiesen ist, dass ein anderer Agent mit ihm interagiert. Dem zweiten Agenten kann dann eine Aktion auf die Interuppt-Liste gesetzt werden, damit er unmittelbar bei der nächsten Gelegenheit mit dem ersten Agenten interagiert und keine anderen Aktionen vorzieht.
 \end{description}
 
-Die Kernfunktionalität eines Action-Schedulers ist es, mit geeigneten Algorithmen zu jedem Zeitpunkt eine Aktion auszuwählen. Hierzu ruft der Agent die \codemethod{getNextAction()}-Methode auf, worauf hin der Scheduler eine Aktion auswählt und diese von der Liste löscht.
+Die Kernfunktionalität eines Action-Schedulers ist es, mit geeigneten Algorithmen zu jedem Zeitpunkt eine Aktion auszuwählen. Hierzu ruft der Agent die \codemethod{getNextAction()}-Methode auf, woraufhin der Scheduler eine Aktion auswählt und diese von der Liste löscht.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Kommunikationshandler}\label{subsec:concept_communication}
-Ein Kommunikationshandler muss das \codeinterface{ICommunicationHandler}-Interface implementieren. Kommunikationshandler sind für die Verwaltung der Kommunikation mit einem beliebigem Gegenpart außerhalb des Simulators zuständig. Ein konkretes Beispiel ist ein Netzwerkhandler, der die Kommunikation über eine Netzwerkschnittstelle verwalten kann. In der aktuellen Implementierung ist der \codeclass{MACKNetworkHandler} ein Kommunikationshandler der den Informationsaustausch mit dem MACK Server realisiert.
+Ein Kommunikationshandler muss das \codeinterface{ICommunicationHandler}-Interface implementieren. Kommunikationshandler sind für die Verwaltung der Kommunikation mit einem beliebigen Gegenpart außerhalb des Simulators zuständig. Ein konkretes Beispiel ist ein Netzwerkhandler, der die Kommunikation über eine Netzwerkschnittstelle verwalten kann. In der aktuellen Implementierung ist der \codeclass{MACKNetworkHandler} ein Kommunikationshandler, der den Informationsaustausch mit dem MACK Server realisiert.
 
 Innerhalb der Simulation interagiert der Kommunikationshandler mit Sensoren und Aktuatoren, die beide das Interface \codeinterface{ICommunicationComponent} implementieren.. Die Komponenten registrieren sich in der Initialisierungsphase des Simulators beim Handler, indem die Methode \codemethod{re\-gister (ICom\-muni\-cation\-Component comp)} aufgerufen wird.
 

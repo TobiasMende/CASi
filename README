@@ -1,1 +1,5 @@
 Team repository for the development of the CASi (Context Awareness Simulator)
+
+* A documentation can be found in paper/documentation.pdf.
+* The folder "CASi" contains the entire project.
+* Class diagramms for better understanding of the architecture can be found in the "uml" folder.

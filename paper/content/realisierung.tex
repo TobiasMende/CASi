@@ -1,4 +1,5 @@
 \chapter{Realisierung}\label{chapter:realization}
+In diesem Kapitel beschreiben wir die Umsetzung der in Kapitel \ref{chapter:concept} beschriebenen Konzepte. Die Unterteilung dieses Kapitels basiert auf der in Abbildung \ref{fig:architecture} dargestellten Struktur des Simulators. Nachfolgend beschreiben wir die Realisierung der Module, die ein fester Bestandteil der Simulatorarchitektur sind und geben Beispiele für den Arbeit mit ihnen.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\imiscomment{Beschreibung der hard- und software-technischen Realisierung}
 %
@@ -17,24 +18,24 @@ Während der Simulation können die Welt und der Kommunikationshandler über die
 \subsubsection{SimulationClock}
 Die \codeclass{SimulationClock} ist das Herzstück der Simulation. Sie stößt sämtliche Aktionen der Komponenten des Modells an. Die Clock ist wie die Engine ebenfalls mit dem Singleton-Designpatter realisiert. So ist sicher gestellt, dass es nur eine Uhr geben kann, die aus allen Klassen erreichbar ist.
 
-Die \codeclass{SimulationClock} verwendet das Listener-Konzept, um Komponenten, die an der Simulationszeit interessiert sind regelmäßig über Änderungen zu informieren. Komponenten die sich als Listener bei der Uhr registrieren möchten müssen dazu die \codeinterface{ISimulationClockListener}-Schnittstelle implementieren und können dann mit 
-\begin{illfloat}[H]
+Die \codeclass{SimulationClock} verwendet das Listener-Konzept, um Komponenten, die an der Simulationszeit interessiert sind regelmäßig über Änderungen zu informieren. Komponenten die sich als Listener bei der Uhr registrieren möchten müssen dazu die \codeinterface{ISimulationClockListener}-Schnittstelle implementieren und können dann mit dem in Quelltext \ref{src:addClockListener} beschriebenen Code hinzugefügt und analog wie in Quelltext \ref{src:removeClockListener} beschrieben wieder entfernt werden.
+
+\begin{illfloat}
   \begin{lstlisting}
 SimulationClock.getInstance()
 .addListener(ISimulationClockListener);
   \end{lstlisting}
-  \illcaption{Beispiel für das Hinzufügen eines Listeners an die SimulationClock}
+  \illcaption{Beispiel für das Hinzufügen eines Listeners an die \codeclass{SimulationClock}}
+\label{src:addClockListener}
 \end{illfloat}
-
-hinzugefügt und analog mit
-\begin{illfloat}[H]
+\begin{illfloat}
 \begin{lstlisting}
 SimulationClock.getInstance()
 .removeListener(ISimulationClockListener);
 \end{lstlisting}
-  \illcaption{Beispiel für das Entfernen eines Listeners an die SimulationClock}
+  \illcaption{Beispiel für das Entfernen eines Listeners von der \codeclass{SimulationClock}}
+\label{src:removeClockListener}
 \end{illfloat}
-wieder entfernt werden.
 
 Über das Listener-Konzept werden in jeder simulierten Sekunde Aktionen bei den Listenern angestoßen. Standardmäßig ist es nicht möglich, eine Java-Collection während des Durchlaufens dieser zu verändern. Somit wäre es unmöglich, dass sich eine Komponente als Listener abmelden kann. Die \codeclass{SimulationClock} speichert jedoch alle Hinzufüge- und Entfernanfragen an die Listener-Collection zwischen und führt diese vor dem nächsten Durchlauf aus.
 

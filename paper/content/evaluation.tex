@@ -1,6 +1,7 @@
 \chapter{Evaluation}\label{chapter:eval}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-In diesem Kapitel beschreiben wir, welche Komponenten wir evaluieren wollen und mit welchen Methoden wir dies gemacht haben.
+In diesem Kapitel beschreiben wir, welche Komponenten wir evaluieren wollen und mit welchen Methoden wir dies gemacht haben. Wir beschreiben zunächst die Ziele, die wir mit der Evaluation verfolgt haben und erklären dann in Abschnitt \ref{sec:eva_approach} welche Methoden wir verwendet haben und wie wir vorgegangen sind.
+Abschließend beschreiben wir die Evaluationsergebnisse in Abschnitt \ref{sec:eva_results}.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Ziel}\label{sec:eva_goal}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -11,29 +12,29 @@ Wir verwenden einige \codeclass{JUnit}-Testfälle um die Funktionalität einzeln
 Des Weiteren haben wir eine Simulation entwickelt, die auch zum Testen der MATe Anwendung verwendet werden kann. Auf diese Art ist es möglich, den Simulator als Gesamtsystem zu testen und zu gewährleisten, dass das Simulationsframework mit frei definierten Simulationen umgehen kann und das Konzept vollständig in dem Sinne ist, dass verschiedene Simulationen realisiert und simuliert werden können.\\
 Zu diesem Zweck dienen ebenfalls die vor Beginn der Implementierungsphase definierten Szenarien. Mit ihnen haben wir während der Entwicklungsphase permanent die Vollständigkeit des Systems verifiziert und gegebenenfalls die Komponenten erweitert.
 
-Ein weitere Bereich, der evaluiert werden muss, sind die Log-Ausgaben, die insbesondere über den Simulations-Logger geschrieben werden, da diese im späteren Produktivbetrieb für den Test des MACK Frameworks von großer Bedeutung sind. Dies bedeutet, dass wir losgelöst von der eigentlichen Simulationsengine überprüfen müssen, ob die Logfiles ausreichende Informationen enthalten, um den Ablauf der Simulation nachvollziehen und Fehler oder Schwächen der Reasoner ablesen zu können.
+Ein weiterer Bereich, der evaluiert werden muss, sind die Log-Ausgaben, die insbesondere über den Simulation-Logger geschrieben werden, da diese im späteren Produktivbetrieb für den Test des MACK-Frameworks von großer Bedeutung sind. Dies bedeutet, dass wir losgelöst von der eigentlichen Simulationsengine überprüfen müssen, ob die Logfiles ausreichende Informationen enthalten, um den Ablauf der Simulation nachvollziehen und Fehler oder Schwächen der Reasoner ablesen zu können.
 
-Darüber hinaus muss evaluiert werden, ob der Simulator seinen Zweck erfüllt und auswertbare Informationen über das Verhalten des MACK Frameworks generiert.
+Darüber hinaus muss evaluiert werden, ob der Simulator seinen Zweck erfüllt und verwertbare Informationen über das Verhalten des MACK-Frameworks generiert.
 
 %\imiscomment{Was soll evaluiert werden und warum\ldots}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Methoden und Vorgehen}\label{sec:eva_approach}
 Insbesondere zu Beginn der Entwicklungsphase war es nicht möglich, das Gesamtsystem zu testen, da viele Klassen noch nicht oder nicht vollständig implementiert waren. Aus diesem Grund haben wir für Teilbereiche, deren Funktionalität besonders wichtig oder aufwändig ist, Testfälle entwickelt, mit denen das gekapselte Testen dieser Klassen möglich ist.
 
-Die einzige effektive Methode zum Testen des Gesamtsystems stellt die Entwicklung einer umfangreichen Simulation dar. Da es bereits eine Implementierung der MATe Anwendung gibt und ein Server für diese Anwendung zur Verfügung steht, haben wir ein Szenario entwickelt, das mit diesem Server zusammenarbeiten kann und somit die Interaktion zwischen dem MATe Server und dem Simulator verifizieren kann.
+Die einzige effektive Methode zum Testen des Gesamtsystems stellt die Entwicklung einer umfangreichen Simulation dar. Da es bereits eine Implementierung der MATe-Anwendung gibt und ein Server für diese Anwendung zur Verfügung steht, haben wir ein Szenario entwickelt, das mit diesem Server zusammenarbeiten kann und somit die Interaktion zwischen dem MATe-Server und dem Simulator verifizieren kann.
 
 Durch dieses Vorgehen kann gleichzeitig die Funktionalität mehrere Teilsysteme evaluiert werden. Hierzu zählen unter anderem folgende Bereiche:
 \begin{itemize}
 	\item die Netzwerkschnittstelle (\codeclass{MACKNetworkHandler})
-	\item die Benutzungsschnittstelle (\codeclass{SimpelGui})
+	\item die Benutzungsschnittstelle (\codeclass{SimpleGui})
 	\item die Simulationsengine inklusive des Models
-	\item die Flexibilität des Interfaces zur Beschreibung von Simulationen
+	\item die Flexibilität der Schnittstellen zur Beschreibung von Simulationen
 	\item die Vollständigkeit der Log-Ausgaben
 	\item die Interaktion zwischen Sensoren, Aktuatoren und der Netzwerkschnittstelle
 	\item die Interaktion von Sensoren, Aktuatoren und der Simulation (z.B. mit den \codeclass{Agent}s)
 \end{itemize}
 
-Um zu verifizieren, dass der Simulator seinen Zweck erfüllt und die Entwicklung nicht in die falsche Richtung ausartet, haben wir wöchentlich eine ausführbare Version des Simulators unserem Betreuer zur Verfügung gestellt um rechtzeitig ein Feedback zu erhalten. Darüber hinaus haben wir während der Implementierungsphase Rücksprache mit zukünftigen Anwendern und involvierten Personen  in der MACK Entwicklung gesprochen um sicher zu stellen, dass der Simulator zur Verifikation des Verhaltens des MACK Frameworks geeignet ist.
+Um zu verifizieren, dass der Simulator seinen Zweck erfüllt und die Entwicklung nicht in die falsche Richtung ausartet, haben wir wöchentlich eine ausführbare Version des Simulators unserem Betreuer zur Verfügung gestellt, um rechtzeitig ein Feedback zu erhalten. Darüber hinaus haben wir während der Implementierungsphase Rücksprache mit zukünftigen Anwendern und involvierten Personen  in der MACK-Entwicklung gesprochen, um sicher zu stellen, dass der Simulator zur Verifikation des Verhaltens des MACK-Frameworks geeignet ist.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %\imiscomment{Welches Vorgehen wurde bei der Evaluierung gewählt und warum\ldots}
@@ -50,9 +51,9 @@ Um zu verifizieren, dass der Simulator seinen Zweck erfüllt und die Entwicklung
 \section{Ergebnisse}\label{sec:eva_results}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Die Methode des User-centered Desgin war sehr erfolgreich. Durch die vielen, frühzeitigen Rückmeldung der späteren Benutzer konnten wir uns immer schnell an Wünsche und Anregungen anpassen. So haben wir vermieden, dass sich nach der Arbeitsphase am Projekt noch sehr aufwendige Änderungen ergeben.
+Die Methode des benutzerzentrierten Designs war sehr erfolgreich. Durch die vielen, frühzeitigen Rückmeldung der späteren Benutzer konnten wir uns immer schnell an Wünsche und Anregungen anpassen. So haben wir vermieden, dass sich nach der Arbeitsphase am Projekt noch sehr aufwendige Änderungen ergeben.
 
-Unsere Evaluation hat ergeben, dass unser System im Wesentlichen funktionsfähig ist und ein guter Aufsatzpunkt für weitere Arbeiten an diesem Projekt bietet. Der Ablauf der Simulation wirkt auf uns realistisch und sollte sich gut zum Testen des MACK Frameworks eignen. Die Sensoren und Aktuatoren ändern ihre Werte, in Abhängigkeit des Geschehens und nehmen ebenfalls Einfluss darauf. Ein Problem ist allerdings, dass bei schneller Simulationsgeschwindigkeit die Antworten des MACK Servers stark verzögert sind. In diesem Fall passen die Sensor- und Aktuatorwerte nicht zum aktuellen Verhalten der Simulation.
+Unsere Evaluation hat ergeben, dass unser System im Wesentlichen funktionsfähig ist und einen guten Ansatzpunkt für weitere Arbeiten an diesem Projekt bietet. Der Ablauf der Simulation wirkt auf uns realistisch und sollte sich gut zum Testen des MACK-Frameworks eignen. Die Sensoren und Aktuatoren ändern ihre Werte in Abhängigkeit vom Geschehen und nehmen ebenfalls Einfluss darauf. Ein aktuelles Problem ist jedoch, dass bei schneller Simulationsgeschwindigkeit die Antworten des MACK-Servers stark verzögert sind. In diesem Fall passen die Sensor- und Aktuatorwerte nicht zum aktuellen Verhalten der Simulation.
 
 %\imiscomment{Welche Ergebnisse brachte die Evaluierung und was ist davon zu halten\ldots}
 

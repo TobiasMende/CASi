@@ -223,15 +223,15 @@ public void register(ICommunicationComponent comp);
 \label{src:reg_com_comp}
 \end{illfloat}
 am \codeclass{MACKNetworkHandler} anmeldet, eine Jabber-ID aus dieser Liste zugewiesen, sofern noch eine zum jeweiligen Typ passende verfügbar ist. Andernfalls wird eine Warnung ausgegeben und die Komponente nicht angemeldet.
-In der Registrierungsphase überprüft der Handler, ob der jeweilige Jabber-Identifier bereits am XMPP-Server registriert ist. Ist dies nicht der Fall, versucht der Simulator automatisch, den Identifier zu registrieren. Wenn mehrere Adressen noch nicht registriert wurden, kann es abhängig vom in der Konfigurationsdatei angegebenen \codeinline{REGISTRATION\_DELAY} zum längeren Wartezeiten kommen, bevor der Simulator mit der Simulation beginnt. Wenn jedoch alle Komponenten bereits registriert sind, kann die Simulation ohne Wartezeit starten.
+In der Registrierungsphase überprüft der Handler, ob der jeweilige Jabber-Identifier bereits am XMPP-Server registriert ist. Ist dies nicht der Fall, versucht der Simulator automatisch, den Identifier zu registrieren. Wenn mehrere Adressen noch nicht registriert wurden, kann es abhängig vom, in der Konfigurationsdatei angegebenen, \codeinline{REGISTRATION\_DELAY} zu längeren Wartezeiten kommen, bevor der Simulator mit der Simulation beginnt. Wenn jedoch alle Komponenten bereits registriert sind, kann die Simulation ohne Verzögerung starten.
 
-Der \codeclass{MACKNetworkHandler} erzeugt nach erfolgreichem Zuordnen der Identifier und dem Login am Jabber-Server für jede Komponente einen Chat mit dem MACK-Server. Über diesen Chat werden Pull- und Push-Requests gesendet und Rückmeldungen empfangen und an die betroffene Komponente weitergeleitet.
+Der \codeclass{MACKNetworkHandler} erzeugt nach erfolgreichem Zuordnen der Identifier und dem Login am XMPP-Server für jede Komponente einen Chat mit dem MACK-Server. Über diesen Chat werden Pull- und Push-Anfragen gesendet und Rückmeldungen empfangen und an die betroffene Komponente weitergeleitet.
 
 Sowohl die \codemethod{send}-Methode im \codeinterface{ICommunicationHandler}-Interface, als auch die \codemethod{receive}-Methode im \codeinterface{ICommunicationComponent}-Interface sehen vor, dass die Nachrichten vom Typ \codeclass{Object} sind. Hierdurch ist ein hoher Abstraktionsgrad und somit eine hohe Flexibilität gegeben. Für die richtige Interpretation der Nachrichten ist somit der Entwickler des Handlers und der Sensoren und Aktuatoren verantwortlich.
 
-In der MATe Implementierung sind die Nachrichten immer vom Typ \codeclass{String}, da sie die den Body der Chat-Nachrichten, also die eigentliche Nachricht im Format des MACK-Protokolls enthalten.
+In der MATe-Implementierung sind die Nachrichten immer vom Typ \codeclass{String}, da sie die den Body der Chat-Nachrichten, also die eigentliche Nachricht im Format des MACK-Protokolls enthalten.
 
-Zum Erzeugen der Nachrichten in den Aktuatoren und Sensoren kann die \codeclass{MACKProtocollFactory} verwendet werden. Hierfür steht für Push- und Pull-Nachrichten je eine Methode zur Verfügung. Nachrichten, die vom MACK-Server empfangen werden, können mit der \codemethod{parseMessage} in ein \codeclass{MACKInformation}-Objekt zerlegt werden, das die Antwort in einer leicht zugänglichen Form bereit hält.
+Zum Erzeugen der Nachrichten in den Aktuatoren und Sensoren kann die \codeclass{MACKProtocollFactory} verwendet werden. Hierfür steht für Push- und Pull-Nachrichten je eine Methode zur Verfügung. Nachrichten, die vom MACK-Server empfangen werden, können mit der \codemethod{parseMessage}-Methode in ein \codeclass{MACKInformation}-Objekt zerlegt werden, das die Antwort in einer leicht zugänglichen Form bereit hält.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

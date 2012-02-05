@@ -103,28 +103,28 @@ Folgend sind die Projektstruktur (Abschnitt \ref{sec:appendix_structure}) inklus
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Projektstruktur}\label{sec:appendix_structure}
-Um die Weiterentwicklung des Projektes zu erleichtern, befindet sich in diesem Abschnitt eine ausführliche Erklärung zur Struktur des Projekts. Dies beinhaltet zum einen die Paket- und Ordnerstruktur, aber auch Hinweise auf Funktionen, die die Entwicklung erleichtern.
+Um die Weiterentwicklung des Projektes zu erleichtern, befindet sich in diesem Abschnitt eine ausführliche Erklärung zur Struktur des Projektes. Dies beinhaltet zum einen die Paket- und Ordnerstruktur, aber auch Hinweise auf Funktionalitäten, die die Entwicklung erleichtern.
 \subsection{Ordnerstruktur}
 Das Projekt ist in verschiedene Ordner unterteilt, deren Sinn nachfolgend erläutert wird:
 \begin{description}
 	\item[src] In diesem Ordner befinden sich die Beschreibungen und Implementierungen des Simulators und der Simulationen.
-	\item[test] Dieser Ordner enthält die JUnit-Testfälle für einige Klassen im \codeinline{src}-Ordner. Hierbei entspricht die interne Paket-Struktur dieses Ordners der Struktur des \codeinline{src}-Ordners.
+	\item[test] Dieser Ordner enthält die JUnit-Testfälle für einige Klassen im \codeinline{src}-Ordner. Hierbei entspricht die interne Paket-Struktur dieses Ordners der Struktur des \codeinline{src}-Verzeichnisses.
 	\item[log] Logfiles, die während der Ausführung des Programms generiert werden, werden mit einem Zeitstempel in diesem Ordner abgelegt.
 	\item[doc] Die JavaDoc-Dokumentation des Simulators befindet sich in diesem Verzeichnis.
 	\item[dist] Im Distributionsverzeichnis finden sich ausführbare Versionen der Anwendungen als jar-Datei.
 	\item[sims] Beschreibungen für Simulationen, wie z.B. textuelle Erklärungen zu einzelnen Simulationen und die Netzwerk-Konfigurationsdateien befinden sich in diesem Ordner.
-	\item[bin] Binaries des Simulators
-	\item[lib] externe Bibliotheken
-	\item[reports] Reports über die Durchführung der Testfälle
+	\item[bin] Dieser Ordner enthält die Binaries des Simulators.
+	\item[lib] In diesem Verzeichnis befinden sich externe Bibliotheken, die für die Arbeit am Projekt oder für Komponenten des Simulators notwendig sind.
+	\item[reports] Dieses Verzeichnis enthält Reports über die Durchführung der Testfälle.
 \end{description}
 \subsection{Paketstruktur}
-Alle Klassen, die zum Simulator gehören befinden sich in Unterpaketen des Paketes \codeinline{de.uniluebeck\-.imis.casi} im Ordner \codeinline{src}.
-Nachfolgend wird der Sinn der verschiedenen Pakte erläutert:
+Alle Klassen, die zum Simulator gehören, befinden sich in Unterpaketen des Paketes \codeinline{de.uniluebeck\-.imis.casi} im Ordner \codeinline{src}.
+Nachfolgend wird der Sinn der verschiedenen Pakete erläutert:
 \begin{description}
-	\item[engine] Dieses Paket enthält die Basis des Simulators, die für die Koordination der Ausführung und die Verknüpfung der Komponenten sorgt. Hierzu zählen insbesondere die \codeclass{SimulationEngine} und die \texttt{SimulationClock}.
+	\item[engine] Dieses Paket enthält die Basis des Simulators, die für die Koordination der Ausführung und die Verknüpfung der Komponenten sorgt. Hierzu zählen insbesondere die \codeclass{SimulationEngine} und die \codeclass{SimulationClock}.
 	\item[communication] In diesem Paket befinden sich die Schnittstellenbeschreibungen für Kommunikationshandler. In Unterpaketen befinden sich konkrete Implementierungen. So enthält \codeinline{com\-munication\-.mack} die Implementierung des \codeclass{MACKNetworkHandler}s.
-	\item[generator] Das \codeinline{Generator}-Paket beinhaltet die Beschreibung der Schnittstellen, die von Generatoren der Welt implementiert werden müssen.
-	\item[ui] In diesem Paket befinden sich die Beschreibungen für Benutzungsschnittstellen. Unterpakete enthalten die Implementierungen verschiedener Userinterfaces. Das Paket \codeinline{ui.simplegui} enthält die einfache graphische Benutzungsoberfläche.
+	\item[generator] Das \codeinline{generator}-Paket beinhaltet die Beschreibung der Schnittstellen, die von \codeclass{World}-Generatoren implementiert werden müssen.
+	\item[ui] In diesem Paket befinden sich die Beschreibungen für Benutzungsschnittstellen. Unterpakete enthalten die Implementierungen verschiedener Schnittstellen. Das Paket \codeinline{ui.simplegui} enthält die einfache graphische Benutzungsoberfläche.
 	\item[utils] Im \codeinline{utils}-Paket befinden sich Klassen, die einen hohen Abstraktionsgrad aufweisen und somit leicht in andere Projekte portiert werden können, da sie größtenteils vom Simulator unabhängig sind.
 	\item[simulations] Dieses Paket kapselt in weiteren Unterpaketen die Beschreibungen einzelner Simulationen.
 	\item[simulation.model] Die Anwendungslogik befindet sich in diesem Paket.
@@ -147,13 +147,13 @@ Das Projektverzeichnis enthält das Ant-Buildfile \codeinline{build.xml}, welche
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Ausführungsanweisungen}\label{sec:appendix_install}
-Da es sich bei dem Projekt um ein Java-Projekt handelt, gibt es keine Installation im herkömmlichen Sinne. In diesem Abschnitt beschrieben, wie die Programme ausgeführt werden können.
+Da es sich bei dem Projekt um ein Java-Projekt handelt, gibt es keine Installation im herkömmlichen Sinne. In diesem Abschnitt wird beschrieben, wie die Programme ausgeführt werden können. Dieser Abschnitt beinhaltet Informationen zum Umgang mit dem Simulator und dem zuvor bereits beschriebenen \codeclass{XmppRegistrator}.
 \subsection{Simulator}
 Die jar-Version des Simulators kann, nachdem sie mit \codemethod{ant jar} erzeugt wurde, mit \codemethod{java -jar dist/CASi.jar <parameter>} ausgeführt werden. Eine ausführliche Dokumentation der möglichen Parameter erhält man mit \codemethod{java -jar dist/CASi.jar \codemethod{-}\codemethod{-}help}.
 \subsection{XmppRegistrator}
-Der XmppRegistrator kann automatisch alle für die Simulation benötigten XmppIdentifier am Jabber-Server registrieren. Dies ist besonders hilfreich, wenn der Server ein Delay zwischen zwei Registrierungsoperationen benötigt, da somit vermieden werden kann, dass die Identifier erst beim Start der Simulation registriert werden und somit die Ausführung der Simulation verzögert wird.
+Der \codeclass{XmppRegistrator} kann automatisch alle für die Simulation benötigten \codeclass{XmppIdentifier} am XMPP-Server registrieren. Dies ist besonders hilfreich, wenn der Server ein Delay zwischen zwei Registrierungsoperationen benötigt, da somit vermieden werden kann, dass die Identifier erst beim Start der Simulation registriert werden und somit die Ausführung der Simulation verzögert wird.
 
-Der XmppRegistrator verlangt als einzigen Parameter den Pfad zu einer Netzwerkkonfigurationsdatei und kann, nachdem er mit \codemethod{ant xmpp-registrator-jar} erzeugt wurde, mit \codemethod{java -jar dist/XmppRegistrator.jar <path-to-config-file>} ausgeführt werden.
+Der \codeclass{XmppRegistrator} verlangt als einzigen Parameter den Pfad zu einer Netzwerkkonfigurationsdatei und kann, nachdem er mit \codemethod{ant xmpp-registrator-jar} erzeugt wurde, mit \codemethod{java -jar dist/XmppRegistrator.jar <path-to-config-file>} ausgeführt werden.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter*{Erklärung}\addcontentsline{toc}{chapter}{Erklärung}

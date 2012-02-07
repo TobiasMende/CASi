@@ -530,11 +530,13 @@
 \thispagestyle{empty}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-In unserer Projektarbeit im Rahmen des Praktikums im Bereich Interaktions- und Mediengestaltung beschäftigen wir uns mit der Konzeption und Entwicklung eines Context Awareness Simulators.
+In unserer Projektarbeit im Rahmen des Praktikums im Bereich Interaktions- und Mediengestaltung haben wir uns mit der Konzeption und Entwicklung eines Context Awareness Simulators beschäftigt.
 
-Ziel des Projektes ist es, eine Simulation zu entwickeln, mit der das MACK Framework und die dazugehörigen Reasoner ohne spezielle Hardware getestet werden können. Hierfür entwickeln wir zunächst ein abstraktes Simulationsframework, mit dem Simulationen für verschiedene Umgebungen entwickelt und simuliert werden können.
+Ziel des Projektes war es, eine Simulation zu entwickeln, mit der das MACK Framework und die dazugehörigen Reasoner ohne spezielle Hardware getestet werden können. Hierfür haben wir zunächst ein abstraktes Simulationsframework entwickelt, mit dem Simulationen für verschiedene Umgebungen entwickelt und simuliert werden können.
 
-Auf dieser Grundlage implementieren wir eine Simulation zum Test der MATe Anwendung.
+Das System ist sehr modular aufgebaut und soll leicht erweiterbar sein. Insbesondere der Generator, durch den die Simulation erstellt wird, die Kommunikationsschnittstelle sowie die Benutzungsschnittstelle sind leicht austauschbar. Bisher kann man Simulationen ausschließlich mit \textit{Java} spezifizieren. Als Benutzungsschnittstelle haben wir eine einfach grafische Oberfläche entworfen, die die wichtigsten Informationen anzeigt.
+
+Unser Entwicklungsprozess basiert auf dem Vorgehen des User Centered Design, denn wir haben die späteren Nutzer bei wichtigen Entscheidungen während der Planung und Implementierung miteinbezogen. Zusätzlich haben wir ihnen möglichst jede Woche Prototypen der Software zum Testen und Evaluieren zur Verfügung gestellt, um ein frühes Feedback zu erhalten.
 
 \vfill
 
@@ -550,13 +552,14 @@ Auf dieser Grundlage implementieren wir eine Simulation zum Test der MATe Anwend
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %\imiscomment{A short, english abstract of the work}
-This project thesis displays our approach of planning and developing a simulation software for context aware systems. It covers both the aspects of the initial planning as well as the development phases itself.
-This work originates from the course interaction- and media-development at the University of Lübeck.
+This project thesis displays our approach of planning and developing a simulation software for context aware systems. It covers both the aspects of the initial planning as well as the development phases itself. This work originates from the course interaction- and media-development at the University of Lübeck.
 
 The primary goal was to develop a simulator that interacts with the established MACK framework and its reasoners, without the need to build concrete hardware modules.
-For the reason of reusability a generic simulation framework was designed, which focuses on modularity and abstraction, to enable  different user groups to simulate their own environments.
 
-With this software (called CASi - context awareness simulator) we implemented a simulation that reflects the MATe application.
+For the reason of reusability a generic simulation framework was designed, which focuses on modularity and abstraction, to enable different user groups to simulate their own environments. Particularly, the component that generates the simulation, the communication handler and the user interface are very easy to replace with accordant components. At the moment a simulation can be specified by using \textit{Java}. The user interface is a simple graphical user interface, that shows the most important information about the simulation.
+
+We chose User Centered Design for the developement of the software, so we involved the users in important decisions about the simulator. In addition to that we provided them a prototype     
+ every week, to get an early feedback.
 
 \vfill
 

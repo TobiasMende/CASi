@@ -1,4 +1,4 @@
 #!/bin/bash
 for file in *.aux ; do
-  bibtex `basename $file .aux`
+  /usr/local/texlive/2010/bin/x86_64-darwin/bibtex `basename $file .aux`
 done

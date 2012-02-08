@@ -18,7 +18,7 @@ Während der Simulation können die Welt und der Kommunikationshandler über die
 \subsubsection{SimulationClock}
 Die \codeclass{SimulationClock} ist das Herzstück der Simulation. Sie stößt sämtliche Aktionen der Komponenten des Modells an. Die Clock ist wie die Engine ebenfalls mit dem Singleton-Designpatter realisiert. So ist sicher gestellt, dass es nur eine Uhr geben kann, die aus allen Klassen erreichbar ist.
 
-Die \codeclass{SimulationClock} verwendet das Listener-Konzept, um Komponenten, die an der Simulationszeit interessiert sind regelmäßig über Änderungen zu informieren. Komponenten die sich als Listener bei der Uhr registrieren möchten müssen dazu die \codeinterface{ISimulationClockListener}-Schnittstelle implementieren und können dann mit dem in Quelltext \ref{src:addClockListener} beschriebenen Code hinzugefügt und analog wie in Quelltext \ref{src:removeClockListener} beschrieben wieder entfernt werden.
+Die \codeclass{SimulationClock} verwendet das Listener-Konzept, um Komponenten, die an der Simulationszeit interessiert sind regelmäßig über Änderungen zu informieren. Komponenten die sich als Listener bei der Uhr registrieren möchten müssen dazu die \codeinterface{ISimulationClockListener}-Schnitt\-stel\-le implementieren und können dann mit dem in Quelltext \ref{src:addClockListener} beschriebenen Code hinzugefügt und analog wie in Quelltext \ref{src:removeClockListener} beschrieben wieder entfernt werden.
 
 \begin{illfloat}
   \begin{lstlisting}

@@ -75,7 +75,7 @@
 % localization (laguages set in document directive):
 \usepackage{babel}
 % we use UTF8 input:
-\usepackage[utf8]{inputenc}
+\usepackage[latin1]{inputenc}
 % out put encoding:
 \usepackage[T1]{fontenc}
 
@@ -532,16 +532,15 @@
 
 In unserer Projektarbeit im Rahmen des Praktikums im Bereich Interaktions- und Mediengestaltung haben wir uns mit der Konzeption und Entwicklung eines Context Awareness Simulators beschäftigt.
 
-Ziel des Projektes war es, eine Simulation zu entwickeln, mit der das MACK Framework und die dazugehörigen Reasoner ohne spezielle Hardware getestet werden können. Hierfür haben wir zunächst ein abstraktes Simulationsframework entwickelt, mit dem Simulationen für verschiedene Umgebungen entwickelt und simuliert werden können.
+Ziel des Projektes war es, einen Simulator zu entwickeln, mit der das MACK Framework und die dazugehörigen Reasoner ohne spezielle Hardware getestet werden können. Auf Grund der Komplexität dieser Aufgabe haben wir uns dafür entschieden, ein abstraktes Simulationsframework zu entwickeln, da die Software ohnehin sehr flexibel sein muss, um verschiedene Anwendungsgebiete simulieren zu können.
 
-Das System ist sehr modular aufgebaut und soll leicht erweiterbar sein. Insbesondere der Generator, durch den die Simulation erstellt wird, die Kommunikationsschnittstelle sowie die Benutzungsschnittstelle sind leicht austauschbar. Bisher kann man Simulationen ausschließlich mit \textit{Java} spezifizieren. Als Benutzungsschnittstelle haben wir eine einfach grafische Oberfläche entworfen, die die wichtigsten Informationen anzeigt.
+Zunächst haben wir eine Analyse des Einsatzgebietes, der Anwender und notwendigen Funktionen vorgenommen, um mit diesen Ergebnissen ein Konzept für einen modularen Simulator zu entwerfen. Das von uns entwickelte Konzept sah vor, dass einzelne Module durch klar definierte Schnittstellen voneinander abgegrenzt sind und mit geringem Aufwand ausgetauscht werden können. Dies betrifft insbesondere Sensoren, Aktuatoren, Kommunikationshandler, Benutzungsschnittstellen und die Simulationserzeugung, da diese Komponenten stark vom Einsatzgebiet des Simulators und dem Simulationskontext abhängen.
 
-Unser Entwicklungsprozess basiert auf dem Vorgehen des User Centered Design, denn wir haben die späteren Nutzer bei wichtigen Entscheidungen während der Planung und Implementierung miteinbezogen. Zusätzlich haben wir ihnen möglichst jede Woche Prototypen der Software zum Testen und Evaluieren zur Verfügung gestellt, um ein frühes Feedback zu erhalten.
-
+Wir verwenden einen benutzerzentrierten Entwicklungsprozess, um die späteren Nutzer bei wichtigen Entscheidungen während der Planung und Implementierung miteinzubeziehen. Hiermit wollten wir die Qualität und Gebrauchstauglichkeit unserer Software sicherstellen. 
 \vfill
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section*{Schlüsselwörter} Simulator, Context Awareness, Software Entwicklung
+\section*{Schlüsselwörter} Simulator, Context Awareness, Software Entwicklung, Framework, Projektarbeit
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
@@ -552,19 +551,18 @@ Unser Entwicklungsprozess basiert auf dem Vorgehen des User Centered Design, den
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %\imiscomment{A short, english abstract of the work}
-This project thesis displays our approach of planning and developing a simulation software for context aware systems. It covers both the aspects of the initial planning as well as the development phases itself. This work originates from the course interaction- and media-development at the University of Lübeck.
+This project report displays our approach of planning and developing a simulation software for context aware systems. It covers both the aspects of the initial planning as well as the development phases itself. This work originates from the course interaction- and media development at the University of Lübeck.
 
-The primary goal was to develop a simulator that interacts with the established MACK framework and its reasoners, without the need to build concrete hardware modules.
+The primary goal was to develop a simulator that interacts with the established MACK framework and its reasoners, without the need to build concrete hardware modules. Due to the complexity of simulations, we decided to create a more generic framework which allows easy adoption to other context and environments.
 
-For the reason of reusability a generic simulation framework was designed, which focuses on modularity and abstraction, to enable different user groups to simulate their own environments. Particularly, the component that generates the simulation, the communication handler and the user interface are very easy to replace with accordant components. At the moment a simulation can be specified by using \textit{Java}. The user interface is a simple graphical user interface, that shows the most important information about the simulation.
+Therefore we started with the analysis of the context, the users and  the needed features. We developed the concept with the focus on modularity and simple and well defined interfaces to separate the components. Particularly sensors, actuators, communication handlers, user interfaces and simulation generation are subject to different context. 
 
-We chose User Centered Design for the developement of the software, so we involved the users in important decisions about the simulator. In addition to that we provided them a prototype     
- every week, to get an early feedback.
+We have chosen a user centered design approach for the development of the software, so we involved the users in important decisions about the simulator. This was to ensure the quality and usability of our software.
 
 \vfill
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section*{Keywords} context awareness, simulator, software development
+\section*{Keywords} context awareness, simulator, software development, framework, project work
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \selectlanguage{ngerman} % and back to german
 

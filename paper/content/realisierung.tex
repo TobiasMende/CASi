@@ -237,7 +237,7 @@ Zum Erzeugen der Nachrichten in den Aktuatoren und Sensoren kann die \codeclass{
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Sensoren und Aktuatoren}\label{subsec:real_sensors}
-In diesem Unterabschnitt beschreiben wir die verschiedenen, bereits durch uns realisierten, Sensoren und Aktuatoren um verständliche Beispiele für die Entwicklung weiterer Komponenten bereit zu stellen. Die modellierten Komponenten des MACK-Frameworks befinden sich im Paket \\\codeinline{de.uniluebeck.imis.casi.simulation.model.mackComponents}.
+In diesem Unterabschnitt beschreiben wir die verschiedenen, bereits durch uns realisierten, Sensoren und Aktuatoren, um verständliche Beispiele für die Entwicklung weiterer Komponenten bereitzustellen. Die modellierten Komponenten des MACK-Frameworks befinden sich im Paket \\\codeinline{de.uniluebeck.imis.casi.simulation.model.mackComponents}.
 
 \subsubsection{Gemeinsamkeiten von Sensoren und Aktuatoren}
 Komponenten, die in regelmäßigen Abständen eine Aktion ausführen müssen, können sich als Zuhörer bei der \codeclass{SimulationClock} hinzufügen. Sie können dann zum einen die Standardmethoden der \codeinterface{ISimulationClockListener}-Schnittstelle verwenden und darüber hinaus die  \codemethod{send\-Recurring\-Message(Simulation\-Time new\-Time)}-Methode überschreiben, die automatisch, in dem durch \codeinline{AbstractInteractionComponent.PULL\_INTERVALL} beschriebenen Intervall, aufgerufen wird. Diese Methode eignet sich besonders, um regelmäßige Pull-Nachrichten an den Server zu senden.
@@ -269,7 +269,7 @@ interestingActions.add(HaveAMeeting.class);
 \end{illfloat}
 
 \subsubsection{Cube (MATe: Cubus)}
-Der \codeclass{Cube} besitzt eine Status-Variable, die Werte aus \codeclass{Code.State} annehmen kann. Die Werte entsprechen den Textwerten, die das MACK-Framework für die Kommunikation mit dem Cubus verwendet. In der aktuellen Implementierung reagiert der \codeclass{Cube} auf die \codeclass{WorkOnDesktop}-Aktion, indem er anhand der Arbeitsgeschwindigkeit und der verwendeten Programmklasse sinnvolle Annahmen über die mögliche Tätigkeit der arbeitenden Person macht. Entspricht der aktuelle Status des \codeclass{Cube}s nicht dem ermittelten, löst er mit einer bestimmten Wahrscheinlichkeit und einer Verzögerung von \codeinline{Cube.TURN\_CUBE\_SCHEDULE\_DELAY} Sekunden eine \codeclass{TurnCube}-Aktion aus. Die Wahrscheinlichkeit kann über die \codeclass{ConfigMap} definiert werden. Wir keine explizite Wahrscheinlichkeit in der \codeclass{ConfigMap} des Agents gesetzt, wir die \codeinline{Cube.DEFAULT\_TURN\_CUBE\_PROBABILITY} verwendet.
+Der \codeclass{Cube} besitzt eine Status-Variable, die Werte aus \codeclass{Code.State} annehmen kann. Die Werte entsprechen den Textwerten, die das MACK-Framework für die Kommunikation mit dem Cubus verwendet. In der aktuellen Implementierung reagiert der \codeclass{Cube} auf die \codeclass{WorkOnDesktop}-Aktion, indem er anhand der Arbeitsgeschwindigkeit und der verwendeten Programmklasse sinnvolle Annahmen über die mögliche Tätigkeit der arbeitenden Person macht. Entspricht der aktuelle Status des \codeclass{Cube}s nicht dem ermittelten, löst er mit einer bestimmten Wahrscheinlichkeit und einer Verzögerung von \codeinline{Cube.TURN\_CUBE\_SCHEDULE\_DELAY} Sekunden eine \codeclass{TurnCube}-Aktion aus. Die Wahrscheinlichkeit kann über die \codeclass{ConfigMap} definiert werden. Wenn keine explizite Wahrscheinlichkeit in der \codeclass{ConfigMap} des Agents gesetzt wird, dann wird die \codeinline{Cube.DEFAULT\_TURN\_CUBE\_PROBABILITY} verwendet.
 
 Der \codeclass{Cube} fügt sich als Zuhörer zu der \codeclass{SimulationClock} hinzu. Dies führt dazu, dass durch die Elternklasse \codeclass{AbstractInteractionComponent} in regelmäßigen Abständen die \codemethod{send\-Recurring\-Message(Simulation\-Time new\-Time)}-Methode aufgerufen wird. In dieser Methode wird eine Pull-Nachricht gesendet, mit der die Werte für \codeinline{activity} und \codeinline{interruptibility} abgefragt werden.
 
@@ -281,7 +281,7 @@ Wenn sich die Werte für die Programmklasse und die Intensität der Arbeit ände
 \subsubsection{DoorLight}
 Das \codeclass{DoorLight} ist ein Aktuator, der Personen davon abhalten kann, einen Raum zu betreten. Hierfür kann es einen Status aus \codeclass{DoorLight.State} annehmen. Die möglichen Werte entsprechen den \codeinline{inte\-rupti\-bility}-Werten, die der Server zur Verfügung stellt.
 
-Der Aktuator sendet periodische Pull-Nachrichten an den Server um den Werte für \codeinline{inte\-rupti\-bility} abzufragen. Die Komponente ist so definiert, dass sie Interesse an allen Personen außer der zugehörigen hat. Es reagiert auf \codeclass{Move}-Aktionen um zu überprüfen, ob eine Bewegung in den Raum oder nur zufällig durch den beobachteten Bereich führt.
+Der Aktuator sendet periodische Pull-Nachrichten an den Server, um den Werte für \codeinline{inte\-rupti\-bility} abzufragen. Die Komponente ist so definiert, dass sie Interesse an allen Personen außer der zugehörigen hat. Sie reagiert auf \codeclass{Move}-Aktionen, um zu überprüfen, ob eine Bewegung in den Raum oder nur zufällig durch den beobachteten Bereich führt.
 
 \subsubsection{DoorSensor}
 Der Türsensor ist ein \codeinterface{IDoorListener} und wird somit über die Veränderung des Türstatus informiert. Bei Statusänderungen sendet der Sensor den aktuellen Wert als Push-Nachricht an den MACK-Server.
@@ -292,7 +292,7 @@ Die \codeclass{DropZone} ist ebenfalls eine passive Komponente, mit der über di
 Der Sensor sendet eine Liste von Namen an den Server, wenn sich diese ändert.
 
 \subsubsection{Mike (MATe: MikeRophone)}
-Dieser Sensor beobachtet standardmäßig den gesamten Raum, in dem er sich befindet. Er dient dazu, sprechende Personen zu erkennen. Um dieses Verhalten zu Simulieren, reagiert das \codeclass{Mike} auf die Aktionen \codeclass{SpeakTo} und \codeclass{HaveAMeeting}. Bei der ersten Aktion nimmt es die Namen von den beiden Personen, die miteinander sprechen und sendet diese Liste an den Server. Bei der zweiten Aktion wählt der Sensor zufällig aus allen beteiligten Personen zwei aus, deren Namen er an den MACK-Server sendet. 
+Dieser Sensor beobachtet standardmäßig den gesamten Raum, in dem er sich befindet. Er dient dazu, sprechende Personen zu erkennen. Um dieses Verhalten zu simulieren, reagiert das \codeclass{Mike} auf die Aktionen \codeclass{SpeakTo} und \codeclass{HaveAMeeting}. Bei der ersten Aktion nimmt es die Namen von den beiden Personen, die miteinander sprechen und sendet diese Liste an den Server. Bei der zweiten Aktion wählt der Sensor zufällig aus allen beteiligten Personen zwei aus, deren Namen er an den MACK-Server sendet. 
 
 Das Senden und erneute Ermitteln der Sprecher erfolgt automatisch. Die Zeit zwischen den Aktualisierungen variiert zufällig zwischen 10 und 120 Sekunden. Auf diese Weise wird sichergestellt, dass sich die Sprecher nicht zu schnell abwechseln und eine möglichst realitätsnahe Unterhaltung simuliert werden kann.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

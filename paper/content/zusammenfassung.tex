@@ -1,40 +1,46 @@
-%!TEX root = /Users/marv/devel/multimediaprogrammierung/paper/documentation.tex
 \chapter{Zusammenfassung und Ausblick}\label{chapter:conclusions}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 In diesem Kapitel wird kurz aufgezeigt, was in dieser Arbeit erreich wurde, welche Punkt dabei offen geblieben sind und in welcher Weise man diese in Zukunft angehen könnte.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Zusammenfassung}\label{sec:conc_summary}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-Wir haben es geschafft einen Simulator zu entwickeln, der das MACK-Framework testet. Die Methode des benutzerzentrierten Designs war sehr erfolgreich. Durch die vielen, frühzeitigen Rückmeldung der späteren Benutzer konnten wir uns immer schnell an Wünsche und Anregungen anpassen. So haben wir vermieden, dass sich nach der Arbeitsphase am Projekt noch sehr aufwendige Änderungen ergeben. 
-In diversen Treffen untereinander und mit unserem wissenschaftlichen Begleiten haben wir eine strukturierte Arbeitsweise entwickelt. Diese half uns, das Projektziel in einer Art und Weise zu erreichen die die Entwicklung für uns, als auch für zukünftige Benutzer und Entwickler der Software, besonders angenehm machte und machen wird.\\
+Wir haben es geschafft, ein Simulationsframework zu entwickeln, das so modular aufgebaut ist, dass sich zum einen verschieden komplexe Abläufe simulieren lassen und zum anderen die Adaption auf andere Anwendungsgebiete möglich ist. Hiervon versprechen wir uns eine hohe Relevanz, sowohl für das MACK-Projekt, als auch für andere Projekte im Bereich der Context Awareness. Die Veröffentlichung unserer Software unter der LGPL soll dazu beitragen, anderen Projektgruppen die Weiterentwicklung zu ermöglichen. Aus diesem Grund haben wir auch auf die ausführliche Dokumentation in allen Teilen des Projekts geachtet.
+
+Darüber hinaus haben wir eine Simulation entwickelt, mit der das MACK-Framework getestet werden kann. Diese Simulation erfüllt zum einen das ursprüngliche Projektziel, das Testen des MACK-Frameworks zu ermöglichen. Außerdem eignet sich diese Simulation als Beispiel für die Möglichkeiten des Simulators, da sie insbesondere die Funktionalität und Modularität der Software aufzeigt.
+
+Die Methode des benutzerzentrierten Designs war sehr erfolgreich. Durch die vielen, frühzeitigen Rückmeldung der späteren Benutzer konnten wir uns immer schnell an Wünsche und Anregungen anpassen. So haben wir vermieden, dass sich nach der Arbeitsphase am Projekt noch sehr aufwendige Änderungen ergeben. 
+In diversen Treffen untereinander und mit unserem wissenschaftlichen Begleiter haben wir eine strukturierte Arbeitsweise entwickelt. Diese half uns, das Projektziel in einer Art und Weise zu erreichen, die die Entwicklung für uns, als auch für zukünftige Benutzer und Entwickler der Software, besonders angenehm machte und machen wird.
 
 Unsere Evaluation hat ergeben, dass unser System im Wesentlichen funktionsfähig ist und einen guten Ansatzpunkt für weitere Arbeiten an diesem Projekt bietet. Der Ablauf der Simulation wirkt auf uns ausreichend realistisch und sollte sich gut zum Testen des MACK-Frameworks eignen. Die Sensoren und Aktuatoren ändern ihre Werte in Abhängigkeit vom Geschehen und nehmen ebenfalls Einfluss darauf.
 
-\imiscomment{Darstellung, was erreicht wurde (ca. 1 Seite) Aber ich weiß einfach nicht so recht wie und was wir hier noch ausschmücken sollten!}
+%\imiscomment{Darstellung, was erreicht wurde (ca. 1 Seite) Aber ich weiß einfach nicht so recht wie und was wir hier noch ausschmücken sollten!}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Offene Punkte}\label{sec:conc_open_questions}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-Im Rahmen unseres Projektes konnten nicht alle der ursprünglich geplanten Punkte umgesetzt werden. Einzig die Beschreibungssprache CASiX wurde komplett gestrichen.
+Im Rahmen unseres Projektes konnten fast alle der ursprünglich geplanten Punkte umgesetzt werden. Einzig die Beschreibungssprache CASiX wurde komplett gestrichen.
 
 \subsection{CASiX}\label{subsec:conc_open_questions_casix}
-Eine in der Analyse festgestellte Anforderung an unsere Software war die Möglichkeit, Simulationen durch eine Beschreibungssprache zu erzeugen. Im frühen Stadium unserer Arbeit haben wir uns, mit Hilfe der befragten Benutzer, für XML entschieden. Es sollte eine XML-Spezifkiation in Form einer XML-Schema-Datei festgelegt werden. Unter dem Namen \codeinline{CASiX} wurde ein erster Version spezifiziert.\\
+Eine in der Analyse festgestellte Anforderung an unsere Software war die Möglichkeit, Simulationen durch eine Beschreibungssprache zu erzeugen. Im frühen Stadium unserer Arbeit haben wir uns, mit Hilfe der befragten Benutzer, für XML entschieden. Es sollte eine XML-Spezifkation in Form einer XML-Schema-Datei festgelegt werden. Unter dem Namen \codeinline{CASiX} wurde ein erster Version spezifiziert.
 
-Im weiteren Entwicklungsprozess wurde jedoch festgestellt, dass die Spezifikation in ihrer vorliegenden Form nicht ansatzweise flexibel genug war, um unseren Anspruch an die gebrauchstaugliche Gestaltung einer Simulation zu genügen. Daraufhin wurde der Schritt wieder zurück zur Spezifikation gegangen. Nach langer Diskussion haben wir uns schlussendlich dafür entschieden, unsere Arbeit ohne die Beschreibungssprache fortzusetzen. Da wir nicht nur in deren Planung, sondern, vor allem, in deren späteren Implementierung im System große Schwierigkeiten sahen.
-Ungefähr zur Projektmitte haben wir die Simulations\-beschreibungs\-sprache in den letzen Projekt-Meilenstein verlegt. Dieser enthält Ideen und Konzepte die wir uns für die Zukunft von CASi vorstellen können, im Rahmen dieses Projekts aber keine Zeit dafür gefunden werde konnte. Wir sind der Meinung, dass die durch diese Entscheidung eingesparte Arbeit in unserem Projekt an anderen Stellen sinnvoller zum Einsatz kam.\\
+Im weiteren Entwicklungsprozess wurde jedoch festgestellt, dass die Spezifikation in ihrer vorliegenden Form nicht ansatzweise flexibel genug war, um unseren Anspruch an die gebrauchstaugliche Gestaltung einer Simulation zu genügen. Daraufhin wurde der Schritt wieder zurück zur Spezifikation gegangen. Nach langer Diskussion haben wir uns schlussendlich dafür entschieden, unsere Arbeit ohne die Beschreibungssprache fortzusetzen. Da wir nicht nur in deren Planung, sondern, vor allem, in deren späteren Implementierung einen sehr hohen Zeitaufwand sahen, so dass die Realisierung zu Lasten der Entwicklung des eigentlichen Simulators gefallen wäre.
 
-Durch den stark modularen Aufbau der Software ist es jedoch für spätere Entwickler besonders einfach diesen Aspekt noch einmal aufzugreifen und in CASi zu integrieren.
+Ungefähr zur Projektmitte haben wir die Simulations\-beschreibungs\-sprache in den letzen Projekt-Meilenstein verlegt, da die Entwicklung eines XML-Handlers zwar interessant und sinnvoll, aber keinesfalls maßgeblich das Projekt beeinflussend ist. 
+
+Wir sind der Meinung, dass die durch diese Entscheidung eingesparte Arbeit in unserem Projekt an anderen Stellen sinnvoller zum Einsatz kam.\\
+
+Durch den stark modularen Aufbau der Software ist es jedoch für spätere Entwickler besonders einfach, diesen Aspekt noch einmal aufzugreifen und in CASi zu integrieren.
 
 \subsection{Antwortzeiten des MACK-Servers}\label{subsec:conc_open_questions_mack}
 Ein aktuelles Problem ist, dass bei schneller Simulationsgeschwindigkeit die Antworten des MACK-Servers zu stark verzögert sind. In diesem Fall passen die Sensor- und Aktuatorwerte nicht zum aktuellen Verhalten der Simulation. Diese können sich auf den gesamten Simulationslauf auswirken. Dagegen können wir uns zwei unterschiedlich einflussreiche Verbesserungen vorstellen. 
 
-Die Kommunikationskanäle hinsichtlich ihrer Geschwindigkeit optimieren. Den Jabber-Host (über den sämtliche Kommunikation läuft) lokal auf Maschine des Awareness-Hubs zu installieren verringert die Paketlaufzeiten vermutlich erheblich.
+Die Kommunikationskanäle könnten hinsichtlich ihrer Geschwindigkeit optimiert werden. Dies könnte zum Beispiel durch das Verlegen des XMPP-Servers (über den sämtliche Kommunikation läuft) auf die lokalen Maschine des Awareness-Hubs geschehen. Somit könnte der Netzwerkverkehr lokal abgewickelt werden, was die Packetlaufzeiten deutlich reduzieren dürfte.
 
-Weit sinnvoller halten wir es jedoch, das MACK-Protokoll zu überarbeiten. Wenn dieses dahingehend erweitert wird, das Zeitstempel und oder andere Identifikationsmerkmale übermittelt werden, könnten sich der Awareness-Hub und der Simulator unabhängig ihrer Geschwindigkeit austauschen. Reasoner für die zeitliche Aspekte wichtig sind, wären in der Lage auf die erhöht Geschwindigkeit der Simulation zu versehen und sich darauf gehend anzupassen.
+Weit sinnvoller halten wir es jedoch, das MACK-Protokoll zu überarbeiten. Wenn dieses dahingehend erweitert wird, dass Zeitstempel und/oder andere Identifikationsmerkmale übermittelt werden, könnten sich der Awareness-Hub und der Simulator unabhängig von ihrer Geschwindigkeit austauschen. Reasoner für die zeitliche Aspekte wichtig sind, wären in der Lage, die erhöht Geschwindigkeit der Simulation zu versehen und sich darauf anzupassen. Als Vorarbeit zu diesem Ansatz senden unsere Komponenten bereits in den Push-Nachrichten Zeitstempel mit.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Ausblick}\label{sec:conc_outlook}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-Aspekte unserer Arbeit an die gut in der Zukunft angeknüpft werden kann sind prinzipiell in zwei Teilbereiche aufzuteilen. Eine Weiterentwicklungsmöglichkeit ist es eigene, neue Simulationen zu entwerfen. Die dazu benötigten anderen Sonsoren, Aktuatoren oder Agentverhalten wären unkompliziert zu erstellen. Man könnte sich an das in dieser Dokumentation beschriebene Vorgehen halten, oder sich an unserer Demonstations\-simulation orientieren.\\
+Aspekte unserer Arbeit an die gut in der Zukunft angeknüpft werden kann, sind prinzipiell in zwei Teilbereiche aufzuteilen. Eine Weiterentwicklungsmöglichkeit ist es eigene, neue Simulationen zu entwerfen. Die dazu benötigten anderen Sensoren, Aktuatoren oder Aktionen sind unkompliziert zu erstellen. Man könnte sich an das, in dieser Dokumentation beschriebene, Vorgehen halten, oder sich an unserer Demonstations\-simulation orientieren.\\
 
-Zum anderen sind auch für den CASi-Kern Erweiterungen vorstellbar. Dazu zählen insbesondere die Entwicklung einer umfangreicheren graphischen Schnittstelle, zum Beispiel durch eine drei dimensionale Darstellung der Simulations-Welt. Weitergehen könnten wir uns vorstellen, Simulationen interaktiv zu gestalten. Denkbar wäre  eine Simulation in einer virtuellen Realität, in der die Benutzer die Agenten direkt steuern können. Dafür könnten Netzwerk-Mehrspieler-Spiele genutzt werden. Beispielsweise Minecraft \cite{web-minecraft} bietet dafür eine in Java programmierte quelloffene Serverkomponente an, welcher sich durch geeignete Schnittstellen erweitern lassen könnte.
+Zum anderen sind auch für den CASi-Kern Erweiterungen vorstellbar. Dazu zählen insbesondere die Entwicklung einer umfangreicheren graphischen Schnittstelle, die erweiterte Interaktionsmöglichkeiten bereitstellt. Weitergehen könnten wir uns vorstellen, Simulationen interaktiv zu gestalten. Denkbar wäre  eine Simulation in einer virtuellen Realität, in der die Benutzer die Agenten direkt steuern können. Dafür könnten Netzwerk-Mehrspieler-Spiele genutzt werden. Beispielsweise Minecraft \cite{web-minecraft} bietet dafür eine in Java programmierte quelloffene Serverkomponente an, welche sich durch geeignete Schnittstellen erweitern lassen könnte.

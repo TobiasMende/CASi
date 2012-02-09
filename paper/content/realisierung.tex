@@ -5,17 +5,17 @@ In diesem Kapitel beschreiben wir die Umsetzung der in Kapitel \ref{chapter:conc
 %
 %\imiscomment{Struktur dieses Kapitel kann je nach Problemstellung unterschiedlich gestaltet werden}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Realisierung der Einzelmodule}
+%\section{Realisierung der Einzelmodule}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{SimulationEngine und SimulationClock}\label{subsec:real_engine}
-\subsubsection{SimulationEngine}
+\section{SimulationEngine und SimulationClock}\label{subsec:real_engine}
+\subsection{SimulationEngine}
 Die \codeclass{SimulationEngine} ist als Singleton realisiert. Dies hat den Vorteil, dass es zur Laufzeit nur eine Instanz von ihr geben kann, die in allen Klassen verfügbar ist. Diese Instanz hält die \codeclass{World}, den \codeclass{CommunicationHandler} bereit. Beide Objekte können vor dem Start der Simulation, d.h. vor dem Start der \codeclass{SimulationClock} mit den jeweiligen Setter-Methoden gesetzt werden. Der Aufruf dieser Methoden nach dem Start der Simulation erzeugt einen \codeclass{IllegalAccessException}.
 
 Während der Simulation können die Welt und der Kommunikationshandler über die Getter-Methoden abgerufen werden. Auf diesem Weg können unter anderem Sensoren und Aktuatoren den Kommunikationshandler erreichen. Auch die graphische Oberfläche holt sich die zu zeichnenden Objekte über die Simulationsengine.
 
-\subsubsection{SimulationClock}
+\subsection{SimulationClock}
 Die \codeclass{SimulationClock} ist das Herzstück der Simulation. Sie stößt sämtliche Aktionen der Komponenten des Modells an. Die Clock ist wie die Engine ebenfalls mit dem Singleton-Designpatter realisiert. So ist sicher gestellt, dass es nur eine Uhr geben kann, die aus allen Klassen erreichbar ist.
 
 Die \codeclass{SimulationClock} verwendet das Listener-Konzept, um Komponenten, die an der Simulationszeit interessiert sind regelmäßig über Änderungen zu informieren. Komponenten die sich als Listener bei der Uhr registrieren möchten müssen dazu die \codeinterface{ISimulationClockListener}-Schnitt\-stel\-le implementieren und können dann mit dem in Quelltext \ref{src:addClockListener} beschriebenen Code hinzugefügt und analog wie in Quelltext \ref{src:removeClockListener} beschrieben wieder entfernt werden.
@@ -44,7 +44,7 @@ Die Uhr basiert auf einem Timer-Thread, der alle $x$ Millisekunden auslöst. Wen
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Generatoren}\label{subsec:real_generator}
+\section{Generatoren}\label{subsec:real_generator}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 Für das Erstellen einer neuen Simulation reicht es aus, eine Simulationswelt (der Klasse \codeclass{World}) zu erzeugen. Dieser Vorgang wird als Generierung bezeichnet und von einem Generator realisiert.
 Ein Beispiel, wie eine solche erzeugt werden kann, ist in diesem Kapitel an Hand der Demonstrationssimulation dargestellt.\\ 
@@ -59,7 +59,7 @@ Durch den gewählten Ansatz der starken Abstraktion ist es möglich Simulationen
 \end{itemize}
 In einem frühen Konzept unserer Projektarbeit war insbesondere eine Beschreibung durch eine spezifizierte XML (Arbeitstitel: \codeinline{CASiX}) vorgesehen. Diese wurde jedoch im Laufe des Semesters wegen nicht unerheblichen Aufwand zurückgestellt. Da eine saubere und klare Schnittstelle definiert wurde, ist es ohne Weiteres möglich, dass diese später noch hinzugefügt werden.
 
-\subsubsection{Generierung durch Java-Code}\label{subsec:real_generator_java}
+\subsection{Generierung durch Java-Code}\label{subsec:real_generator_java}
 Für das Erstellen einer neuen Simulation hat es sich als sinnvoll erwiesen, ein neues Paket zu erstellen und darin die \codeinterface{IWorld\-Generator}-Schnittstelle zu implementieren. Innerhalb dieses Paketes ist eine Aufteilung in weitere Klasse zu empfehlen.
 
 \begin{figure}[htb]
@@ -77,7 +77,7 @@ Wenn alle Erzeugerklassen abgearbeitet sind, ruft der \codeclass{World\-Generato
 Als letzten Schritt nimmt der Generator alle Komponenten (rote Pfeile) und erzeugt daraus ein \codeclass{World}-Objekt.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Benutzungsschnittstellen}\label{subsec:real_interfaces}
+\section{Benutzungsschnittstellen}\label{subsec:real_interfaces}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 Als Benutzungsschnittstelle für den Simulator haben wir die \emph{Simple GUI} entwickelt. Diese soll die simulierte Welt grafisch darstellen und es ermöglichen, gewünschte Informationen abzurufen. Wir wollten, dass diese Benutzungsschnittstelle sowohl für die späteren Hauptbenutzer, die Simulationen testen, viele Funktionen bietet, aber auch für Benutzer verständlich ist, die von dem System noch keine fortgeschrittenen Kenntnisse haben. Zum Beispiel könnte sie auch benutzt werden, um anderen das MACK-Framework zu präsentieren und zu veranschaulichen.
@@ -142,14 +142,14 @@ In dem Menü \emph{View} lassen sich Einstellungen zur Anzeige im Simulationsber
 Die Anzeigeeinstellungen werden durch Checkboxen (\codeclass{JCheckBoxMenuItem}) vorgenommen, an denen leicht erkennbar ist, welche Elemente zur Zeit angezeigt oder ausgeblendet werden. Welche Komponenten zu Beginn eingeblendet sind, hängt davon ab, in welchem Modus das Programm gestartet wird. Ist der Entwicklermodus aktiviert, werden alle Elemente angezeigt, um Debugging zu ermöglichen. Anderenfalls werden nur die Sensoren und Aktuatoren eingeblendet und zusätzliche Informationen können bei Bedarf angezeigt werden. Das soll die Übersicht nach dem Programmstart bewahren. 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Aktionen}\label{subsec:real_actions}
+\section{Aktionen}\label{subsec:real_actions}
 In unserer Implementierung sind verschiedenen Aktionen enthalten. In der Package-Struktur haben wir diese wie folgt aufgeteilt:
 
 In \codeinline{.simulation.model.actions} befinden sich Aktionen, die allgemein im Simulator durchgeführt werden können. Diese sind unabhängig vom MACK-Framework, Sensoren und Aktuatoren.
 
 Im Paket \codeinline{.simulation.model.mackActions} befinden sich Aktionen, die bestimmte Sensoren und Aktuatoren benötigen und somit abhängig von der jeweiligen Simulation sind.
 
-\subsubsection{Allgemeine Aktionen}
+\subsection{Allgemeine Aktionen}
 Zu den wichtigsten allgemeinen Aktionen in unserer Implementierung zählen unter anderem:
 \begin{description}
 	\item[Move] Die \codeclass{Move}-Aktion dient dazu, die Position eines Agentens zu Ändern. Hierbei wird in der Initialisierung der Aktion nur das Ziel angegeben. Zum Zeitpunkt der Ausführung der Aktion wird automatisch der Weg zum Ziel berechnet und pro Iteration die Position um eine bestimmte Anzahl von Wegpunkten verändert. Dieser Aktion kann keine Dauer übergeben werden, da sie automatisch terminiert, wenn das Ziel erreicht wurde. Gibt es keinen Weg zum Ziel. Bricht die Aktion automatisch ab.
@@ -161,7 +161,7 @@ Zu den wichtigsten allgemeinen Aktionen in unserer Implementierung zählen unter
 	
 	In der aktuellen Implementierung bricht der Agent diese Aktion ab, wenn der Partner sich nicht in seinem Büro befindet. Diese Aktion kann aber erweitert werden, wenn es z.B. Aktuatoren wie das \codeclass{DoorPlate} gibt, welches Auskunft über die wirkliche Position des Anderen gibt.
 \end{description}
-\subsubsection{Simulationsspezifische Aktionen}
+\subsection{Simulationsspezifische Aktionen}
 Die simulationspezifischen Aktionen hängen von Sensoren und Aktuatoren einer Simulationsimplementierung ab. In der aktuellen Implementierung gibt es unter anderem folgende Aktionen:
 \begin{description}
 	\item[WorkOnDesktop] Mit dieser Aktion kann man einen Agenten für eine bestimmte Zeit arbeiten lassen. Hierfür erzeugt man eine neue Instanz dieser Klasse und gibt im Konstruktor den Arbeitsplatz, die Programmklasse, die Frequenz und die Dauer an.
@@ -174,13 +174,13 @@ Die simulationspezifischen Aktionen hängen von Sensoren und Aktuatoren einer Si
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Aktionsverwaltung}\label{subsec:real_actionhandling}
+\section{Aktionsverwaltung}\label{subsec:real_actionhandling}
 In unserer Implementierung nutzt die Verwaltungskomponente für Aufgaben im Wesentlichen den Scheduling-Algorithmus \emph{Earliest Deadline First}. Darüber hinaus nutzt der Scheduler weitere Möglichkeiten um auch Parameter außer der Deadline zu berücksichtigen, da nicht jede Aufgabe eine Deadline haben muss. 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Kommunikationshandler}\label{subsec:real_communication}
+\section{Kommunikationshandler}\label{subsec:real_communication}
 Die abstrahierte Beschreibung der Schnittstellen eines Kommunikationshandlers befindet sich im Paket \codeinline{de.uniluebeck.imis.casi.communication}. 
 
 Eine Implementierung für die Zusammenarbeit mit dem MACK-Framework befindet sich in \codeinline{de.uni\-luebeck.imis.casi\-.com\-munication.mack}. \emph{Bei Änderungen am MACK-Protokoll sind im Wesentlichen die Methoden in diesem Paket anzupassen.}
@@ -236,10 +236,10 @@ Zum Erzeugen der Nachrichten in den Aktuatoren und Sensoren kann die \codeclass{
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Sensoren und Aktuatoren}\label{subsec:real_sensors}
+\section{Sensoren und Aktuatoren}\label{subsec:real_sensors}
 In diesem Unterabschnitt beschreiben wir die verschiedenen, bereits durch uns realisierten, Sensoren und Aktuatoren, um verständliche Beispiele für die Entwicklung weiterer Komponenten bereitzustellen. Die modellierten Komponenten des MACK-Frameworks befinden sich im Paket \\\codeinline{de.uniluebeck.imis.casi.simulation.model.mackComponents}.
 
-\subsubsection{Gemeinsamkeiten von Sensoren und Aktuatoren}
+\section{Gemeinsamkeiten von Sensoren und Aktuatoren}
 Komponenten, die in regelmäßigen Abständen eine Aktion ausführen müssen, können sich als Zuhörer bei der \codeclass{SimulationClock} hinzufügen. Sie können dann zum einen die Standardmethoden der \codeinterface{ISimulationClockListener}-Schnittstelle verwenden und darüber hinaus die  \codemethod{send\-Recurring\-Message(Simulation\-Time new\-Time)}-Methode überschreiben, die automatisch, in dem durch \codeinline{AbstractInteractionComponent.PULL\_INTERVALL} beschriebenen Intervall, aufgerufen wird. Diese Methode eignet sich besonders, um regelmäßige Pull-Nachrichten an den Server zu senden.
 
 Alle Komponenten müssen die \codemethod{getType()}-Methode überschreiben, um einen textuellen Wert für den Typ der Komponente anzugeben. Im Falle des MACK-Frameworks entspricht der Typ genau der vom Framework verwendeten Bezeichnung.
@@ -268,30 +268,30 @@ interestingActions.add(HaveAMeeting.class);
 \label{src:interaction_components_addInterestingActions}
 \end{illfloat}
 
-\subsubsection{Cube (MATe: Cubus)}
+\subsection{Cube (MATe: Cubus)}
 Der \codeclass{Cube} besitzt eine Status-Variable, die Werte aus \codeclass{Code.State} annehmen kann. Die Werte entsprechen den Textwerten, die das MACK-Framework für die Kommunikation mit dem Cubus verwendet. In der aktuellen Implementierung reagiert der \codeclass{Cube} auf die \codeclass{WorkOnDesktop}-Aktion, indem er anhand der Arbeitsgeschwindigkeit und der verwendeten Programmklasse sinnvolle Annahmen über die mögliche Tätigkeit der arbeitenden Person macht. Entspricht der aktuelle Status des \codeclass{Cube}s nicht dem ermittelten, löst er mit einer bestimmten Wahrscheinlichkeit und einer Verzögerung von \codeinline{Cube.TURN\_CUBE\_SCHEDULE\_DELAY} Sekunden eine \codeclass{TurnCube}-Aktion aus. Die Wahrscheinlichkeit kann über die \codeclass{ConfigMap} definiert werden. Wenn keine explizite Wahrscheinlichkeit in der \codeclass{ConfigMap} des Agents gesetzt wird, dann wird die \codeinline{Cube.DEFAULT\_TURN\_CUBE\_PROBABILITY} verwendet.
 
 Der \codeclass{Cube} fügt sich als Zuhörer zu der \codeclass{SimulationClock} hinzu. Dies führt dazu, dass durch die Elternklasse \codeclass{AbstractInteractionComponent} in regelmäßigen Abständen die \codemethod{send\-Recurring\-Message(Simulation\-Time new\-Time)}-Methode aufgerufen wird. In dieser Methode wird eine Pull-Nachricht gesendet, mit der die Werte für \codeinline{activity} und \codeinline{interruptibility} abgefragt werden.
 
-\subsubsection{Desktop (MATe: DesktopActivityAnalyzer)}
+\subsection{Desktop (MATe: DesktopActivityAnalyzer)}
 Der \codeclass{Desktop} ist ein Beispiel für eine Komponente, die zunächst kein Interesse an einem Agenten hat. Die Interaktion mit diesem Sensor erfolgt durch die \codeclass{WorkOnDesktop}-Aktion, die die \codemethod{work(Program program, Frequency frequency)}-Methode aufruft, wenn ein Agent mit diesem Computer arbeitet.
 
 Wenn sich die Werte für die Programmklasse und die Intensität der Arbeit ändern, sendet der \codeclass{Desktop} diese Werte als Push-Nachricht an den MACK-Server.
 
-\subsubsection{DoorLight}
+\subsection{DoorLight}
 Das \codeclass{DoorLight} ist ein Aktuator, der Personen davon abhalten kann, einen Raum zu betreten. Hierfür kann es einen Status aus \codeclass{DoorLight.State} annehmen. Die möglichen Werte entsprechen den \codeinline{inte\-rupti\-bility}-Werten, die der Server zur Verfügung stellt.
 
 Der Aktuator sendet periodische Pull-Nachrichten an den Server, um den Werte für \codeinline{inte\-rupti\-bility} abzufragen. Die Komponente ist so definiert, dass sie Interesse an allen Personen außer der zugehörigen hat. Sie reagiert auf \codeclass{Move}-Aktionen, um zu überprüfen, ob eine Bewegung in den Raum oder nur zufällig durch den beobachteten Bereich führt.
 
-\subsubsection{DoorSensor}
+\subsection{DoorSensor}
 Der Türsensor ist ein \codeinterface{IDoorListener} und wird somit über die Veränderung des Türstatus informiert. Bei Statusänderungen sendet der Sensor den aktuellen Wert als Push-Nachricht an den MACK-Server.
 
-\subsubsection{DropZone}
+\subsection{DropZone}
 Die \codeclass{DropZone} ist ebenfalls eine passive Komponente, mit der über die Aktionen \codeclass{Put\-Key\-In\-Drop\-Zone} und \codeclass{RemoveKeyFromDropZone} interagiert werden kann. Mit diesen Aktionen können Personen eine Referenz auf sich in der \codeclass{DropZone} speichern. Hiermit wird das Ablegen und Entfernen eines Schlüssels simuliert.
 
 Der Sensor sendet eine Liste von Namen an den Server, wenn sich diese ändert.
 
-\subsubsection{Mike (MATe: MikeRophone)}
+\subsection{Mike (MATe: MikeRophone)}
 Dieser Sensor beobachtet standardmäßig den gesamten Raum, in dem er sich befindet. Er dient dazu, sprechende Personen zu erkennen. Um dieses Verhalten zu simulieren, reagiert das \codeclass{Mike} auf die Aktionen \codeclass{SpeakTo} und \codeclass{HaveAMeeting}. Bei der ersten Aktion nimmt es die Namen von den beiden Personen, die miteinander sprechen und sendet diese Liste an den Server. Bei der zweiten Aktion wählt der Sensor zufällig aus allen beteiligten Personen zwei aus, deren Namen er an den MACK-Server sendet. 
 
 Das Senden und erneute Ermitteln der Sprecher erfolgt automatisch. Die Zeit zwischen den Aktualisierungen variiert zufällig zwischen 10 und 120 Sekunden. Auf diese Weise wird sichergestellt, dass sich die Sprecher nicht zu schnell abwechseln und eine möglichst realitätsnahe Unterhaltung simuliert werden kann.

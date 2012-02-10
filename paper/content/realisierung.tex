@@ -10,6 +10,7 @@ In diesem Kapitel beschreiben wir die Umsetzung der in Kapitel \ref{chapter:conc
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{SimulationEngine und SimulationClock}\label{subsec:real_engine}
+Nachfolgend wird die Realisierung der Komponenten \codeclass{SimulationClock} und \codeclass{SimulationEngine} beschrieben, die zusammen die Kerneinheit des Simulators darstellen, die den ganzen Simulationsfluss kontrollieren.
 \subsection{SimulationEngine}
 Die \codeclass{SimulationEngine} ist als Singleton realisiert. Dies hat den Vorteil, dass es zur Laufzeit nur eine Instanz von ihr geben kann, die in allen Klassen verfügbar ist. Diese Instanz hält die \codeclass{World}, den \codeclass{CommunicationHandler} bereit. Beide Objekte können vor dem Start der Simulation, d.h. vor dem Start der \codeclass{SimulationClock} mit den jeweiligen Setter-Methoden gesetzt werden. Der Aufruf dieser Methoden nach dem Start der Simulation erzeugt einen \codeclass{IllegalAccessException}.
 
@@ -47,10 +48,10 @@ Die Uhr basiert auf einem Timer-Thread, der alle $x$ Millisekunden auslöst. Wen
 \section{Generatoren}\label{subsec:real_generator}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 Für das Erstellen einer neuen Simulation reicht es aus, eine Simulationswelt (der Klasse \codeclass{World}) zu erzeugen. Dieser Vorgang wird als Generierung bezeichnet und von einem Generator realisiert.
-Ein Beispiel, wie eine solche erzeugt werden kann, ist in diesem Kapitel an Hand der Demonstrationssimulation dargestellt.\\ 
+Ein Beispiel, wie eine solche erzeugt werden kann, ist in diesem Kapitel an Hand der Demonstrationssimulation dargestellt. 
 
 Aus Modularitätsgründen haben wir uns für das Konzept eines leicht austauschbaren Generators entschieden. Dafür wurde die Schnittstelle \codeinterface{IWorldGenerator} entworfen, welches nur eine Methode (\codemethod{generateWorld()}) definiert, die von allen konkreten Generatoren als Schnittstelle genutzt werden sollte.
-Darüber hinaus gibt es im Generatorpaket (\codeinline{de.uniluebeck.imis.casi.gene\-rator}) einige Helferklassen, deren Name mit \codeclass{Collector} gekennzeichnet ist und einen \codeclass{Linker}.\\
+Darüber hinaus gibt es im Generatorpaket (\codeinline{de.uniluebeck.imis.casi.gene\-rator}) einige Helferklassen, deren Name mit \codeclass{Collector} gekennzeichnet ist und einen \codeclass{Linker}.
 
 Durch den gewählten Ansatz der starken Abstraktion ist es möglich Simulationen auf die unterschiedlichsten Arten zu beschreiben ohne Änderungen am Simulator vornehmen zu müssen. Das von uns gewählte, am kurzfristigsten umzusetzende Vorgehen ist es, direkt aus Java-Klassen heraus die Objekte der Simulationswelt zu erzeugen und zu verknüpfen. Weitere Möglichkeiten wären:
 \begin{itemize}
@@ -264,12 +265,12 @@ Verweise auf interessante Aktionstypen werden in der Sammlung \codeinline{\# int
 interestingActions.add(SpeakTo.class);
 interestingActions.add(HaveAMeeting.class);
 \end{lstlisting}
-\illcaption{Beispiel für das Hinzufügen interessanter Aktionstypen aus dem Konstruktor der Klasse \codeclass{Mike}.}
+\illcaption{Beispiel für das Hinzufügen interessanter Aktionstypen aus dem Konstruktor der Klasse \codeclass{Mike}}
 \label{src:interaction_components_addInterestingActions}
 \end{illfloat}
 
 \subsection{Cube (MATe: Cubus)}
-Der \codeclass{Cube} besitzt eine Status-Variable, die Werte aus \codeclass{Code.State} annehmen kann. Die Werte entsprechen den Textwerten, die das MACK-Framework für die Kommunikation mit dem Cubus verwendet. In der aktuellen Implementierung reagiert der \codeclass{Cube} auf die \codeclass{WorkOnDesktop}-Aktion, indem er anhand der Arbeitsgeschwindigkeit und der verwendeten Programmklasse sinnvolle Annahmen über die mögliche Tätigkeit der arbeitenden Person macht. Entspricht der aktuelle Status des \codeclass{Cube}s nicht dem ermittelten, löst er mit einer bestimmten Wahrscheinlichkeit und einer Verzögerung von \codeinline{Cube.TURN\_CUBE\_SCHEDULE\_DELAY} Sekunden eine \codeclass{TurnCube}-Aktion aus. Die Wahrscheinlichkeit kann über die \codeclass{ConfigMap} definiert werden. Wenn keine explizite Wahrscheinlichkeit in der \codeclass{ConfigMap} des Agents gesetzt wird, dann wird die \codeinline{Cube.DEFAULT\_TURN\_CUBE\_PROBABILITY} verwendet.
+Der \codeclass{Cube} besitzt eine Status-Variable, die Werte aus \codeclass{Code.State} annehmen kann. Die Werte entsprechen den Textwerten, die das MACK-Framework für die Kommunikation mit dem Cubus verwendet. In der aktuellen Implementierung reagiert der \codeclass{Cube} auf die \codeclass{WorkOnDesktop}-Aktion, indem er anhand der Arbeitsgeschwindigkeit und der verwendeten Programmklasse sinnvolle Annahmen über die mögliche Tätigkeit der arbeitenden Person macht. Entspricht der aktuelle Status des \codeclass{Cube}s nicht dem ermittelten, löst er mit einer bestimmten Wahrscheinlichkeit und einer Verzögerung von \codeinline{TURN\_CUBE\_SCHEDULE\_DELAY} Sekunden eine \codeclass{TurnCube}-Aktion aus. Die Wahrscheinlichkeit kann über die \codeclass{ConfigMap} definiert werden. Wenn keine explizite Wahrscheinlichkeit in der \codeclass{ConfigMap} des Agents gesetzt wird, dann wird die \codeinline{DEFAULT\_TURN\_CUBE\_PROBABILITY} verwendet.
 
 Der \codeclass{Cube} fügt sich als Zuhörer zu der \codeclass{SimulationClock} hinzu. Dies führt dazu, dass durch die Elternklasse \codeclass{AbstractInteractionComponent} in regelmäßigen Abständen die \codemethod{send\-Recurring\-Message(Simulation\-Time new\-Time)}-Methode aufgerufen wird. In dieser Methode wird eine Pull-Nachricht gesendet, mit der die Werte für \codeinline{activity} und \codeinline{interruptibility} abgefragt werden.
 

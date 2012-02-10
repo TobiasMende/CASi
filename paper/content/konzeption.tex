@@ -1,4 +1,4 @@
-\chapter{Konzeption}\label{chapter:concept}
+\chapter{Konzeption der Systemarchitektur}\label{chapter:concept}
 In diesem Kapitel beschreiben wir die Konzepte, die wir im Rahmen unserer Analysen und der Planungsphase erarbeitet haben. Zu diesem Zweck beschreiben wir zunächst in Abschnitt \ref{subsec:concept_engine} den Aufbau und die logische Struktur der \codeclass{SimulationEngine} und der \codeclass{SimulationClock}. 
 
 Die weiteren Abschnitte gliedern sich nach dem in Abbildung \ref{fig:architecture} dargestellten Schema.
@@ -11,7 +11,7 @@ Die weiteren Abschnitte gliedern sich nach dem in Abbildung \ref{fig:architectur
 %\imiscomment{Struktur dieses Kapitel kann je nach Problemstellung unterschiedlich gestaltet werden}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Systemarchitektur}\label{sec:architecture}
+%\section{Systemarchitektur}\label{sec:architecture}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 In Abbildung \ref{fig:architecture} wird die Modularität der Architektur des Simulators deutlich. Die Komponenten in den weißen Kästen stellen Module dar, die durch den Austausch weniger Codezeilen ausgewechselt werden können. Diese Komponenten sind zum Teil simulationsspezifisch. Zum Beispiel sind Sensoren, Aktuatoren und Aktionen vom Simulationsumfeld abhängig. Darüber hinaus bestehen auch die Abhängigkeiten Sensoren $\leftrightarrow$ Aktionen und Aktuatoren $\leftrightarrow$ Aktionen, da Sensoren auf bestimmte Aktionen reagieren und Aktuatoren bestimmte Aktionen auslösen können.
@@ -55,7 +55,7 @@ Die Pfeile in der Abbildung geben den Hauptinformationsfluss zwischen den Kompon
 \end{figure}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Simulationsengine}\label{subsec:concept_engine}
+\section{Simulationsengine}\label{subsec:concept_engine}
 
 Der Kern des Simulationsframeworks ist die Simulationsengine, die im wesentlichen aus den Klasse \codeclass{SimulationEngine} und \codeclass{SimulationClock} besteht. Sowohl die Uhr als auch die Maschine sind als Singleton realisiert und können deshalb aus jeder Klasse angesprochen werden.
 
@@ -68,7 +68,7 @@ Die Engine hält die simulierte Welt (\codeclass{World}) bereit, welche die Konf
 %\imiscomment{Grobkonzeption eines einzelnen Moduls}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Generatoren}\label{subsec:concept_generators}
+\section{Generatoren}\label{subsec:concept_generators}
 Generatoren erzeugen \codeclass{World}-Objekte, die von der Simulationsengine simuliert werden können.
 
 Ein Generator muss sich darum kümmern, Räume, Sensoren, Aktuatoren, Agenten und Aktionen zu erzeugen und geeignet zu verknüpfen. In unserer Implementierung gibt es einen Generator in dem fest einprogrammiert Java-Objekte erzeugt werden.
@@ -80,12 +80,12 @@ Generatoren können in der Main-Klasse (\codeclass{CASi}) des Simulators ausgeta
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Benutzungsschnittstellen}\label{subsec:concept_interfaces}
+\section{Benutzungsschnittstellen}\label{subsec:concept_interfaces}
 Benutzungsschnittstellen können bereit gestellt werden, indem eine Implementierung des Interfaces \codeinterface{IMainView} in der Main-Klasse des Simulators an den \codeclass{MainController} übergeben wird. Die Benutzungsschnittstellen können sowohl passiv als auch interaktiv gestaltet werden. Hierfür können sich Implementierungen der Schnittstelle als Zuhörer (\emph{Listener}) bei den Objekten des Modells registrieren und auf die \codeclass{SimulationClock} und die Engine zugreifen, da beide Komponenten als Singleton realisiert sind.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+\newpage
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Aktionen}\label{subsec:concept_actions}
+\section{Aktionen}\label{subsec:concept_actions}
 Aktionen können allgemein durch folgende Parameter spezifiziert werden:
 \begin{description}
 	\item[priority] Die Priorität einer Aktion als Ganzzahl zwischen \codeinline{0} und \codeinline{10}.
@@ -102,9 +102,9 @@ Wenn eine Dauer angegeben wurde, kümmert sich dass Simulationsframework um das 
 
 Aktionen müssen vom Generator erzeugt werden und einem oder mehreren Agenten hinzugefügt werden.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+\newpage
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Aktionsverwaltung}\label{subsec:concept_actionhandling}
+\section{Aktionsverwaltung}\label{subsec:concept_actionhandling}
 Zur Aktionsverwaltung hat jeder Agent einen \codeinterface{IActionScheduler}, der im Konstruktor ausgetauscht werden kann. Die Aufgabe des Schedulers ist es, die Aktions-Sammlungen bereit zu halten. Das Konzept sieht vor, dass es für jeden Agenten drei Listen von Aktionen gibt:
 \begin{description}
 	\item[todoList] Diese Liste beinhaltet Aufgaben, die in jedem Fall während der Simulation entsprechend ihrer oben beschriebenen Parameter ausgeführt werden sollen.
@@ -117,7 +117,7 @@ Die Kernfunktionalität eines Action-Schedulers ist es, mit geeigneten Algorithm
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Kommunikationshandler}\label{subsec:concept_communication}
+\section{Kommunikationshandler}\label{subsec:concept_communication}
 Ein Kommunikationshandler muss das \codeinterface{ICommunicationHandler}-Interface implementieren.\\ Kommunikationshandler sind für die Verwaltung der Kommunikation mit einem beliebigen Gegenpart außerhalb des Simulators zuständig. Ein konkretes Beispiel ist ein Netzwerkhandler, der die Kommunikation über eine Netzwerkschnittstelle verwalten kann. In der aktuellen Implementierung ist der \codeclass{MACKNetworkHandler} ein Kommunikationshandler, der den Informationsaustausch mit dem MACK Server realisiert.
 
 Innerhalb der Simulation interagiert der Kommunikationshandler mit Sensoren und Aktuatoren, die beide das Interface \codeinterface{ICommunicationComponent} implementieren.. Die Komponenten registrieren sich in der Initialisierungsphase des Simulators beim Handler, indem die Methode \codemethod{re\-gister (ICom\-muni\-cation\-Component comp)} aufgerufen wird.
@@ -132,7 +132,7 @@ In der spezifischen Simulation und dem \codeclass{MACKCommunicationHandler} sind
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Sensoren und Aktuatoren}\label{subsec:concept_actuators_sensors}
+\section{Sensoren und Aktuatoren}\label{subsec:concept_actuators_sensors}
 Da Sensoren und Aktuatoren viele Gemeinsamkeiten aufweisen, erben alle konkreten Sensoren und Aktuatoren von der abstrakten Klasse \codeclass{AbstractInteractionComponent}, die auch das \codeinterface{ICom\-muni\-cation\-Component}-Interface implementiert.
 
 Beide Komponenten haben einen Bereich, in dem sie auf Aktivitäten reagieren oder bei den Agenten Aktivitäten auslösen können. Der Bereich kann als Ausrichtung (Blickrichtung), Öffnungswinkel und Radius definiert werden, indem der entsprechende Konstruktor verwendet wird. Werden diese Parameter nicht angegeben, wird der komplette Raum, in dem sich eine Komponente befindet überwacht. Mit der Methode \codemethod{setShapeRepresentation(Shape shape)} kann darüber hinaus eine beliebige Shape als Überwachungsbereich festgelegt werden.

@@ -1,6 +1,0 @@
-<agent name="smith" typ="Arzt oder Schwester" id="agent_42" starttime=1234 speed=1.5 image="agent.png">
-    <actions offset=5>
-        <action ref="action_foobar" /> <!-- hängt die Action an vorhandene Listen des Typend an -->
-    </actions>
-    <default_position ref="raum_id" overwrite_default_start_position=boolean /> <!-- (optional) -->
-</agent>

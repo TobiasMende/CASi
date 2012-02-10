@@ -1,6 +1,12 @@
 Team repository for the development of the CASi (Context Awareness Simulator)
 
-* A documentation can be found in paper/documentation.pdf.
+* Master Branch:*
 * The folder "CASi" contains the entire project.
+
+* Docs Branch:*
+* A documentation can be found in paper/documentation.pdf.
 * Class diagramms for better understanding of the architecture can be found in the "uml" folder.
+
+* Draft Branch:*
 * The folder CASiX-Draft contains a first raw idea of the CASi XML Description Language.
+* The folder CASi-Draft contains our first raw ideas of the architecture and the entire concept.

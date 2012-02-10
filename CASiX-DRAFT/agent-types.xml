@@ -1,6 +1,0 @@
-<agent typ="arzt" id="doctor" starttime=1234 speed=1.0><!-- IDs multipler Agents werden id+fortlaufende Nummer -->
-    <actions>
-        <action list="actionlist_random" />
-    </actions>
-    <default_position ref="raum_id" overwrite_default_start_position=boolean /> (optional)
-</agent>

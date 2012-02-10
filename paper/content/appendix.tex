@@ -87,7 +87,7 @@
 % \addcontentsline{toc}{chapter}{Anhänge}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 Folgend sind die Projektstruktur (Abschnitt \ref{sec:appendix_structure}) inklusive der konzeptionellen Aufteilung einzelner Arbeitsteilgebiete in verschiedene Ordner und Pakete und eine Hilfestellung zum Ausführen des Simulationsprogramms (Abschnitt \ref{sec:appendix_install}) gegeben.\\ 
-\imiscomment{Umfangreiche zusätzliche Informationen, die im Textverlauf stören würden, aber für die Arbeit wichtig sind, wie z.B. Programmcode, Fragebögen, Evaluationstabellen}
+%\imiscomment{Umfangreiche zusätzliche Informationen, die im Textverlauf stören würden, aber für die Arbeit wichtig sind, wie z.B. Programmcode, Fragebögen, Evaluationstabellen}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\section{Programmcode}\label{sec:appendix_A}
@@ -107,14 +107,14 @@ Um die Weiterentwicklung des Projektes zu erleichtern, befindet sich in diesem A
 \subsection{Ordnerstruktur}
 Das Projekt ist in verschiedene Ordner unterteilt, deren Sinn nachfolgend erläutert wird:
 \begin{description}
-	\item[src] In diesem Ordner befinden sich die Beschreibungen und Implementierungen des Simulators und der Simulationen.
+	\item[src] Im Quellverzeichnis befinden sich Beschreibung und Implementierung des Projektes.
 	\item[test] Dieser Ordner enthält die JUnit-Testfälle für einige Klassen im \codeinline{src}-Ordner. Hierbei entspricht die interne Paket-Struktur dieses Ordners der Struktur des \codeinline{src}-Verzeichnisses.
 	\item[log] Logfiles, die während der Ausführung des Programms generiert werden, werden mit einem Zeitstempel in diesem Ordner abgelegt.
 	\item[doc] Die JavaDoc-Dokumentation des Simulators befindet sich in diesem Verzeichnis.
 	\item[dist] Im Distributionsverzeichnis finden sich ausführbare Versionen der Anwendungen als jar-Datei.
 	\item[sims] Beschreibungen für Simulationen, wie z.B. textuelle Erklärungen zu einzelnen Simulationen und die Netzwerk-Konfigurationsdateien befinden sich in diesem Ordner.
 	\item[bin] Dieser Ordner enthält die Binaries des Simulators.
-	\item[lib] In diesem Verzeichnis befinden sich externe Bibliotheken, die für die Arbeit am Projekt oder für Komponenten des Simulators notwendig sind.
+	\item[lib] Diese Verzeichnis enthält notwendige, externe Bibliotheken.
 	\item[reports] Dieses Verzeichnis enthält Reports über die Durchführung der Testfälle.
 \end{description}
 \subsection{Paketstruktur}

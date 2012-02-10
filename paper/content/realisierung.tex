@@ -10,7 +10,7 @@ In diesem Kapitel beschreiben wir die Umsetzung der in Kapitel \ref{chapter:conc
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{SimulationEngine und SimulationClock}\label{subsec:real_engine}
-Nachfolgend wird die Realisierung der Komponenten \codeclass{SimulationClock} und \codeclass{SimulationEngine} beschrieben, die zusammen die Kerneinheit des Simulators darstellen, die den ganzen Simulationsfluss kontrollieren.
+Nachfolgend wird die Realisierung der Komponenten \codeclass{SimulationClock} und \codeclass{Simulation\-Engine} beschrieben, die zusammen die Kerneinheit des Simulators darstellen, die den ganzen Simulationsfluss kontrollieren.
 \subsection{SimulationEngine}
 Die \codeclass{SimulationEngine} ist als Singleton realisiert. Dies hat den Vorteil, dass es zur Laufzeit nur eine Instanz von ihr geben kann, die in allen Klassen verfügbar ist. Diese Instanz hält die \codeclass{World}, den \codeclass{CommunicationHandler} bereit. Beide Objekte können vor dem Start der Simulation, d.h. vor dem Start der \codeclass{SimulationClock} mit den jeweiligen Setter-Methoden gesetzt werden. Der Aufruf dieser Methoden nach dem Start der Simulation erzeugt einen \codeclass{IllegalAccessException}.
 
@@ -240,7 +240,7 @@ Zum Erzeugen der Nachrichten in den Aktuatoren und Sensoren kann die \codeclass{
 \section{Sensoren und Aktuatoren}\label{subsec:real_sensors}
 In diesem Unterabschnitt beschreiben wir die verschiedenen, bereits durch uns realisierten, Sensoren und Aktuatoren, um verständliche Beispiele für die Entwicklung weiterer Komponenten bereitzustellen. Die modellierten Komponenten des MACK-Frameworks befinden sich im Paket \\\codeinline{de.uniluebeck.imis.casi.simulation.model.mackComponents}.
 
-\section{Gemeinsamkeiten von Sensoren und Aktuatoren}
+\subsection{Gemeinsamkeiten von Sensoren und Aktuatoren}
 Komponenten, die in regelmäßigen Abständen eine Aktion ausführen müssen, können sich als Zuhörer bei der \codeclass{SimulationClock} hinzufügen. Sie können dann zum einen die Standardmethoden der \codeinterface{ISimulationClockListener}-Schnittstelle verwenden und darüber hinaus die  \codemethod{send\-Recurring\-Message(Simulation\-Time new\-Time)}-Methode überschreiben, die automatisch, in dem durch \codeinline{AbstractInteractionComponent.PULL\_INTERVALL} beschriebenen Intervall, aufgerufen wird. Diese Methode eignet sich besonders, um regelmäßige Pull-Nachrichten an den Server zu senden.
 
 Alle Komponenten müssen die \codemethod{getType()}-Methode überschreiben, um einen textuellen Wert für den Typ der Komponente anzugeben. Im Falle des MACK-Frameworks entspricht der Typ genau der vom Framework verwendeten Bezeichnung.
